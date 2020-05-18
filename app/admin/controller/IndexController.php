@@ -23,4 +23,13 @@ class IndexController extends BaseController
     {
         return  $this->fetch();
     }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function test(): string
+    {
+        return  $this->fetch();
+    }
 }

@@ -55,6 +55,8 @@ class BaseController
      */
     protected function fetch(string $template = '', array $vars = []): string
     {
+        $this->admin['name'] = '后台';
+
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
