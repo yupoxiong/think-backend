@@ -9,11 +9,15 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\admin\traits\AdminTreeTrait;
 use Exception;
 use think\View;
 
 class BaseController
 {
+
+    use AdminTreeTrait;
+
     /**
      * 后台主变量
      * @var array
@@ -30,8 +34,6 @@ class BaseController
     public function __construct(View $view)
     {
         $this->view = $view;
-
-        $this->admin['is_pjax'] = request()->isPjax();
     }
 
     /**
@@ -56,6 +58,11 @@ class BaseController
     protected function fetch(string $template = '', array $vars = []): string
     {
         $this->admin['name'] = '后台';
+        $this->admin['is_pjax'] = request()->isPjax();
+
+        if(!$this->admin['is_pjax']){
+
+        }
 
         // 赋值后台变量
         $this->assign([

@@ -20,7 +20,7 @@
         <div class="card-body login-card-body">
             <p class="login-box-msg">请输入账号密码进行登录</p>
 
-            <form action="{:url('auth/userLogin')}" method="post">
+            <form action="{:url('auth/userLogin')}" method="post" id="dataForm" class="dataForm" >
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="账号">
                     <div class="input-group-append">
@@ -62,6 +62,15 @@
 </div>
 <!-- /.login-box -->
 
+<script>
+    Swal.fire({
+        title: '系统提示',
+        text: '正在请求，请稍候',
+        icon: 'info',
+        allowOutsideClick: false,
+    });
 
+    Swal.showLoading();
+</script>
 </body>
 </html>

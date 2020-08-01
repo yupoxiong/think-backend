@@ -13,4 +13,14 @@ namespace app\admin\service;
 class AdminUserService
 {
 
+    public function emailLogin()
+    {
+
+    }
+
+
+    public function usernameLogin()
+    {
+
+    }
 }

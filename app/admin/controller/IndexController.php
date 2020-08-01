@@ -21,6 +21,9 @@ class IndexController extends BaseController
      */
     public function index(): string
     {
+
+
+
         return  $this->fetch();
     }
 

@@ -9,10 +9,10 @@ declare (strict_types=1);
 return [
     // 模版替换参数
     'tpl_replace_string' => [
-        '__STATIC__'  => '/static/admin',
-        '__JS__'      => '/static/admin/js',
-        '__CSS__'     => '/static/admin/css',
-        '__IMAGES__'  => '/static/admin/images',
-        '__PLUGINS__' => '/static/admin/plugins',
+        '__ADMIN_STATIC__'        => '/static/admin',
+        '__ADMIN_JS__'      => '/static/admin/js',
+        '__ADMIN_CSS__'     => '/static/admin/css',
+        '__ADMIN_IMAGES__'  => '/static/admin/images',
+        '__ADMIN_PLUGINS__' => '/static/admin/plugins',
     ]
 ];

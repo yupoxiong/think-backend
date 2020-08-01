@@ -26,7 +26,10 @@
         "topthink/think-multi-app": "^1.0",
         "topthink/think-view": "^1.0",
       "ext-json": "*",
-        "casbin/casbin": "^2.1"
+        "casbin/casbin": "^2.1",
+        "topthink/think-migration": "^3.0",
+        "matthiasmullie/minify": "^1.3",
+        "bluem/tree": "^3.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",
