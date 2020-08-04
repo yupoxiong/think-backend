@@ -35,4 +35,13 @@ class IndexController extends BaseController
     {
         return  $this->fetch();
     }
+
+    public function testNameThis()
+    {
+        dump(app('http')->getName());
+        dump(request()->controller());
+
+        dump(request()->action());
+        return '';
+    }
 }
