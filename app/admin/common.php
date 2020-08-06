@@ -31,9 +31,9 @@ if (!function_exists('admin_success')) {
      * @param array $options
      * @return Json
      */
-    function admin_success($msg = '操作成功', $result = [], $code = 200, $url = URL_CURRENT, array $header = [], $options = [])
+    function admin_success($msg = '操作成功', $result = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = [])
     {
-        return admin_result($msg, $result, $code, $url, $header, $options);
+        return admin_result($msg, $result, $url, $code, $header, $options);
     }
 }
 
@@ -43,15 +43,15 @@ if (!function_exists('admin_error')) {
      * 后台返回错误
      * @param string $msg
      * @param array $result
-     * @param int $code
      * @param string $url
+     * @param int $code
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_error($msg = '操作失败', $result = [], $code = 500, $url = URL_CURRENT, array $header = [], $options = [])
+    function admin_error($msg = '操作失败', $result = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = [])
     {
-        return admin_result($msg, $result, $code, $url, $header, $options);
+        return admin_result($msg, $result, $url, $code, $header, $options);
     }
 }
 
@@ -61,14 +61,14 @@ if (!function_exists('admin_result')) {
     /**
      * 后台返回结果
      * @param array $result
-     * @param int $code
      * @param string $msg
      * @param string $url
+     * @param int $code
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_result($msg = '', $result = [], $code = 500, $url = URL_CURRENT, $header = [], $options = [])
+    function admin_result($msg = '', $result = [], $url = URL_CURRENT, $code = 500, $header = [], $options = [])
     {
 
         $data = [

@@ -24,11 +24,16 @@ class AuthController extends BaseController
      * @return string
      * @throws \Exception
      */
-    public function login()
+    public function login(Request $request)
     {
 
+        $redirect = $request->param('redirect') ?? url('admin/index/index');
 
-        config('app.app_trace',false);
+        $this->assign([
+            'redirect' => $redirect,
+        ]);
+
+        //config('app.app_trace',false);
 
         return $this->fetch();
     }
@@ -42,6 +47,7 @@ class AuthController extends BaseController
 
             $username = $param['username'];
             $password = $param['password'];
+            $redirect = $param['redirect'] ?? url('admin/index/index')->build();
 
             $admin_user = $service->login($username, $password);
 
@@ -56,7 +62,7 @@ class AuthController extends BaseController
             return admin_error(lang($msg));
         }
 
-        return admin_success('登录成功', $admin_user);
+        return admin_success('登录成功', [], $redirect);
     }
 
     public function logout()

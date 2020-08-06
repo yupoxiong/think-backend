@@ -50,4 +50,24 @@ class AdminUser extends AdminBaseModel
     {
         return base64_encode(password_hash($password, 1));
     }
+
+
+    //获取当前用户已授权的显示菜单
+    public function getShowMenu()
+    {
+        if ($this->id === 1) {
+            return AdminMenu::where('is_show', 1)->order('sort_id', 'asc')->order('id', 'asc')->column('id,parent_id,name,url,icon,sort_id', 'id');
+        }
+
+        $role_urls = AdminRole::where('id', 'in', $this->role)->where('status', 1)->column('url');
+
+        $url_id_str = '';
+        foreach ($role_urls as $key => $val) {
+            $url_id_str .= $key == 0 ? $val : ',' . $val;
+        }
+
+        $url_id = array_unique(explode(',', $url_id_str));
+        return AdminMenu::where('id', 'in', $url_id)->where('is_show', 1)->order('sort_id', 'asc')->order('id', 'asc')->column('id,parent_id,name,url,icon,sort_id', 'id');
+    }
+
 }
