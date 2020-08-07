@@ -19,8 +19,15 @@ use think\Request;
 class AuthController extends BaseController
 {
 
+    protected $authExcept = [
+        'admin/auth/login',
+        'admin/auth/login',
+        'admin/auth/userLogin',
+    ];
+
 
     /**
+     * @param Request $request
      * @return string
      * @throws \Exception
      */
@@ -47,9 +54,11 @@ class AuthController extends BaseController
 
             $username = $param['username'];
             $password = $param['password'];
+            $remember = $param['remember'];
             $redirect = $param['redirect'] ?? url('admin/index/index')->build();
 
             $admin_user = $service->login($username, $password);
+            $service->setAdminUserAuthInfo($admin_user, $remember);
 
         } catch (ValidateException $e) {
             $msg = $e->getMessage();

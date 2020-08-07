@@ -28,7 +28,7 @@ class AuthService extends AdminService
     public function __construct()
     {
         $this->admin_key = config('admin.admin_key') ?? $this->admin_key;
-        $this->model   = new AdminUser();
+        $this->model     = new AdminUser();
     }
 
     /**
@@ -129,7 +129,7 @@ class AuthService extends AdminService
      */
     public function getUserSign($admin_user): string
     {
-        return md5(md5($admin_user->id) . $this->admin_key);
+        return md5(md5($this->admin_key . $admin_user->id) . $this->admin_key);
     }
 
 

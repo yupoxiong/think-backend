@@ -1,0 +1,57 @@
+<!-- 空白页面参考模版 -->
+{extend name='public/base' /}
+{block name='content'}
+{include file='public/content_header' /}
+<section class="content">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Bordered Table</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input id="dataCheckAll" type="checkbox" onclick="checkAll(this)" class="checkbox" placeholder="全选/取消">
+                                </th>
+                                <th>Task</th>
+                                <th>Progress</th>
+                                <th style="width: 40px">Label</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $data as $key=>$value}
+
+                            <tr>
+                                <td>{$value.id}</td>
+                                <td>{$value.nickname}</td>
+                                <td>{$value.username}</td>
+                                <td><span class="badge bg-danger">55%</span></td>
+                            </tr>
+
+                            {/foreach}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        {$page|raw}
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+</section>
+
+{/block}

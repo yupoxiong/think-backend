@@ -9,7 +9,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\event\AdminUser;
+use app\admin\model\AdminUser;
 use app\admin\traits\AdminAuthTrait;
 use app\admin\traits\AdminTreeTrait;
 use Exception;
@@ -94,7 +94,7 @@ class BaseController
         $this->admin['is_pjax'] = request()->isPjax();
 
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
-            $this->admin['menu'] = $this->getLeftMenu($this->user);
+            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu());
         }
 
 
@@ -103,6 +103,7 @@ class BaseController
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
+            'user'  => $this->user,
         ]);
 
         return $this->view->fetch($template, $vars);

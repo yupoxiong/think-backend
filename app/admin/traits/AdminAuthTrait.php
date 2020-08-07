@@ -8,6 +8,7 @@ use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminLog;
 use app\admin\model\AdminUser;
 use app\admin\service\AuthService;
+use think\exception\HttpResponseException;
 use think\response\Json;
 use think\response\Redirect;
 
@@ -28,19 +29,31 @@ trait AdminAuthTrait
             . '/' . parse_name($request->controller())
             . '/' . parse_name($request->action());
 
+
+        $auth_except = !empty($this->authExcept)?array_map('parse_name',$this->authExcept):$this->authExcept;
+
         // 验证权限
-        if (!in_array($url, $this->authExcept, true)) {
+        if (!in_array($url, $auth_except, true)) {
             $auth = new AuthService();
             try {
                 $this->user = $admin_user = $auth->getAdminUserAuthInfo();
 
                 if ($admin_user->id !== 1 && !$this->checkPermission($admin_user, $url)) {
 
+                    dump(222);
                     return $request->isGet() ? $this->fetch('public/error/403') : admin_error('无权限');
                 }
             } catch (AdminServiceException $exception) {
+                dump($exception);
+                exit();
+                $redirect  = url($url)->build();
+                $login_url = url('admin/auth/login', ['redirect' => $redirect])->build();
 
-                return $request->isGet() ? redirect('admin/auth/login') : admin_error('未登录');
+                if($request->isGet()){
+                    throw new HttpResponseException(redirect($login_url));
+                }
+
+                throw new HttpResponseException(admin_error('未登录', [], $login_url, 401));
             }
         }
 

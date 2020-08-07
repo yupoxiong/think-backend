@@ -222,13 +222,13 @@ trait AdminTreeTrait
                 $current_id = $v['id'];
             }
         }
+
         if ($parent_ids === false) {
             $parent_ids = array(0 => 0);
         }
 
-
         foreach ($menu as $k => $v) {
-            $url               = url($v['url']);
+            $url               = url($v['url'])->build();
             $menu[$k]['icon']  = $v['icon'];
             $menu[$k]['level'] = $this->getLevel($v['id'], $menu);
             $max_level         = $max_level <= $menu[$k]['level'] ? $menu[$k]['level'] : $max_level;
@@ -237,32 +237,44 @@ trait AdminTreeTrait
 
         $this->initTree($menu);
 
-        $text_base_one   = "<li class='treeview";
-        $text_hover      = ' active';
-        $text_base_two   = "'><a href='javascript:void(0);'>
+        $text_base_one   = "<li class='nav-item has-treeview";
+
+        $text_base_two   = "'><a href='#' class='nav-link' >
 <i class='fa \$icon'></i>
-<span>
-\$name
-</span>
-                             <span class='pull-right-container'><i class='fa fa-angle-left pull-right'></i></span>
-                             </a><ul class='treeview-menu";
+<p>\$name<i class='right fas fa-angle-left'></i></p>
+
+                             </a>
+                             <ul class='nav nav-treeview";
         $text_open       = ' menu-open';
         $text_base_three = "'>";
 
-        $text_base_four = '<li';
-        $text_hover_li  = " class='active'";
-        $text_base_five = ">
-                            <a href='\$url'>
-                            <i class='fa \$icon'></i>
-                            <span>\$name</span>
+        $text_base_four = "<li class='nav-item'>
+                            <a class='nav-link ";
+        $text_base_five="' href='\$url'>
+                            <i class='nav-icon fa \$icon'></i>
+                            <p>\$name</p>
                             </a>
                          </li>";
 
+        // 有子菜单，不打开
         $text_0       = $text_base_one . $text_base_two . $text_base_three;
-        $text_1       = $text_base_one . $text_hover . $text_base_two . $text_open . $text_base_three;
+
+        //echo $text_0.'<br/><br/><br/>';
+
+        // 有子菜单，打开
+        $text_1       = $text_base_one  .$text_open . $text_base_two  . $text_base_three;
+        //echo $text_1.'<br/><br/><br/>';
+
         $text_2       = '</ul></li>';
-        $text_current = $text_base_four . $text_hover_li . $text_base_five;
+        //echo $text_2.'<br/><br/><br/>';
+
+        // 当前的子菜单
+        $text_current = $text_base_four .' active ' . $text_base_five;
+        //echo $text_current.'<br/><br/><br/>';
+
+        //其他的子菜单
         $text_other   = $text_base_four . $text_base_five;
+        //echo $text_other.'<br/><br/><br/>';
 
         for ($i = 0; $i <= $max_level; $i++) {
             $this->text[$i]['0'] = $text_0;

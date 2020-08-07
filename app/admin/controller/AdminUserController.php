@@ -22,12 +22,34 @@ class AdminUserController extends BaseController
 
     /**
      * 显示资源列表
+     * @param Request $request
+     * @param AdminUser $model
+     * @return string
+     * @throws \think\db\exception\DbException
      * @throws Exception
      */
-    public function index(): string
+    public function index(Request $request, AdminUser $model): string
     {
+
+        $param = $request->param();
+        $data  = $model->scope('where', $param)
+            ->paginate([
+                'list_rows' => $this->admin['per_page'],
+                'var_page'  => 'page',
+                'query'     => $request->get()
+            ]);
+
+        // 关键词，排序等赋值
+        $this->assign($request->get());
+
+        $this->assign([
+            'data'  => $data,
+            'page'  => $data->render(),
+            'total' => $data->total(),
+        ]);
         return $this->fetch();
     }
+
 
     /**
      * 显示创建资源表单页.
@@ -108,7 +130,7 @@ class AdminUserController extends BaseController
      * @param AdminUserValidate $validate
      * @return Json
      */
-    public function update(Request $request, $id, AdminUser $model,AdminUserValidate $validate): Json
+    public function update(Request $request, $id, AdminUser $model, AdminUserValidate $validate): Json
     {
         $param = $request->param();
         $check = $validate->scene('admin_update')->check($param);
@@ -116,7 +138,7 @@ class AdminUserController extends BaseController
             return admin_error($validate->getError());
         }
 
-        $result = $model::update($param,$id);
+        $result = $model::update($param, $id);
 
         return $result ? admin_success('修改成功') : admin_error('修改失败');
     }
