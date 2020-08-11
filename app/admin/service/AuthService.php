@@ -14,6 +14,7 @@ use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminUser;
 use think\facade\Cookie;
 use think\facade\Event;
+use think\facade\Log;
 use think\facade\Session;
 
 class AuthService extends AdminService
@@ -55,6 +56,8 @@ class AuthService extends AdminService
 
         // Event_事件 管理用户登录
         Event::trigger('AdminUserLogin', $admin_user);
+
+        Log::info('产生了AdminUserLogin事件');
 
         return $admin_user;
     }

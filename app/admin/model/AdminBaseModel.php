@@ -15,4 +15,5 @@ use think\Model;
 class AdminBaseModel extends Model
 {
 
+    
 }

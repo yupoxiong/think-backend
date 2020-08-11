@@ -22,26 +22,6 @@ class IndexController extends BaseController
     public function index(): string
     {
 
-
-
         return  $this->fetch();
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function test(): string
-    {
-        return  $this->fetch();
-    }
-
-    public function testNameThis()
-    {
-        dump(app('http')->getName());
-        dump(request()->controller());
-
-        dump(request()->action());
-        return '';
     }
 }

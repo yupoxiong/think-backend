@@ -10,7 +10,11 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Bordered Table</h3>
+
+                        <button class="btn btn-default btn-sm ReloadButton" data-toggle="tooltip" title="刷新" >
+                            <i class="fa fa-refresh"></i> 刷新
+                        </button>
+
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -18,21 +22,36 @@
                             <thead>
                             <tr>
                                 <th>
+                                    <label for="dataCheckAll" class="dataCheckLabel"></label>
                                     <input id="dataCheckAll" type="checkbox" onclick="checkAll(this)" class="checkbox" placeholder="全选/取消">
                                 </th>
-                                <th>Task</th>
-                                <th>Progress</th>
-                                <th style="width: 40px">Label</th>
+                                <th>ID</th>
+                                <th>昵称</th>
+                                <th>账号</th>
+                                <th>角色</th>
+                                <th>是否启用</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {foreach $data as $key=>$value}
+                            {foreach name='data' id='item'}
 
                             <tr>
-                                <td>{$value.id}</td>
-                                <td>{$value.nickname}</td>
-                                <td>{$value.username}</td>
-                                <td><span class="badge bg-danger">55%</span></td>
+
+                                <td>
+                                    <label for="dataItem{$item.id}" class="dataCheckLabel"></label>
+                                    <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox"
+                                           data-id="{$item.id}" class="checkbox dataListCheck" value="{$item.id}"
+                                           placeholder="选择/取消" id="dataItem{$item.id}">
+                                </td>
+                                <td>{$item.id}</td>
+                                <td>{$item.nickname}</td>
+                                <td>{$item.username}</td>
+                                <td>
+                                    {foreach name='item.role' id='item_role'}
+                                    {$item_role.name|default=''}
+                                    {/foreach}
+                                </td>
+                                <td>{$item.status_text}</td>
                             </tr>
 
                             {/foreach}

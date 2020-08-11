@@ -1,22 +1,37 @@
 try {
     /** pjax相关 */
-    $.pjax.defaults.timeout = 3000;	//超时3秒(可选)
+    $.pjax.defaults.timeout = 3000;
     $.pjax.defaults.type = 'GET';
-    $.pjax.defaults.container = '#pjax-container';	//存储容器id
-    $.pjax.defaults.fragment = '#pjax-container';	//目标id
-    $.pjax.defaults.maxCacheLength = 0;	//最大缓存长度(可选)
+    $.pjax.defaults.container = '#pjaxContainer';
+    $.pjax.defaults.fragment = '#pjaxContainer';
+    $.pjax.defaults.maxCacheLength = 0;
     $(document).pjax('a:not(a[target="_blank"])', {	//
-        container: '#pjax-container',	//存储容器id
-        fragment: '#pjax-container'	//目标id
+        container: '#pjaxContainer',
+        fragment: '#pjaxContainer'
     });
-    $(document).ajaxStart(function () {	//ajax请求开始时执行
-        NProgress.start();	//启动进度条
-    }).ajaxStop(function () {	//ajax请求结束后执行
-        NProgress.done();	//关闭进度条
+    $(document).ajaxStart(function () {
+        NProgress.start();
+    }).ajaxStop(function () {
+        NProgress.done();
     });
 } catch (e) {
     console.log(e.message);
 }
+
+$(document).on('pjax:timeout', function (event) {
+    event.preventDefault();
+});
+$(document).on('pjax:send', function (xhr) {
+    NProgress.start();
+});
+$(document).on('pjax:complete', function (xhr) {
+    initToolTip();
+    NProgress.done();
+});
+//列表页搜索pjax
+$(document).on('submit', '.searchForm', function (event) {
+    $.pjax.submit(event, '#pjaxContainer');
+});
 
 /** 表单验证 */
 $.validator.setDefaults({
@@ -40,8 +55,83 @@ $.validator.setDefaults({
 });
 
 
-function submitForm(form) {
+/* 清除搜索表单 */
+function clearSearchForm() {
+    let url_all = window.location.href;
+    let arr = url_all.split('?');
+    let url = arr[0];
+    $.pjax({url: url, container: '#pjaxContainer'});
+}
 
+
+$(function () {
+
+    initToolTip();
+
+    let $body = $('body');
+    /* 返回按钮 */
+    $body.on('click', '.BackButton', function (event) {
+        event.preventDefault();
+        history.back(1);
+    });
+
+    /* 刷新按钮 */
+    $body.on('click', '.ReloadButton', function (event) {
+        event.preventDefault();
+        $.pjax.reload();
+    });
+
+});
+
+/**
+ * 初始化提示
+ */
+function initToolTip() {
+    // 提示泡
+    $('[data-toggle="tooltip"]').tooltip({
+        container:'#pjaxContainer'
+    });
+}
+
+/*列表中单个选择和取消*/
+function checkThis(obj) {
+    let id = $(obj).attr('value');
+    if ($(obj).is(':checked')) {
+        if ($.inArray(id, dataSelectIds) < 0) {
+            dataSelectIds.push(id);
+        }
+    } else {
+        if ($.inArray(id, dataSelectIds) > -1) {
+            dataSelectIds.splice($.inArray(id, dataSelectIds), 1);
+        }
+    }
+
+    let all_length = $("input[name='dataCheckbox']").length;
+    let checked_length = $("input[name='dataCheckbox']:checked").length;
+    if (all_length === checked_length) {
+        $("#dataCheckAll").prop("checked", true);
+    } else {
+        $("#dataCheckAll").prop("checked", false);
+    }
+    console.log(dataSelectIds);
+}
+
+/*全部选择/取消*/
+function checkAll(obj) {
+    dataSelectIds = [];
+    var all_check = $("input[name='dataCheckbox']");
+    if ($(obj).is(':checked')) {
+        all_check.prop("checked", true);
+        $(all_check).each(function () {
+            dataSelectIds.push(this.value);
+        });
+    } else {
+        all_check.prop("checked", false);
+    }
+}
+
+
+function submitForm(form) {
 
     openLoading();
 
@@ -135,14 +225,14 @@ function showSuccessMsg(title = '请求成功', text = '', timer = 1600) {
 }
 
 function showErrorMsg(title = '请求失败', text = '', timer = 1600) {
-    showResultMsg( title, text, 'error', timer)
+    showResultMsg(title, text, 'error', timer)
 }
 
 
 /**
  * 显示请求结果
  */
-function showResultMsg( title = '', text = '', icon = 'error', timer = 1600) {
+function showResultMsg(title = '', text = '', icon = 'error', timer = 1600) {
     Swal.fire({
         title: title,
         text: text,
@@ -172,7 +262,7 @@ function goUrl(url = 1) {
     } else if (url === 'url://back' || url === 3) {
         console.log('Return to the last page.');
         history.back(1);
-    }else if (url === 4 || url === 'url://close-refresh') {
+    } else if (url === 4 || url === 'url://close-refresh') {
         console.log('Close this layer page and refresh parent page.');
         let indexWindow = parent.layer.getFrameIndex(window.name);
         //先刷新父级页面
@@ -188,7 +278,7 @@ function goUrl(url = 1) {
         try {
             $.pjax({
                 url: url,
-                container: '#pjax-container'
+                container: '#pjaxContainer'
             });
         } catch (e) {
             window.location.href = url;

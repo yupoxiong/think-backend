@@ -122,7 +122,7 @@ class PageService extends Paginator
             }
 
             return sprintf(
-                '<ul class="pagination pagination-sm m-0 float-right ">%s %s %s</ul>',
+                '<ul class="pagination pagination-md float-right ">%s %s %s</ul>',
                 $this->getPreviousButton(),
                 $this->getLinks(),
                 $this->getNextButton()
@@ -150,7 +150,7 @@ class PageService extends Paginator
      */
     protected function getDisabledTextWrapper(string $text): string
     {
-        return '<li class="page-item next-disabled"><span>' . $text . '</span></li>';
+        return '<li class="page-item disabled"><a class="page-link">' . $text . '</a></li>';
     }
 
     /**
@@ -161,7 +161,7 @@ class PageService extends Paginator
      */
     protected function getActivePageWrapper(string $text): string
     {
-        return '<li class="page-item active"><span>' . $text . '</span></li>';
+        return '<li class="page-item active"><a class="page-link">' . $text . '</a></li>';
     }
 
     /**

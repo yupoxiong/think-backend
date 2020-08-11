@@ -335,8 +335,8 @@ trait AdminTreeTrait
         foreach ($data as $key => $value) {
             //左侧选择
             $data[$key]['select_html'] = '<td>
-                                <input type="checkbox" onclick="checkThis(this)" name="data-checkbox"
-                                       data-id="' . $value['id'] . '" class="checkbox data-list-check" value="' . $value['id'] . '"
+                                <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox"
+                                       data-id="' . $value['id'] . '" class="checkbox dataListCheck" value="' . $value['id'] . '"
                                        placeholder="选择/取消">
                             </td>';
 

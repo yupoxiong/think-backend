@@ -103,7 +103,7 @@ class BaseController
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
-            'user'  => $this->user,
+            'admin_user'  => $this->user,
         ]);
 
         return $this->view->fetch($template, $vars);

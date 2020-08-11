@@ -55,6 +55,7 @@ class AdminUser extends AdminBaseModel
     //获取当前用户已授权的显示菜单
     public function getShowMenu()
     {
+
         if ($this->id === 1) {
             return AdminMenu::where('is_show', 1)->order('sort_id', 'asc')->order('id', 'asc')->column('id,parent_id,name,url,icon,sort_id', 'id');
         }

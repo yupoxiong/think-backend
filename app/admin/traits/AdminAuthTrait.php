@@ -44,8 +44,7 @@ trait AdminAuthTrait
                     return $request->isGet() ? $this->fetch('public/error/403') : admin_error('无权限');
                 }
             } catch (AdminServiceException $exception) {
-                dump($exception);
-                exit();
+
                 $redirect  = url($url)->build();
                 $login_url = url('admin/auth/login', ['redirect' => $redirect])->build();
 

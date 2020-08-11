@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台用户控制器
+ * 后台操作日志控制器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -9,8 +9,8 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminUser;
-use app\admin\validate\AdminUserValidate;
+use app\admin\model\AdminLog;
+use app\admin\validate\AdminLogValidate;
 use Exception;
 use think\db\exception\DbException;
 use think\db\Query;
@@ -18,19 +18,19 @@ use think\Request;
 use think\Response;
 use think\response\Json;
 
-class AdminUserController extends BaseController
+class AdminLogController extends BaseController
 {
 
     /**
      * 列表
      *
      * @param Request $request
-     * @param AdminUser $model
+     * @param AdminLog $model
      * @return string
      * @throws DbException
      * @throws Exception
      */
-    public function index(Request $request, AdminUser $model): string
+    public function index(Request $request, AdminLog $model): string
     {
         $param = $request->param();
         $data  = $model->scope('where', $param)
@@ -55,12 +55,12 @@ class AdminUserController extends BaseController
      * 添加
      *
      * @param Request $request
-     * @param AdminUser $model
-     * @param AdminUserValidate $validate
+     * @param AdminLog $model
+     * @param AdminLogValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function add(Request $request, AdminUser $model, AdminUserValidate $validate)
+    public function add(Request $request, AdminLog $model, AdminLogValidate $validate)
     {
 
         if ($request->isPost()) {
@@ -82,12 +82,12 @@ class AdminUserController extends BaseController
      *
      * @param int $id
      * @param Request $request
-     * @param AdminUser $model
-     * @param AdminUserValidate $validate
+     * @param AdminLog $model
+     * @param AdminLogValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function edit($id, Request $request, AdminUser $model, AdminUserValidate $validate)
+    public function edit($id, Request $request, AdminLog $model, AdminLogValidate $validate)
     {
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
@@ -113,10 +113,10 @@ class AdminUserController extends BaseController
      * 删除
      *
      * @param int $id
-     * @param AdminUser $model
+     * @param AdminLog $model
      * @return Response
      */
-    public function delete($id, AdminUser $model): Response
+    public function delete($id, AdminLog $model): Response
     {
         $result = $model::destroy(function ($query) use($id){
             /** @var Query $query */
