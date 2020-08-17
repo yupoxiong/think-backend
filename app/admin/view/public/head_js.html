@@ -1,7 +1,15 @@
 <script>
     var adminDebug = {$admin.debug};
+    // cookie前缀
+    var cookiePrefix = "{$cookie_prefix|default=''}";
+    // UEditor server地址
+    var UEServer = "{:url('editor/server')}";
+    // 列表页当前选择的ID
+    var dataSelectIds = [];
 </script>
 
+<!-- js-cookie -->
+{js href="__ADMIN_PLUGINS__/js-cookie/js.cookie-2.2.0.min.js" /}
 <!-- jQuery -->
 {js href="__ADMIN_PLUGINS__/jquery/jquery.min.js" /}
 <!-- Bootstrap 4 -->
@@ -10,8 +18,12 @@
 {js href="__ADMIN_PLUGINS__/pjax/jquery.pjax.js" /}
 <!-- nprogress -->
 {js href="__ADMIN_PLUGINS__/nprogress/nprogress.js" /}
+<!-- fileinput -->
+{js href="__ADMIN_PLUGINS__/fileinput/js/fileinput.min.js" /}
+<!-- fileinput themes -->
+{js href="__ADMIN_PLUGINS__/fileinput/themes/fas/theme.min.js" /}
 <!-- sweetalert2 -->
-{js href="__ADMIN_PLUGINS__/sweetalert2/sweetalert2.all.min.js" /}
+{js href="__ADMIN_PLUGINS__/layer/layer.js" /}
 <!-- jquery-validation -->
 {js href="__ADMIN_PLUGINS__/jquery-validation/jquery.validate.min.js" /}
 <!-- AdminLTE App -->

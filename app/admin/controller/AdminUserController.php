@@ -9,14 +9,15 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminUser;
-use app\admin\validate\AdminUserValidate;
 use Exception;
-use think\db\exception\DbException;
-use think\db\Query;
 use think\Request;
 use think\Response;
+use think\db\Query;
 use think\response\Json;
+use think\db\exception\DbException;
+
+use app\admin\model\AdminUser;
+use app\admin\validate\AdminUserValidate;
 
 class AdminUserController extends BaseController
 {
@@ -65,14 +66,19 @@ class AdminUserController extends BaseController
 
         if ($request->isPost()) {
             $param = $request->param();
-            $check = $validate->scene('admin_save')->check($param);
+            $check = $validate->scene('admin_add')->check($param);
             if (!$check) {
                 return admin_error($validate->getError());
             }
 
             $result = $model::create($param);
 
-            return $result ? admin_success('添加成功') : admin_error('添加失败');
+            $redirect = URL_BACK;
+            if (isset($param['_create']) && (int)$param['_create'] === 1) {
+                $redirect = URL_RELOAD;
+            }
+
+            return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
         }
         return $this->fetch();
     }
@@ -116,13 +122,13 @@ class AdminUserController extends BaseController
      * @param AdminUser $model
      * @return Response
      */
-    public function delete($id, AdminUser $model): Response
+    public function del($id, AdminUser $model): Response
     {
-        $result = $model::destroy(function ($query) use($id){
+        $result = $model::destroy(function ($query) use ($id) {
             /** @var Query $query */
-            $query->whereIn('id',$id);
+            $query->whereIn('id', $id);
         });
 
-        return $result ? admin_success('删除成功') : admin_error('删除失败');
+        return $result ? admin_success('删除成功',[],URL_RELOAD) : admin_error('删除失败');
     }
 }
