@@ -9,6 +9,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminRole;
 use Exception;
 use think\Request;
 use think\Response;
@@ -18,6 +19,7 @@ use think\db\exception\DbException;
 
 use app\admin\model\AdminUser;
 use app\admin\validate\AdminUserValidate;
+use yupoxiong\plugin\Plugin;
 
 class AdminUserController extends BaseController
 {
@@ -80,6 +82,11 @@ class AdminUserController extends BaseController
 
             return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
         }
+
+        $this->assign([
+            'role_list' => (new AdminRole)->select(),
+        ]);
+
         return $this->fetch();
     }
 
@@ -98,21 +105,23 @@ class AdminUserController extends BaseController
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
             $param = $request->param();
-            $check = $validate->scene('admin_update')->check($param);
+
+            $check = $validate->scene('admin_edit')->check($param);
             if (!$check) {
                 return admin_error($validate->getError());
             }
 
-            $result = $model::update($param, $id);
+            $result = $data->save($param);
 
-            return $result ? admin_success('修改成功') : admin_error('修改失败');
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
-            'data' => $data,
+            'data'      => $data,
+            'role_list' => (new AdminRole)->select(),
         ]);
 
-        return $this->fetch();
+        return $this->fetch('add');
     }
 
     /**
@@ -124,11 +133,35 @@ class AdminUserController extends BaseController
      */
     public function del($id, AdminUser $model): Response
     {
-        $result = $model::destroy(function ($query) use ($id) {
+        $result = $model::destroy(static function ($query) use ($id) {
             /** @var Query $query */
             $query->whereIn('id', $id);
         });
 
-        return $result ? admin_success('删除成功',[],URL_RELOAD) : admin_error('删除失败');
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+    }
+
+    /**
+     * 启用
+     * @param $id
+     * @param AdminUser $model
+     * @return Json
+     */
+    public function enable($id, AdminUser $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+    /**
+     * 禁用
+     * @param $id
+     * @param AdminUser $model
+     * @return Json
+     */
+    public function disable($id, AdminUser $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
 }

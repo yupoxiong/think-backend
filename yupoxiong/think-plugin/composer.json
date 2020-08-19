@@ -1,0 +1,48 @@
+{
+    "name": "yupoxiong/think-plugin",
+    "description": "基于ThinkPHP6.0的插件系统扩展",
+    "homepage": "https://github.com/yupoxiong/think-plugin",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "thinkphp6.0",
+        "thinkphp",
+        "plugin",
+        "插件",
+        "应用"
+    ],
+    "authors": [
+        {
+            "name": "yupoxiong",
+            "email": "i@yufuping.com",
+            "homepage": "https://www.yupoxiong.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3.0",
+        "topthink/framework": "^6.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "yupoxiong\\plugin\\": "src"
+        },
+        "files": [
+            "src/helper.php"
+        ]
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "yupoxiong\\plugin\\Service"
+            ],
+            "config":{
+                "plugin": "src/config.php"
+            }
+        }
+    },
+    "scripts" : {
+        "post-install-cmd": [
+            "php think plugin:config"
+        ]
+    }
+}

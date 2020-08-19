@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 登录退出控制器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -13,8 +13,11 @@ namespace app\admin\controller;
 use app\admin\exception\AdminServiceException;
 use app\admin\service\AuthService;
 use app\admin\validate\AdminUserValidate;
+use Exception;
 use think\exception\ValidateException;
 use think\Request;
+use think\response\Json;
+use think\response\Redirect;
 
 class AuthController extends BaseController
 {
@@ -26,11 +29,12 @@ class AuthController extends BaseController
 
 
     /**
+     * 登录
      * @param Request $request
      * @param AuthService $service
      * @param AdminUserValidate $validate
-     * @return string|\think\response\Json
-     * @throws \Exception
+     * @return string|Json
+     * @throws Exception
      */
     public function login(Request $request, AuthService $service, AdminUserValidate $validate)
     {
@@ -69,7 +73,12 @@ class AuthController extends BaseController
     }
 
 
-    public function logout(AuthService $service)
+    /**
+     * 退出
+     * @param AuthService $service
+     * @return Redirect
+     */
+    public function logout(AuthService $service): Redirect
     {
         $service->logout($this->user);
 

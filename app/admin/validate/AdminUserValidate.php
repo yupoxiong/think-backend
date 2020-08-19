@@ -33,6 +33,7 @@ class AdminUserValidate extends AdminBaseValidate
 
     protected $scene = [
         'admin_add' => ['username', 'password'],
+        'admin_edit' => ['username', 'password'],
     ];
 
     public function sceneLogin(): void

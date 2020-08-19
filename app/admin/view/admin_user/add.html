@@ -19,10 +19,40 @@
                 <form class="form-horizontal" role="form" id="dataForm" action="" method="post"
                       enctype="multipart/form-data">
                     <div class="card-body">
+
+                        <div class="form-group row">
+                            <label for="role" class="col-sm-2 col-form-label ">角色</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <select class="form-control select2bs4" id="role" name="role[]" data-placeholder="请选择角色" multiple>
+                                    <option value="">请选择角色</option>
+                                    {foreach name='role_list' id='item'}
+                                    <option value="{$item.id}" {if isset($data) && in_array($item.id,$data.role)}selected{/if}>
+                                    {$item.name}
+                                    </option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <script>
+                            $('.select2bs4').select2({
+                                theme: 'bootstrap4'
+                            })
+                        </script>
+
+                        <div class="form-group row">
+                            <label for="nickname" class="col-sm-2 col-form-label ">昵称</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input type="text" class="form-control"
+                                       id="nickname" name="nickname" value="{$data.nickname|default=''}"
+                                       placeholder="请输入昵称">
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="username" class="col-sm-2 col-form-label ">账号</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
-                                <input type="text" class="form-control" id="username" name="username"
+                                <input type="text" class="form-control"
+                                       id="username" name="username" value="{$data.username|default=''}"
                                        placeholder="请输入账号">
                             </div>
                         </div>
@@ -30,10 +60,33 @@
                         <div class="form-group row">
                             <label for="password" class="col-sm-2 col-form-label ">密码</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
-                                <input type="password" class="form-control" id="password" name="password"
+                                <input type="password" class="form-control"
+                                       id="password" name="password" value="{$data.password|default=''}"
                                        placeholder="请输入密码">
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-2 col-form-label ">是否启用</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input class="switch fieldSwitch" id="status" name="status"
+                                       value="{$data.status|default='1'}" hidden/>
+                                <input type="checkbox" class="input-switch" id="statusSwitch" value="1"
+                                       {if(!isset($data) ||$data.status==1)}checked{/if}/>
+                            </div>
+
+                        </div>
+                        <script>
+                            $('#statusSwitch').bootstrapSwitch({
+                                onColor : 'success',
+                                offColor : 'danger',
+                                onText : '是',
+                                offText : '否',
+                                onSwitchChange: function (event, state) {
+                                    $('#status').val(state ? '1' : '0');
+                                }
+                            });
+                        </script>
 
                     </div>
                     <!-- /.card-body -->

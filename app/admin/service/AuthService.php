@@ -21,15 +21,26 @@ class AuthService extends AdminService
 {
     protected $model;
 
+    /**
+     * @var string 保存登录用户信息cookie和session的[ID]key值
+     */
     protected $store_uid_key = 'admin_user_id';
+    /**
+     * @var string 保存登录用户信息cookie和session的[签名]key值
+     */
     protected $store_sign_key = 'admin_user_sign';
-
+    /**
+     * @var mixed|string 用来签名加密/解密的key
+     */
     protected $admin_key = '_ThisClassDefaultKey_';
 
     public function __construct()
     {
-        $this->admin_key = config('admin.admin_key') ?? $this->admin_key;
-        $this->model     = new AdminUser();
+        $this->model = new AdminUser();
+
+        $this->admin_key      = config('admin.admin_key') ?? $this->admin_key;
+        $this->store_uid_key  = config('admin.store_uid_key') ?? $this->store_uid_key;
+        $this->store_sign_key = config('admin.store_sign_key') ?? $this->store_sign_key;
     }
 
     /**
@@ -78,6 +89,7 @@ class AuthService extends AdminService
     }
 
     /**
+     * 获取登录用户信息
      * @return AdminUser
      * @throws AdminServiceException
      */
@@ -103,7 +115,6 @@ class AuthService extends AdminService
         $admin_user = $this->model->where('id', '=', $admin_user_id)->findOrEmpty();
 
         /** @var AdminUser $admin_user */
-
         if (!$admin_user) {
             throw new AdminServiceException('用户不存在');
         }
@@ -122,6 +133,29 @@ class AuthService extends AdminService
         }
 
         return $admin_user;
+    }
+
+    /**
+     * 退出
+     * @param AdminUser $admin_user
+     */
+    public function logout($admin_user): void
+    {
+        // Event_事件 管理用户退出
+        Event::trigger('AdminUserLogout', $admin_user);
+
+        $this->clearAuthInfo();
+    }
+
+    /**
+     * 清除登录用户信息
+     */
+    public function clearAuthInfo(): void
+    {
+        Session::delete($this->store_uid_key);
+
+        Cookie::delete($this->store_uid_key);
+        Cookie::delete($this->store_sign_key);
 
     }
 
@@ -136,21 +170,4 @@ class AuthService extends AdminService
     }
 
 
-    public function logout($admin_user): void
-    {
-        // Event_事件 管理用户退出
-        Event::trigger('AdminUserLogout', $admin_user);
-
-        $this->clearAuthInfo();
-    }
-
-
-    public function clearAuthInfo(): void
-    {
-        Session::delete($this->store_uid_key);
-
-        Cookie::delete($this->store_uid_key);
-        Cookie::delete($this->store_sign_key);
-
-    }
 }

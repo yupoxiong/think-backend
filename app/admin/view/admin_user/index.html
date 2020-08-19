@@ -85,6 +85,7 @@
                                 <th>账号</th>
                                 <th>角色</th>
                                 <th>是否启用</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -102,11 +103,39 @@
                                 <td>{$item.nickname}</td>
                                 <td>{$item.username}</td>
                                 <td>
-                                    {foreach name='item.role' id='item_role'}
+                                    {foreach name='item.role_list' id='item_role'}
                                     {$item_role.name|default=''}
                                     {/foreach}
                                 </td>
                                 <td>{$item.status_text}</td>
+
+                                <td>
+                                    <a href="{:url('admin_user/edit',['id'=>$item.id])}"
+                                       class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+
+                                    <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    {if $item.status==1}
+                                    <button class="btn btn-warning btn-xs AjaxButton" data-toggle="tooltip" title="禁用"
+                                       data-id="{$item.id}" data-confirm-title="禁用确认"
+                                       data-confirm-content='您确定要禁用ID为 <span class="text-red">{$item.id}</span> 的数据吗'
+                                       data-url="{:url('disable')}">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    {else/}
+                                    <button class="btn btn-success btn-xs AjaxButton" data-toggle="tooltip" title="启用"
+                                       data-id="{$item.id}" data-confirm-title="启用确认"
+                                       data-confirm-content='您确定要启用ID为 <span class="text-red">{$item.id}</span> 的数据吗'
+                                       data-url="{:url('enable')}">
+                                        <i class="far fa-circle"></i>
+                                    </button>
+                                    {/if}
+                                </td>
+
                             </tr>
 
                             {/foreach}

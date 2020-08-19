@@ -13,4 +13,18 @@ namespace app\admin\controller;
 class PluginController extends BaseController
 {
 
+
+    /**
+     * 插件列表页
+     */
+    public function index()
+    {
+
+    }
+
+
+    public function local()
+    {
+
+    }
 }

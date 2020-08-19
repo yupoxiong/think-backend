@@ -240,7 +240,7 @@ trait AdminTreeTrait
         $text_base_one   = "<li class='nav-item has-treeview";
 
         $text_base_two   = "'><a href='#' class='nav-link' >
-<i class='fa \$icon'></i>
+<i class='\$icon'></i>
 <p>\$name<i class='right fas fa-angle-left'></i></p>
 
                              </a>
@@ -251,7 +251,7 @@ trait AdminTreeTrait
         $text_base_four = "<li class='nav-item'>
                             <a class='nav-link ";
         $text_base_five="' href='\$url'>
-                            <i class='nav-icon fa \$icon'></i>
+                            <i class='nav-icon \$icon'></i>
                             <p>\$name</p>
                             </a>
                          </li>";
@@ -310,7 +310,7 @@ trait AdminTreeTrait
             foreach ($arr as $id => $a) {
                 if (($a['id'] === $my_id) && $a['parent_id'] !== 0) {
                     $parent_ids[] = $a['parent_id'];
-                    $ru           = '<li><a><i class="fa ' . $a['icon'] . '"></i> ' . $a['name'] . '</a></li>';
+                    $ru           = '<li><a><i class="' . $a['icon'] . '"></i> ' . $a['name'] . '</a></li>';
                     $current_nav  = $ru . $current_nav;
                     $temp_result  = $this->getCurrentNav($arr, $a['parent_id'], $parent_ids, $current_nav);
                     $parent_ids   = $temp_result[0];
@@ -344,13 +344,13 @@ trait AdminTreeTrait
             $data[$key]['todo_html'] = '<td class="td-do">
                                 <a href="' . url('edit', ['id' => $value['id']]) . '"
                                    class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
-                                    <i class="fa fa-pencil"></i>
+                                    <i class="fas fa-pencil"></i>
                                 </a>
                                 <a class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"
                                    data-id="' . $value['id'] . '" data-confirm-title="删除确认"
                                    data-confirm-content=\'您确定要删除ID为 <span class="text-red">' . $value['id'] . '</span> 的数据吗\'
                                     data-url="' . url('del') . '" >
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fas fa-trash"></i>
                                 </a>
                                  </td>';
 
