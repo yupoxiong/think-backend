@@ -30,7 +30,7 @@ trait AdminAuthTrait
             . '/' . parse_name($request->action());
 
 
-        $auth_except = !empty($this->authExcept)?array_map('parse_name',$this->authExcept):$this->authExcept;
+        $auth_except = !empty($this->authExcept) ? array_map('parse_name', $this->authExcept) : $this->authExcept;
 
         // 验证权限
         if (!in_array($url, $auth_except, true)) {
@@ -48,12 +48,17 @@ trait AdminAuthTrait
                 $redirect  = url($url)->build();
                 $login_url = url('admin/auth/login', ['redirect' => $redirect])->build();
 
-                if($request->isGet()){
+                if ($request->isGet()) {
                     throw new HttpResponseException(redirect($login_url));
                 }
 
                 throw new HttpResponseException(admin_error('未登录', [], $login_url, 401));
             }
+        }
+
+        // 如果是提前验证权限
+        if ($request->param('check_auth')) {
+            throw new HttpResponseException(admin_success('验证权限成功', [], URL_CURRENT));
         }
 
         return true;
@@ -72,25 +77,4 @@ trait AdminAuthTrait
     }
 
 
-    public function createAdminLog($user, $menu): void
-    {
-        $data = [
-            'admin_user_id' => $user->id,
-            'name'          => $menu->name,
-            'log_method'    => $menu->log_method,
-            'url'           => request()->pathinfo(),
-            'log_ip'        => request()->ip()
-        ];
-        $log  = AdminLog::create($data);
-
-        $data_arr = [
-            'header' => request()->header(),
-            'param'  => request()->param(),
-        ];
-
-        $log_data = [
-            'data' => json_encode($data_arr),
-        ];
-        $log->adminLogData()->save($log_data);
-    }
 }

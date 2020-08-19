@@ -48,7 +48,7 @@ class AuthController extends BaseController
 
                 $username = $param['username'];
                 $password = $param['password'];
-                $remember = $param['remember'];
+                $remember = $param['remember'] ?? 0;
                 $redirect = $param['redirect'] ?? url('admin/index/index')->build();
 
                 $admin_user = $service->login($username, $password);

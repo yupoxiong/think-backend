@@ -51,78 +51,21 @@ class AdminLogController extends BaseController
         return $this->fetch();
     }
 
-    /**
-     * 添加
-     *
-     * @param Request $request
-     * @param AdminLog $model
-     * @param AdminLogValidate $validate
-     * @return string|Json
-     * @throws Exception
-     */
-    public function add(Request $request, AdminLog $model, AdminLogValidate $validate)
-    {
-
-        if ($request->isPost()) {
-            $param = $request->param();
-            $check = $validate->scene('admin_save')->check($param);
-            if (!$check) {
-                return admin_error($validate->getError());
-            }
-
-            $result = $model::create($param);
-
-            return $result ? admin_success('添加成功') : admin_error('添加失败');
-        }
-        return $this->fetch();
-    }
 
     /**
-     * 修改
-     *
-     * @param int $id
-     * @param Request $request
+     * @param $id
      * @param AdminLog $model
-     * @param AdminLogValidate $validate
-     * @return string|Json
+     * @return string
      * @throws Exception
      */
-    public function edit($id, Request $request, AdminLog $model, AdminLogValidate $validate)
+    public function detail($id, AdminLog $model): string
     {
-        $data = $model->findOrEmpty($id);
-        if ($request->isPost()) {
-            $param = $request->param();
-            $check = $validate->scene('admin_update')->check($param);
-            if (!$check) {
-                return admin_error($validate->getError());
-            }
-
-            $result = $model::update($param, $id);
-
-            return $result ? admin_success('修改成功') : admin_error('修改失败');
-        }
+        $data = $model->with('adminLogData')->findOrEmpty($id);
 
         $this->assign([
-            'data' => $data,
+            'data'=>$data,
         ]);
 
         return $this->fetch();
-    }
-
-    /**
-     * 删除
-     *
-     * @param int $id
-     * @param AdminLog $model
-     * @return Response
-     */
-    public function delete($id, AdminLog $model): Response
-    {
-        $result = $model::destroy(function ($query) use($id){
-            /** @var Query $query */
-            $query->whereIn('id',$id);
-        });
-
-        return $result ? admin_success('删除成功') : admin_error('删除失败');
     }
 }

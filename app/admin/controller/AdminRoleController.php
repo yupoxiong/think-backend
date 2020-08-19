@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台用户控制器
+ * 后台角色控制器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -65,7 +65,7 @@ class AdminRoleController extends BaseController
 
         if ($request->isPost()) {
             $param = $request->param();
-            $check = $validate->scene('admin_save')->check($param);
+            $check = $validate->scene('admin_add')->check($param);
             if (!$check) {
                 return admin_error($validate->getError());
             }
@@ -92,7 +92,7 @@ class AdminRoleController extends BaseController
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
             $param = $request->param();
-            $check = $validate->scene('admin_update')->check($param);
+            $check = $validate->scene('admin_edit')->check($param);
             if (!$check) {
                 return admin_error($validate->getError());
             }

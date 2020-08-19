@@ -414,7 +414,11 @@ function ajaxRequest(url, method, data, go) {
                 goUrl(go);
             },
             error: function (xhr, type, errorThrown) {
-                //异常处理；
+
+                layer.close(loadT);
+                let errorTitle = '';
+
+                // 调试信息
                 if (adminDebug) {
                     console.log('%crequest fail!', ';color:#dd4b39');
                     console.log();
@@ -422,9 +426,15 @@ function ajaxRequest(url, method, data, go) {
                     console.log("url:" + url);
                     console.log("data:");
                     console.log(data);
-                    layer.close(loadT);
                 }
-                layer.msg('访问错误,代码' + xhr.status, {icon: 2, scrollbar: false,});
+
+                if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
+                    errorTitle = xhr.responseJSON.msg;
+                } else {
+                    errorTitle = '系统繁忙,状态码' + xhr.status;
+                }
+
+                layer.msg(errorTitle, {icon: 2, scrollbar: false,});
             }
         }
     );

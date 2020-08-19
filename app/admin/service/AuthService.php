@@ -65,10 +65,16 @@ class AuthService extends AdminService
             throw new AdminServiceException('密码错误');
         }
 
+        // 检查是否被冻结
+        if ($admin_user->status !== 1) {
+            throw new AdminServiceException('账号被冻结');
+        }
+
         // Event_事件 管理用户登录
         Event::trigger('AdminUserLogin', $admin_user);
 
-        Log::info('产生了AdminUserLogin事件');
+        // 记录日志
+        (new AdminLogService())->create($admin_user, '登录');
 
         return $admin_user;
     }

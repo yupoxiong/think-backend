@@ -21,41 +21,35 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th>
-                                    <label for="dataCheckAll" class="dataCheckLabel"></label>
-                                    <input id="dataCheckAll" type="checkbox" onclick="checkAll(this)" class="checkbox" placeholder="全选/取消">
-                                </th>
                                 <th>ID</th>
-                                <th>昵称</th>
-                                <th>账号</th>
-                                <th>角色</th>
-                                <th>是否启用</th>
+                                <th>用户</th>
+                                <th>操作</th>
+                                <th>URL</th>
+                                <th>请求方式</th>
+                                <th>IP</th>
+                                <th>日期</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             {foreach name='data' id='item'}
-
                             <tr>
-
-                                <td>
-                                    <label for="dataItem{$item.id}" class="dataCheckLabel"></label>
-                                    <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox"
-                                           data-id="{$item.id}" class="checkbox dataListCheck" value="{$item.id}"
-                                           placeholder="选择/取消" id="dataItem{$item.id}">
-                                </td>
                                 <td>{$item.id}</td>
-                                <td>{$item.nickname}</td>
-                                <td>{$item.username}</td>
-                                <td>
-                                    {foreach name='item.role' id='item_role'}
-                                    {$item_role.name|default=''}
-                                    {/foreach}
+                                <td>{$item->adminUser->nickname}</td>
+                                <td>{$item.name}</td>
+                                <td>{$item.url}</td>
+                                <td>{$item.log_method}</td>
+                                <td>{$item.log_ip}</td>
+                                <td>{$item.create_time}</td>
+                                <td class="td-do">
+                                    <a data-id="{$item.id}" data-url="detail" data-confirm="2" data-type="2"
+                                       class="btn btn-default btn-xs AjaxButton" data-title="日志详情" title="查看详情" data-toggle="tooltip">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </td>
-                                <td>{$item.status_text}</td>
                             </tr>
-
                             {/foreach}
-
                             </tbody>
                         </table>
                     </div>

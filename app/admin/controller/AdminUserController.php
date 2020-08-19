@@ -127,12 +127,17 @@ class AdminUserController extends BaseController
     /**
      * 删除
      *
-     * @param int $id
+     * @param mixed $id
      * @param AdminUser $model
      * @return Response
      */
     public function del($id, AdminUser $model): Response
     {
+
+        if ((is_array($id) && in_array(1, $id)) || $id == 1) {
+            return admin_error('超级管理员不能删除');
+        }
+
         $result = $model::destroy(static function ($query) use ($id) {
             /** @var Query $query */
             $query->whereIn('id', $id);
@@ -143,7 +148,7 @@ class AdminUserController extends BaseController
 
     /**
      * 启用
-     * @param $id
+     * @param mixed $id
      * @param AdminUser $model
      * @return Json
      */
@@ -155,12 +160,16 @@ class AdminUserController extends BaseController
 
     /**
      * 禁用
-     * @param $id
+     * @param mixed $id
      * @param AdminUser $model
      * @return Json
      */
     public function disable($id, AdminUser $model): Json
     {
+        if ((is_array($id) && in_array(1, $id)) || $id == 1) {
+            return admin_error('超级管理员不能禁用');
+        }
+
         $result = $model->whereIn('id', $id)->update(['status' => 0]);
         return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }

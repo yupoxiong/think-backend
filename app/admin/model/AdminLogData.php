@@ -14,11 +14,19 @@ use think\model\relation\BelongsTo;
 
 class AdminLogData extends AdminBaseModel
 {
-//关联log
+
+    /**
+     * 关联log
+     * @return BelongsTo
+     */
     public function adminLog(): BelongsTo
     {
         return $this->belongsTo(AdminLog::class);
     }
 
+    public function getDataFormatAttr($value,$data)
+    {
+        return json_encode(json_decode($data['data'], true), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    }
 
 }
