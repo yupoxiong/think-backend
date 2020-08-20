@@ -9,6 +9,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use addons\Test;
 use app\admin\model\AdminLog;
 use app\admin\validate\AdminLogValidate;
 use Exception;
@@ -32,6 +33,8 @@ class AdminLogController extends BaseController
      */
     public function index(Request $request, AdminLog $model): string
     {
+
+        echo (new Test())->test();
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([

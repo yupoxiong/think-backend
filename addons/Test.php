@@ -7,14 +7,14 @@
 declare (strict_types=1);
 
 
-namespace addons\test\controller;
+namespace addons;
 
 
-class TestController
+class Test
 {
 
     public function test()
     {
-        return 1;
+        return ';dafdf';
     }
 }
