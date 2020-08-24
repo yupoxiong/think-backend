@@ -6,7 +6,6 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
 use app\admin\model\AdminMenu;
@@ -48,6 +47,7 @@ class AdminMenuController extends BaseController
             'page'  => $data->render(),
             'total' => $data->total(),
         ]);
+
         return $this->fetch();
     }
 
@@ -70,9 +70,10 @@ class AdminMenuController extends BaseController
                 return admin_error($validate->getError());
             }
 
-            $result = $model::create($param);
+            $result   = $model::create($param);
+            $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
 
-            return $result ? admin_success('添加成功') : admin_error('添加失败');
+            return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
         }
         return $this->fetch();
     }
@@ -112,17 +113,19 @@ class AdminMenuController extends BaseController
     /**
      * 删除
      *
-     * @param int $id
+     * @param mixed $id
      * @param AdminMenu $model
      * @return Response
      */
-    public function delete($id, AdminMenu $model): Response
+    public function del($id, AdminMenu $model): Response
     {
-        $result = $model::destroy(function ($query) use($id){
+
+
+        $result = $model::destroy(static function ($query) use ($id) {
             /** @var Query $query */
-            $query->whereIn('id',$id);
+            $query->whereIn('id', $id);
         });
 
-        return $result ? admin_success('删除成功') : admin_error('删除失败');
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 }

@@ -1,16 +1,19 @@
 {
-    "name": "yupoxiong/think-plugin",
-    "description": "基于ThinkPHP6.0的插件系统扩展",
-    "homepage": "https://github.com/yupoxiong/think-plugin",
+    "name": "yupoxiong/think-addons",
+    "description": "ThinkPHP6.0插件系统扩展",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/yupoxiong/think-addons",
     "type": "library",
-    "license": "MIT",
     "keywords": [
         "thinkphp6.0",
         "thinkphp",
         "plugin",
+        "addons",
         "插件",
+        "扩展",
         "应用"
     ],
+
     "authors": [
         {
             "name": "yupoxiong",
@@ -18,13 +21,16 @@
             "homepage": "https://www.yupoxiong.com"
         }
     ],
+
     "require": {
         "php": ">=7.3.0",
-        "topthink/framework": "^6.0.0"
+        "topthink/framework": "^6.0",
+        "topthink/think-view": "^1.0",
+        "topthink/think-helper": "^3.0.0"
     },
     "autoload": {
         "psr-4": {
-            "yupoxiong\\plugin\\": "src"
+            "yupoxiong\\addons\\": "src/"
         },
         "files": [
             "src/helper.php"
@@ -33,16 +39,16 @@
     "extra": {
         "think": {
             "services": [
-                "yupoxiong\\plugin\\Service"
+                "yupoxiong\\addons\\Service"
             ],
             "config":{
-                "plugin": "src/config.php"
+                "addons": "src/config.php"
             }
         }
     },
     "scripts" : {
         "post-install-cmd": [
-            "php think plugin:config"
+            "php think addons:config"
         ]
     }
 }

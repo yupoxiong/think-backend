@@ -6,7 +6,6 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
 use app\admin\model\AdminRole;
@@ -72,7 +71,9 @@ class AdminRoleController extends BaseController
 
             $result = $model::create($param);
 
-            return $result ? admin_success('添加成功') : admin_error('添加失败');
+            $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
+
+            return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
         }
         return $this->fetch();
     }
@@ -97,32 +98,56 @@ class AdminRoleController extends BaseController
                 return admin_error($validate->getError());
             }
 
-            $result = $model::update($param, $id);
+            $result = $data->save($param);
 
-            return $result ? admin_success('修改成功') : admin_error('修改失败');
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
             'data' => $data,
         ]);
 
-        return $this->fetch();
+        return $this->fetch('add');
     }
 
     /**
      * 删除
      *
-     * @param int $id
+     * @param mixed $id
      * @param AdminRole $model
      * @return Response
      */
-    public function delete($id, AdminRole $model): Response
+    public function del($id, AdminRole $model): Response
     {
-        $result = $model::destroy(function ($query) use($id){
+        $result = $model::destroy(static function ($query) use ($id) {
             /** @var Query $query */
-            $query->whereIn('id',$id);
+            $query->whereIn('id', $id);
         });
 
-        return $result ? admin_success('删除成功') : admin_error('删除失败');
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+    }
+
+    /**
+     * 启用
+     * @param mixed $id
+     * @param AdminRole $model
+     * @return Json
+     */
+    public function enable($id, AdminRole $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param AdminRole $model
+     * @return Json
+     */
+    public function disable($id, AdminRole $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
 }

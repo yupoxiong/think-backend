@@ -6,11 +6,11 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
 use app\admin\model\AdminRole;
 use Exception;
+use think\initializer\Error;
 use think\Request;
 use think\Response;
 use think\db\Query;
@@ -19,7 +19,6 @@ use think\db\exception\DbException;
 
 use app\admin\model\AdminUser;
 use app\admin\validate\AdminUserValidate;
-use yupoxiong\plugin\Plugin;
 
 class AdminUserController extends BaseController
 {
@@ -51,6 +50,7 @@ class AdminUserController extends BaseController
             'page'  => $data->render(),
             'total' => $data->total(),
         ]);
+
         return $this->fetch();
     }
 
@@ -65,7 +65,6 @@ class AdminUserController extends BaseController
      */
     public function add(Request $request, AdminUser $model, AdminUserValidate $validate)
     {
-
         if ($request->isPost()) {
             $param = $request->param();
             $check = $validate->scene('admin_add')->check($param);
@@ -73,12 +72,8 @@ class AdminUserController extends BaseController
                 return admin_error($validate->getError());
             }
 
-            $result = $model::create($param);
-
-            $redirect = URL_BACK;
-            if (isset($param['_create']) && (int)$param['_create'] === 1) {
-                $redirect = URL_RELOAD;
-            }
+            $result   = $model::create($param);
+            $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
 
             return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
         }
@@ -133,9 +128,9 @@ class AdminUserController extends BaseController
      */
     public function del($id, AdminUser $model): Response
     {
-
-        if ((is_array($id) && in_array(1, $id)) || $id == 1) {
-            return admin_error('超级管理员不能删除');
+        $check = $model->checkDeleteId($id);
+        if (true !== $check) {
+            return admin_error('ID 为' . $check . '的数据无法删除');
         }
 
         $result = $model::destroy(static function ($query) use ($id) {

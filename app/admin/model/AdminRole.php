@@ -14,6 +14,10 @@ namespace app\admin\model;
 class AdminRole extends AdminBaseModel
 {
 
+    protected $searchField = [
+        'name'
+    ];
+
     /**
      * 角色初始权限
      * @param AdminRole $data

@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\model;
-
 
 use think\db\Query;
 use think\Model;
@@ -16,25 +14,26 @@ use think\Model;
 class AdminBaseModel extends Model
 {
 
-    //是否字段，使用场景：用户的是否冻结，文章是否为热门等等。
+
+    // 是否字段，使用场景：用户的是否冻结，文章是否为热门等等。
     public const BOOLEAN_TEXT = [0 => '否', 1 => '是'];
 
-    //是否为软删除
+    // 是否为软删除
     public $softDelete = true;
 
-    //软删除字段默认值
+    // 软删除字段默认值
     protected $defaultSoftDelete = 0;
 
-    //可搜索字段
+    // 可作为搜索关键词的字段
     protected $searchField = [];
 
-    //可作为条件的字段
+    // 可作为条件查询的字段
     protected $whereField = [];
 
-    //可做为时间范围查询的字段
+    // 可作为时间范围查询的字段
     protected $timeField = [];
 
-    //禁止删除的数据id
+    // 禁止删除的数据id
     public $noDeletionId = [];
 
     /**
@@ -66,7 +65,7 @@ class AdminBaseModel extends Model
                 if ($value !== '' && in_array((string)$key, $this->timeField, true)) {
                     $field_type = $this->getFieldsType($this->table, $key);
                     $time_range = explode(' - ', $value);
-                    [$start_time,$end_time] = $time_range;
+                    [$start_time, $end_time] = $time_range;
                     //如果是int，进行转换
                     if (false !== strpos($field_type, 'int')) {
                         $start_time = strtotime($start_time);
@@ -85,6 +84,21 @@ class AdminBaseModel extends Model
         $by    = $param['_by'] ?? 'desc';
         $query->order($order ?: 'id', $by ?: 'desc');
     }
+
+    public function checkDeleteId($id)
+    {
+        if (count($this->noDeletionId) > 0) {
+            if (is_array($id)) {
+                if (array_intersect($this->noDeletionId, $id)) {
+                    return implode(',', $id);
+                }
+            } else if (in_array((int)$id, $this->noDeletionId, true)) {
+                return implode(',', [1]);
+            }
+        }
+        return true;
+    }
+
 
     //状态获取器
     public function getStatusTextAttr($value, $data)

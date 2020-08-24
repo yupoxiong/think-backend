@@ -1,7 +1,10 @@
 <?php
+/**
+ * 插件
+ */
 namespace addons\test;	// 注意命名空间规范
+use yupoxiong\addons\Addons;
 
-use think\Addons;
 
 /**
  * 插件测试

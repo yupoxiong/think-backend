@@ -6,6 +6,30 @@
 
     <div class="container-fluid">
         <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header dataSearch">
+                        <form class="searchForm form-inline" id="searchForm" action="" method="get">
+                            <div class="input-group input-group-sm searchGroup">
+                                <input value="{$_keywords|default=''}" name="_keywords" id="_keywords" class="form-control input-sm"
+                                       placeholder="操作/URL">
+                            </div>
+                            <div class="input-group input-group-sm searchGroup">
+                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
+                                </button>
+                            </div>
+
+                            <div class="form-group searchGroup">
+                                <button onclick="clearSearchForm()" class="btn btn-sm btn-default" type="button"><i
+                                        class="fa  fa-eraser"></i> 清空查询
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-12">
 
                 <div class="card">
@@ -18,7 +42,7 @@
                     </div>
 
                     <div class="card-body">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover table-responsive-sm">
                             <thead>
                             <tr>
                                 <th>ID</th>

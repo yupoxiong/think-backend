@@ -6,18 +6,12 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
-use addons\Test;
 use app\admin\model\AdminLog;
-use app\admin\validate\AdminLogValidate;
 use Exception;
 use think\db\exception\DbException;
-use think\db\Query;
 use think\Request;
-use think\Response;
-use think\response\Json;
 
 class AdminLogController extends BaseController
 {
@@ -33,8 +27,6 @@ class AdminLogController extends BaseController
      */
     public function index(Request $request, AdminLog $model): string
     {
-
-        echo (new Test())->test();
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
@@ -53,7 +45,6 @@ class AdminLogController extends BaseController
         ]);
         return $this->fetch();
     }
-
 
     /**
      * @param $id

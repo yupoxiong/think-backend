@@ -10,6 +10,7 @@ declare (strict_types=1);
 namespace app\admin\model;
 
 use think\db\exception\ModelNotFoundException;
+use think\model\concern\SoftDelete;
 
 /**
  * Class AdminUser
@@ -23,6 +24,10 @@ use think\db\exception\ModelNotFoundException;
  */
 class AdminUser extends AdminBaseModel
 {
+
+    use SoftDelete;
+
+    public $noDeletionId = [1];
 
     /**
      * @param AdminUser $data

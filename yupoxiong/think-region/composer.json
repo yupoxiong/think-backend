@@ -1,0 +1,28 @@
+{
+    "name": "yupoxiong/think-region",
+    "description": "基于ThinkPHP6.0省市区街道应用",
+    "homepage": "https://github.com/yupoxiong/think-region",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "region",
+        "thinkphp6.0",
+        "thinkphp",
+        "省市区"
+    ],
+    "authors": [
+        {
+            "name": "yupoxiong",
+            "email": "i@yufuping.com",
+            "homepage": "https://www.yupoxiong.com"
+        }
+    ],
+    "require": {
+        "php":">=5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "yupoxiong\\region\\": "src"
+        }
+    }
+}
