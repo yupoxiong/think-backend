@@ -12,21 +12,14 @@ namespace app\admin\validate;
 
 class AdminRoleValidate extends AdminBaseValidate
 {
-
     protected $rule = [
-        'name|名称'       => 'require',
-        'status|状态'         => 'require',
+        'name|名称'        => 'require|unique:admin_role',
+        'description|介绍' => 'require',
+        'rules|权限'       => 'require',
     ];
-
-
 
     protected $scene = [
-        'create' => ['username', 'password'],
+        'add'  => ['name', 'description'],
+        'edit' => ['name', 'description'],
     ];
-
-    public function sceneLogin(): void
-    {
-        $this->only(['username', 'password'])
-            ->remove('username', 'unique');
-    }
 }

@@ -12,24 +12,8 @@
                 <small>{$user.username|default=''}</small>
             </p>
         </li>
-        <!-- Menu Body -->
-        <li class="user-body">
-            <div class="row">
-                <div class="col-4 text-center">
-                    <a href="#">Followers</a>
-                </div>
-                <div class="col-4 text-center">
-                    <a href="#">Sales</a>
-                </div>
-                <div class="col-4 text-center">
-                    <a href="#">Friends</a>
-                </div>
-            </div>
-            <!-- /.row -->
-        </li>
-        <!-- Menu Footer-->
         <li class="user-footer">
-            <a href="{:url('admin/user/profile')}" class="btn btn-default btn-flat">个人资料</a>
+            <a href="{:url('admin/AdminUser/profile')}" class="btn btn-default btn-flat">个人资料</a>
             <a href="{:url('admin/auth/logout')}" class="btn btn-default btn-flat float-right">退  出</a>
         </li>
     </ul>

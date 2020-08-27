@@ -97,9 +97,9 @@ class AdminUser extends AdminBaseModel
 
         if ($this->id === 1) {
             return (new AdminMenu)->where('is_show', '=', 1)
-                ->order('sort_id', 'asc')
+                ->order('sort_number', 'asc')
                 ->order('id', 'asc')
-                ->column('id,parent_id,name,url,icon,sort_id', 'id');
+                ->column('id,parent_id,name,url,icon,sort_number', 'id');
         }
 
         $role_urls = (new AdminRole)->whereIn('id', $this->role)
@@ -115,9 +115,9 @@ class AdminUser extends AdminBaseModel
 
         return (new AdminMenu)->whereIn('id', $url_id)
             ->where('is_show', '=', 1)
-            ->order('sort_id', 'asc')
+            ->order('sort_number', 'asc')
             ->order('id', 'asc')
-            ->column('id,parent_id,name,url,icon,sort_id', 'id');
+            ->column('id,parent_id,name,url,icon,sort_number', 'id');
     }
 
 

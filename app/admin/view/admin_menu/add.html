@@ -21,71 +21,116 @@
                     <div class="card-body">
 
                         <div class="form-group row">
-                            <label for="role" class="col-sm-2 col-form-label ">父级菜单</label>
+                            <label for="parent_id" class="col-sm-2 col-form-label ">父级菜单</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
-                                <select class="form-control select2bs4" id="role" name="role[]" data-placeholder="请选择角色" multiple>
-                                    <option value="">请选择角色</option>
-                                    {foreach name='role_list' id='item'}
-                                    <option value="{$item.id}" {if isset($data) && in_array($item.id,$data.role)}selected{/if}>
-                                    {$item.name}
-                                    </option>
-                                    {/foreach}
+                                <select class="form-control select2bs4" id="parent_id" name="parent_id"
+                                        data-placeholder="请选择父级菜单">
+                                    <option value="0">/</option>
+                                    {$parent_list|raw|default=''}
                                 </select>
                             </div>
                         </div>
                         <script>
-                            $('.select2bs4').select2({
+                            $('#parent_id').select2({
                                 theme: 'bootstrap4'
                             })
                         </script>
 
                         <div class="form-group row">
-                            <label for="nickname" class="col-sm-2 col-form-label ">昵称</label>
+                            <label for="name" class="col-sm-2 col-form-label ">名称</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input type="text" class="form-control"
-                                       id="nickname" name="nickname" value="{$data.nickname|default=''}"
-                                       placeholder="请输入昵称">
+                                       id="name" name="name" value="{$data.name|default=''}"
+                                       placeholder="请输入名称">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="username" class="col-sm-2 col-form-label ">账号</label>
+                            <label for="url" class="col-sm-2 col-form-label ">URL</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input type="text" class="form-control"
-                                       id="username" name="username" value="{$data.username|default=''}"
-                                       placeholder="请输入账号">
+                                       id="url" name="url" value="{$data.url|default=''}"
+                                       placeholder="请输入URL">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-sm-2 col-form-label ">密码</label>
+                            <label for="sort_number" class="col-sm-2 col-form-label ">排序号</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
-                                <input type="password" class="form-control"
-                                       id="password" name="password" value="{$data.password|default=''}"
-                                       placeholder="请输入密码">
+                                <input type="number" class="form-control"
+                                       id="sort_number" name="sort_number" value="{$data.sort_number|default='1000'}"
+                                       placeholder="请输入排序号">
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="status" class="col-sm-2 col-form-label ">是否启用</label>
-                            <div class="col-sm-10 col-md-4 formInputDiv">
-                                <input class="switch fieldSwitch" id="status" name="status"
-                                       value="{$data.status|default='1'}" hidden/>
-                                <input type="checkbox" class="input-switch" id="statusSwitch" value="1"
-                                       {if(!isset($data) ||$data.status==1)}checked{/if}/>
-                            </div>
-
                         </div>
                         <script>
-                            $('#statusSwitch').bootstrapSwitch({
-                                onColor : 'success',
-                                offColor : 'danger',
-                                onText : '是',
-                                offText : '否',
+                            $('#sort_number')
+                                .bootstrapNumber({
+                                    upClass: 'success',
+                                    downClass: 'primary',
+                                    center: true
+                                });
+                        </script>
+
+                        <div class="form-group row">
+                            <label for="icon" class="col-sm-2 col-form-label">图标</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text iconpicker-component">
+                                            <i class="far fa-calendar-alt"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" maxlength="30" id="icon" name="icon"
+                                           value="{$data.icon|default='fas fa-list'}" class="form-control "
+                                           placeholder="请输入图标class">
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $('#icon').iconpicker({
+                                placement: 'bottomLeft',
+                                title: '请选择一个图标',
+                                animation:false,
+                            });
+                        </script>
+
+                        <div class="form-group row">
+                            <label for="is_show" class="col-sm-2 col-form-label ">是否显示</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input class="switch fieldSwitch" id="is_show" name="is_show"
+                                       value="{$data.is_show|default='1'}" hidden/>
+                                <input type="checkbox" class="input-switch" id="is_showSwitch" value="1"
+                                       {if(!isset($data) ||$data.is_show==1)}checked{/if}/>
+                            </div>
+                        </div>
+                        <script>
+                            $('#is_showSwitch').bootstrapSwitch({
+                                onColor: 'success',
+                                offColor: 'danger',
+                                onText: '是',
+                                offText: '否',
                                 onSwitchChange: function (event, state) {
-                                    $('#status').val(state ? '1' : '0');
+                                    $('#is_show').val(state ? '1' : '0');
                                 }
                             });
+                        </script>
+
+                        <div class="form-group row">
+                            <label for="log_method" class="col-sm-2 col-form-label ">日志记录方式</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <select class="form-control select2bs4" id="log_method" name="log_method"
+                                        data-placeholder="请选择日志记录方式">
+                                    <option value="">请选择日志记录方式</option>
+                                    {foreach name='log_method_list' id='item'}
+                                    <option value="{$item.id}" {if isset($data)&&$data.log_method==$item.id}selected{/if}>{$item.name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <script>
+                            $('#log_method').select2({
+                                theme: 'bootstrap4'
+                            })
                         </script>
 
                     </div>
@@ -108,15 +153,12 @@
                                     </button>
                                 </div>
 
-
                                 {if !isset($data)}
-
                                 <div class="btn-group float-right createContinueDiv">
-                                    <input type="checkbox" class="form-check-input" value="1" id="_create" name="_create" title="继续添加数据">
+                                    <input type="checkbox" class="form-check-input" value="1" id="_create"
+                                           name="_create" title="继续添加数据">
                                     <label class="form-check-label" for="_create">继续添加</label>
                                 </div>
-
-
                                 {/if}
                             </div>
                         </div>
@@ -132,33 +174,19 @@
     /** 表单验证 **/
     $('#dataForm').validate({
         rules: {
-            'role[]': {
+            'name': {
                 required: true,
             },
-            'username': {
+            'url': {
                 required: true,
             },
-            'nickname': {
-                required: true,
-            },
-            'password': {
-                required: true,
-            },
-
-
         },
         messages: {
-            'role[]': {
-                required: "请选择角色",
+            'name': {
+                required: "名称不能为空",
             },
-            'username': {
-                required: "用户名不能为空",
-            },
-            'nickname': {
-                required: "昵称不能为空",
-            },
-            'password': {
-                required: "密码不能为空",
+            'url': {
+                required: "URL不能为空",
             },
         }
     });

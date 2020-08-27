@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 后台菜单验证器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -12,21 +12,23 @@ namespace app\admin\validate;
 
 class AdminMenuValidate extends AdminBaseValidate
 {
-
     protected $rule = [
-        'name|名称'       => 'require',
-        'status|状态'         => 'require',
+        'parent_id|父级菜单'    => 'require|egt:0',
+        'name|名称'           => 'require',
+        'url|URL'           => 'require|unique:admin_menu',
+        'icon|图标'           => 'require',
+        'sort_number|排序'    => 'require',
+        'is_show|是否显示'      => 'require',
+        'log_method|日志记录方式' => 'require',
     ];
 
-
+    protected $message = [
+        'parent_id.egt' => '请选择上级菜单',
+    ];
 
     protected $scene = [
-        'create' => ['username', 'password'],
+        'add'  => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
+        'edit' => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
     ];
 
-    public function sceneLogin(): void
-    {
-        $this->only(['username', 'password'])
-            ->remove('username', 'unique');
-    }
 }

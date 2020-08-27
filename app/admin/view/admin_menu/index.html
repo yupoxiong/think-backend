@@ -7,37 +7,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header dataSearch">
-                        <form class="searchForm form-inline" id="searchForm">
-                            <div class="input-group input-group-sm searchGroup">
-                                <input value="" name="_keywords" id="_keywords" class="form-control input-sm"
-                                       placeholder="用户名/手机号/昵称">
-                            </div>
 
-
-                            <div class="input-group input-group-sm searchGroup">
-                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
-                                </button>
-                            </div>
-
-                            <div class="form-group searchGroup">
-                                <button onclick="exportData()" class="btn btn-sm btn-warning exportData" type="button"><i
-                                        class="fa fa-search"></i> 导出
-                                </button>
-                            </div>
-
-                            <div class="form-group searchGroup">
-                                <button onclick="clearSearchForm()" class="btn btn-sm btn-default" type="button"><i
-                                        class="fa  fa-eraser"></i> 清空查询
-                                </button>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-12">
 
@@ -81,72 +51,22 @@
                                            placeholder="全选/取消">
                                 </th>
                                 <th>ID</th>
-                                <th>昵称</th>
-                                <th>账号</th>
-                                <th>角色</th>
-                                <th>是否启用</th>
+                                <th>菜单名称</th>
+                                <th>url</th>
+                                <th>父级ID</th>
+                                <th>图标</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>日志记录方式</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {foreach name='data' id='item'}
-
-                            <tr>
-
-                                <td>
-                                    <label for="dataItem{$item.id}" class="dataCheckLabel"></label>
-                                    <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox"
-                                           data-id="{$item.id}" class="checkbox dataListCheck" value="{$item.id}"
-                                           placeholder="选择/取消" id="dataItem{$item.id}">
-                                </td>
-                                <td>{$item.id}</td>
-                                <td>{$item.nickname}</td>
-                                <td>{$item.username}</td>
-                                <td>
-                                    {foreach name='item.role_list' id='item_role'}
-                                    {$item_role.name|default=''}
-                                    {/foreach}
-                                </td>
-                                <td>{$item.status_text}</td>
-
-                                <td>
-                                    <a href="{:url('admin_user/edit',['id'=>$item.id])}"
-                                       class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-
-                                    <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-
-                                    {if $item.status==1}
-                                    <button class="btn btn-warning btn-xs AjaxButton" data-toggle="tooltip" title="禁用"
-                                       data-id="{$item.id}" data-confirm-title="禁用确认"
-                                       data-confirm-content='您确定要禁用ID为 <span class="text-red">{$item.id}</span> 的数据吗'
-                                       data-url="{:url('disable')}">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                    {else/}
-                                    <button class="btn btn-success btn-xs AjaxButton" data-toggle="tooltip" title="启用"
-                                       data-id="{$item.id}" data-confirm-title="启用确认"
-                                       data-confirm-content='您确定要启用ID为 <span class="text-red">{$item.id}</span> 的数据吗'
-                                       data-url="{:url('enable')}">
-                                        <i class="far fa-circle"></i>
-                                    </button>
-                                    {/if}
-                                </td>
-
-                            </tr>
-
-                            {/foreach}
-
+                            {$data|raw}
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        {$page|raw}
-                    </div>
+
                 </div>
 
             </div>

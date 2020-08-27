@@ -51,7 +51,7 @@ trait AdminTreeTrait
      * @param string $str_group
      * @return string
      */
-    public function getTree($my_id, $str, $sid = 0, $adds = '', $str_group = '')
+    public function getTree($my_id, $str, $sid = 0, $adds = '', $str_group = ''): string
     {
         $parent_id = '';
         $n_str     = '';
@@ -92,7 +92,7 @@ trait AdminTreeTrait
      * @param $parent_ids
      * @return mixed
      */
-    public function get_authTree($my_id, $current_id, $parent_ids)
+    public function getAuthTree($my_id, $current_id, $parent_ids)
     {
 
         $n_str = '';
@@ -119,7 +119,7 @@ trait AdminTreeTrait
                     }
 
 
-                    self::get_authTree($k, $current_id, $parent_ids);
+                    self::getAuthTree($k, $current_id, $parent_ids);
                     eval("\$n_str = \"$text[2]\";");
                     $this->html .= $n_str;
                 } else if ($k === $current_id) {
@@ -284,7 +284,7 @@ trait AdminTreeTrait
         $this->text['current'] = $text_current;
         $this->text['other']   = $text_other;
 
-        return $this->get_authTree(0, $current_id, $parent_ids);
+        return $this->getAuthTree(0, $current_id, $parent_ids);
     }
 
     //获取父级菜单
@@ -327,7 +327,7 @@ trait AdminTreeTrait
      * @param Model $model
      * @return string
      */
-    protected function getTreeList($model)
+    protected function getTreeList($model): string
     {
 
         $data = $model->column('id,name,parent_id', 'id');
@@ -377,7 +377,7 @@ trait AdminTreeTrait
      * @param int $selected
      * @return string
      */
-    protected function getSelectList($model, $selected = 0)
+    protected function getSelectList($model, $selected = 0): string
     {
         $data = $model->column('id,parent_id,name', 'id');
 
