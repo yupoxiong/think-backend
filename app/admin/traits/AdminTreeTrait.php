@@ -92,7 +92,7 @@ trait AdminTreeTrait
      * @param $parent_ids
      * @return mixed
      */
-    public function getAuthTree($my_id, $current_id, $parent_ids)
+    public function getLeftMenuTree($my_id, $current_id, $parent_ids)
     {
 
         $n_str = '';
@@ -118,8 +118,7 @@ trait AdminTreeTrait
                         $this->html .= $n_str;
                     }
 
-
-                    self::getAuthTree($k, $current_id, $parent_ids);
+                    self::getLeftMenuTree($k, $current_id, $parent_ids);
                     eval("\$n_str = \"$text[2]\";");
                     $this->html .= $n_str;
                 } else if ($k === $current_id) {
@@ -237,7 +236,7 @@ trait AdminTreeTrait
 
         $this->initTree($menu);
 
-        $text_base_one   = "<li class='nav-item has-treeview";
+        $text_base_one = "<li class='nav-item has-treeview";
 
         $text_base_two   = "'><a href='#' class='nav-link' >
 <i class='\$icon'></i>
@@ -250,30 +249,30 @@ trait AdminTreeTrait
 
         $text_base_four = "<li class='nav-item'>
                             <a class='nav-link ";
-        $text_base_five="' href='\$url'>
+        $text_base_five = "' href='\$url'>
                             <i class='nav-icon \$icon'></i>
                             <p>\$name</p>
                             </a>
                          </li>";
 
         // 有子菜单，不打开
-        $text_0       = $text_base_one . $text_base_two . $text_base_three;
+        $text_0 = $text_base_one . $text_base_two . $text_base_three;
 
         //echo $text_0.'<br/><br/><br/>';
 
         // 有子菜单，打开
-        $text_1       = $text_base_one  .$text_open . $text_base_two  . $text_base_three;
+        $text_1 = $text_base_one . $text_open . $text_base_two . $text_base_three;
         //echo $text_1.'<br/><br/><br/>';
 
-        $text_2       = '</ul></li>';
+        $text_2 = '</ul></li>';
         //echo $text_2.'<br/><br/><br/>';
 
         // 当前的子菜单
-        $text_current = $text_base_four .' active ' . $text_base_five;
+        $text_current = $text_base_four . ' active ' . $text_base_five;
         //echo $text_current.'<br/><br/><br/>';
 
         //其他的子菜单
-        $text_other   = $text_base_four . $text_base_five;
+        $text_other = $text_base_four . $text_base_five;
         //echo $text_other.'<br/><br/><br/>';
 
         for ($i = 0; $i <= $max_level; $i++) {
@@ -284,7 +283,7 @@ trait AdminTreeTrait
         $this->text['current'] = $text_current;
         $this->text['other']   = $text_other;
 
-        return $this->getAuthTree(0, $current_id, $parent_ids);
+        return $this->getLeftMenuTree(0, $current_id, $parent_ids);
     }
 
     //获取父级菜单
@@ -302,23 +301,27 @@ trait AdminTreeTrait
         return !empty($parent_ids) ? $parent_ids : false;
     }
 
-    //获取当前导航
-    protected function getCurrentNav($arr, $my_id, $parent_ids = array(), $current_nav = '')
+    /**
+     * 获取当前面包屑
+     * @param $data
+     * @param $current_id
+     * @param string $current_nav
+     * @return string
+     */
+    protected function getBreadCrumb($data, $current_id, $current_nav = ''): string
     {
-        $a = array();
-        if (is_array($arr)) {
-            foreach ($arr as $id => $a) {
-                if (($a['id'] === $my_id) && $a['parent_id'] !== 0) {
-                    $parent_ids[] = $a['parent_id'];
-                    $ru           = '<li><a><i class="' . $a['icon'] . '"></i> ' . $a['name'] . '</a></li>';
-                    $current_nav  = $ru . $current_nav;
-                    $temp_result  = $this->getCurrentNav($arr, $a['parent_id'], $parent_ids, $current_nav);
-                    $parent_ids   = $temp_result[0];
-                    $current_nav  = $temp_result[1];
+        $breadcrumb = '';
+        foreach ($data as $key => $value) {
+            if ($value['id'] === $current_id && $value['id'] !== 1) {
+                $html       = '<li class="breadcrumb-item active">'. $value['name'] . '</li>';
+                $breadcrumb = $html . $current_nav;
+                if ($value['parent_id'] === 0) {
+                    return $breadcrumb;
                 }
+                return $this->getBreadCrumb($data, $value['parent_id'], $breadcrumb);
             }
         }
-        return !empty([$parent_ids, $current_nav]) ? [$parent_ids, $current_nav] : false;
+        return $breadcrumb;
     }
 
 
@@ -385,8 +388,6 @@ trait AdminTreeTrait
         $this->initTree($data);
         return $this->getTree(0, $html, $selected);
     }
-
-
 
 
 }

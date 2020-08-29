@@ -5,7 +5,7 @@
 
 return [
     // session name
-    'name'           => 'PHPSESSID',
+    'name'           => 'AppSId',
     // SESSION_ID的提交变量,解决flash上传跨域
     'var_session_id' => '',
     // 驱动方式 支持file cache

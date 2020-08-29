@@ -75,9 +75,6 @@ $(function () {
     });
 
 
-
-
-
 });
 
 /* 清除搜索表单 */
@@ -92,12 +89,12 @@ function clearSearchForm() {
 /**
  * 点击菜单高亮
  */
-function initMenuClick () {
+function initMenuClick() {
     $('.nav-sidebar li:not(.has-treeview) > a').on('click', function () {
-        if(adminDebug){
+        if (adminDebug) {
             console.log('点击了菜单');
         }
-         $(this).addClass('active');
+        $(this).addClass('active');
         let $parents = $(this).parents('li');
         $parents.find('a:first').addClass('active');
         $parents.siblings().find('a').removeClass('active');
@@ -105,6 +102,24 @@ function initMenuClick () {
     });
 
     $('[data-toggle="popover"]').popover();
+}
+
+/**
+ * 显示上传文件页面
+ * @param domId
+ * @param fileType
+ */
+function showFileUpload(domId, fileType) {
+
+    layer.open({
+        type: 1,
+        area: ['80%', '60%'],
+        title: '上传文件',
+        closeBtn: 1,
+        shift: 0,
+        content: uploadUrl + '?dom_id=' + domId + '&file_type=' + fileType,
+        scrollbar: false,
+    });
 }
 
 
@@ -139,8 +154,8 @@ function checkThis(obj) {
     } else {
         $("#dataCheckAll").prop("checked", false);
     }
-    if(adminDebug){
-        console.log('当前选中的ID：'+JSON.stringify(dataSelectIds));
+    if (adminDebug) {
+        console.log('当前选中的ID：' + JSON.stringify(dataSelectIds));
     }
 }
 
@@ -156,8 +171,8 @@ function checkAll(obj) {
     } else {
         all_check.prop("checked", false);
     }
-    if(adminDebug){
-        console.log('当前选中的ID：'+JSON.stringify(dataSelectIds));
+    if (adminDebug) {
+        console.log('当前选中的ID：' + JSON.stringify(dataSelectIds));
     }
 }
 
@@ -397,7 +412,7 @@ function ajaxRequest(url, method, data, go) {
             success: function (result) {
                 layer.close(loadT);
                 layer.msg(result.msg, {
-                    icon:1,
+                    icon: 1,
                     scrollbar: false,
                 });
 

@@ -13,6 +13,7 @@ namespace app\admin\model;
  * Class AdminMenu
  * @package app\admin\model
  * @property int $parent_id
+ * @property string $name
  */
 class AdminMenu extends AdminBaseModel
 {

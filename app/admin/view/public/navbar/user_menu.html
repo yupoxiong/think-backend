@@ -6,14 +6,14 @@
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <!-- User image -->
         <li class="user-header bg-primary">
-            <img src="{$admin.user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
+            <img src="{$user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
             <p>
                 {$user.nickname|default=''}
                 <small>{$user.username|default=''}</small>
             </p>
         </li>
         <li class="user-footer">
-            <a href="{:url('admin/AdminUser/profile')}" class="btn btn-default btn-flat">个人资料</a>
+            <a href="{:url('admin/admin_user/profile')}" class="btn btn-default btn-flat">个人资料</a>
             <a href="{:url('admin/auth/logout')}" class="btn btn-default btn-flat float-right">退  出</a>
         </li>
     </ul>

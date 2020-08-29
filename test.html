@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>系统发生错误</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+        /* Base */
+        body {
+            color: #333;
+            font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 20px 20px;
+        }
+        h1{
+            margin: 10px 0 0;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+        }
+        h2{
+            color: #4288ce;
+            font-weight: 400;
+            padding: 6px 0;
+            margin: 6px 0 0;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+        }
+        h3{
+            margin: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        abbr{
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        a{
+            color: #868686;
+            cursor: pointer;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        .line-error{
+            background: #f8cbcb;
+        }
+
+        .echo table {
+            width: 100%;
+        }
+
+        .echo pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f7f7f7;
+            border: 0;
+            border-radius: 3px;
+            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        .echo pre > pre {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Exception Info */
+        .exception {
+            margin-top: 20px;
+        }
+        .exception .message{
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-bottom: 0 none;
+            line-height: 18px;
+            font-size:16px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+
+        .exception .code{
+            float: left;
+            text-align: center;
+            color: #fff;
+            margin-right: 12px;
+            padding: 16px;
+            border-radius: 4px;
+            background: #999;
+        }
+        .exception .source-code{
+            padding: 6px;
+            border: 1px solid #ddd;
+
+            background: #f9f9f9;
+            overflow-x: auto;
+
+        }
+        .exception .source-code pre{
+            margin: 0;
+        }
+        .exception .source-code pre ol{
+            margin: 0;
+            color: #4288ce;
+            display: inline-block;
+            min-width: 100%;
+            box-sizing: border-box;
+            font-size:14px;
+            font-family: "Century Gothic",Consolas,"Liberation Mono",Courier,Verdana;
+            padding-left: 56px;
+        }
+        .exception .source-code pre li{
+            border-left: 1px solid #ddd;
+            height: 18px;
+            line-height: 18px;
+        }
+        .exception .source-code pre code{
+            color: #333;
+            height: 100%;
+            display: inline-block;
+            border-left: 1px solid #fff;
+            font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace{
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-top: 0 none;
+            line-height: 16px;
+            font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace ol{
+            margin: 12px;
+        }
+        .exception .trace ol li{
+            padding: 2px 4px;
+        }
+        .exception div:last-child{
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Exception Variables */
+        .exception-var table{
+            width: 100%;
+            margin: 12px 0;
+            box-sizing: border-box;
+            table-layout:fixed;
+            word-wrap:break-word;
+        }
+        .exception-var table caption{
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 6px 0;
+        }
+        .exception-var table caption small{
+            font-weight: 300;
+            display: inline-block;
+            margin-left: 10px;
+            color: #ccc;
+        }
+        .exception-var table tbody{
+            font-size: 13px;
+            font-family: Consolas,"Liberation Mono",Courier,"微软雅黑";
+        }
+        .exception-var table td{
+            padding: 0 6px;
+            vertical-align: top;
+            word-break: break-all;
+        }
+        .exception-var table td:first-child{
+            width: 28%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .exception-var table td pre{
+            margin: 0;
+        }
+
+        /* Copyright Info */
+        .copyright{
+            margin-top: 24px;
+            padding: 12px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* SPAN elements with the classes below are added by prettyprint. */
+        pre.prettyprint .pln { color: #000 }  /* plain text */
+        pre.prettyprint .str { color: #080 }  /* string content */
+        pre.prettyprint .kwd { color: #008 }  /* a keyword */
+        pre.prettyprint .com { color: #800 }  /* a comment */
+        pre.prettyprint .typ { color: #606 }  /* a type name */
+        pre.prettyprint .lit { color: #066 }  /* a literal value */
+        /* punctuation, lisp open bracket, lisp close bracket */
+        pre.prettyprint .pun, pre.prettyprint .opn, pre.prettyprint .clo { color: #660 }
+        pre.prettyprint .tag { color: #008 }  /* a markup tag name */
+        pre.prettyprint .atn { color: #606 }  /* a markup attribute name */
+        pre.prettyprint .atv { color: #080 }  /* a markup attribute value */
+        pre.prettyprint .dec, pre.prettyprint .var { color: #606 }  /* a declaration; a variable name */
+        pre.prettyprint .fun { color: red }  /* a function name */
+    </style>
+</head>
+<body>
+<div class="echo">
+</div>
+<div class="exception">
+    <div class="message">
+
+        <div class="info">
+            <div>
+                <h2>[8]&nbsp;<abbr title="think\exception\ErrorException">ErrorException</abbr> in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/lib/Upload.php line 262">Upload.php line 262</a></h2>
+            </div>
+            <div><h1>Trying to access array offset on value of type bool</h1></div>
+        </div>
+
+    </div>
+    <div class="source-code">
+            <pre class="prettyprint lang-php"><ol start="253"><li class="line-253"><code>            $error = $fileImage-&gt;getError();
+</code></li><li class="line-254"><code>            unset($fileImage);
+</code></li><li class="line-255"><code>            unlink($strSaveFilePath);
+</code></li><li class="line-256"><code>            $this-&gt;error = $error;
+</code></li><li class="line-257"><code>            return false;
+</code></li><li class="line-258"><code>        }
+</code></li><li class="line-259"><code>
+</code></li><li class="line-260"><code>        //  $url=$first['url'];
+</code></li><li class="line-261"><code>        $storageSetting = cmf_get_cmf_settings('storage');
+</code></li><li class="line-262"><code>        $qiniuSetting   = $storageSetting['Qiniu']['setting'];
+</code></li><li class="line-263"><code>        //$url=preg_replace('/^https/', $qiniu_setting['protocol'], $url);
+</code></li><li class="line-264"><code>        //$url=preg_replace('/^http/', $qiniu_setting['protocol'], $url);
+</code></li><li class="line-265"><code>
+</code></li><li class="line-266"><code>        $arrInfo = [];
+</code></li><li class="line-267"><code>        if (config('FILE_UPLOAD_TYPE') == 'Qiniu' &amp;&amp; $qiniuSetting['enable_picture_protect']) {
+</code></li><li class="line-268"><code>            //todo  qiniu code ...
+</code></li><li class="line-269"><code>            // $previewUrl = $url.$qiniuSetting['style_separator'].$qiniuSetting['styles']['thumbnail300x300'];
+</code></li><li class="line-270"><code>            // $url= $url.$qiniuSetting['style_separator'].$qiniuSetting['styles']['watermark'];
+</code></li><li class="line-271"><code>        } else {
+</code></li></ol></pre>
+    </div>
+    <div class="trace">
+        <h2>Call Stack</h2>
+        <ol>
+            <li>in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/lib/Upload.php line 262">Upload.php line 262</a></li>
+            <li>
+                at <abbr title="think\Error">Error</abbr>::appError(8, '<a class="toggle" title="Trying to access array offset on value of type bool">Trying to access arr...</a>', '<a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/lib/Upload.php">/Users/yufuping/work...</a>', 262, ['uploadSetting' => ['file_types' => ['image' => ['upload_max_filesize' => '10240', 'extensions' => '<a class="toggle" title="jpg,jpeg,png,gif,bmp4">jpg,jpeg,png,gif,bmp...</a>'], 'video' => ['upload_max_filesize' => '10240', 'extensions' => '<a class="toggle" title="mp4,avi,wmv,rm,rmvb,mkv">mp4,avi,wmv,rm,rmvb,...</a>'], 'audio' => ['upload_max_filesize' => '10240', 'extensions' => 'mp3,wma,wav'], ...], 'chunk_size' => 512, 'max_files' => 20, ...], 'arrFileTypes' => ['image' => ['title' => 'Image files', 'extensions' => '<a class="toggle" title="jpg,jpeg,png,gif,bmp4">jpg,jpeg,png,gif,bmp...</a>'], 'video' => ['title' => 'Video files', 'extensions' => '<a class="toggle" title="mp4,avi,wmv,rm,rmvb,mkv">mp4,avi,wmv,rm,rmvb,...</a>'], 'audio' => ['title' => 'Audio files', 'extensions' => 'mp3,wma,wav'], ...], 'arrData' => ['_ajax' => '1', 'app' => 'admin', 'filetype' => 'image', ...], ...]) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/lib/Upload.php line 262">Upload.php line 262</a>                </li>
+            <li>
+                at <abbr title="cmf\lib\Upload">Upload</abbr>->upload() in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf-app/src/user/controller/AssetController.php line 42">AssetController.php line 42</a>                </li>
+            <li>
+                at <abbr title="app\user\controller\AssetController">AssetController</abbr>->webuploader()                </li>
+            <li>
+                at <abbr title="ReflectionMethod">ReflectionMethod</abbr>->invokeArgs(<em>object</em>(<abbr title="app\user\controller\AssetController">AssetController</abbr>), []) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/Container.php line 395">Container.php line 395</a>                </li>
+            <li>
+                at <abbr title="think\Container">Container</abbr>->invokeReflectMethod(<em>object</em>(<abbr title="app\user\controller\AssetController">AssetController</abbr>), <em>object</em>(<abbr title="ReflectionMethod">ReflectionMethod</abbr>), ['_ajax' => '1', 'app' => 'admin', 'filetype' => 'image', ...]) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/route/dispatch/Module.php line 131">Module.php line 131</a>                </li>
+            <li>
+                at <abbr title="think\route\dispatch\Module">Module</abbr>->think\route\dispatch\{closure}(<em>object</em>(<abbr title="think\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>), <em>null</em>)                </li>
+            <li>
+                at call_user_func_array(<em>object</em>(<abbr title="Closure">Closure</abbr>), [<em>object</em>(<abbr title="think\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>), <em>null</em>]) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/Middleware.php line 185">Middleware.php line 185</a>                </li>
+            <li>
+                at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="think\Request">Request</abbr>))                </li>
+            <li>
+                at call_user_func(<em>object</em>(<abbr title="Closure">Closure</abbr>), <em>object</em>(<abbr title="think\Request">Request</abbr>)) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/Middleware.php line 130">Middleware.php line 130</a>                </li>
+            <li>
+                at <abbr title="think\Middleware">Middleware</abbr>->dispatch(<em>object</em>(<abbr title="think\Request">Request</abbr>), 'controller') in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/route/dispatch/Module.php line 136">Module.php line 136</a>                </li>
+            <li>
+                at <abbr title="think\route\dispatch\Module">Module</abbr>->exec() in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/route/Dispatch.php line 168">Dispatch.php line 168</a>                </li>
+            <li>
+                at <abbr title="think\route\Dispatch">Dispatch</abbr>->run() in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/App.php line 484">App.php line 484</a>                </li>
+            <li>
+                at <abbr title="think\App">App</abbr>->think\{closure}(<em>object</em>(<abbr title="think\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>), <em>null</em>)                </li>
+            <li>
+                at call_user_func_array(<em>object</em>(<abbr title="Closure">Closure</abbr>), [<em>object</em>(<abbr title="think\Request">Request</abbr>), <em>object</em>(<abbr title="Closure">Closure</abbr>), <em>null</em>]) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/Middleware.php line 185">Middleware.php line 185</a>                </li>
+            <li>
+                at <abbr title="think\Middleware">Middleware</abbr>->think\{closure}(<em>object</em>(<abbr title="think\Request">Request</abbr>))                </li>
+            <li>
+                at call_user_func(<em>object</em>(<abbr title="Closure">Closure</abbr>), <em>object</em>(<abbr title="think\Request">Request</abbr>)) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkphp/library/think/Middleware.php line 130">Middleware.php line 130</a>                </li>
+            <li>
+                at <abbr title="think\Middleware">Middleware</abbr>->dispatch(<em>object</em>(<abbr title="think\Request">Request</abbr>)) in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/vendor/thinkcmf/cmf/src/App.php line 487">App.php line 487</a>                </li>
+            <li>
+                at <abbr title="think\App">App</abbr>->run() in <a class="toggle" title="/Users/yufuping/work/php/THinkCMF/public/index.php line 33">index.php line 33</a>                </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="exception-var">
+    <h2>Environment Variables</h2>
+    <table>
+        <caption>GET Data</caption>
+        <tbody>
+        <tr>
+            <td>_ajax</td>
+            <td>
+                1                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>POST Data</caption>
+        <tbody>
+        <tr>
+            <td>app</td>
+            <td>
+                admin                    </td>
+        </tr>
+        <tr>
+            <td>filetype</td>
+            <td>
+                image                    </td>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>
+                WU_FILE_0                    </td>
+        </tr>
+        <tr>
+            <td>name</td>
+            <td>
+                14B070D3EBDF8553FE8AA4EFE58861DF.png                    </td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>
+                image/png                    </td>
+        </tr>
+        <tr>
+            <td>lastModifiedDate</td>
+            <td>
+                Tue Aug 25 2020 14:59:37 GMT+0800 (中国标准时间)                    </td>
+        </tr>
+        <tr>
+            <td>size</td>
+            <td>
+                16511                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>Files</caption>
+        <tbody>
+        <tr>
+            <td>file</td>
+            <td>
+                {
+                &quot;name&quot;: &quot;14B070D3EBDF8553FE8AA4EFE58861DF.png&quot;,
+                &quot;type&quot;: &quot;image\/png&quot;,
+                &quot;tmp_name&quot;: &quot;\/private\/var\/tmp\/phpTYLQEJ&quot;,
+                &quot;error&quot;: 0,
+                &quot;size&quot;: 16511
+                }                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>Cookies</caption>
+        <tbody>
+        <tr>
+            <td>thinkphp_show_page_trace</td>
+            <td>
+                0|0                    </td>
+        </tr>
+        <tr>
+            <td>PHPSESSID</td>
+            <td>
+                gb360jv6sdu88gt1cft5f207k9                    </td>
+        </tr>
+        <tr>
+            <td>admin_username</td>
+            <td>
+                admin                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>Session</caption>
+        <tbody>
+        <tr>
+            <td>think</td>
+            <td>
+                {
+                &quot;install&quot;: {
+                &quot;db_config&quot;: {
+                &quot;type&quot;: &quot;mysql&quot;,
+                &quot;hostname&quot;: &quot;127.0.0.1&quot;,
+                &quot;username&quot;: &quot;root&quot;,
+                &quot;password&quot;: &quot;root&quot;,
+                &quot;hostport&quot;: &quot;3306&quot;,
+                &quot;charset&quot;: &quot;utf8mb4&quot;,
+                &quot;database&quot;: &quot;thinkcmf&quot;,
+                &quot;prefix&quot;: &quot;cmf_&quot;
+                },
+                &quot;sql&quot;: [
+                &quot;--\n-- \u8868\u7684\u7ed3\u6784 `cmf_admin_menu`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_admin_menu` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `parent_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7236\u83dc\u5355id',\n  `type` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u83dc\u5355\u7c7b\u578b;1:\u6709\u754c\u9762\u53ef\u8bbf\u95ee\u83dc\u5355,2:\u65e0\u754c\u9762\u53ef\u8bbf\u95ee\u83dc\u5355,0:\u53ea\u4f5c\u4e3a\u83dc\u5355',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u72b6\u6001;1:\u663e\u793a,0:\u4e0d\u663e\u793a',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `app` varchar(40) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5e94\u7528\u540d',\n  `controller` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u63a7\u5236\u5668\u540d',\n  `action` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u64cd\u4f5c\u540d\u79f0',\n  `param` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u989d\u5916\u53c2\u6570',\n  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u83dc\u5355\u540d\u79f0',\n  `icon` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u83dc\u5355\u56fe\u6807',\n  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u5907\u6ce8',\n  PRIMARY KEY (`id`),\n  KEY `status` (`status`),\n  KEY `parent_id` (`parent_id`),\n  KEY `controller` (`controller`)\n) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8mb4 COMMENT='\u540e\u53f0\u83dc\u5355\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_admin_menu`\n--\n\nINSERT INTO `cmf_admin_menu` (`id`, `parent_id`, `type`, `status`, `list_order`, `app`, `controller`, `action`, `param`, `name`, `icon`, `remark`) VALUES\n(1, 0, 0, 1, 20, 'admin', 'Plugin', 'default', '', '\u63d2\u4ef6\u4e2d\u5fc3', 'cloud', '\u63d2\u4ef6\u4e2d\u5fc3'),\n(2, 1, 1, 1, 10000, 'admin', 'Hook', 'index', '', '\u94a9\u5b50\u7ba1\u7406', '', '\u94a9\u5b50\u7ba1\u7406'),\n(3, 2, 1, 0, 10000, 'admin', 'Hook', 'plugins', '', '\u94a9\u5b50\u63d2\u4ef6\u7ba1\u7406', '', '\u94a9\u5b50\u63d2\u4ef6\u7ba1\u7406'),\n(4, 2, 2, 0, 10000, 'admin', 'Hook', 'pluginListOrder', '', '\u94a9\u5b50\u63d2\u4ef6\u6392\u5e8f', '', '\u94a9\u5b50\u63d2\u4ef6\u6392\u5e8f'),\n(5, 2, 1, 0, 10000, 'admin', 'Hook', 'sync', '', '\u540c\u6b65\u94a9\u5b50', '', '\u540c\u6b65\u94a9\u5b50'),\n(6, 0, 0, 1, 0, 'admin', 'Setting', 'default', '', '\u8bbe\u7f6e', 'cogs', '\u7cfb\u7edf\u8bbe\u7f6e\u5165\u53e3'),\n(7, 6, 1, 1, 50, 'admin', 'Link', 'index', '', '\u53cb\u60c5\u94fe\u63a5', '', '\u53cb\u60c5\u94fe\u63a5\u7ba1\u7406'),\n(8, 7, 1, 0, 10000, 'admin', 'Link', 'add', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5'),\n(9, 7, 2, 0, 10000, 'admin', 'Link', 'addPost', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58'),\n(10, 7, 1, 0, 10000, 'admin', 'Link', 'edit', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5'),\n(11, 7, 2, 0, 10000, 'admin', 'Link', 'editPost', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58'),\n(12, 7, 2, 0, 10000, 'admin', 'Link', 'delete', '', '\u5220\u9664\u53cb\u60c5\u94fe\u63a5', '', '\u5220\u9664\u53cb\u60c5\u94fe\u63a5'),\n(13, 7, 2, 0, 10000, 'admin', 'Link', 'listOrder', '', '\u53cb\u60c5\u94fe\u63a5\u6392\u5e8f', '', '\u53cb\u60c5\u94fe\u63a5\u6392\u5e8f'),\n(14, 7, 2, 0, 10000, 'admin', 'Link', 'toggle', '', '\u53cb\u60c5\u94fe\u63a5\u663e\u793a\u9690\u85cf', '', '\u53cb\u60c5\u94fe\u63a5\u663e\u793a\u9690\u85cf'),\n(15, 6, 1, 1, 10, 'admin', 'Mailer', 'index', '', '\u90ae\u7bb1\u914d\u7f6e', '', '\u90ae\u7bb1\u914d\u7f6e'),\n(16, 15, 2, 0, 10000, 'admin', 'Mailer', 'indexPost', '', '\u90ae\u7bb1\u914d\u7f6e\u63d0\u4ea4\u4fdd\u5b58', '', '\u90ae\u7bb1\u914d\u7f6e\u63d0\u4ea4\u4fdd\u5b58'),\n(17, 15, 1, 0, 10000, 'admin', 'Mailer', 'template', '', '\u90ae\u4ef6\u6a21\u677f', '', '\u90ae\u4ef6\u6a21\u677f'),\n(18, 15, 2, 0, 10000, 'admin', 'Mailer', 'templatePost', '', '\u90ae\u4ef6\u6a21\u677f\u63d0\u4ea4', '', '\u90ae\u4ef6\u6a21\u677f\u63d0\u4ea4'),\n(19, 15, 1, 0, 10000, 'admin', 'Mailer', 'test', '', '\u90ae\u4ef6\u53d1\u9001\u6d4b\u8bd5', '', '\u90ae\u4ef6\u53d1\u9001\u6d4b\u8bd5'),\n(20, 6, 1, 0, 10000, 'admin', 'Menu', 'index', '', '\u540e\u53f0\u83dc\u5355', '', '\u540e\u53f0\u83dc\u5355\u7ba1\u7406'),\n(21, 20, 1, 0, 10000, 'admin', 'Menu', 'lists', '', '\u6240\u6709\u83dc\u5355', '', '\u540e\u53f0\u6240\u6709\u83dc\u5355\u5217\u8868'),\n(22, 20, 1, 0, 10000, 'admin', 'Menu', 'add', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0'),\n(23, 20, 2, 0, 10000, 'admin', 'Menu', 'addPost', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0\u63d0\u4ea4\u4fdd\u5b58', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0\u63d0\u4ea4\u4fdd\u5b58'),\n(24, 20, 1, 0, 10000, 'admin', 'Menu', 'edit', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91'),\n(25, 20, 2, 0, 10000, 'admin', 'Menu', 'editPost', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58'),\n(26, 20, 2, 0, 10000, 'admin', 'Menu', 'delete', '', '\u540e\u53f0\u83dc\u5355\u5220\u9664', '', '\u540e\u53f0\u83dc\u5355\u5220\u9664'),\n(27, 20, 2, 0, 10000, 'admin', 'Menu', 'listOrder', '', '\u540e\u53f0\u83dc\u5355\u6392\u5e8f', '', '\u540e\u53f0\u83dc\u5355\u6392\u5e8f'),\n(28, 20, 1, 0, 10000, 'admin', 'Menu', 'getActions', '', '\u5bfc\u5165\u65b0\u540e\u53f0\u83dc\u5355', '', '\u5bfc\u5165\u65b0\u540e\u53f0\u83dc\u5355'),\n(29, 6, 1, 1, 30, 'admin', 'Nav', 'index', '', '\u5bfc\u822a\u7ba1\u7406', '', '\u5bfc\u822a\u7ba1\u7406'),\n(30, 29, 1, 0, 10000, 'admin', 'Nav', 'add', '', '\u6dfb\u52a0\u5bfc\u822a', '', '\u6dfb\u52a0\u5bfc\u822a'),\n(31, 29, 2, 0, 10000, 'admin', 'Nav', 'addPost', '', '\u6dfb\u52a0\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58', '', '\u6dfb\u52a0\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58'),\n(32, 29, 1, 0, 10000, 'admin', 'Nav', 'edit', '', '\u7f16\u8f91\u5bfc\u822a', '', '\u7f16\u8f91\u5bfc\u822a'),\n(33, 29, 2, 0, 10000, 'admin', 'Nav', 'editPost', '', '\u7f16\u8f91\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58', '', '\u7f16\u8f91\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58'),\n(34, 29, 2, 0, 10000, 'admin', 'Nav', 'delete', '', '\u5220\u9664\u5bfc\u822a', '', '\u5220\u9664\u5bfc\u822a'),\n(35, 29, 1, 0, 10000, 'admin', 'NavMenu', 'index', '', '\u5bfc\u822a\u83dc\u5355', '', '\u5bfc\u822a\u83dc\u5355'),\n(36, 35, 1, 0, 10000, 'admin', 'NavMenu', 'add', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355'),\n(37, 35, 2, 0, 10000, 'admin', 'NavMenu', 'addPost', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58'),\n(38, 35, 1, 0, 10000, 'admin', 'NavMenu', 'edit', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355'),\n(39, 35, 2, 0, 10000, 'admin', 'NavMenu', 'editPost', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58'),\n(40, 35, 2, 0, 10000, 'admin', 'NavMenu', 'delete', '', '\u5220\u9664\u5bfc\u822a\u83dc\u5355', '', '\u5220\u9664\u5bfc\u822a\u83dc\u5355'),\n(41, 35, 2, 0, 10000, 'admin', 'NavMenu', 'listOrder', '', '\u5bfc\u822a\u83dc\u5355\u6392\u5e8f', '', '\u5bfc\u822a\u83dc\u5355\u6392\u5e8f'),\n(42, 1, 1, 1, 10000, 'admin', 'Plugin', 'index', '', '\u63d2\u4ef6\u5217\u8868', '', '\u63d2\u4ef6\u5217\u8868'),\n(43, 42, 2, 0, 10000, 'admin', 'Plugin', 'toggle', '', '\u63d2\u4ef6\u542f\u7528\u7981\u7528', '', '\u63d2\u4ef6\u542f\u7528\u7981\u7528'),\n(44, 42, 1, 0, 10000, 'admin', 'Plugin', 'setting', '', '\u63d2\u4ef6\u8bbe\u7f6e', '', '\u63d2\u4ef6\u8bbe\u7f6e'),\n(45, 42, 2, 0, 10000, 'admin', 'Plugin', 'settingPost', '', '\u63d2\u4ef6\u8bbe\u7f6e\u63d0\u4ea4', '', '\u63d2\u4ef6\u8bbe\u7f6e\u63d0\u4ea4'),\n(46, 42, 2, 0, 10000, 'admin', 'Plugin', 'install', '', '\u63d2\u4ef6\u5b89\u88c5', '', '\u63d2\u4ef6\u5b89\u88c5'),\n(47, 42, 2, 0, 10000, 'admin', 'Plugin', 'update', '', '\u63d2\u4ef6\u66f4\u65b0', '', '\u63d2\u4ef6\u66f4\u65b0'),\n(48, 42, 2, 0, 10000, 'admin', 'Plugin', 'uninstall', '', '\u5378\u8f7d\u63d2\u4ef6', '', '\u5378\u8f7d\u63d2\u4ef6'),\n(49, 110, 0, 1, 10000, 'admin', 'User', 'default', '', '\u7ba1\u7406\u7ec4', '', '\u7ba1\u7406\u7ec4'),\n(50, 49, 1, 1, 10000, 'admin', 'Rbac', 'index', '', '\u89d2\u8272\u7ba1\u7406', '', '\u89d2\u8272\u7ba1\u7406'),\n(51, 50, 1, 0, 10000, 'admin', 'Rbac', 'roleAdd', '', '\u6dfb\u52a0\u89d2\u8272', '', '\u6dfb\u52a0\u89d2\u8272'),\n(52, 50, 2, 0, 10000, 'admin', 'Rbac', 'roleAddPost', '', '\u6dfb\u52a0\u89d2\u8272\u63d0\u4ea4', '', '\u6dfb\u52a0\u89d2\u8272\u63d0\u4ea4'),\n(53, 50, 1, 0, 10000, 'admin', 'Rbac', 'roleEdit', '', '\u7f16\u8f91\u89d2\u8272', '', '\u7f16\u8f91\u89d2\u8272'),\n(54, 50, 2, 0, 10000, 'admin', 'Rbac', 'roleEditPost', '', '\u7f16\u8f91\u89d2\u8272\u63d0\u4ea4', '', '\u7f16\u8f91\u89d2\u8272\u63d0\u4ea4'),\n(55, 50, 2, 0, 10000, 'admin', 'Rbac', 'roleDelete', '', '\u5220\u9664\u89d2\u8272', '', '\u5220\u9664\u89d2\u8272'),\n(56, 50, 1, 0, 10000, 'admin', 'Rbac', 'authorize', '', '\u8bbe\u7f6e\u89d2\u8272\u6743\u9650', '', '\u8bbe\u7f6e\u89d2\u8272\u6743\u9650'),\n(57, 50, 2, 0, 10000, 'admin', 'Rbac', 'authorizePost', '', '\u89d2\u8272\u6388\u6743\u63d0\u4ea4', '', '\u89d2\u8272\u6388\u6743\u63d0\u4ea4'),\n(58, 0, 1, 0, 10000, 'admin', 'RecycleBin', 'index', '', '\u56de\u6536\u7ad9', '', '\u56de\u6536\u7ad9'),\n(59, 58, 2, 0, 10000, 'admin', 'RecycleBin', 'restore', '', '\u56de\u6536\u7ad9\u8fd8\u539f', '', '\u56de\u6536\u7ad9\u8fd8\u539f'),\n(60, 58, 2, 0, 10000, 'admin', 'RecycleBin', 'delete', '', '\u56de\u6536\u7ad9\u5f7b\u5e95\u5220\u9664', '', '\u56de\u6536\u7ad9\u5f7b\u5e95\u5220\u9664'),\n(61, 6, 1, 1, 10000, 'admin', 'Route', 'index', '', 'URL\u7f8e\u5316', '', 'URL\u89c4\u5219\u7ba1\u7406'),\n(62, 61, 1, 0, 10000, 'admin', 'Route', 'add', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219'),\n(63, 61, 2, 0, 10000, 'admin', 'Route', 'addPost', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219\u63d0\u4ea4', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219\u63d0\u4ea4'),\n(64, 61, 1, 0, 10000, 'admin', 'Route', 'edit', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91'),\n(65, 61, 2, 0, 10000, 'admin', 'Route', 'editPost', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91\u63d0\u4ea4', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91\u63d0\u4ea4'),\n(66, 61, 2, 0, 10000, 'admin', 'Route', 'delete', '', '\u8def\u7531\u89c4\u5219\u5220\u9664', '', '\u8def\u7531\u89c4\u5219\u5220\u9664'),\n(67, 61, 2, 0, 10000, 'admin', 'Route', 'ban', '', '\u8def\u7531\u89c4\u5219\u7981\u7528', '', '\u8def\u7531\u89c4\u5219\u7981\u7528'),\n(68, 61, 2, 0, 10000, 'admin', 'Route', 'open', '', '\u8def\u7531\u89c4\u5219\u542f\u7528', '', '\u8def\u7531\u89c4\u5219\u542f\u7528'),\n(69, 61, 2, 0, 10000, 'admin', 'Route', 'listOrder', '', '\u8def\u7531\u89c4\u5219\u6392\u5e8f', '', '\u8def\u7531\u89c4\u5219\u6392\u5e8f'),\n(70, 61, 1, 0, 10000, 'admin', 'Route', 'select', '', '\u9009\u62e9URL', '', '\u9009\u62e9URL'),\n(71, 6, 1, 1, 0, 'admin', 'Setting', 'site', '', '\u7f51\u7ad9\u4fe1\u606f', '', '\u7f51\u7ad9\u4fe1\u606f'),\n(72, 71, 2, 0, 10000, 'admin', 'Setting', 'sitePost', '', '\u7f51\u7ad9\u4fe1\u606f\u8bbe\u7f6e\u63d0\u4ea4', '', '\u7f51\u7ad9\u4fe1\u606f\u8bbe\u7f6e\u63d0\u4ea4'),\n(73, 6, 1, 0, 10000, 'admin', 'Setting', 'password', '', '\u5bc6\u7801\u4fee\u6539', '', '\u5bc6\u7801\u4fee\u6539'),\n(74, 73, 2, 0, 10000, 'admin', 'Setting', 'passwordPost', '', '\u5bc6\u7801\u4fee\u6539\u63d0\u4ea4', '', '\u5bc6\u7801\u4fee\u6539\u63d0\u4ea4'),\n(75, 6, 1, 1, 10000, 'admin', 'Setting', 'upload', '', '\u4e0a\u4f20\u8bbe\u7f6e', '', '\u4e0a\u4f20\u8bbe\u7f6e'),\n(76, 75, 2, 0, 10000, 'admin', 'Setting', 'uploadPost', '', '\u4e0a\u4f20\u8bbe\u7f6e\u63d0\u4ea4', '', '\u4e0a\u4f20\u8bbe\u7f6e\u63d0\u4ea4'),\n(77, 6, 1, 0, 10000, 'admin', 'Setting', 'clearCache', '', '\u6e05\u9664\u7f13\u5b58', '', '\u6e05\u9664\u7f13\u5b58'),\n(78, 6, 1, 1, 40, 'admin', 'Slide', 'index', '', '\u5e7b\u706f\u7247\u7ba1\u7406', '', '\u5e7b\u706f\u7247\u7ba1\u7406'),\n(79, 78, 1, 0, 10000, 'admin', 'Slide', 'add', '', '\u6dfb\u52a0\u5e7b\u706f\u7247', '', '\u6dfb\u52a0\u5e7b\u706f\u7247'),\n(80, 78, 2, 0, 10000, 'admin', 'Slide', 'addPost', '', '\u6dfb\u52a0\u5e7b\u706f\u7247\u63d0\u4ea4', '', '\u6dfb\u52a0\u5e7b\u706f\u7247\u63d0\u4ea4'),\n(81, 78, 1, 0, 10000, 'admin', 'Slide', 'edit', '', '\u7f16\u8f91\u5e7b\u706f\u7247', '', '\u7f16\u8f91\u5e7b\u706f\u7247'),\n(82, 78, 2, 0, 10000, 'admin', 'Slide', 'editPost', '', '\u7f16\u8f91\u5e7b\u706f\u7247\u63d0\u4ea4', '', '\u7f16\u8f91\u5e7b\u706f\u7247\u63d0\u4ea4'),\n(83, 78, 2, 0, 10000, 'admin', 'Slide', 'delete', '', '\u5220\u9664\u5e7b\u706f\u7247', '', '\u5220\u9664\u5e7b\u706f\u7247'),\n(84, 78, 1, 0, 10000, 'admin', 'SlideItem', 'index', '', '\u5e7b\u706f\u7247\u9875\u9762\u5217\u8868', '', '\u5e7b\u706f\u7247\u9875\u9762\u5217\u8868'),\n(85, 84, 1, 0, 10000, 'admin', 'SlideItem', 'add', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0'),\n(86, 84, 2, 0, 10000, 'admin', 'SlideItem', 'addPost', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0\u63d0\u4ea4', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0\u63d0\u4ea4'),\n(87, 84, 1, 0, 10000, 'admin', 'SlideItem', 'edit', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91'),\n(88, 84, 2, 0, 10000, 'admin', 'SlideItem', 'editPost', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91\u63d0\u4ea4', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91\u63d0\u4ea4'),\n(89, 84, 2, 0, 10000, 'admin', 'SlideItem', 'delete', '', '\u5e7b\u706f\u7247\u9875\u9762\u5220\u9664', '', '\u5e7b\u706f\u7247\u9875\u9762\u5220\u9664'),\n(90, 84, 2, 0, 10000, 'admin', 'SlideItem', 'ban', '', '\u5e7b\u706f\u7247\u9875\u9762\u9690\u85cf', '', '\u5e7b\u706f\u7247\u9875\u9762\u9690\u85cf'),\n(91, 84, 2, 0, 10000, 'admin', 'SlideItem', 'cancelBan', '', '\u5e7b\u706f\u7247\u9875\u9762\u663e\u793a', '', '\u5e7b\u706f\u7247\u9875\u9762\u663e\u793a'),\n(92, 84, 2, 0, 10000, 'admin', 'SlideItem', 'listOrder', '', '\u5e7b\u706f\u7247\u9875\u9762\u6392\u5e8f', '', '\u5e7b\u706f\u7247\u9875\u9762\u6392\u5e8f'),\n(93, 6, 1, 1, 10000, 'admin', 'Storage', 'index', '', '\u6587\u4ef6\u5b58\u50a8', '', '\u6587\u4ef6\u5b58\u50a8'),\n(94, 93, 2, 0, 10000, 'admin', 'Storage', 'settingPost', '', '\u6587\u4ef6\u5b58\u50a8\u8bbe\u7f6e\u63d0\u4ea4', '', '\u6587\u4ef6\u5b58\u50a8\u8bbe\u7f6e\u63d0\u4ea4'),\n(95, 6, 1, 1, 20, 'admin', 'Theme', 'index', '', '\u6a21\u677f\u7ba1\u7406', '', '\u6a21\u677f\u7ba1\u7406'),\n(96, 95, 1, 0, 10000, 'admin', 'Theme', 'install', '', '\u5b89\u88c5\u6a21\u677f', '', '\u5b89\u88c5\u6a21\u677f'),\n(97, 95, 2, 0, 10000, 'admin', 'Theme', 'uninstall', '', '\u5378\u8f7d\u6a21\u677f', '', '\u5378\u8f7d\u6a21\u677f'),\n(98, 95, 2, 0, 10000, 'admin', 'Theme', 'installTheme', '', '\u6a21\u677f\u5b89\u88c5', '', '\u6a21\u677f\u5b89\u88c5'),\n(99, 95, 2, 0, 10000, 'admin', 'Theme', 'update', '', '\u6a21\u677f\u66f4\u65b0', '', '\u6a21\u677f\u66f4\u65b0'),\n(100, 95, 2, 0, 10000, 'admin', 'Theme', 'active', '', '\u542f\u7528\u6a21\u677f', '', '\u542f\u7528\u6a21\u677f'),\n(101, 95, 1, 0, 10000, 'admin', 'Theme', 'files', '', '\u6a21\u677f\u6587\u4ef6\u5217\u8868', '', '\u542f\u7528\u6a21\u677f'),\n(102, 95, 1, 0, 10000, 'admin', 'Theme', 'fileSetting', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e'),\n(103, 95, 1, 0, 10000, 'admin', 'Theme', 'fileArrayData', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5217\u8868', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5217\u8868'),\n(104, 95, 2, 0, 10000, 'admin', 'Theme', 'fileArrayDataEdit', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91'),\n(105, 95, 2, 0, 10000, 'admin', 'Theme', 'fileArrayDataEditPost', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58'),\n(106, 95, 2, 0, 10000, 'admin', 'Theme', 'fileArrayDataDelete', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5220\u9664', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5220\u9664'),\n(107, 95, 2, 0, 10000, 'admin', 'Theme', 'settingPost', '', '\u6a21\u677f\u6587\u4ef6\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', '', '\u6a21\u677f\u6587\u4ef6\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58'),\n(108, 95, 1, 0, 10000, 'admin', 'Theme', 'dataSource', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e\u6570\u636e\u6e90', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e\u6570\u636e\u6e90'),\n(109, 95, 1, 0, 10000, 'admin', 'Theme', 'design', '', '\u6a21\u677f\u8bbe\u8ba1', '', '\u6a21\u677f\u8bbe\u8ba1'),\n(110, 0, 0, 1, 10, 'user', 'AdminIndex', 'default', '', '\u7528\u6237\u7ba1\u7406', 'group', '\u7528\u6237\u7ba1\u7406'),\n(111, 49, 1, 1, 10000, 'admin', 'User', 'index', '', '\u7ba1\u7406\u5458', '', '\u7ba1\u7406\u5458\u7ba1\u7406'),\n(112, 111, 1, 0, 10000, 'admin', 'User', 'add', '', '\u7ba1\u7406\u5458\u6dfb\u52a0', '', '\u7ba1\u7406\u5458\u6dfb\u52a0'),\n(113, 111, 2, 0, 10000, 'admin', 'User', 'addPost', '', '\u7ba1\u7406\u5458\u6dfb\u52a0\u63d0\u4ea4', '', '\u7ba1\u7406\u5458\u6dfb\u52a0\u63d0\u4ea4'),\n(114, 111, 1, 0, 10000, 'admin', 'User', 'edit', '', '\u7ba1\u7406\u5458\u7f16\u8f91', '', '\u7ba1\u7406\u5458\u7f16\u8f91'),\n(115, 111, 2, 0, 10000, 'admin', 'User', 'editPost', '', '\u7ba1\u7406\u5458\u7f16\u8f91\u63d0\u4ea4', '', '\u7ba1\u7406\u5458\u7f16\u8f91\u63d0\u4ea4'),\n(116, 111, 1, 0, 10000, 'admin', 'User', 'userInfo', '', '\u4e2a\u4eba\u4fe1\u606f', '', '\u7ba1\u7406\u5458\u4e2a\u4eba\u4fe1\u606f\u4fee\u6539'),\n(117, 111, 2, 0, 10000, 'admin', 'User', 'userInfoPost', '', '\u7ba1\u7406\u5458\u4e2a\u4eba\u4fe1\u606f\u4fee\u6539\u63d0\u4ea4', '', '\u7ba1\u7406\u5458\u4e2a\u4eba\u4fe1\u606f\u4fee\u6539\u63d0\u4ea4'),\n(118, 111, 2, 0, 10000, 'admin', 'User', 'delete', '', '\u7ba1\u7406\u5458\u5220\u9664', '', '\u7ba1\u7406\u5458\u5220\u9664'),\n(119, 111, 2, 0, 10000, 'admin', 'User', 'ban', '', '\u505c\u7528\u7ba1\u7406\u5458', '', '\u505c\u7528\u7ba1\u7406\u5458'),\n(120, 111, 2, 0, 10000, 'admin', 'User', 'cancelBan', '', '\u542f\u7528\u7ba1\u7406\u5458', '', '\u542f\u7528\u7ba1\u7406\u5458'),\n(121, 0, 1, 0, 10000, 'user', 'AdminAsset', 'index', '', '\u8d44\u6e90\u7ba1\u7406', 'file', '\u8d44\u6e90\u7ba1\u7406\u5217\u8868'),\n(122, 121, 2, 0, 10000, 'user', 'AdminAsset', 'delete', '', '\u5220\u9664\u6587\u4ef6', '', '\u5220\u9664\u6587\u4ef6'),\n(123, 110, 0, 1, 10000, 'user', 'AdminIndex', 'default1', '', '\u7528\u6237\u7ec4', '', '\u7528\u6237\u7ec4'),\n(124, 123, 1, 1, 10000, 'user', 'AdminIndex', 'index', '', '\u672c\u7ad9\u7528\u6237', '', '\u672c\u7ad9\u7528\u6237'),\n(125, 124, 2, 0, 10000, 'user', 'AdminIndex', 'ban', '', '\u672c\u7ad9\u7528\u6237\u62c9\u9ed1', '', '\u672c\u7ad9\u7528\u6237\u62c9\u9ed1'),\n(126, 124, 2, 0, 10000, 'user', 'AdminIndex', 'cancelBan', '', '\u672c\u7ad9\u7528\u6237\u542f\u7528', '', '\u672c\u7ad9\u7528\u6237\u542f\u7528'),\n(127, 123, 1, 1, 10000, 'user', 'AdminOauth', 'index', '', '\u7b2c\u4e09\u65b9\u7528\u6237', '', '\u7b2c\u4e09\u65b9\u7528\u6237'),\n(128, 127, 2, 0, 10000, 'user', 'AdminOauth', 'delete', '', '\u5220\u9664\u7b2c\u4e09\u65b9\u7528\u6237\u7ed1\u5b9a', '', '\u5220\u9664\u7b2c\u4e09\u65b9\u7528\u6237\u7ed1\u5b9a'),\n(129, 6, 1, 1, 10000, 'user', 'AdminUserAction', 'index', '', '\u7528\u6237\u64cd\u4f5c\u7ba1\u7406', '', '\u7528\u6237\u64cd\u4f5c\u7ba1\u7406'),\n(130, 129, 1, 0, 10000, 'user', 'AdminUserAction', 'edit', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c'),\n(131, 129, 2, 0, 10000, 'user', 'AdminUserAction', 'editPost', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c\u63d0\u4ea4', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c\u63d0\u4ea4'),\n(132, 129, 1, 0, 10000, 'user', 'AdminUserAction', 'sync', '', '\u540c\u6b65\u7528\u6237\u64cd\u4f5c', '', '\u540c\u6b65\u7528\u6237\u64cd\u4f5c')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_asset`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_asset` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7528\u6237id',\n  `file_size` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6587\u4ef6\u5927\u5c0f,\u5355\u4f4dB',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u4e0a\u4f20\u65f6\u95f4',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u53ef\u7528,0:\u4e0d\u53ef\u7528',\n  `download_times` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u4e0b\u8f7d\u6b21\u6570',\n  `file_key` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u6587\u4ef6\u60df\u4e00\u7801',\n  `filename` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u6587\u4ef6\u540d',\n  `file_path` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u6587\u4ef6\u8def\u5f84,\u76f8\u5bf9\u4e8eupload\u76ee\u5f55,\u53ef\u4ee5\u4e3aurl',\n  `file_md5` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u6587\u4ef6md5\u503c',\n  `file_sha1` varchar(40) CHARACTER SET utf8 NOT NULL DEFAULT '',\n  `suffix` varchar(10) NOT NULL DEFAULT '' COMMENT '\u6587\u4ef6\u540e\u7f00\u540d,\u4e0d\u5305\u62ec\u70b9',\n  `more` text COMMENT '\u5176\u5b83\u8be6\u7ec6\u4fe1\u606f,JSON\u683c\u5f0f',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u8d44\u6e90\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_auth_access`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_auth_access` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `role_id` int(10) UNSIGNED NOT NULL COMMENT '\u89d2\u8272',\n  `rule_name` varchar(100) NOT NULL DEFAULT '' COMMENT '\u89c4\u5219\u552f\u4e00\u82f1\u6587\u6807\u8bc6,\u5168\u5c0f\u5199',\n  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '\u6743\u9650\u89c4\u5219\u5206\u7c7b,\u8bf7\u52a0\u5e94\u7528\u524d\u7f00,\u5982admin_',\n  PRIMARY KEY (`id`),\n  KEY `role_id` (`role_id`),\n  KEY `rule_name` (`rule_name`) USING BTREE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\u6743\u9650\u6388\u6743\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_auth_rule`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_auth_rule` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '\u89c4\u5219id,\u81ea\u589e\u4e3b\u952e',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u662f\u5426\u6709\u6548(0:\u65e0\u6548,1:\u6709\u6548)',\n  `app` varchar(15) NOT NULL COMMENT '\u89c4\u5219\u6240\u5c5emodule',\n  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '\u6743\u9650\u89c4\u5219\u5206\u7c7b\uff0c\u8bf7\u52a0\u5e94\u7528\u524d\u7f00,\u5982admin_',\n  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '\u89c4\u5219\u552f\u4e00\u82f1\u6587\u6807\u8bc6,\u5168\u5c0f\u5199',\n  `param` varchar(100) NOT NULL DEFAULT '' COMMENT '\u989d\u5916url\u53c2\u6570',\n  `title` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u89c4\u5219\u63cf\u8ff0',\n  `condition` varchar(200) NOT NULL DEFAULT '' COMMENT '\u89c4\u5219\u9644\u52a0\u6761\u4ef6',\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `name` (`name`) USING BTREE,\n  KEY `module` (`app`,`status`,`type`)\n) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8mb4 COMMENT='\u6743\u9650\u89c4\u5219\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_auth_rule`\n--\n\nINSERT INTO `cmf_auth_rule` (`id`, `status`, `app`, `type`, `name`, `param`, `title`, `condition`) VALUES\n(1, 1, 'admin', 'admin_url', 'admin\/Hook\/index', '', '\u94a9\u5b50\u7ba1\u7406', ''),\n(2, 1, 'admin', 'admin_url', 'admin\/Hook\/plugins', '', '\u94a9\u5b50\u63d2\u4ef6\u7ba1\u7406', ''),\n(3, 1, 'admin', 'admin_url', 'admin\/Hook\/pluginListOrder', '', '\u94a9\u5b50\u63d2\u4ef6\u6392\u5e8f', ''),\n(4, 1, 'admin', 'admin_url', 'admin\/Hook\/sync', '', '\u540c\u6b65\u94a9\u5b50', ''),\n(5, 1, 'admin', 'admin_url', 'admin\/Link\/index', '', '\u53cb\u60c5\u94fe\u63a5', ''),\n(6, 1, 'admin', 'admin_url', 'admin\/Link\/add', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5', ''),\n(7, 1, 'admin', 'admin_url', 'admin\/Link\/addPost', '', '\u6dfb\u52a0\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58', ''),\n(8, 1, 'admin', 'admin_url', 'admin\/Link\/edit', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5', ''),\n(9, 1, 'admin', 'admin_url', 'admin\/Link\/editPost', '', '\u7f16\u8f91\u53cb\u60c5\u94fe\u63a5\u63d0\u4ea4\u4fdd\u5b58', ''),\n(10, 1, 'admin', 'admin_url', 'admin\/Link\/delete', '', '\u5220\u9664\u53cb\u60c5\u94fe\u63a5', ''),\n(11, 1, 'admin', 'admin_url', 'admin\/Link\/listOrder', '', '\u53cb\u60c5\u94fe\u63a5\u6392\u5e8f', ''),\n(12, 1, 'admin', 'admin_url', 'admin\/Link\/toggle', '', '\u53cb\u60c5\u94fe\u63a5\u663e\u793a\u9690\u85cf', ''),\n(13, 1, 'admin', 'admin_url', 'admin\/Mailer\/index', '', '\u90ae\u7bb1\u914d\u7f6e', ''),\n(14, 1, 'admin', 'admin_url', 'admin\/Mailer\/indexPost', '', '\u90ae\u7bb1\u914d\u7f6e\u63d0\u4ea4\u4fdd\u5b58', ''),\n(15, 1, 'admin', 'admin_url', 'admin\/Mailer\/template', '', '\u90ae\u4ef6\u6a21\u677f', ''),\n(16, 1, 'admin', 'admin_url', 'admin\/Mailer\/templatePost', '', '\u90ae\u4ef6\u6a21\u677f\u63d0\u4ea4', ''),\n(17, 1, 'admin', 'admin_url', 'admin\/Mailer\/test', '', '\u90ae\u4ef6\u53d1\u9001\u6d4b\u8bd5', ''),\n(18, 1, 'admin', 'admin_url', 'admin\/Menu\/index', '', '\u540e\u53f0\u83dc\u5355', ''),\n(19, 1, 'admin', 'admin_url', 'admin\/Menu\/lists', '', '\u6240\u6709\u83dc\u5355', ''),\n(20, 1, 'admin', 'admin_url', 'admin\/Menu\/add', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0', ''),\n(21, 1, 'admin', 'admin_url', 'admin\/Menu\/addPost', '', '\u540e\u53f0\u83dc\u5355\u6dfb\u52a0\u63d0\u4ea4\u4fdd\u5b58', ''),\n(22, 1, 'admin', 'admin_url', 'admin\/Menu\/edit', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91', ''),\n(23, 1, 'admin', 'admin_url', 'admin\/Menu\/editPost', '', '\u540e\u53f0\u83dc\u5355\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', ''),\n(24, 1, 'admin', 'admin_url', 'admin\/Menu\/delete', '', '\u540e\u53f0\u83dc\u5355\u5220\u9664', ''),\n(25, 1, 'admin', 'admin_url', 'admin\/Menu\/listOrder', '', '\u540e\u53f0\u83dc\u5355\u6392\u5e8f', ''),\n(26, 1, 'admin', 'admin_url', 'admin\/Menu\/getActions', '', '\u5bfc\u5165\u65b0\u540e\u53f0\u83dc\u5355', ''),\n(27, 1, 'admin', 'admin_url', 'admin\/Nav\/index', '', '\u5bfc\u822a\u7ba1\u7406', ''),\n(28, 1, 'admin', 'admin_url', 'admin\/Nav\/add', '', '\u6dfb\u52a0\u5bfc\u822a', ''),\n(29, 1, 'admin', 'admin_url', 'admin\/Nav\/addPost', '', '\u6dfb\u52a0\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58', ''),\n(30, 1, 'admin', 'admin_url', 'admin\/Nav\/edit', '', '\u7f16\u8f91\u5bfc\u822a', ''),\n(31, 1, 'admin', 'admin_url', 'admin\/Nav\/editPost', '', '\u7f16\u8f91\u5bfc\u822a\u63d0\u4ea4\u4fdd\u5b58', ''),\n(32, 1, 'admin', 'admin_url', 'admin\/Nav\/delete', '', '\u5220\u9664\u5bfc\u822a', ''),\n(33, 1, 'admin', 'admin_url', 'admin\/NavMenu\/index', '', '\u5bfc\u822a\u83dc\u5355', ''),\n(34, 1, 'admin', 'admin_url', 'admin\/NavMenu\/add', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355', ''),\n(35, 1, 'admin', 'admin_url', 'admin\/NavMenu\/addPost', '', '\u6dfb\u52a0\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58', ''),\n(36, 1, 'admin', 'admin_url', 'admin\/NavMenu\/edit', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355', ''),\n(37, 1, 'admin', 'admin_url', 'admin\/NavMenu\/editPost', '', '\u7f16\u8f91\u5bfc\u822a\u83dc\u5355\u63d0\u4ea4\u4fdd\u5b58', ''),\n(38, 1, 'admin', 'admin_url', 'admin\/NavMenu\/delete', '', '\u5220\u9664\u5bfc\u822a\u83dc\u5355', ''),\n(39, 1, 'admin', 'admin_url', 'admin\/NavMenu\/listOrder', '', '\u5bfc\u822a\u83dc\u5355\u6392\u5e8f', ''),\n(40, 1, 'admin', 'admin_url', 'admin\/Plugin\/default', '', '\u63d2\u4ef6\u4e2d\u5fc3', ''),\n(41, 1, 'admin', 'admin_url', 'admin\/Plugin\/index', '', '\u63d2\u4ef6\u5217\u8868', ''),\n(42, 1, 'admin', 'admin_url', 'admin\/Plugin\/toggle', '', '\u63d2\u4ef6\u542f\u7528\u7981\u7528', ''),\n(43, 1, 'admin', 'admin_url', 'admin\/Plugin\/setting', '', '\u63d2\u4ef6\u8bbe\u7f6e', ''),\n(44, 1, 'admin', 'admin_url', 'admin\/Plugin\/settingPost', '', '\u63d2\u4ef6\u8bbe\u7f6e\u63d0\u4ea4', ''),\n(45, 1, 'admin', 'admin_url', 'admin\/Plugin\/install', '', '\u63d2\u4ef6\u5b89\u88c5', ''),\n(46, 1, 'admin', 'admin_url', 'admin\/Plugin\/update', '', '\u63d2\u4ef6\u66f4\u65b0', ''),\n(47, 1, 'admin', 'admin_url', 'admin\/Plugin\/uninstall', '', '\u5378\u8f7d\u63d2\u4ef6', ''),\n(48, 1, 'admin', 'admin_url', 'admin\/Rbac\/index', '', '\u89d2\u8272\u7ba1\u7406', ''),\n(49, 1, 'admin', 'admin_url', 'admin\/Rbac\/roleAdd', '', '\u6dfb\u52a0\u89d2\u8272', ''),\n(50, 1, 'admin', 'admin_url', 'admin\/Rbac\/roleAddPost', '', '\u6dfb\u52a0\u89d2\u8272\u63d0\u4ea4', ''),\n(51, 1, 'admin', 'admin_url', 'admin\/Rbac\/roleEdit', '', '\u7f16\u8f91\u89d2\u8272', ''),\n(52, 1, 'admin', 'admin_url', 'admin\/Rbac\/roleEditPost', '', '\u7f16\u8f91\u89d2\u8272\u63d0\u4ea4', ''),\n(53, 1, 'admin', 'admin_url', 'admin\/Rbac\/roleDelete', '', '\u5220\u9664\u89d2\u8272', ''),\n(54, 1, 'admin', 'admin_url', 'admin\/Rbac\/authorize', '', '\u8bbe\u7f6e\u89d2\u8272\u6743\u9650', ''),\n(55, 1, 'admin', 'admin_url', 'admin\/Rbac\/authorizePost', '', '\u89d2\u8272\u6388\u6743\u63d0\u4ea4', ''),\n(56, 1, 'admin', 'admin_url', 'admin\/RecycleBin\/index', '', '\u56de\u6536\u7ad9', ''),\n(57, 1, 'admin', 'admin_url', 'admin\/RecycleBin\/restore', '', '\u56de\u6536\u7ad9\u8fd8\u539f', ''),\n(58, 1, 'admin', 'admin_url', 'admin\/RecycleBin\/delete', '', '\u56de\u6536\u7ad9\u5f7b\u5e95\u5220\u9664', ''),\n(59, 1, 'admin', 'admin_url', 'admin\/Route\/index', '', 'URL\u7f8e\u5316', ''),\n(60, 1, 'admin', 'admin_url', 'admin\/Route\/add', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219', ''),\n(61, 1, 'admin', 'admin_url', 'admin\/Route\/addPost', '', '\u6dfb\u52a0\u8def\u7531\u89c4\u5219\u63d0\u4ea4', ''),\n(62, 1, 'admin', 'admin_url', 'admin\/Route\/edit', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91', ''),\n(63, 1, 'admin', 'admin_url', 'admin\/Route\/editPost', '', '\u8def\u7531\u89c4\u5219\u7f16\u8f91\u63d0\u4ea4', ''),\n(64, 1, 'admin', 'admin_url', 'admin\/Route\/delete', '', '\u8def\u7531\u89c4\u5219\u5220\u9664', ''),\n(65, 1, 'admin', 'admin_url', 'admin\/Route\/ban', '', '\u8def\u7531\u89c4\u5219\u7981\u7528', ''),\n(66, 1, 'admin', 'admin_url', 'admin\/Route\/open', '', '\u8def\u7531\u89c4\u5219\u542f\u7528', ''),\n(67, 1, 'admin', 'admin_url', 'admin\/Route\/listOrder', '', '\u8def\u7531\u89c4\u5219\u6392\u5e8f', ''),\n(68, 1, 'admin', 'admin_url', 'admin\/Route\/select', '', '\u9009\u62e9URL', ''),\n(69, 1, 'admin', 'admin_url', 'admin\/Setting\/default', '', '\u8bbe\u7f6e', ''),\n(70, 1, 'admin', 'admin_url', 'admin\/Setting\/site', '', '\u7f51\u7ad9\u4fe1\u606f', ''),\n(71, 1, 'admin', 'admin_url', 'admin\/Setting\/sitePost', '', '\u7f51\u7ad9\u4fe1\u606f\u8bbe\u7f6e\u63d0\u4ea4', ''),\n(72, 1, 'admin', 'admin_url', 'admin\/Setting\/password', '', '\u5bc6\u7801\u4fee\u6539', ''),\n(73, 1, 'admin', 'admin_url', 'admin\/Setting\/passwordPost', '', '\u5bc6\u7801\u4fee\u6539\u63d0\u4ea4', ''),\n(74, 1, 'admin', 'admin_url', 'admin\/Setting\/upload', '', '\u4e0a\u4f20\u8bbe\u7f6e', ''),\n(75, 1, 'admin', 'admin_url', 'admin\/Setting\/uploadPost', '', '\u4e0a\u4f20\u8bbe\u7f6e\u63d0\u4ea4', ''),\n(76, 1, 'admin', 'admin_url', 'admin\/Setting\/clearCache', '', '\u6e05\u9664\u7f13\u5b58', ''),\n(77, 1, 'admin', 'admin_url', 'admin\/Slide\/index', '', '\u5e7b\u706f\u7247\u7ba1\u7406', ''),\n(78, 1, 'admin', 'admin_url', 'admin\/Slide\/add', '', '\u6dfb\u52a0\u5e7b\u706f\u7247', ''),\n(79, 1, 'admin', 'admin_url', 'admin\/Slide\/addPost', '', '\u6dfb\u52a0\u5e7b\u706f\u7247\u63d0\u4ea4', ''),\n(80, 1, 'admin', 'admin_url', 'admin\/Slide\/edit', '', '\u7f16\u8f91\u5e7b\u706f\u7247', ''),\n(81, 1, 'admin', 'admin_url', 'admin\/Slide\/editPost', '', '\u7f16\u8f91\u5e7b\u706f\u7247\u63d0\u4ea4', ''),\n(82, 1, 'admin', 'admin_url', 'admin\/Slide\/delete', '', '\u5220\u9664\u5e7b\u706f\u7247', ''),\n(83, 1, 'admin', 'admin_url', 'admin\/SlideItem\/index', '', '\u5e7b\u706f\u7247\u9875\u9762\u5217\u8868', ''),\n(84, 1, 'admin', 'admin_url', 'admin\/SlideItem\/add', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0', ''),\n(85, 1, 'admin', 'admin_url', 'admin\/SlideItem\/addPost', '', '\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0\u63d0\u4ea4', ''),\n(86, 1, 'admin', 'admin_url', 'admin\/SlideItem\/edit', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91', ''),\n(87, 1, 'admin', 'admin_url', 'admin\/SlideItem\/editPost', '', '\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91\u63d0\u4ea4', ''),\n(88, 1, 'admin', 'admin_url', 'admin\/SlideItem\/delete', '', '\u5e7b\u706f\u7247\u9875\u9762\u5220\u9664', ''),\n(89, 1, 'admin', 'admin_url', 'admin\/SlideItem\/ban', '', '\u5e7b\u706f\u7247\u9875\u9762\u9690\u85cf', ''),\n(90, 1, 'admin', 'admin_url', 'admin\/SlideItem\/cancelBan', '', '\u5e7b\u706f\u7247\u9875\u9762\u663e\u793a', ''),\n(91, 1, 'admin', 'admin_url', 'admin\/SlideItem\/listOrder', '', '\u5e7b\u706f\u7247\u9875\u9762\u6392\u5e8f', ''),\n(92, 1, 'admin', 'admin_url', 'admin\/Storage\/index', '', '\u6587\u4ef6\u5b58\u50a8', ''),\n(93, 1, 'admin', 'admin_url', 'admin\/Storage\/settingPost', '', '\u6587\u4ef6\u5b58\u50a8\u8bbe\u7f6e\u63d0\u4ea4', ''),\n(94, 1, 'admin', 'admin_url', 'admin\/Theme\/index', '', '\u6a21\u677f\u7ba1\u7406', ''),\n(95, 1, 'admin', 'admin_url', 'admin\/Theme\/install', '', '\u5b89\u88c5\u6a21\u677f', ''),\n(96, 1, 'admin', 'admin_url', 'admin\/Theme\/uninstall', '', '\u5378\u8f7d\u6a21\u677f', ''),\n(97, 1, 'admin', 'admin_url', 'admin\/Theme\/installTheme', '', '\u6a21\u677f\u5b89\u88c5', ''),\n(98, 1, 'admin', 'admin_url', 'admin\/Theme\/update', '', '\u6a21\u677f\u66f4\u65b0', ''),\n(99, 1, 'admin', 'admin_url', 'admin\/Theme\/active', '', '\u542f\u7528\u6a21\u677f', ''),\n(100, 1, 'admin', 'admin_url', 'admin\/Theme\/files', '', '\u6a21\u677f\u6587\u4ef6\u5217\u8868', ''),\n(101, 1, 'admin', 'admin_url', 'admin\/Theme\/fileSetting', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e', ''),\n(102, 1, 'admin', 'admin_url', 'admin\/Theme\/fileArrayData', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5217\u8868', ''),\n(103, 1, 'admin', 'admin_url', 'admin\/Theme\/fileArrayDataEdit', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91', ''),\n(104, 1, 'admin', 'admin_url', 'admin\/Theme\/fileArrayDataEditPost', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u6dfb\u52a0\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', ''),\n(105, 1, 'admin', 'admin_url', 'admin\/Theme\/fileArrayDataDelete', '', '\u6a21\u677f\u6587\u4ef6\u6570\u7ec4\u6570\u636e\u5220\u9664', ''),\n(106, 1, 'admin', 'admin_url', 'admin\/Theme\/settingPost', '', '\u6a21\u677f\u6587\u4ef6\u7f16\u8f91\u63d0\u4ea4\u4fdd\u5b58', ''),\n(107, 1, 'admin', 'admin_url', 'admin\/Theme\/dataSource', '', '\u6a21\u677f\u6587\u4ef6\u8bbe\u7f6e\u6570\u636e\u6e90', ''),\n(108, 1, 'admin', 'admin_url', 'admin\/Theme\/design', '', '\u6a21\u677f\u8bbe\u8ba1', ''),\n(109, 1, 'admin', 'admin_url', 'admin\/User\/default', '', '\u7ba1\u7406\u7ec4', ''),\n(110, 1, 'admin', 'admin_url', 'admin\/User\/index', '', '\u7ba1\u7406\u5458', ''),\n(111, 1, 'admin', 'admin_url', 'admin\/User\/add', '', '\u7ba1\u7406\u5458\u6dfb\u52a0', ''),\n(112, 1, 'admin', 'admin_url', 'admin\/User\/addPost', '', '\u7ba1\u7406\u5458\u6dfb\u52a0\u63d0\u4ea4', ''),\n(113, 1, 'admin', 'admin_url', 'admin\/User\/edit', '', '\u7ba1\u7406\u5458\u7f16\u8f91', ''),\n(114, 1, 'admin', 'admin_url', 'admin\/User\/editPost', '', '\u7ba1\u7406\u5458\u7f16\u8f91\u63d0\u4ea4', ''),\n(115, 1, 'admin', 'admin_url', 'admin\/User\/userInfo', '', '\u4e2a\u4eba\u4fe1\u606f', ''),\n(116, 1, 'admin', 'admin_url', 'admin\/User\/userInfoPost', '', '\u7ba1\u7406\u5458\u4e2a\u4eba\u4fe1\u606f\u4fee\u6539\u63d0\u4ea4', ''),\n(117, 1, 'admin', 'admin_url', 'admin\/User\/delete', '', '\u7ba1\u7406\u5458\u5220\u9664', ''),\n(118, 1, 'admin', 'admin_url', 'admin\/User\/ban', '', '\u505c\u7528\u7ba1\u7406\u5458', ''),\n(119, 1, 'admin', 'admin_url', 'admin\/User\/cancelBan', '', '\u542f\u7528\u7ba1\u7406\u5458', ''),\n(120, 1, 'user', 'admin_url', 'user\/AdminAsset\/index', '', '\u8d44\u6e90\u7ba1\u7406', ''),\n(121, 1, 'user', 'admin_url', 'user\/AdminAsset\/delete', '', '\u5220\u9664\u6587\u4ef6', ''),\n(122, 1, 'user', 'admin_url', 'user\/AdminIndex\/default', '', '\u7528\u6237\u7ba1\u7406', ''),\n(123, 1, 'user', 'admin_url', 'user\/AdminIndex\/default1', '', '\u7528\u6237\u7ec4', ''),\n(124, 1, 'user', 'admin_url', 'user\/AdminIndex\/index', '', '\u672c\u7ad9\u7528\u6237', ''),\n(125, 1, 'user', 'admin_url', 'user\/AdminIndex\/ban', '', '\u672c\u7ad9\u7528\u6237\u62c9\u9ed1', ''),\n(126, 1, 'user', 'admin_url', 'user\/AdminIndex\/cancelBan', '', '\u672c\u7ad9\u7528\u6237\u542f\u7528', ''),\n(127, 1, 'user', 'admin_url', 'user\/AdminOauth\/index', '', '\u7b2c\u4e09\u65b9\u7528\u6237', ''),\n(128, 1, 'user', 'admin_url', 'user\/AdminOauth\/delete', '', '\u5220\u9664\u7b2c\u4e09\u65b9\u7528\u6237\u7ed1\u5b9a', ''),\n(129, 1, 'user', 'admin_url', 'user\/AdminUserAction\/index', '', '\u7528\u6237\u64cd\u4f5c\u7ba1\u7406', ''),\n(130, 1, 'user', 'admin_url', 'user\/AdminUserAction\/edit', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c', ''),\n(131, 1, 'user', 'admin_url', 'user\/AdminUserAction\/editPost', '', '\u7f16\u8f91\u7528\u6237\u64cd\u4f5c\u63d0\u4ea4', ''),\n(132, 1, 'user', 'admin_url', 'user\/AdminUserAction\/sync', '', '\u540c\u6b65\u7528\u6237\u64cd\u4f5c', '')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_comment`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_comment` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u88ab\u56de\u590d\u7684\u8bc4\u8bbaid',\n  `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u53d1\u8868\u8bc4\u8bba\u7684\u7528\u6237id',\n  `to_user_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u88ab\u8bc4\u8bba\u7684\u7528\u6237id',\n  `object_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u8bc4\u8bba\u5185\u5bb9 id',\n  `like_count` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u70b9\u8d5e\u6570',\n  `dislike_count` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u4e0d\u559c\u6b22\u6570',\n  `floor` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u697c\u5c42\u6570',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u8bc4\u8bba\u65f6\u95f4',\n  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5220\u9664\u65f6\u95f4',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001,1:\u5df2\u5ba1\u6838,0:\u672a\u5ba1\u6838',\n  `type` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u8bc4\u8bba\u7c7b\u578b\uff1b1\u5b9e\u540d\u8bc4\u8bba',\n  `table_name` varchar(64) NOT NULL DEFAULT '' COMMENT '\u8bc4\u8bba\u5185\u5bb9\u6240\u5728\u8868\uff0c\u4e0d\u5e26\u8868\u524d\u7f00',\n  `full_name` varchar(50) NOT NULL DEFAULT '' COMMENT '\u8bc4\u8bba\u8005\u6635\u79f0',\n  `email` varchar(255) NOT NULL DEFAULT '' COMMENT '\u8bc4\u8bba\u8005\u90ae\u7bb1',\n  `path` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5c42\u7ea7\u5173\u7cfb',\n  `url` text COMMENT '\u539f\u6587\u5730\u5740',\n  `content` text CHARACTER SET utf8mb4 COMMENT '\u8bc4\u8bba\u5185\u5bb9',\n  `more` text CHARACTER SET utf8mb4 COMMENT '\u6269\u5c55\u5c5e\u6027',\n  PRIMARY KEY (`id`),\n  KEY `table_id_status` (`table_name`,`object_id`,`status`),\n  KEY `object_id` (`object_id`) USING BTREE,\n  KEY `status` (`status`) USING BTREE,\n  KEY `parent_id` (`parent_id`) USING BTREE,\n  KEY `create_time` (`create_time`) USING BTREE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\u8bc4\u8bba\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_hook`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_hook` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `type` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u94a9\u5b50\u7c7b\u578b(1:\u7cfb\u7edf\u94a9\u5b50;2:\u5e94\u7528\u94a9\u5b50;3:\u6a21\u677f\u94a9\u5b50;4:\u540e\u53f0\u6a21\u677f\u94a9\u5b50)',\n  `once` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u662f\u5426\u53ea\u5141\u8bb8\u4e00\u4e2a\u63d2\u4ef6\u8fd0\u884c(0:\u591a\u4e2a;1:\u4e00\u4e2a)',\n  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '\u94a9\u5b50\u540d\u79f0',\n  `hook` varchar(50) NOT NULL DEFAULT '' COMMENT '\u94a9\u5b50',\n  `app` varchar(15) NOT NULL DEFAULT '' COMMENT '\u5e94\u7528\u540d(\u53ea\u6709\u5e94\u7528\u94a9\u5b50\u624d\u7528)',\n  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '\u63cf\u8ff0',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7cfb\u7edf\u94a9\u5b50\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_hook`\n--\n\nINSERT INTO `cmf_hook` (`id`, `type`, `once`, `name`, `hook`, `app`, `description`) VALUES\n(2, 1, 0, '\u5e94\u7528\u5f00\u59cb', 'app_begin', 'cmf', '\u5e94\u7528\u5f00\u59cb'),\n(3, 1, 0, '\u6a21\u5757\u521d\u59cb\u5316', 'module_init', 'cmf', '\u6a21\u5757\u521d\u59cb\u5316'),\n(4, 1, 0, '\u63a7\u5236\u5668\u5f00\u59cb', 'action_begin', 'cmf', '\u63a7\u5236\u5668\u5f00\u59cb'),\n(5, 1, 0, '\u89c6\u56fe\u8f93\u51fa\u8fc7\u6ee4', 'view_filter', 'cmf', '\u89c6\u56fe\u8f93\u51fa\u8fc7\u6ee4'),\n(6, 1, 0, '\u5e94\u7528\u7ed3\u675f', 'app_end', 'cmf', '\u5e94\u7528\u7ed3\u675f'),\n(7, 1, 0, '\u65e5\u5fd7write\u65b9\u6cd5', 'log_write', 'cmf', '\u65e5\u5fd7write\u65b9\u6cd5'),\n(8, 1, 0, '\u8f93\u51fa\u7ed3\u675f', 'response_end', 'cmf', '\u8f93\u51fa\u7ed3\u675f'),\n(9, 1, 0, '\u540e\u53f0\u63a7\u5236\u5668\u521d\u59cb\u5316', 'admin_init', 'cmf', '\u540e\u53f0\u63a7\u5236\u5668\u521d\u59cb\u5316'),\n(10, 1, 0, '\u524d\u53f0\u63a7\u5236\u5668\u521d\u59cb\u5316', 'home_init', 'cmf', '\u524d\u53f0\u63a7\u5236\u5668\u521d\u59cb\u5316'),\n(11, 1, 1, '\u53d1\u9001\u624b\u673a\u9a8c\u8bc1\u7801', 'send_mobile_verification_code', 'cmf', '\u53d1\u9001\u624b\u673a\u9a8c\u8bc1\u7801'),\n(12, 3, 0, '\u6a21\u677f body\u6807\u7b7e\u5f00\u59cb', 'body_start', '', '\u6a21\u677f body\u6807\u7b7e\u5f00\u59cb'),\n(13, 3, 0, '\u6a21\u677f head\u6807\u7b7e\u7ed3\u675f\u524d', 'before_head_end', '', '\u6a21\u677f head\u6807\u7b7e\u7ed3\u675f\u524d'),\n(14, 3, 0, '\u6a21\u677f\u5e95\u90e8\u5f00\u59cb', 'footer_start', '', '\u6a21\u677f\u5e95\u90e8\u5f00\u59cb'),\n(15, 3, 0, '\u6a21\u677f\u5e95\u90e8\u5f00\u59cb\u4e4b\u524d', 'before_footer', '', '\u6a21\u677f\u5e95\u90e8\u5f00\u59cb\u4e4b\u524d'),\n(16, 3, 0, '\u6a21\u677f\u5e95\u90e8\u7ed3\u675f\u4e4b\u524d', 'before_footer_end', '', '\u6a21\u677f\u5e95\u90e8\u7ed3\u675f\u4e4b\u524d'),\n(17, 3, 0, '\u6a21\u677f body \u6807\u7b7e\u7ed3\u675f\u4e4b\u524d', 'before_body_end', '', '\u6a21\u677f body \u6807\u7b7e\u7ed3\u675f\u4e4b\u524d'),\n(18, 3, 0, '\u6a21\u677f\u5de6\u8fb9\u680f\u5f00\u59cb', 'left_sidebar_start', '', '\u6a21\u677f\u5de6\u8fb9\u680f\u5f00\u59cb'),\n(19, 3, 0, '\u6a21\u677f\u5de6\u8fb9\u680f\u7ed3\u675f\u4e4b\u524d', 'before_left_sidebar_end', '', '\u6a21\u677f\u5de6\u8fb9\u680f\u7ed3\u675f\u4e4b\u524d'),\n(20, 3, 0, '\u6a21\u677f\u53f3\u8fb9\u680f\u5f00\u59cb', 'right_sidebar_start', '', '\u6a21\u677f\u53f3\u8fb9\u680f\u5f00\u59cb'),\n(21, 3, 0, '\u6a21\u677f\u53f3\u8fb9\u680f\u7ed3\u675f\u4e4b\u524d', 'before_right_sidebar_end', '', '\u6a21\u677f\u53f3\u8fb9\u680f\u7ed3\u675f\u4e4b\u524d'),\n(22, 3, 1, '\u8bc4\u8bba\u533a', 'comment', '', '\u8bc4\u8bba\u533a'),\n(23, 3, 1, '\u7559\u8a00\u533a', 'guestbook', '', '\u7559\u8a00\u533a'),\n(24, 2, 0, '\u540e\u53f0\u9996\u9875\u4eea\u8868\u76d8', 'admin_dashboard', 'admin', '\u540e\u53f0\u9996\u9875\u4eea\u8868\u76d8'),\n(25, 4, 0, '\u540e\u53f0\u6a21\u677f head\u6807\u7b7e\u7ed3\u675f\u524d', 'admin_before_head_end', '', '\u540e\u53f0\u6a21\u677f head\u6807\u7b7e\u7ed3\u675f\u524d'),\n(26, 4, 0, '\u540e\u53f0\u6a21\u677f body \u6807\u7b7e\u7ed3\u675f\u4e4b\u524d', 'admin_before_body_end', '', '\u540e\u53f0\u6a21\u677f body \u6807\u7b7e\u7ed3\u675f\u4e4b\u524d'),\n(27, 2, 0, '\u540e\u53f0\u767b\u5f55\u9875\u9762', 'admin_login', 'admin', '\u540e\u53f0\u767b\u5f55\u9875\u9762'),\n(28, 1, 1, '\u524d\u53f0\u6a21\u677f\u5207\u6362', 'switch_theme', 'cmf', '\u524d\u53f0\u6a21\u677f\u5207\u6362'),\n(29, 3, 0, '\u4e3b\u8981\u5185\u5bb9\u4e4b\u540e', 'after_content', '', '\u4e3b\u8981\u5185\u5bb9\u4e4b\u540e'),\n(32, 2, 1, '\u83b7\u53d6\u4e0a\u4f20\u754c\u9762', 'fetch_upload_view', 'user', '\u83b7\u53d6\u4e0a\u4f20\u754c\u9762'),\n(33, 3, 0, '\u4e3b\u8981\u5185\u5bb9\u4e4b\u524d', 'before_content', 'cmf', '\u4e3b\u8981\u5185\u5bb9\u4e4b\u524d'),\n(34, 1, 0, '\u65e5\u5fd7\u5199\u5165\u5b8c\u6210', 'log_write_done', 'cmf', '\u65e5\u5fd7\u5199\u5165\u5b8c\u6210'),\n(35, 1, 1, '\u540e\u53f0\u6a21\u677f\u5207\u6362', 'switch_admin_theme', 'cmf', '\u540e\u53f0\u6a21\u677f\u5207\u6362'),\n(36, 1, 1, '\u9a8c\u8bc1\u7801\u56fe\u7247', 'captcha_image', 'cmf', '\u9a8c\u8bc1\u7801\u56fe\u7247'),\n(37, 2, 1, '\u540e\u53f0\u6a21\u677f\u8bbe\u8ba1\u754c\u9762', 'admin_theme_design_view', 'admin', '\u540e\u53f0\u6a21\u677f\u8bbe\u8ba1\u754c\u9762'),\n(38, 2, 1, '\u540e\u53f0\u8bbe\u7f6e\u7f51\u7ad9\u4fe1\u606f\u754c\u9762', 'admin_setting_site_view', 'admin', '\u540e\u53f0\u8bbe\u7f6e\u7f51\u7ad9\u4fe1\u606f\u754c\u9762'),\n(39, 2, 1, '\u540e\u53f0\u6e05\u9664\u7f13\u5b58\u754c\u9762', 'admin_setting_clear_cache_view', 'admin', '\u540e\u53f0\u6e05\u9664\u7f13\u5b58\u754c\u9762'),\n(40, 2, 1, '\u540e\u53f0\u5bfc\u822a\u7ba1\u7406\u754c\u9762', 'admin_nav_index_view', 'admin', '\u540e\u53f0\u5bfc\u822a\u7ba1\u7406\u754c\u9762'),\n(41, 2, 1, '\u540e\u53f0\u53cb\u60c5\u94fe\u63a5\u7ba1\u7406\u754c\u9762', 'admin_link_index_view', 'admin', '\u540e\u53f0\u53cb\u60c5\u94fe\u63a5\u7ba1\u7406\u754c\u9762'),\n(42, 2, 1, '\u540e\u53f0\u5e7b\u706f\u7247\u7ba1\u7406\u754c\u9762', 'admin_slide_index_view', 'admin', '\u540e\u53f0\u5e7b\u706f\u7247\u7ba1\u7406\u754c\u9762'),\n(43, 2, 1, '\u540e\u53f0\u7ba1\u7406\u5458\u5217\u8868\u754c\u9762', 'admin_user_index_view', 'admin', '\u540e\u53f0\u7ba1\u7406\u5458\u5217\u8868\u754c\u9762'),\n(44, 2, 1, '\u540e\u53f0\u89d2\u8272\u7ba1\u7406\u754c\u9762', 'admin_rbac_index_view', 'admin', '\u540e\u53f0\u89d2\u8272\u7ba1\u7406\u754c\u9762'),\n(49, 2, 1, '\u7528\u6237\u7ba1\u7406\u672c\u7ad9\u7528\u6237\u5217\u8868\u754c\u9762', 'user_admin_index_view', 'user', '\u7528\u6237\u7ba1\u7406\u672c\u7ad9\u7528\u6237\u5217\u8868\u754c\u9762'),\n(50, 2, 1, '\u8d44\u6e90\u7ba1\u7406\u5217\u8868\u754c\u9762', 'user_admin_asset_index_view', 'user', '\u8d44\u6e90\u7ba1\u7406\u5217\u8868\u754c\u9762'),\n(51, 2, 1, '\u7528\u6237\u7ba1\u7406\u7b2c\u4e09\u65b9\u7528\u6237\u5217\u8868\u754c\u9762', 'user_admin_oauth_index_view', 'user', '\u7528\u6237\u7ba1\u7406\u7b2c\u4e09\u65b9\u7528\u6237\u5217\u8868\u754c\u9762'),\n(52, 2, 1, '\u540e\u53f0\u9996\u9875\u754c\u9762', 'admin_index_index_view', 'admin', '\u540e\u53f0\u9996\u9875\u754c\u9762'),\n(53, 2, 1, '\u540e\u53f0\u56de\u6536\u7ad9\u754c\u9762', 'admin_recycle_bin_index_view', 'admin', '\u540e\u53f0\u56de\u6536\u7ad9\u754c\u9762'),\n(54, 2, 1, '\u540e\u53f0\u83dc\u5355\u7ba1\u7406\u754c\u9762', 'admin_menu_index_view', 'admin', '\u540e\u53f0\u83dc\u5355\u7ba1\u7406\u754c\u9762'),\n(55, 2, 1, '\u540e\u53f0\u81ea\u5b9a\u4e49\u767b\u5f55\u662f\u5426\u5f00\u542f\u94a9\u5b50', 'admin_custom_login_open', 'admin', '\u540e\u53f0\u81ea\u5b9a\u4e49\u767b\u5f55\u662f\u5426\u5f00\u542f\u94a9\u5b50'),\n(64, 2, 1, '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u5217\u8868\u754c\u9762', 'admin_slide_item_index_view', 'admin', '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u5217\u8868\u754c\u9762'),\n(65, 2, 1, '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0\u754c\u9762', 'admin_slide_item_add_view', 'admin', '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u6dfb\u52a0\u754c\u9762'),\n(66, 2, 1, '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91\u754c\u9762', 'admin_slide_item_edit_view', 'admin', '\u540e\u53f0\u5e7b\u706f\u7247\u9875\u9762\u7f16\u8f91\u754c\u9762'),\n(67, 2, 1, '\u540e\u53f0\u7ba1\u7406\u5458\u6dfb\u52a0\u754c\u9762', 'admin_user_add_view', 'admin', '\u540e\u53f0\u7ba1\u7406\u5458\u6dfb\u52a0\u754c\u9762'),\n(68, 2, 1, '\u540e\u53f0\u7ba1\u7406\u5458\u7f16\u8f91\u754c\u9762', 'admin_user_edit_view', 'admin', '\u540e\u53f0\u7ba1\u7406\u5458\u7f16\u8f91\u754c\u9762'),\n(69, 2, 1, '\u540e\u53f0\u89d2\u8272\u6dfb\u52a0\u754c\u9762', 'admin_rbac_role_add_view', 'admin', '\u540e\u53f0\u89d2\u8272\u6dfb\u52a0\u754c\u9762'),\n(70, 2, 1, '\u540e\u53f0\u89d2\u8272\u7f16\u8f91\u754c\u9762', 'admin_rbac_role_edit_view', 'admin', '\u540e\u53f0\u89d2\u8272\u7f16\u8f91\u754c\u9762'),\n(71, 2, 1, '\u540e\u53f0\u89d2\u8272\u6388\u6743\u754c\u9762', 'admin_rbac_authorize_view', 'admin', '\u540e\u53f0\u89d2\u8272\u6388\u6743\u754c\u9762')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_hook_plugin`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_hook_plugin` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001(0:\u7981\u7528,1:\u542f\u7528)',\n  `hook` varchar(50) NOT NULL DEFAULT '' COMMENT '\u94a9\u5b50\u540d',\n  `plugin` varchar(50) NOT NULL DEFAULT '' COMMENT '\u63d2\u4ef6',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7cfb\u7edf\u94a9\u5b50\u63d2\u4ef6\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_link`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_link` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u663e\u793a;0:\u4e0d\u663e\u793a',\n  `rating` int(11) NOT NULL DEFAULT '0' COMMENT '\u53cb\u60c5\u94fe\u63a5\u8bc4\u7ea7',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u63cf\u8ff0',\n  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u5730\u5740',\n  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u540d\u79f0',\n  `image` varchar(100) NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u56fe\u6807',\n  `target` varchar(10) NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u6253\u5f00\u65b9\u5f0f',\n  `rel` varchar(50) NOT NULL DEFAULT '' COMMENT '\u94fe\u63a5\u4e0e\u7f51\u7ad9\u7684\u5173\u7cfb',\n  PRIMARY KEY (`id`),\n  KEY `status` (`status`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='\u53cb\u60c5\u94fe\u63a5\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_link`\n--\n\nINSERT INTO `cmf_link` (`id`, `status`, `rating`, `list_order`, `description`, `url`, `name`, `image`, `target`, `rel`) VALUES\n(1, 1, 1, 8, 'thinkcmf\u5b98\u7f51', 'http:\/\/www.thinkcmf.com', 'ThinkCMF', '', '_blank', '')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_nav`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_nav` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `is_main` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u662f\u5426\u4e3a\u4e3b\u5bfc\u822a;1:\u662f;0:\u4e0d\u662f',\n  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u5bfc\u822a\u4f4d\u7f6e\u540d\u79f0',\n  `remark` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5907\u6ce8',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='\u524d\u53f0\u5bfc\u822a\u4f4d\u7f6e\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_nav`\n--\n\nINSERT INTO `cmf_nav` (`id`, `is_main`, `name`, `remark`) VALUES\n(1, 1, '\u4e3b\u5bfc\u822a', '\u4e3b\u5bfc\u822a'),\n(2, 0, '\u5e95\u90e8\u5bfc\u822a', '')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_nav_menu`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_nav_menu` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `nav_id` int(11) NOT NULL COMMENT '\u5bfc\u822a id',\n  `parent_id` int(11) NOT NULL COMMENT '\u7236 id',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u663e\u793a;0:\u9690\u85cf',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u83dc\u5355\u540d\u79f0',\n  `target` varchar(10) NOT NULL DEFAULT '' COMMENT '\u6253\u5f00\u65b9\u5f0f',\n  `href` varchar(100) NOT NULL DEFAULT '' COMMENT '\u94fe\u63a5',\n  `icon` varchar(20) NOT NULL DEFAULT '' COMMENT '\u56fe\u6807',\n  `path` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5c42\u7ea7\u5173\u7cfb',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='\u524d\u53f0\u5bfc\u822a\u83dc\u5355\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_nav_menu`\n--\n\nINSERT INTO `cmf_nav_menu` (`id`, `nav_id`, `parent_id`, `status`, `list_order`, `name`, `target`, `href`, `icon`, `path`) VALUES\n(1, 1, 0, 1, 0, '\u9996\u9875', '', 'home', '', '0-1')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_option`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_option` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `autoload` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u662f\u5426\u81ea\u52a8\u52a0\u8f7d;1:\u81ea\u52a8\u52a0\u8f7d;0:\u4e0d\u81ea\u52a8\u52a0\u8f7d',\n  `option_name` varchar(64) NOT NULL DEFAULT '' COMMENT '\u914d\u7f6e\u540d',\n  `option_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '\u914d\u7f6e\u503c',\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `option_name` (`option_name`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u5168\u7ad9\u914d\u7f6e\u8868' ROW_FORMAT=COMPACT&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_plugin`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_plugin` (\n  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '\u81ea\u589eid',\n  `type` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u63d2\u4ef6\u7c7b\u578b;1:\u7f51\u7ad9;8:\u5fae\u4fe1',\n  `has_admin` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u662f\u5426\u6709\u540e\u53f0\u7ba1\u7406,0:\u6ca1\u6709;1:\u6709',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u5f00\u542f;0:\u7981\u7528',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u63d2\u4ef6\u5b89\u88c5\u65f6\u95f4',\n  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '\u63d2\u4ef6\u6807\u8bc6\u540d,\u82f1\u6587\u5b57\u6bcd(\u60df\u4e00)',\n  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u63d2\u4ef6\u540d\u79f0',\n  `demo_url` varchar(50) NOT NULL DEFAULT '' COMMENT '\u6f14\u793a\u5730\u5740\uff0c\u5e26\u534f\u8bae',\n  `hooks` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5b9e\u73b0\u7684\u94a9\u5b50;\u4ee5\u201c,\u201d\u5206\u9694',\n  `author` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u63d2\u4ef6\u4f5c\u8005',\n  `author_url` varchar(50) NOT NULL DEFAULT '' COMMENT '\u4f5c\u8005\u7f51\u7ad9\u94fe\u63a5',\n  `version` varchar(20) NOT NULL DEFAULT '' COMMENT '\u63d2\u4ef6\u7248\u672c\u53f7',\n  `description` varchar(255) NOT NULL COMMENT '\u63d2\u4ef6\u63cf\u8ff0',\n  `config` text COMMENT '\u63d2\u4ef6\u914d\u7f6e',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u63d2\u4ef6\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_recycle_bin`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_recycle_bin` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `object_id` int(11) DEFAULT '0' COMMENT '\u5220\u9664\u5185\u5bb9 id',\n  `create_time` int(10) UNSIGNED DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `table_name` varchar(60) DEFAULT '' COMMENT '\u5220\u9664\u5185\u5bb9\u6240\u5728\u8868\u540d',\n  `name` varchar(255) DEFAULT '' COMMENT '\u5220\u9664\u5185\u5bb9\u540d\u79f0',\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7528\u6237id',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=' \u56de\u6536\u7ad9'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_role`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_role` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `parent_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7236\u89d2\u8272ID',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u72b6\u6001;0:\u7981\u7528;1:\u6b63\u5e38',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `update_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u66f4\u65b0\u65f6\u95f4',\n  `list_order` float NOT NULL DEFAULT '0' COMMENT '\u6392\u5e8f',\n  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u89d2\u8272\u540d\u79f0',\n  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5907\u6ce8',\n  PRIMARY KEY (`id`),\n  KEY `parent_id` (`parent_id`),\n  KEY `status` (`status`)\n) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='\u89d2\u8272\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_role`\n--\n\nINSERT INTO `cmf_role` (`id`, `parent_id`, `status`, `create_time`, `update_time`, `list_order`, `name`, `remark`) VALUES\n(1, 0, 1, 1329633709, 1329633709, 0, '\u8d85\u7ea7\u7ba1\u7406\u5458', '\u62e5\u6709\u7f51\u7ad9\u6700\u9ad8\u7ba1\u7406\u5458\u6743\u9650\uff01'),\n(2, 0, 1, 1329633709, 1329633709, 0, '\u666e\u901a\u7ba1\u7406\u5458', '\u6743\u9650\u7531\u6700\u9ad8\u7ba1\u7406\u5458\u5206\u914d\uff01')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_role_user`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_role_user` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `role_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u89d2\u8272 id',\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7528\u6237id',\n  PRIMARY KEY (`id`),\n  KEY `role_id` (`role_id`),\n  KEY `user_id` (`user_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\u7528\u6237\u89d2\u8272\u5bf9\u5e94\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_route`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_route` (\n  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '\u8def\u7531id',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u542f\u7528,0:\u4e0d\u542f\u7528',\n  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'URL\u89c4\u5219\u7c7b\u578b;1:\u7528\u6237\u81ea\u5b9a\u4e49;2:\u522b\u540d\u6dfb\u52a0',\n  `full_url` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5b8c\u6574url',\n  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5b9e\u9645\u663e\u793a\u7684url',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='url\u8def\u7531\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_slide`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_slide` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001,1:\u663e\u793a,0\u4e0d\u663e\u793a',\n  `delete_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5220\u9664\u65f6\u95f4',\n  `name` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5e7b\u706f\u7247\u5206\u7c7b',\n  `remark` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5206\u7c7b\u5907\u6ce8',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u5e7b\u706f\u7247\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_slide_item`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_slide_item` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `slide_id` int(11) NOT NULL DEFAULT '0' COMMENT '\u5e7b\u706f\u7247id',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001,1:\u663e\u793a;0:\u9690\u85cf',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '\u5e7b\u706f\u7247\u540d\u79f0',\n  `image` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5e7b\u706f\u7247\u56fe\u7247',\n  `url` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u5e7b\u706f\u7247\u94fe\u63a5',\n  `target` varchar(10) NOT NULL DEFAULT '' COMMENT '\u53cb\u60c5\u94fe\u63a5\u6253\u5f00\u65b9\u5f0f',\n  `description` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '\u5e7b\u706f\u7247\u63cf\u8ff0',\n  `content` text CHARACTER SET utf8 COMMENT '\u5e7b\u706f\u7247\u5185\u5bb9',\n  `more` text COMMENT '\u6269\u5c55\u4fe1\u606f',\n  PRIMARY KEY (`id`),\n  KEY `slide_id` (`slide_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u5e7b\u706f\u7247\u5b50\u9879\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_theme`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_theme` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5b89\u88c5\u65f6\u95f4',\n  `update_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6700\u540e\u5347\u7ea7\u65f6\u95f4',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6a21\u677f\u72b6\u6001,1:\u6b63\u5728\u4f7f\u7528;0:\u672a\u4f7f\u7528',\n  `is_compiled` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u662f\u5426\u4e3a\u5df2\u7f16\u8bd1\u6a21\u677f',\n  `theme` varchar(20) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u76ee\u5f55\u540d\uff0c\u7528\u4e8e\u4e3b\u9898\u7684\u7ef4\u4e00\u6807\u8bc6',\n  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u540d\u79f0',\n  `version` varchar(20) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u7248\u672c\u53f7',\n  `demo_url` varchar(50) NOT NULL DEFAULT '' COMMENT '\u6f14\u793a\u5730\u5740\uff0c\u5e26\u534f\u8bae',\n  `thumbnail` varchar(100) NOT NULL DEFAULT '' COMMENT '\u7f29\u7565\u56fe',\n  `author` varchar(20) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u4f5c\u8005',\n  `author_url` varchar(50) NOT NULL DEFAULT '' COMMENT '\u4f5c\u8005\u7f51\u7ad9\u94fe\u63a5',\n  `lang` varchar(10) NOT NULL DEFAULT '' COMMENT '\u652f\u6301\u8bed\u8a00',\n  `keywords` varchar(50) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u5173\u952e\u5b57',\n  `description` varchar(100) NOT NULL DEFAULT '' COMMENT '\u4e3b\u9898\u63cf\u8ff0',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_theme_file`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_theme_file` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `is_public` tinyint(4) NOT NULL DEFAULT '0' COMMENT '\u662f\u5426\u516c\u5171\u7684\u6a21\u677f\u6587\u4ef6',\n  `list_order` float NOT NULL DEFAULT '10000' COMMENT '\u6392\u5e8f',\n  `theme` varchar(20) NOT NULL DEFAULT '' COMMENT '\u6a21\u677f\u540d\u79f0',\n  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '\u6a21\u677f\u6587\u4ef6\u540d',\n  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '\u64cd\u4f5c',\n  `file` varchar(50) NOT NULL DEFAULT '' COMMENT '\u6a21\u677f\u6587\u4ef6\uff0c\u76f8\u5bf9\u4e8e\u6a21\u677f\u6839\u76ee\u5f55\uff0c\u5982Portal\/index.html',\n  `description` varchar(100) NOT NULL DEFAULT '' COMMENT '\u6a21\u677f\u6587\u4ef6\u63cf\u8ff0',\n  `more` text COMMENT '\u6a21\u677f\u66f4\u591a\u914d\u7f6e,\u7528\u6237\u81ea\u5df1\u540e\u53f0\u8bbe\u7f6e\u7684',\n  `config_more` text COMMENT '\u6a21\u677f\u66f4\u591a\u914d\u7f6e,\u6765\u6e90\u6a21\u677f\u7684\u914d\u7f6e\u6587\u4ef6',\n  `draft_more` text COMMENT '\u6a21\u677f\u66f4\u591a\u914d\u7f6e,\u7528\u6237\u4e34\u65f6\u4fdd\u5b58\u7684\u914d\u7f6e',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_third_party_user`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_third_party_user` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u672c\u7ad9\u7528\u6237id',\n  `last_login_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6700\u540e\u767b\u5f55\u65f6\u95f4',\n  `expire_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'access_token\u8fc7\u671f\u65f6\u95f4',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7ed1\u5b9a\u65f6\u95f4',\n  `login_times` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u767b\u5f55\u6b21\u6570',\n  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u72b6\u6001;1:\u6b63\u5e38;0:\u7981\u7528',\n  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u6635\u79f0',\n  `third_party` varchar(20) NOT NULL DEFAULT '' COMMENT '\u7b2c\u4e09\u65b9\u552f\u4e00\u7801',\n  `app_id` varchar(64) NOT NULL DEFAULT '' COMMENT '\u7b2c\u4e09\u65b9\u5e94\u7528 id',\n  `last_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '\u6700\u540e\u767b\u5f55ip',\n  `access_token` varchar(512) NOT NULL DEFAULT '' COMMENT '\u7b2c\u4e09\u65b9\u6388\u6743\u7801',\n  `openid` varchar(40) NOT NULL DEFAULT '' COMMENT '\u7b2c\u4e09\u65b9\u7528\u6237id',\n  `union_id` varchar(64) NOT NULL DEFAULT '' COMMENT '\u7b2c\u4e09\u65b9\u7528\u6237\u591a\u4e2a\u4ea7\u54c1\u4e2d\u7684\u60df\u4e00 id,(\u5982:\u5fae\u4fe1\u5e73\u53f0)',\n  `more` text COMMENT '\u6269\u5c55\u4fe1\u606f',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7b2c\u4e09\u65b9\u7528\u6237\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_type` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u7528\u6237\u7c7b\u578b;1:admin;2:\u4f1a\u5458',\n  `sex` tinyint(2) NOT NULL DEFAULT '0' COMMENT '\u6027\u522b;0:\u4fdd\u5bc6,1:\u7537,2:\u5973',\n  `birthday` int(11) NOT NULL DEFAULT '0' COMMENT '\u751f\u65e5',\n  `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '\u6700\u540e\u767b\u5f55\u65f6\u95f4',\n  `score` int(11) NOT NULL DEFAULT '0' COMMENT '\u7528\u6237\u79ef\u5206',\n  `coin` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u91d1\u5e01',\n  `balance` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '\u4f59\u989d',\n  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '\u6ce8\u518c\u65f6\u95f4',\n  `user_status` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '\u7528\u6237\u72b6\u6001;0:\u7981\u7528,1:\u6b63\u5e38,2:\u672a\u9a8c\u8bc1',\n  `user_login` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u540d',\n  `user_pass` varchar(64) NOT NULL DEFAULT '' COMMENT '\u767b\u5f55\u5bc6\u7801;cmf_password\u52a0\u5bc6',\n  `user_nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u6635\u79f0',\n  `user_email` varchar(100) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u767b\u5f55\u90ae\u7bb1',\n  `user_url` varchar(100) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u4e2a\u4eba\u7f51\u5740',\n  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u5934\u50cf',\n  `signature` varchar(255) NOT NULL DEFAULT '' COMMENT '\u4e2a\u6027\u7b7e\u540d',\n  `last_login_ip` varchar(15) NOT NULL DEFAULT '' COMMENT '\u6700\u540e\u767b\u5f55ip',\n  `user_activation_key` varchar(60) NOT NULL DEFAULT '' COMMENT '\u6fc0\u6d3b\u7801',\n  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u624b\u673a\u53f7',\n  `more` text COMMENT '\u6269\u5c55\u5c5e\u6027',\n  PRIMARY KEY (`id`),\n  KEY `user_login` (`user_login`),\n  KEY `user_nickname` (`user_nickname`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_action`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_action` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `score` int(11) NOT NULL DEFAULT '0' COMMENT '\u66f4\u6539\u79ef\u5206\uff0c\u53ef\u4ee5\u4e3a\u8d1f',\n  `coin` int(11) NOT NULL DEFAULT '0' COMMENT '\u66f4\u6539\u91d1\u5e01\uff0c\u53ef\u4ee5\u4e3a\u8d1f',\n  `reward_number` int(11) NOT NULL DEFAULT '0' COMMENT '\u5956\u52b1\u6b21\u6570',\n  `cycle_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5468\u671f\u7c7b\u578b;0:\u4e0d\u9650;1:\u6309\u5929;2:\u6309\u5c0f\u65f6;3:\u6c38\u4e45',\n  `cycle_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5468\u671f\u65f6\u95f4\u503c',\n  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u64cd\u4f5c\u540d\u79f0',\n  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u64cd\u4f5c\u540d\u79f0',\n  `app` varchar(50) NOT NULL DEFAULT '' COMMENT '\u64cd\u4f5c\u6240\u5728\u5e94\u7528\u540d\u6216\u63d2\u4ef6\u540d\u7b49',\n  `url` text COMMENT '\u6267\u884c\u64cd\u4f5c\u7684url',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u64cd\u4f5c\u8868'&quot;,
+                &quot;\n--\n-- \u8f6c\u5b58\u8868\u4e2d\u7684\u6570\u636e `cmf_user_action`\n--\n\nINSERT INTO `cmf_user_action` VALUES ('1', '1', '1', '1', '2', '1', '\u7528\u6237\u767b\u5f55', 'login', 'user', '')&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_action_log`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_action_log` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7528\u6237id',\n  `count` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u8bbf\u95ee\u6b21\u6570',\n  `last_visit_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6700\u540e\u8bbf\u95ee\u65f6\u95f4',\n  `object` varchar(100) NOT NULL DEFAULT '' COMMENT '\u8bbf\u95ee\u5bf9\u8c61\u7684id,\u683c\u5f0f:\u4e0d\u5e26\u524d\u7f00\u7684\u8868\u540d+id;\u5982posts1\u8868\u793axx_posts\u8868\u91ccid\u4e3a1\u7684\u8bb0\u5f55',\n  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '\u64cd\u4f5c\u540d\u79f0;\u683c\u5f0f:\u5e94\u7528\u540d+\u63a7\u5236\u5668+\u64cd\u4f5c\u540d,\u4e5f\u53ef\u81ea\u5df1\u5b9a\u4e49\u683c\u5f0f\u53ea\u8981\u4e0d\u53d1\u751f\u51b2\u7a81\u4e14\u60df\u4e00;',\n  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT '\u7528\u6237ip',\n  PRIMARY KEY (`id`),\n  KEY `user_object_action` (`user_id`,`object`,`action`),\n  KEY `user_object_action_ip` (`user_id`,`object`,`action`,`ip`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u8bbf\u95ee\u8bb0\u5f55\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_balance_log`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_balance_log` (\n  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '\u7528\u6237 id',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `change` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '\u66f4\u6539\u4f59\u989d',\n  `balance` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '\u66f4\u6539\u540e\u4f59\u989d',\n  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '\u63cf\u8ff0',\n  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5907\u6ce8',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u4f59\u989d\u53d8\u66f4\u65e5\u5fd7\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_favorite`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_favorite` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u7528\u6237 id',\n  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '\u6536\u85cf\u5185\u5bb9\u7684\u6807\u9898',\n  `url` varchar(255) CHARACTER SET utf8 DEFAULT '' COMMENT '\u6536\u85cf\u5185\u5bb9\u7684\u539f\u6587\u5730\u5740\uff0c\u4e0d\u5e26\u57df\u540d',\n  `description` varchar(500) CHARACTER SET utf8 DEFAULT '' COMMENT '\u6536\u85cf\u5185\u5bb9\u7684\u63cf\u8ff0',\n  `table_name` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u6536\u85cf\u5b9e\u4f53\u4ee5\u524d\u6240\u5728\u8868,\u4e0d\u5e26\u524d\u7f00',\n  `object_id` int(10) UNSIGNED DEFAULT '0' COMMENT '\u6536\u85cf\u5185\u5bb9\u539f\u6765\u7684\u4e3b\u952eid',\n  `create_time` int(10) UNSIGNED DEFAULT '0' COMMENT '\u6536\u85cf\u65f6\u95f4',\n  PRIMARY KEY (`id`),\n  KEY `uid` (`user_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u6536\u85cf\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_login_attempt`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_login_attempt` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `login_attempts` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5c1d\u8bd5\u6b21\u6570',\n  `attempt_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5c1d\u8bd5\u767b\u5f55\u65f6\u95f4',\n  `locked_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u9501\u5b9a\u65f6\u95f4',\n  `ip` varchar(15) NOT NULL DEFAULT '' COMMENT '\u7528\u6237 ip',\n  `account` varchar(100) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u8d26\u53f7,\u624b\u673a\u53f7,\u90ae\u7bb1\u6216\u7528\u6237\u540d',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u767b\u5f55\u5c1d\u8bd5\u8868' ROW_FORMAT=COMPACT&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_score_log`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_score_log` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '\u7528\u6237 id',\n  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `action` varchar(50) NOT NULL DEFAULT '' COMMENT '\u7528\u6237\u64cd\u4f5c\u540d\u79f0',\n  `score` int(11) NOT NULL DEFAULT '0' COMMENT '\u66f4\u6539\u79ef\u5206\uff0c\u53ef\u4ee5\u4e3a\u8d1f',\n  `coin` int(11) NOT NULL DEFAULT '0' COMMENT '\u66f4\u6539\u91d1\u5e01\uff0c\u53ef\u4ee5\u4e3a\u8d1f',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u64cd\u4f5c\u79ef\u5206\u7b49\u5956\u52b1\u65e5\u5fd7\u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_user_token`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_user_token` (\n  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '\u7528\u6237id',\n  `expire_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT ' \u8fc7\u671f\u65f6\u95f4',\n  `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `token` varchar(64) NOT NULL DEFAULT '' COMMENT 'token',\n  `device_type` varchar(10) NOT NULL DEFAULT '' COMMENT '\u8bbe\u5907\u7c7b\u578b;mobile,android,iphone,ipad,web,pc,mac,wxapp',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u5ba2\u6237\u7aef\u767b\u5f55 token \u8868'&quot;,
+                &quot;\n-- --------------------------------------------------------\n\n--\n-- \u8868\u7684\u7ed3\u6784 `cmf_verification_code`\n--\n\nCREATE TABLE IF NOT EXISTS `cmf_verification_code` (\n  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '\u8868id',\n  `count` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u5f53\u5929\u5df2\u7ecf\u53d1\u9001\u6210\u529f\u7684\u6b21\u6570',\n  `send_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u6700\u540e\u53d1\u9001\u6210\u529f\u65f6\u95f4',\n  `expire_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '\u9a8c\u8bc1\u7801\u8fc7\u671f\u65f6\u95f4',\n  `code` varchar(8) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u6700\u540e\u53d1\u9001\u6210\u529f\u7684\u9a8c\u8bc1\u7801',\n  `account` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '\u624b\u673a\u53f7\u6216\u8005\u90ae\u7bb1',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='\u624b\u673a\u90ae\u7bb1\u6570\u5b57\u9a8c\u8bc1\u7801\u8868'&quot;,
+                &quot;\n\nALTER TABLE `cmf_auth_rule` CHANGE `app` `app` VARCHAR(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '\u89c4\u5219\u6240\u5c5eapp'&quot;,
+                &quot;\nALTER TABLE `cmf_user_favorite` ADD `thumbnail` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '\u7f29\u7565\u56fe' AFTER `title`&quot;,
+                &quot;\nALTER TABLE `cmf_user_favorite` CHANGE `url` `url` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '\u6536\u85cf\u5185\u5bb9\u7684\u539f\u6587\u5730\u5740\uff0cJSON\u683c\u5f0f'&quot;,
+                &quot;ALTER TABLE `cmf_user_favorite` CHANGE `description` `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '\u6536\u85cf\u5185\u5bb9\u7684\u63cf\u8ff0'&quot;,
+                &quot;ALTER TABLE `cmf_user_favorite` CHANGE `table_name` `table_name` VARCHAR(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '\u6536\u85cf\u5b9e\u4f53\u4ee5\u524d\u6240\u5728\u8868,\u4e0d\u5e26\u524d\u7f00'&quot;,
+                &quot;\n\nCREATE TABLE `cmf_user_like` (\n  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '\u7528\u6237 id',\n  `object_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '\u5185\u5bb9\u539f\u6765\u7684\u4e3b\u952eid',\n  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '\u521b\u5efa\u65f6\u95f4',\n  `table_name` varchar(64) NOT NULL DEFAULT '' COMMENT '\u5185\u5bb9\u4ee5\u524d\u6240\u5728\u8868,\u4e0d\u5e26\u524d\u7f00',\n  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '\u5185\u5bb9\u7684\u539f\u6587\u5730\u5740\uff0c\u4e0d\u5e26\u57df\u540d',\n  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '\u5185\u5bb9\u7684\u6807\u9898',\n  `thumbnail` varchar(100) NOT NULL DEFAULT '' COMMENT '\u7f29\u7565\u56fe',\n  `description` text COMMENT '\u5185\u5bb9\u7684\u63cf\u8ff0',\n  PRIMARY KEY (`id`),\n  KEY `uid` (`user_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='\u7528\u6237\u70b9\u8d5e\u8868'&quot;,
+                &quot;\nALTER TABLE `cmf_user` CHANGE `mobile` `mobile` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '\u4e2d\u56fd\u624b\u673a\u4e0d\u5e26\u56fd\u5bb6\u4ee3\u7801\uff0c\u56fd\u9645\u624b\u673a\u53f7\u683c\u5f0f\u4e3a\uff1a\u56fd\u5bb6\u4ee3\u7801-\u624b\u673a\u53f7';&quot;
+                ],
+                &quot;error&quot;: 0,
+                &quot;site_info&quot;: {
+                &quot;site_name&quot;: &quot;ThinkCMF\u5185\u5bb9\u7ba1\u7406\u6846\u67b6&quot;,
+                &quot;site_seo_title&quot;: &quot;ThinkCMF\u5185\u5bb9\u7ba1\u7406\u6846\u67b6&quot;,
+                &quot;site_seo_keywords&quot;: &quot;ThinkCMF,php,\u5185\u5bb9\u7ba1\u7406\u6846\u67b6,cmf,cms,\u7b80\u7ea6\u98ce, simplewind,framework&quot;,
+                &quot;site_seo_description&quot;: &quot;ThinkCMF\u662f\u7b80\u7ea6\u98ce\u7f51\u7edc\u79d1\u6280\u53d1\u5e03\u7684\u4e00\u6b3e\u7528\u4e8e\u5feb\u901f\u5f00\u53d1\u7684\u5185\u5bb9\u7ba1\u7406\u6846\u67b6&quot;
+                },
+                &quot;admin_info&quot;: {
+                &quot;user_login&quot;: &quot;admin&quot;,
+                &quot;user_pass&quot;: &quot;adminn&quot;,
+                &quot;user_email&quot;: &quot;admin@admin.com&quot;
+                },
+                &quot;step&quot;: 4
+                },
+                &quot;__SP_ADMIN_LOGIN_PAGE_SHOWED_SUCCESS__&quot;: true,
+                &quot;name&quot;: &quot;admin&quot;,
+                &quot;token&quot;: &quot;d0dd442c766d1360b2681af5c5e64ff3c6b5688b5798c69e3fa1c82c7565694d&quot;,
+                &quot;ADMIN_ID&quot;: 1
+                }                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>Server/Request Data</caption>
+        <tbody>
+        <tr>
+            <td>USER</td>
+            <td>
+                yufuping                    </td>
+        </tr>
+        <tr>
+            <td>HOME</td>
+            <td>
+                /Users/yufuping                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_COOKIE</td>
+            <td>
+                thinkphp_show_page_trace=0|0; PHPSESSID=gb360jv6sdu88gt1cft5f207k9; admin_username=admin                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_ACCEPT_LANGUAGE</td>
+            <td>
+                zh-CN,zh;q=0.9,en;q=0.8                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_ACCEPT_ENCODING</td>
+            <td>
+                gzip, deflate                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_REFERER</td>
+            <td>
+                http://thinkcmf.site/user/Asset/webuploader?&amp;multi=0&amp;filetype=image&amp;app=admin                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_ORIGIN</td>
+            <td>
+                http://thinkcmf.site                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_ACCEPT</td>
+            <td>
+                */*                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_CONTENT_TYPE</td>
+            <td>
+                multipart/form-data; boundary=----WebKitFormBoundaryNBRfvuz6HNkIUGNE                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_USER_AGENT</td>
+            <td>
+                Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_CONTENT_LENGTH</td>
+            <td>
+                17493                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_CONNECTION</td>
+            <td>
+                keep-alive                    </td>
+        </tr>
+        <tr>
+            <td>HTTP_HOST</td>
+            <td>
+                thinkcmf.site                    </td>
+        </tr>
+        <tr>
+            <td>REDIRECT_STATUS</td>
+            <td>
+                200                    </td>
+        </tr>
+        <tr>
+            <td>SERVER_NAME</td>
+            <td>
+                thinkcmf.site                    </td>
+        </tr>
+        <tr>
+            <td>SERVER_PORT</td>
+            <td>
+                80                    </td>
+        </tr>
+        <tr>
+            <td>SERVER_ADDR</td>
+            <td>
+                127.0.0.1                    </td>
+        </tr>
+        <tr>
+            <td>REMOTE_PORT</td>
+            <td>
+                51792                    </td>
+        </tr>
+        <tr>
+            <td>REMOTE_ADDR</td>
+            <td>
+                127.0.0.1                    </td>
+        </tr>
+        <tr>
+            <td>SERVER_SOFTWARE</td>
+            <td>
+                nginx/1.17.7                    </td>
+        </tr>
+        <tr>
+            <td>GATEWAY_INTERFACE</td>
+            <td>
+                CGI/1.1                    </td>
+        </tr>
+        <tr>
+            <td>REQUEST_SCHEME</td>
+            <td>
+                http                    </td>
+        </tr>
+        <tr>
+            <td>SERVER_PROTOCOL</td>
+            <td>
+                HTTP/1.1                    </td>
+        </tr>
+        <tr>
+            <td>DOCUMENT_ROOT</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/public                    </td>
+        </tr>
+        <tr>
+            <td>DOCUMENT_URI</td>
+            <td>
+                /index.php                    </td>
+        </tr>
+        <tr>
+            <td>REQUEST_URI</td>
+            <td>
+                /user/asset/webuploader.html?_ajax=1                    </td>
+        </tr>
+        <tr>
+            <td>SCRIPT_NAME</td>
+            <td>
+                /index.php                    </td>
+        </tr>
+        <tr>
+            <td>CONTENT_LENGTH</td>
+            <td>
+                17493                    </td>
+        </tr>
+        <tr>
+            <td>CONTENT_TYPE</td>
+            <td>
+                multipart/form-data; boundary=----WebKitFormBoundaryNBRfvuz6HNkIUGNE                    </td>
+        </tr>
+        <tr>
+            <td>REQUEST_METHOD</td>
+            <td>
+                POST                    </td>
+        </tr>
+        <tr>
+            <td>QUERY_STRING</td>
+            <td>
+                s=/user/asset/webuploader.html&amp;_ajax=1                    </td>
+        </tr>
+        <tr>
+            <td>SCRIPT_FILENAME</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/public/index.php                    </td>
+        </tr>
+        <tr>
+            <td>FCGI_ROLE</td>
+            <td>
+                RESPONDER                    </td>
+        </tr>
+        <tr>
+            <td>PHP_SELF</td>
+            <td>
+                /index.php                    </td>
+        </tr>
+        <tr>
+            <td>REQUEST_TIME_FLOAT</td>
+            <td>
+                1598598671.6494                    </td>
+        </tr>
+        <tr>
+            <td>REQUEST_TIME</td>
+            <td>
+                1598598671                    </td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <caption>Environment Variables<small>empty</small></caption>
+    </table>
+    <table>
+        <caption>ThinkPHP Constants</caption>
+        <tbody>
+        <tr>
+            <td>APP_DEBUG</td>
+            <td>
+                true                    </td>
+        </tr>
+        <tr>
+            <td>CMF_ROOT</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/                    </td>
+        </tr>
+        <tr>
+            <td>CMF_DATA</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/data/                    </td>
+        </tr>
+        <tr>
+            <td>APP_PATH</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/app/                    </td>
+        </tr>
+        <tr>
+            <td>WEB_ROOT</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/public/                    </td>
+        </tr>
+        <tr>
+            <td>HTMLPURIFIER_PREFIX</td>
+            <td>
+                /Users/yufuping/work/php/THinkCMF/vendor/ezyang/htmlpurifier/library                    </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="copyright">
+    <a title="官方网站" href="http://www.thinkphp.cn">ThinkPHP</a>
+    <span>V5.1.39 LTS</span>
+    <span>{ 十年磨一剑-为API开发设计的高性能框架 }</span>
+</div>
+<script>
+    var LINE = 262;
+
+    function $(selector, node){
+        var elements;
+
+        node = node || document;
+        if(document.querySelectorAll){
+            elements = node.querySelectorAll(selector);
+        } else {
+            switch(selector.substr(0, 1)){
+                case '#':
+                    elements = [node.getElementById(selector.substr(1))];
+                    break;
+                case '.':
+                    if(document.getElementsByClassName){
+                        elements = node.getElementsByClassName(selector.substr(1));
+                    } else {
+                        elements = get_elements_by_class(selector.substr(1), node);
+                    }
+                    break;
+                default:
+                    elements = node.getElementsByTagName();
+            }
+        }
+        return elements;
+
+        function get_elements_by_class(search_class, node, tag) {
+            var elements = [], eles,
+                pattern  = new RegExp('(^|\\s)' + search_class + '(\\s|$)');
+
+            node = node || document;
+            tag  = tag  || '*';
+
+            eles = node.getElementsByTagName(tag);
+            for(var i = 0; i < eles.length; i++) {
+                if(pattern.test(eles[i].className)) {
+                    elements.push(eles[i])
+                }
+            }
+
+            return elements;
+        }
+    }
+
+    $.getScript = function(src, func){
+        var script = document.createElement('script');
+
+        script.async  = 'async';
+        script.src    = src;
+        script.onload = func || function(){};
+
+        $('head')[0].appendChild(script);
+    }
+
+    ;(function(){
+        var files = $('.toggle');
+        var ol    = $('ol', $('.prettyprint')[0]);
+        var li    = $('li', ol[0]);
+
+        // 短路径和长路径变换
+        for(var i = 0; i < files.length; i++){
+            files[i].ondblclick = function(){
+                var title = this.title;
+
+                this.title = this.innerHTML;
+                this.innerHTML = title;
+            }
+        }
+
+        // 设置出错行
+        var err_line = $('.line-' + LINE, ol[0])[0];
+        err_line.className = err_line.className + ' line-error';
+
+        $.getScript('//cdn.bootcss.com/prettify/r298/prettify.min.js', function(){
+            prettyPrint();
+
+            // 解决Firefox浏览器一个很诡异的问题
+            // 当代码高亮后，ol的行号莫名其妙的错位
+            // 但是只要刷新li里面的html重新渲染就没有问题了
+            if(window.navigator.userAgent.indexOf('Firefox') >= 0){
+                ol[0].innerHTML = ol[0].innerHTML;
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>

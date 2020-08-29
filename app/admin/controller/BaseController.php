@@ -9,6 +9,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminMenu;
 use app\admin\model\AdminUser;
 use app\admin\traits\AdminAuthTrait;
 use app\admin\traits\AdminTreeTrait;
@@ -90,8 +91,18 @@ class BaseController
      */
     protected function fetch(string $template = '', array $vars = []): string
     {
-        $this->admin['name']    = '后台';
-        $this->admin['is_pjax'] = request()->isPjax();
+        /** @var AdminMenu $menu */
+        $menu = (new AdminMenu)->where(['url' => $this->url])->find();
+        if ($menu) {
+            $menu_all = (new AdminMenu)->field('id,parent_id,name,icon')->select()->toArray();
+
+            $this->admin['title']      = $menu->name;
+            $this->admin['breadcrumb'] = $this->getBreadCrumb($menu_all, $menu->id);
+        }
+
+        $this->admin['name']       = '后台';
+        $this->admin['is_pjax']    = request()->isPjax();
+        $this->admin['upload_url'] = url('admin/file/upload')->build();
 
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
             $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu());

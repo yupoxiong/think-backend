@@ -10,7 +10,6 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminRole;
 use Exception;
-use think\initializer\Error;
 use think\Request;
 use think\Response;
 use think\db\Query;
@@ -167,5 +166,19 @@ class AdminUserController extends BaseController
 
         $result = $model->whereIn('id', $id)->update(['status' => 0]);
         return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+    /**
+     * 个人资料
+     * @param AdminUser $model
+     * @return string
+     * @throws Exception
+     */
+    public function profile(AdminUser $model): string
+    {
+        $this->assign([
+            'data' => $this->user,
+        ]);
+        return $this->fetch();
     }
 }
