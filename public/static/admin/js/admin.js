@@ -112,7 +112,7 @@ function initMenuClick() {
 function showFileUpload(domId, fileType) {
 
     layer.open({
-        type: 1,
+        type: 2,
         area: ['80%', '60%'],
         title: '上传文件',
         closeBtn: 1,

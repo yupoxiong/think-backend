@@ -1,86 +1,96 @@
 <!--空白弹出页面参考模版-->
 {extend name='public/layer_base' /}
 {block name='content'}
+<script>
+    var indexWindow = parent.layer.getFrameIndex(window.name);
+    var minFileCount = {$min_file_count};
+    var maxFileCount = {$max_file_count};
+    var fileType = '{$file_type}';
+    var domId = '{$dom_id}';
+    var uploadResult = '';
+
+</script>
 <section class="content">
-    <div class="row">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+    <div class="container-fluid">
+        <div class="card">
 
-                    <div class="card">
+            <div class="card-body">
 
-                        <form class="form-horizontal" role="form" id="dataForm" action="" method="post"
-                              enctype="multipart/form-data">
-                            <div class="card-body table-responsive p-0">
+                <input id="file" name="file" type="file" {$multiple} class="file-loading">
+                <input name="uploadResult" id="uploadResult" hidden placeholder="上传结果">
+                <script>
+                    $("#file").fileinput({
+                        theme: 'fas',
+                        showClose: false,
+                        uploadUrl: uploadUrl, // 服务器端上传处理程序
+                        uploadAsync: false,  //异步上传
+                        minFileCount: minFileCount,    //最小上传文件数： 1
+                        maxFileCount: maxFileCount,    //最大上传文件数： 5
+                        overwriteInitial: false,  //不能重载初始预览
+                        initialPreviewAsData: true,      // 确定传入预览数据，而不是原生标记语言
+                        initialPreviewFileType: fileType,
+                        uploadExtraData: {
+                            min_file_count: minFileCount,
+                            max_file_count: maxFileCount,
+                            file_type: fileType,
+                        },
+                        language: 'zh',
+                    }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
+                        console.log('32223');
+                        let response = data.response;
 
+                        console.log(response);
+                        console.log('555');
 
-                                <input id="file" name="file" type="file" multiple="multiple" class="file-loading">
-                                <script>
-                                    $("#file").fileinput({
-                                        uploadUrl: "http://localhost/file-upload-single/1", // 服务器端上传处理程序
-                                        uploadAsync: true,  //异步上传
-                                        minFileCount: 1,    //最小上传文件数： 1
-                                        maxFileCount: 5,    //最大上传文件数： 5
-                                        overwriteInitial: false,  //不能重载初始预览
-                                        initialPreview: [         //初始预览数据
-                                            "http://lorempixel.com/800/460/people/1",
-                                            "http://lorempixel.com/800/460/people/2"
-                                        ],
-                                        initialPreviewAsData: true,      // 确定传入预览数据，而不是原生标记语言
-                                        initialPreviewFileType: 'image', // 默认为`image`，可以在下面配置中被覆盖
-                                        initialPreviewConfig: [          //初始预览配置
-                                            {caption: "People-1.jpg", size: 576237, width: "120px", url: "/site/file-delete", key: 1},
-                                            {caption: "People-2.jpg", size: 932882, width: "120px", url: "/site/file-delete", key: 2},
-                                        ],
-                                        uploadExtraData: {    //上传额外数据
-                                            img_key: "1000",
-                                            img_keywords: "happy, places",
-                                        }
-                                    });
-                                </script>
+                        if (response.code === 200 && response.result !== undefined) {
+                          uploadResult = response.result.url;
+                        }
+                    });
+                </script>
 
+            </div>
 
-                                <div class="form-group row">
-                                    <label for="nickname" class="col-sm-2 col-form-label ">昵称</label>
-                                    <div class="col-sm-10 col-md-4 formInputDiv">
-                                        <input type="text" class="form-control"
-                                               id="nickname" name="nickname" value="{$data.nickname|default=''}"
-                                               placeholder="请输入昵称">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="card-footer">
-
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                    </div>
-
-                                    <div class="col-sm-10 col-md-4">
-
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-primary dataFormSubmit">
-                                                保 存
-                                            </button>
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-default dataFormReset">
-                                                取消
-                                            </button>
-                                        </div>
-
-                                        {/if}
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-10 col-md-4">
+                        <div class="btn-group">
+                            <button type="button" onclick="uploadOk()"
+                                    class="btn btn-sm btn-primary">
+                                确定
+                            </button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" onclick="uploadCancel()"
+                                    class="btn btn-sm btn-default">
+                                退 出
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    /**
+     * 文件上传确定
+     */
+    function uploadOk() {
+        console.log(uploadResult);
+        // 把相关的URL返回给调用的input框，单文件返回一个URL，多文件返回逗号隔开的URL。
+        parent. $('#'+domId).val(uploadResult);
+        parent.layer.close(indexWindow);
+    }
 
+    /**
+     * 文件上传退出
+     */
+    function uploadCancel() {
+        parent.layer.close(indexWindow);
+    }
+
+</script>
 {/block}
 
