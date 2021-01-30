@@ -7,4 +7,9 @@ class IndexController
     {
         echo 'hello link';
     }
+
+    public function testAction()
+    {
+        return request()->action();
+    }
 }

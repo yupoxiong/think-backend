@@ -49,7 +49,7 @@ class AdminMenuController extends BaseController
 
         if ($request->isPost()) {
             $param = $request->param();
-            $check = $validate->scene('admin_save')->check($param);
+            $check = $validate->scene('admin_add')->check($param);
             if (!$check) {
                 return admin_error($validate->getError());
             }

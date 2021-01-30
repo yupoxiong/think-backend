@@ -170,12 +170,30 @@ class AdminUserController extends BaseController
 
     /**
      * 个人资料
-     * @param AdminUser $model
-     * @return string
+     * @param Request $request
+     * @return mixed
      * @throws Exception
      */
-    public function profile(AdminUser $model): string
+    public function profile(Request $request, AdminUserValidate $validate)
     {
+        if ($request->isPost()) {
+            $param = $request->param();
+            if ($param['update_type'] === 'password') {
+
+                $validate_result = $validate->scene('password')->check($param);
+                if (!$validate_result) {
+                    return admin_error($validate->getError());
+                }
+
+                if (!password_verify($param['password'], base64_decode($this->user->password))) {
+                    return admin_error('当前密码不正确');
+                }
+                $param['password'] = $param['new_password'];
+            }
+
+            return $this->user->save($param) ? admin_success('修改成功', URL_RELOAD) : admin_error();
+        }
+
         $this->assign([
             'data' => $this->user,
         ]);

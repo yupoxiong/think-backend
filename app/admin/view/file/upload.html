@@ -23,7 +23,7 @@
                         theme: 'fas',
                         showClose: false,
                         uploadUrl: uploadUrl, // 服务器端上传处理程序
-                        uploadAsync: false,  //异步上传
+                        uploadAsync: true,  //异步上传
                         minFileCount: minFileCount,    //最小上传文件数： 1
                         maxFileCount: maxFileCount,    //最大上传文件数： 5
                         overwriteInitial: false,  //不能重载初始预览
@@ -35,13 +35,8 @@
                             file_type: fileType,
                         },
                         language: 'zh',
-                    }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
-                        console.log('32223');
+                    }).on('fileuploaded', function (event, data, previewId, index) {
                         let response = data.response;
-
-                        console.log(response);
-                        console.log('555');
-
                         if (response.code === 200 && response.result !== undefined) {
                           uploadResult = response.result.url;
                         }

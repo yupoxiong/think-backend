@@ -36,9 +36,15 @@ class FileController extends BaseController
         $multiple = $request->param('is_multiple') ? 'multiple="multiple"' : '';
 
         if ($request->isPost()) {
+
             $file = $request->file('file');
-            $name = Filesystem::putFile( 'topic', $file);
-            return admin_success('上传成功',['url'=>$name]);
+            $name = Filesystem::putFile('topic', $file);
+
+            $url  = config('filesystem.disks.public.url');
+
+            return admin_success('上传成功', [
+                'url' => $url .'/'. $name
+            ]);
         }
 
         $this->assign([

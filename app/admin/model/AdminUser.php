@@ -131,4 +131,18 @@ class AdminUser extends AdminBaseModel
         return base64_encode(password_hash($password, 1));
     }
 
+    public function getAuthUrlAttr($value,$data)
+    {
+        $role_urls  = AdminRole::where('id', 'in', $data['role'])->where('status', 1)->column('url');
+        $url_id_str = '';
+        foreach ($role_urls as $key => $val) {
+            $url_id_str .= $key == 0 ? $val : ',' . $val;
+        }
+        $url_id   = array_unique(explode(',', $url_id_str));
+        $auth_url = [];
+        if (count($url_id) > 0) {
+            $auth_url = AdminMenu::where('id', 'in', $url_id)->column('url');
+        }
+        return $auth_url;
+    }
 }
