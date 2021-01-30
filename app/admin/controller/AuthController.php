@@ -19,7 +19,7 @@ use think\Request;
 use think\response\Json;
 use think\response\Redirect;
 
-class AuthController extends BaseController
+class AuthController extends AdminBaseController
 {
 
     protected $authExcept = [

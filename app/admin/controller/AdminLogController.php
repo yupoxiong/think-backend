@@ -13,7 +13,7 @@ use Exception;
 use think\db\exception\DbException;
 use think\Request;
 
-class AdminLogController extends BaseController
+class AdminLogController extends AdminBaseController
 {
 
     /**

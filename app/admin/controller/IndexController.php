@@ -12,7 +12,7 @@ namespace app\admin\controller;
 
 use Exception;
 
-class IndexController extends BaseController
+class IndexController extends AdminBaseController
 {
 
     /**

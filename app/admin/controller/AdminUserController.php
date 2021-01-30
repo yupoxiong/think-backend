@@ -19,7 +19,7 @@ use think\db\exception\DbException;
 use app\admin\model\AdminUser;
 use app\admin\validate\AdminUserValidate;
 
-class AdminUserController extends BaseController
+class AdminUserController extends AdminBaseController
 {
 
     /**

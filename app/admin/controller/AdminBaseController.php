@@ -17,7 +17,7 @@ use Exception;
 use think\facade\Env;
 use think\View;
 
-class BaseController
+class AdminBaseController
 {
 
     use AdminTreeTrait;

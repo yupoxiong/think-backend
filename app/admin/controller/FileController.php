@@ -13,7 +13,7 @@ namespace app\admin\controller;
 use think\facade\Filesystem;
 use think\Request;
 
-class FileController extends BaseController
+class FileController extends AdminBaseController
 {
 
     protected $authExcept = [

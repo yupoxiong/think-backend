@@ -16,7 +16,7 @@ use think\Request;
 use think\Response;
 use think\response\Json;
 
-class AdminMenuController extends BaseController
+class AdminMenuController extends AdminBaseController
 {
 
     /**

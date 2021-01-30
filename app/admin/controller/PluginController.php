@@ -10,9 +10,8 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 
-class PluginController extends BaseController
+class PluginController extends AdminBaseController
 {
-
 
     /**
      * 插件列表页

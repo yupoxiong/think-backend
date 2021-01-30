@@ -17,7 +17,7 @@ use think\Request;
 use think\Response;
 use think\response\Json;
 
-class AdminRoleController extends BaseController
+class AdminRoleController extends AdminBaseController
 {
 
     /**
