@@ -101,7 +101,9 @@ class AuthService extends AdminService
      */
     public function getAdminUserAuthInfo(): AdminUser
     {
+        //  当前管理员ID
         $admin_user_id = 0;
+        // 当前获取登录信息的方式
         $store_from    = 0;
 
         if (Session::has($this->store_uid_key)) {
@@ -118,7 +120,9 @@ class AuthService extends AdminService
             throw new AdminServiceException('未找到登录信息');
         }
 
-        $admin_user = $this->model->where('id', '=', $admin_user_id)->findOrEmpty();
+        $admin_user = $this->model
+            ->where('id', '=', $admin_user_id)
+            ->findOrEmpty();
 
         /** @var AdminUser $admin_user */
         if (!$admin_user) {

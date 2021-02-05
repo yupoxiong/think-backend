@@ -34,7 +34,7 @@ class AdminRoleController extends AdminBaseController
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
-                'list_rows' => $this->admin['per_page'],
+                'list_rows' => $this->admin['admin_per_page'],
                 'var_page'  => 'page',
                 'query'     => $request->get()
             ]);

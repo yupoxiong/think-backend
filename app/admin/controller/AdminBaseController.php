@@ -6,20 +6,16 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
-use app\admin\model\AdminMenu;
-use app\admin\model\AdminUser;
-use app\admin\traits\AdminAuthTrait;
-use app\admin\traits\AdminTreeTrait;
 use Exception;
-use think\facade\Env;
 use think\View;
+use think\facade\Env;
+use app\admin\model\{AdminMenu,AdminUser};
+use app\admin\traits\{AdminAuthTrait,AdminTreeTrait};
 
 class AdminBaseController
 {
-
     use AdminTreeTrait;
     use AdminAuthTrait;
 
@@ -42,7 +38,13 @@ class AdminBaseController
     protected $url;
 
     /**
-     * 无需验证的URL
+     * 无需验证登录的url
+     * @var array
+     */
+    protected $loginExcept =[];
+
+    /**
+     * 无需验证权限的URL
      * @var array
      */
     protected $authExcept = [];
@@ -53,22 +55,22 @@ class AdminBaseController
      */
     protected $user;
 
-
-    public function __construct(View $view)
+    public function __construct()
     {
-        $this->view = $view;
         $this->initialize();
     }
 
-
     public function initialize(): void
     {
-
+        $this->checkLogin();
         $this->checkAuth();
 
-        $this->admin['per_page'] = cookie('admin_per_page') ?? 10;
-        $this->admin['per_page'] = $this->admin['per_page'] < 100 ? $this->admin['per_page'] : 100;
+        $this->view =  app()->make(View::class);
+
+        $this->admin['admin_per_page'] = cookie('admin_per_page') ?? 10;
+        $this->admin['admin_per_page'] = $this->admin['admin_per_page'] < 100 ? $this->admin['admin_per_page'] : 100;
     }
+
 
     /**
      * 模板赋值
@@ -108,7 +110,6 @@ class AdminBaseController
             $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu());
         }
 
-
         $this->admin['debug'] = Env::get('app_debug');
 
         // 赋值后台变量
@@ -119,6 +120,5 @@ class AdminBaseController
 
         return $this->view->fetch($template, $vars);
     }
-
 
 }

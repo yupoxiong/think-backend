@@ -4,8 +4,6 @@
  * @author yupoxiong<i@yupoxiong.com>
  */
 
-declare (strict_types=1);
-
 use think\response\Json;
 
 /** 不做任何操作 */
@@ -31,7 +29,7 @@ if (!function_exists('admin_success')) {
      * @param array $options
      * @return Json
      */
-    function admin_success($msg = '操作成功', $result = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = [])
+    function admin_success($msg = '操作成功', $result = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = []): Json
     {
         return admin_result($msg, $result, $url, $code, $header, $options);
     }
@@ -49,7 +47,7 @@ if (!function_exists('admin_error')) {
      * @param array $options
      * @return Json
      */
-    function admin_error($msg = '操作失败', $result = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = [])
+    function admin_error($msg = '操作失败', $result = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = []): Json
     {
         return admin_result($msg, $result, $url, $code, $header, $options);
     }
@@ -68,7 +66,7 @@ if (!function_exists('admin_result')) {
      * @param array $options
      * @return Json
      */
-    function admin_result($msg = '', $result = [], $url = URL_CURRENT, $code = 500, $header = [], $options = [])
+    function admin_result($msg = '', $result = [], $url = URL_CURRENT, $code = 500, $header = [], $options = []): Json
     {
 
         $data = [

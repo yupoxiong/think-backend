@@ -40,7 +40,7 @@
   ]
 
   $container.append(
-    '<h5>Customize AdminLTE</h5><hr class="mb-2"/>'
+    '<h5>自定义后台参数</h5><hr class="mb-2"/>'
   )
 
   var $no_border_checkbox = $('<input />', {

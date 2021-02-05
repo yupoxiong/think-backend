@@ -108,9 +108,9 @@ class PageService extends Paginator
 
     /**
      * 渲染分页html
-     * @return mixed
+     * @return string
      */
-    public function render()
+    public function render(): string
     {
         if ($this->hasPages()) {
             if ($this->simple) {
@@ -128,13 +128,14 @@ class PageService extends Paginator
                 $this->getNextButton()
             );
         }
+        return '';
     }
 
     /**
      * 生成一个可点击的按钮
      *
-     * @param  string $url
-     * @param  string $page
+     * @param string $url
+     * @param string $page
      * @return string
      */
     protected function getAvailablePageWrapper(string $url, string $page): string
@@ -145,7 +146,7 @@ class PageService extends Paginator
     /**
      * 生成一个禁用的按钮
      *
-     * @param  string $text
+     * @param string $text
      * @return string
      */
     protected function getDisabledTextWrapper(string $text): string
@@ -156,7 +157,7 @@ class PageService extends Paginator
     /**
      * 生成一个激活的按钮
      *
-     * @param  string $text
+     * @param string $text
      * @return string
      */
     protected function getActivePageWrapper(string $text): string
@@ -177,7 +178,7 @@ class PageService extends Paginator
     /**
      * 批量生成页码按钮.
      *
-     * @param  array $urls
+     * @param array $urls
      * @return string
      */
     protected function getUrlLinks(array $urls): string
@@ -194,13 +195,13 @@ class PageService extends Paginator
     /**
      * 生成普通页码按钮
      *
-     * @param  string $url
-     * @param  string    $page
+     * @param string $url
+     * @param string $page
      * @return string
      */
     protected function getPageLinkWrapper(string $url, string $page): string
     {
-        if ($this->currentPage() == $page) {
+        if ($this->currentPage() === (int)$page) {
             return $this->getActivePageWrapper($page);
         }
 

@@ -8,10 +8,9 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminLog;
 use Exception;
-use think\db\exception\DbException;
 use think\Request;
+use app\admin\model\AdminLog;
 
 class AdminLogController extends AdminBaseController
 {
@@ -22,7 +21,6 @@ class AdminLogController extends AdminBaseController
      * @param Request $request
      * @param AdminLog $model
      * @return string
-     * @throws DbException
      * @throws Exception
      */
     public function index(Request $request, AdminLog $model): string
@@ -30,7 +28,7 @@ class AdminLogController extends AdminBaseController
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
-                'list_rows' => $this->admin['per_page'],
+                'list_rows' => $this->admin['admin_per_page'],
                 'var_page'  => 'page',
                 'query'     => $request->get()
             ]);

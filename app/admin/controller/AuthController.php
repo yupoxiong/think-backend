@@ -80,7 +80,7 @@ class AuthController extends AdminBaseController
      */
     public function logout(AuthService $service): Redirect
     {
-        $service->logout($this->user);
+        $service->logout($this->adminUser);
 
         return redirect(url('admin/index/index')->build());
     }
