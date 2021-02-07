@@ -13,5 +13,8 @@ namespace yupoxiong\generate;
 class Generate
 {
 
-
+    public function test()
+    {
+        return '333';
+    }
 }

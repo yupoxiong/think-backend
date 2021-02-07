@@ -111,6 +111,10 @@ class AdminBaseController
         }
 
         $this->admin['debug'] = Env::get('app_debug');
+        $this->admin['top_nav'] = 0;
+        $this->admin['top_search'] = 0;
+        $this->admin['top_message'] = 0;
+        $this->admin['top_notification'] = 0;
 
         // 赋值后台变量
         $this->assign([

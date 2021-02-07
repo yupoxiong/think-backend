@@ -22,4 +22,6 @@ class GenerateController extends AdminBaseController
     {
 
     }
+
+
 }

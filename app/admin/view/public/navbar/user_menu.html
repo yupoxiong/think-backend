@@ -1,19 +1,25 @@
+<li class="nav-item">
+    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <i class="fas fa-expand-arrows-alt"></i>
+    </a>
+</li>
+
 <li class="nav-item dropdown user-menu">
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-        <img src="{$user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="user-image img-circle elevation-2" alt="头像">
+        <img src="{$admin.user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="user-image img-circle elevation-2" alt="头像">
         <span class="d-none d-md-inline">{$user.nickname|default=''}</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <!-- User image -->
         <li class="user-header bg-primary">
-            <img src="{$user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
+            <img src="{$admin.user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
             <p>
-                {$user.nickname|default=''}
-                <small>{$user.username|default=''}</small>
+                {$admin.user.nickname|default=''}
+                <small>{$admin.user.username|default=''}</small>
             </p>
         </li>
         <li class="user-footer">
-            <a href="{:url('admin/admin_user/profile')}" class="btn btn-default btn-flat">个人资料</a>
+            <a href="{:url('admin/adminUser/profile')}" class="btn btn-default btn-flat">个人资料</a>
             <a href="{:url('admin/auth/logout')}" class="btn btn-default btn-flat float-right">退  出</a>
         </li>
     </ul>
