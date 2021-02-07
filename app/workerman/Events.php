@@ -20,6 +20,7 @@
 //declare(ticks=1);
 
 namespace app\workerman;
+
 use Exception;
 use \GatewayWorker\Lib\Gateway;
 
@@ -39,10 +40,9 @@ class Events
      */
     public static function onConnect($client_id): void
     {
-        // 向当前client_id发送数据 
-        Gateway::sendToClient($client_id, "Hello $client_id\r\n");
-        // 向所有人发送
-        Gateway::sendToAll("$client_id login\r\n");
+        $msg = '{"type":"connect","client_id":"' . $client_id . '"}';
+        // 告诉客户端clientID
+        Gateway::sendToClient($client_id, $msg);
     }
 
     /**
@@ -51,20 +51,19 @@ class Events
      * @param mixed $message 具体消息
      * @throws Exception
      */
-   public static function onMessage($client_id, $message): void
-   {
-        // 向所有人发送
-        Gateway::sendToAll("$client_id said $message\r\n");
-   }
+    public static function onMessage($client_id, $message): void
+    {
+
+    }
 
     /**
      * 当用户断开连接时触发
      * @param int $client_id 连接id
      * @throws Exception
      */
-   public static function onClose($client_id): void
-   {
-       // 向所有人发送 
-       GateWay::sendToAll("$client_id logout\r\n");
-   }
+    public static function onClose($client_id): void
+    {
+
+    }
+
 }

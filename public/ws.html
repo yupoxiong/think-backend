@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="static/admin/css/adminlte.min.css" rel="stylesheet">
+    <script src="static/admin/plugins/jquery/jquery.min.js"></script>
+    <script src="static/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+
+<div class="wrapper">
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Ws测试</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Title</h3>
+
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="输入内容" type="text" id="text" maxlength="200" />
+                        <button class="btn btn-success" type="button" onclick="send()">发送消息</button>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                Footer
+            </div>
+            <!-- /.card-footer-->
+        </div>
+        <!-- /.card -->
+
+    </section>
+
+
+</div>
+</div>
+
+
+
+
+<script>
+
+    let wsServerUrl = 'ws://127.0.0.1:8282'
+
+    let ws1 = new WebSocket(wsServerUrl);
+
+    let apiPrefix = 'api/live'
+    let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6ImU0Yjk3NjI5ZTQ1ZDI0MDU1NDdhNGZhMzNiNmYzM2MyIn0.eyJpc3MiOiJzZXJ2ZXIiLCJhdWQiOiJhcHAiLCJqdGkiOiJlNGI5NzYyOWU0NWQyNDA1NTQ3YTRmYTMzYjZmMzNjMiIsImlhdCI6MTU5NjU5NzQyMiwibmJmIjoxNTk2NTk3NDIyLCJleHAiOjE1OTc0NjE0MjIsInVpZCI6MTg5NTUsImNpdHlfaWQiOiIxNTciLCJjb25maWdfaWQiOiIxIiwicGxhdGZvcm0iOiIyIn0.TGupY1Z-KjaYtNXuIm9JBmn4m0tiRtyikTCgtdukCfE';
+
+    let client_id = ''
+
+    let ws1Ping = null;
+
+    ws1.onopen = function () {
+        ws1Ping = wsPing(ws1);
+        console.log(ws1Ping);
+        console.log("连接成功");
+    };
+
+    ws1.onerror = function (e) {
+        console.log('连接出错');
+        console.log(e);
+    }
+
+    ws1.onclose= function (e){
+        console.log('连接已被关闭');
+        console.log(e);
+    }
+
+
+
+    ws1.onmessage = function (e) {
+
+        console.log(e.data)
+
+        let data = e.data
+        if (isJson(data)) {
+            let jsonData = JSON.parse(data);
+            console.log(jsonData);
+        }
+        console.log("收到服务端的消息：" + e.data);
+    };
+
+    function send() {
+        let text = document.getElementById('text').value;
+
+        //利用websocket发送
+        ws1.send(text);
+    }
+
+
+    //评论
+    function comment() {
+
+        let content = document.getElementById('text').value;
+
+        $.ajax({
+            'url': apiPrefix + '/sendComment',
+            headers: {
+                token: token,
+                clientId: client_id,
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            data: {
+                content: content,
+                id: 1,
+            },
+            success: function (result) {
+
+                console.log(result);
+
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+    }
+
+
+    /**
+     * 判断是否为json格式字符串
+     * @param str
+     * @returns {boolean}
+     */
+    function isJson(str) {
+        if (typeof str == 'string') {
+            try {
+                var obj = JSON.parse(str);
+                return !!(typeof obj == 'object' && obj);
+            } catch (e) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param ws
+     * @param content
+     * @param interval
+     */
+    function wsPing(ws, content = '{"type":"ping"}', interval = 10000) {
+        // 限制最长心跳检测间隔为60秒
+        if (interval > 60000) {
+            interval = 60000;
+        }
+        // 限制最短心跳检测间隔为2秒
+        if (interval < 2000) {
+            interval = 2000;
+        }
+
+        // 先判断是否在连接状态
+        if (ws.readyState !== ws.OPEN) {
+            return false;
+        }
+
+        return setInterval(function () {
+            if (ws.readyState === ws.OPEN) {
+                ws.send(content);
+            }
+        }, interval);
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1776 @@
+object(Workerman\Connection\TcpConnection)#13 (32) {
+  ["onMessage"]=>
+  array(2) {
+    [0]=>
+    object(GatewayWorker\Gateway)#2 (53) {
+      ["lanIp"]=>
+      string(9) "127.0.0.1"
+      ["lanPort"]=>
+      int(2901)
+      ["startPort"]=>
+      int(2900)
+      ["registerAddress"]=>
+      array(1) {
+        [0]=>
+        string(14) "127.0.0.1:1238"
+      }
+      ["reloadable"]=>
+      bool(false)
+      ["pingInterval"]=>
+      int(10)
+      ["pingNotResponseLimit"]=>
+      int(0)
+      ["pingData"]=>
+      string(15) "{"type":"ping"}"
+      ["secretKey"]=>
+      string(0) ""
+      ["router"]=>
+      array(2) {
+        [0]=>
+        string(22) "\GatewayWorker\Gateway"
+        [1]=>
+        string(10) "routerBind"
+      }
+      ["sendToWorkerBufferSize"]=>
+      int(10240000)
+      ["sendToClientBufferSize"]=>
+      int(1024000)
+      ["protocolAccelerate"]=>
+      bool(false)
+      ["_clientConnections":protected]=>
+      array(1) {
+        [1]=>
+        *RECURSION*
+      }
+      ["_uidConnections":protected]=>
+      array(0) {
+      }
+      ["_groupConnections":protected]=>
+      array(0) {
+      }
+      ["_workerConnections":protected]=>
+      array(1) {
+        ["127.0.0.1:BusinessWorkerTest:0"]=>
+        object(Workerman\Connection\TcpConnection)#12 (24) {
+          ["onMessage"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerMessage"
+          }
+          ["onClose"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(13) "onWorkerClose"
+          }
+          ["onError"]=>
+          NULL
+          ["onBufferFull"]=>
+          NULL
+          ["onBufferDrain"]=>
+          NULL
+          ["protocol"]=>
+          string(25) "Protocols\GatewayProtocol"
+          ["transport"]=>
+          string(3) "tcp"
+          ["worker"]=>
+          object(Workerman\Worker)#6 (27) {
+            ["id"]=>
+            int(0)
+            ["name"]=>
+            string(18) "GatewayInnerWorker"
+            ["count"]=>
+            int(1)
+            ["user"]=>
+            string(0) ""
+            ["group"]=>
+            string(0) ""
+            ["reloadable"]=>
+            bool(true)
+            ["reusePort"]=>
+            bool(false)
+            ["onWorkerStart"]=>
+            NULL
+            ["onConnect"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerConnect"
+            }
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["onWorkerStop"]=>
+            NULL
+            ["onWorkerReload"]=>
+            NULL
+            ["transport"]=>
+            string(3) "tcp"
+            ["connections"]=>
+            array(1) {
+              [2]=>
+              *RECURSION*
+            }
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["_autoloadRootPath":protected]=>
+            string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+            ["_pauseAccept":protected]=>
+            bool(false)
+            ["stopping"]=>
+            bool(false)
+            ["_mainSocket":protected]=>
+            resource(41) of type (stream)
+            ["_socketName":protected]=>
+            string(32) "GatewayProtocol://127.0.0.1:2901"
+            ["_localSocket":protected]=>
+            NULL
+            ["_context":protected]=>
+            resource(40) of type (stream-context)
+            ["workerId"]=>
+            string(32) "000000001a27d83a000000000067d789"
+          }
+          ["bytesRead"]=>
+          int(81)
+          ["bytesWritten"]=>
+          int(28)
+          ["id"]=>
+          int(2)
+          ["_id":protected]=>
+          int(2)
+          ["maxSendBufferSize"]=>
+          int(10240000)
+          ["maxPackageSize"]=>
+          int(10485760)
+          ["_socket":protected]=>
+          resource(48) of type (stream)
+          ["_sendBuffer":protected]=>
+          string(0) ""
+          ["_recvBuffer":protected]=>
+          string(0) ""
+          ["_currentPackageLength":protected]=>
+          int(0)
+          ["_status":protected]=>
+          int(2)
+          ["_remoteAddress":protected]=>
+          string(15) "127.0.0.1:49555"
+          ["_isPaused":protected]=>
+          bool(false)
+          ["_sslHandshakeCompleted":protected]=>
+          bool(false)
+          ["authorized"]=>
+          bool(true)
+          ["key"]=>
+          string(30) "127.0.0.1:BusinessWorkerTest:0"
+        }
+      }
+      ["_innerTcpWorker":protected]=>
+      object(Workerman\Worker)#6 (27) {
+        ["id"]=>
+        int(0)
+        ["name"]=>
+        string(18) "GatewayInnerWorker"
+        ["count"]=>
+        int(1)
+        ["user"]=>
+        string(0) ""
+        ["group"]=>
+        string(0) ""
+        ["reloadable"]=>
+        bool(true)
+        ["reusePort"]=>
+        bool(false)
+        ["onWorkerStart"]=>
+        NULL
+        ["onConnect"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerConnect"
+        }
+        ["onMessage"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerMessage"
+        }
+        ["onClose"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(13) "onWorkerClose"
+        }
+        ["onError"]=>
+        NULL
+        ["onBufferFull"]=>
+        NULL
+        ["onBufferDrain"]=>
+        NULL
+        ["onWorkerStop"]=>
+        NULL
+        ["onWorkerReload"]=>
+        NULL
+        ["transport"]=>
+        string(3) "tcp"
+        ["connections"]=>
+        array(1) {
+          [2]=>
+          object(Workerman\Connection\TcpConnection)#12 (24) {
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["transport"]=>
+            string(3) "tcp"
+            ["worker"]=>
+            *RECURSION*
+            ["bytesRead"]=>
+            int(81)
+            ["bytesWritten"]=>
+            int(28)
+            ["id"]=>
+            int(2)
+            ["_id":protected]=>
+            int(2)
+            ["maxSendBufferSize"]=>
+            int(10240000)
+            ["maxPackageSize"]=>
+            int(10485760)
+            ["_socket":protected]=>
+            resource(48) of type (stream)
+            ["_sendBuffer":protected]=>
+            string(0) ""
+            ["_recvBuffer":protected]=>
+            string(0) ""
+            ["_currentPackageLength":protected]=>
+            int(0)
+            ["_status":protected]=>
+            int(2)
+            ["_remoteAddress":protected]=>
+            string(15) "127.0.0.1:49555"
+            ["_isPaused":protected]=>
+            bool(false)
+            ["_sslHandshakeCompleted":protected]=>
+            bool(false)
+            ["authorized"]=>
+            bool(true)
+            ["key"]=>
+            string(30) "127.0.0.1:BusinessWorkerTest:0"
+          }
+        }
+        ["protocol"]=>
+        string(25) "Protocols\GatewayProtocol"
+        ["_autoloadRootPath":protected]=>
+        string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+        ["_pauseAccept":protected]=>
+        bool(false)
+        ["stopping"]=>
+        bool(false)
+        ["_mainSocket":protected]=>
+        resource(41) of type (stream)
+        ["_socketName":protected]=>
+        string(32) "GatewayProtocol://127.0.0.1:2901"
+        ["_localSocket":protected]=>
+        NULL
+        ["_context":protected]=>
+        resource(40) of type (stream-context)
+        ["workerId"]=>
+        string(32) "000000001a27d83a000000000067d789"
+      }
+      ["_onWorkerStart":protected]=>
+      NULL
+      ["_onConnect":protected]=>
+      object(Closure)#4 (1) {
+        ["parameter"]=>
+        array(1) {
+          ["$connection"]=>
+          string(10) "<required>"
+        }
+      }
+      ["_onMessage":protected]=>
+      NULL
+      ["_onClose":protected]=>
+      NULL
+      ["_onWorkerStop":protected]=>
+      NULL
+      ["_startTime":protected]=>
+      int(1612681351)
+      ["_gatewayPort":protected]=>
+      string(4) "8282"
+      ["id"]=>
+      int(1)
+      ["name"]=>
+      string(14) "AppGatewayTest"
+      ["count"]=>
+      int(2)
+      ["user"]=>
+      string(8) "yufuping"
+      ["group"]=>
+      string(0) ""
+      ["reusePort"]=>
+      bool(false)
+      ["onWorkerStart"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onWorkerStart"
+      }
+      ["onConnect"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onClientConnect"
+      }
+      ["onMessage"]=>
+      *RECURSION*
+      ["onClose"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onClientClose"
+      }
+      ["onError"]=>
+      NULL
+      ["onBufferFull"]=>
+      NULL
+      ["onBufferDrain"]=>
+      NULL
+      ["onWorkerStop"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(12) "onWorkerStop"
+      }
+      ["onWorkerReload"]=>
+      NULL
+      ["transport"]=>
+      string(3) "tcp"
+      ["connections"]=>
+      array(1) {
+        [3]=>
+        *RECURSION*
+      }
+      ["protocol"]=>
+      string(29) "Workerman\Protocols\Websocket"
+      ["_autoloadRootPath":protected]=>
+      string(52) "/Users/yufuping/work/php/think-backend/app/workerman"
+      ["_pauseAccept":protected]=>
+      bool(false)
+      ["stopping"]=>
+      bool(false)
+      ["_mainSocket":protected]=>
+      resource(31) of type (stream)
+      ["_socketName":protected]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["_localSocket":protected]=>
+      NULL
+      ["_context":protected]=>
+      resource(21) of type (stream-context)
+      ["workerId"]=>
+      string(32) "000000001a27d83e000000000067d789"
+      ["socket"]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["status"]=>
+      string(13) "<g> [OK] </g>"
+    }
+    [1]=>
+    string(15) "onClientMessage"
+  }
+  ["onClose"]=>
+  array(2) {
+    [0]=>
+    object(GatewayWorker\Gateway)#2 (53) {
+      ["lanIp"]=>
+      string(9) "127.0.0.1"
+      ["lanPort"]=>
+      int(2901)
+      ["startPort"]=>
+      int(2900)
+      ["registerAddress"]=>
+      array(1) {
+        [0]=>
+        string(14) "127.0.0.1:1238"
+      }
+      ["reloadable"]=>
+      bool(false)
+      ["pingInterval"]=>
+      int(10)
+      ["pingNotResponseLimit"]=>
+      int(0)
+      ["pingData"]=>
+      string(15) "{"type":"ping"}"
+      ["secretKey"]=>
+      string(0) ""
+      ["router"]=>
+      array(2) {
+        [0]=>
+        string(22) "\GatewayWorker\Gateway"
+        [1]=>
+        string(10) "routerBind"
+      }
+      ["sendToWorkerBufferSize"]=>
+      int(10240000)
+      ["sendToClientBufferSize"]=>
+      int(1024000)
+      ["protocolAccelerate"]=>
+      bool(false)
+      ["_clientConnections":protected]=>
+      array(1) {
+        [1]=>
+        *RECURSION*
+      }
+      ["_uidConnections":protected]=>
+      array(0) {
+      }
+      ["_groupConnections":protected]=>
+      array(0) {
+      }
+      ["_workerConnections":protected]=>
+      array(1) {
+        ["127.0.0.1:BusinessWorkerTest:0"]=>
+        object(Workerman\Connection\TcpConnection)#12 (24) {
+          ["onMessage"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerMessage"
+          }
+          ["onClose"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(13) "onWorkerClose"
+          }
+          ["onError"]=>
+          NULL
+          ["onBufferFull"]=>
+          NULL
+          ["onBufferDrain"]=>
+          NULL
+          ["protocol"]=>
+          string(25) "Protocols\GatewayProtocol"
+          ["transport"]=>
+          string(3) "tcp"
+          ["worker"]=>
+          object(Workerman\Worker)#6 (27) {
+            ["id"]=>
+            int(0)
+            ["name"]=>
+            string(18) "GatewayInnerWorker"
+            ["count"]=>
+            int(1)
+            ["user"]=>
+            string(0) ""
+            ["group"]=>
+            string(0) ""
+            ["reloadable"]=>
+            bool(true)
+            ["reusePort"]=>
+            bool(false)
+            ["onWorkerStart"]=>
+            NULL
+            ["onConnect"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerConnect"
+            }
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["onWorkerStop"]=>
+            NULL
+            ["onWorkerReload"]=>
+            NULL
+            ["transport"]=>
+            string(3) "tcp"
+            ["connections"]=>
+            array(1) {
+              [2]=>
+              *RECURSION*
+            }
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["_autoloadRootPath":protected]=>
+            string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+            ["_pauseAccept":protected]=>
+            bool(false)
+            ["stopping"]=>
+            bool(false)
+            ["_mainSocket":protected]=>
+            resource(41) of type (stream)
+            ["_socketName":protected]=>
+            string(32) "GatewayProtocol://127.0.0.1:2901"
+            ["_localSocket":protected]=>
+            NULL
+            ["_context":protected]=>
+            resource(40) of type (stream-context)
+            ["workerId"]=>
+            string(32) "000000001a27d83a000000000067d789"
+          }
+          ["bytesRead"]=>
+          int(81)
+          ["bytesWritten"]=>
+          int(28)
+          ["id"]=>
+          int(2)
+          ["_id":protected]=>
+          int(2)
+          ["maxSendBufferSize"]=>
+          int(10240000)
+          ["maxPackageSize"]=>
+          int(10485760)
+          ["_socket":protected]=>
+          resource(48) of type (stream)
+          ["_sendBuffer":protected]=>
+          string(0) ""
+          ["_recvBuffer":protected]=>
+          string(0) ""
+          ["_currentPackageLength":protected]=>
+          int(0)
+          ["_status":protected]=>
+          int(2)
+          ["_remoteAddress":protected]=>
+          string(15) "127.0.0.1:49555"
+          ["_isPaused":protected]=>
+          bool(false)
+          ["_sslHandshakeCompleted":protected]=>
+          bool(false)
+          ["authorized"]=>
+          bool(true)
+          ["key"]=>
+          string(30) "127.0.0.1:BusinessWorkerTest:0"
+        }
+      }
+      ["_innerTcpWorker":protected]=>
+      object(Workerman\Worker)#6 (27) {
+        ["id"]=>
+        int(0)
+        ["name"]=>
+        string(18) "GatewayInnerWorker"
+        ["count"]=>
+        int(1)
+        ["user"]=>
+        string(0) ""
+        ["group"]=>
+        string(0) ""
+        ["reloadable"]=>
+        bool(true)
+        ["reusePort"]=>
+        bool(false)
+        ["onWorkerStart"]=>
+        NULL
+        ["onConnect"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerConnect"
+        }
+        ["onMessage"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerMessage"
+        }
+        ["onClose"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(13) "onWorkerClose"
+        }
+        ["onError"]=>
+        NULL
+        ["onBufferFull"]=>
+        NULL
+        ["onBufferDrain"]=>
+        NULL
+        ["onWorkerStop"]=>
+        NULL
+        ["onWorkerReload"]=>
+        NULL
+        ["transport"]=>
+        string(3) "tcp"
+        ["connections"]=>
+        array(1) {
+          [2]=>
+          object(Workerman\Connection\TcpConnection)#12 (24) {
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["transport"]=>
+            string(3) "tcp"
+            ["worker"]=>
+            *RECURSION*
+            ["bytesRead"]=>
+            int(81)
+            ["bytesWritten"]=>
+            int(28)
+            ["id"]=>
+            int(2)
+            ["_id":protected]=>
+            int(2)
+            ["maxSendBufferSize"]=>
+            int(10240000)
+            ["maxPackageSize"]=>
+            int(10485760)
+            ["_socket":protected]=>
+            resource(48) of type (stream)
+            ["_sendBuffer":protected]=>
+            string(0) ""
+            ["_recvBuffer":protected]=>
+            string(0) ""
+            ["_currentPackageLength":protected]=>
+            int(0)
+            ["_status":protected]=>
+            int(2)
+            ["_remoteAddress":protected]=>
+            string(15) "127.0.0.1:49555"
+            ["_isPaused":protected]=>
+            bool(false)
+            ["_sslHandshakeCompleted":protected]=>
+            bool(false)
+            ["authorized"]=>
+            bool(true)
+            ["key"]=>
+            string(30) "127.0.0.1:BusinessWorkerTest:0"
+          }
+        }
+        ["protocol"]=>
+        string(25) "Protocols\GatewayProtocol"
+        ["_autoloadRootPath":protected]=>
+        string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+        ["_pauseAccept":protected]=>
+        bool(false)
+        ["stopping"]=>
+        bool(false)
+        ["_mainSocket":protected]=>
+        resource(41) of type (stream)
+        ["_socketName":protected]=>
+        string(32) "GatewayProtocol://127.0.0.1:2901"
+        ["_localSocket":protected]=>
+        NULL
+        ["_context":protected]=>
+        resource(40) of type (stream-context)
+        ["workerId"]=>
+        string(32) "000000001a27d83a000000000067d789"
+      }
+      ["_onWorkerStart":protected]=>
+      NULL
+      ["_onConnect":protected]=>
+      object(Closure)#4 (1) {
+        ["parameter"]=>
+        array(1) {
+          ["$connection"]=>
+          string(10) "<required>"
+        }
+      }
+      ["_onMessage":protected]=>
+      NULL
+      ["_onClose":protected]=>
+      NULL
+      ["_onWorkerStop":protected]=>
+      NULL
+      ["_startTime":protected]=>
+      int(1612681351)
+      ["_gatewayPort":protected]=>
+      string(4) "8282"
+      ["id"]=>
+      int(1)
+      ["name"]=>
+      string(14) "AppGatewayTest"
+      ["count"]=>
+      int(2)
+      ["user"]=>
+      string(8) "yufuping"
+      ["group"]=>
+      string(0) ""
+      ["reusePort"]=>
+      bool(false)
+      ["onWorkerStart"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onWorkerStart"
+      }
+      ["onConnect"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onClientConnect"
+      }
+      ["onMessage"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onClientMessage"
+      }
+      ["onClose"]=>
+      *RECURSION*
+      ["onError"]=>
+      NULL
+      ["onBufferFull"]=>
+      NULL
+      ["onBufferDrain"]=>
+      NULL
+      ["onWorkerStop"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(12) "onWorkerStop"
+      }
+      ["onWorkerReload"]=>
+      NULL
+      ["transport"]=>
+      string(3) "tcp"
+      ["connections"]=>
+      array(1) {
+        [3]=>
+        *RECURSION*
+      }
+      ["protocol"]=>
+      string(29) "Workerman\Protocols\Websocket"
+      ["_autoloadRootPath":protected]=>
+      string(52) "/Users/yufuping/work/php/think-backend/app/workerman"
+      ["_pauseAccept":protected]=>
+      bool(false)
+      ["stopping"]=>
+      bool(false)
+      ["_mainSocket":protected]=>
+      resource(31) of type (stream)
+      ["_socketName":protected]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["_localSocket":protected]=>
+      NULL
+      ["_context":protected]=>
+      resource(21) of type (stream-context)
+      ["workerId"]=>
+      string(32) "000000001a27d83e000000000067d789"
+      ["socket"]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["status"]=>
+      string(13) "<g> [OK] </g>"
+    }
+    [1]=>
+    string(13) "onClientClose"
+  }
+  ["onError"]=>
+  NULL
+  ["onBufferFull"]=>
+  NULL
+  ["onBufferDrain"]=>
+  NULL
+  ["protocol"]=>
+  string(29) "Workerman\Protocols\Websocket"
+  ["transport"]=>
+  string(3) "tcp"
+  ["worker"]=>
+  object(GatewayWorker\Gateway)#2 (53) {
+    ["lanIp"]=>
+    string(9) "127.0.0.1"
+    ["lanPort"]=>
+    int(2901)
+    ["startPort"]=>
+    int(2900)
+    ["registerAddress"]=>
+    array(1) {
+      [0]=>
+      string(14) "127.0.0.1:1238"
+    }
+    ["reloadable"]=>
+    bool(false)
+    ["pingInterval"]=>
+    int(10)
+    ["pingNotResponseLimit"]=>
+    int(0)
+    ["pingData"]=>
+    string(15) "{"type":"ping"}"
+    ["secretKey"]=>
+    string(0) ""
+    ["router"]=>
+    array(2) {
+      [0]=>
+      string(22) "\GatewayWorker\Gateway"
+      [1]=>
+      string(10) "routerBind"
+    }
+    ["sendToWorkerBufferSize"]=>
+    int(10240000)
+    ["sendToClientBufferSize"]=>
+    int(1024000)
+    ["protocolAccelerate"]=>
+    bool(false)
+    ["_clientConnections":protected]=>
+    array(1) {
+      [1]=>
+      *RECURSION*
+    }
+    ["_uidConnections":protected]=>
+    array(0) {
+    }
+    ["_groupConnections":protected]=>
+    array(0) {
+    }
+    ["_workerConnections":protected]=>
+    array(1) {
+      ["127.0.0.1:BusinessWorkerTest:0"]=>
+      object(Workerman\Connection\TcpConnection)#12 (24) {
+        ["onMessage"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerMessage"
+        }
+        ["onClose"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(13) "onWorkerClose"
+        }
+        ["onError"]=>
+        NULL
+        ["onBufferFull"]=>
+        NULL
+        ["onBufferDrain"]=>
+        NULL
+        ["protocol"]=>
+        string(25) "Protocols\GatewayProtocol"
+        ["transport"]=>
+        string(3) "tcp"
+        ["worker"]=>
+        object(Workerman\Worker)#6 (27) {
+          ["id"]=>
+          int(0)
+          ["name"]=>
+          string(18) "GatewayInnerWorker"
+          ["count"]=>
+          int(1)
+          ["user"]=>
+          string(0) ""
+          ["group"]=>
+          string(0) ""
+          ["reloadable"]=>
+          bool(true)
+          ["reusePort"]=>
+          bool(false)
+          ["onWorkerStart"]=>
+          NULL
+          ["onConnect"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerConnect"
+          }
+          ["onMessage"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerMessage"
+          }
+          ["onClose"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(13) "onWorkerClose"
+          }
+          ["onError"]=>
+          NULL
+          ["onBufferFull"]=>
+          NULL
+          ["onBufferDrain"]=>
+          NULL
+          ["onWorkerStop"]=>
+          NULL
+          ["onWorkerReload"]=>
+          NULL
+          ["transport"]=>
+          string(3) "tcp"
+          ["connections"]=>
+          array(1) {
+            [2]=>
+            *RECURSION*
+          }
+          ["protocol"]=>
+          string(25) "Protocols\GatewayProtocol"
+          ["_autoloadRootPath":protected]=>
+          string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+          ["_pauseAccept":protected]=>
+          bool(false)
+          ["stopping"]=>
+          bool(false)
+          ["_mainSocket":protected]=>
+          resource(41) of type (stream)
+          ["_socketName":protected]=>
+          string(32) "GatewayProtocol://127.0.0.1:2901"
+          ["_localSocket":protected]=>
+          NULL
+          ["_context":protected]=>
+          resource(40) of type (stream-context)
+          ["workerId"]=>
+          string(32) "000000001a27d83a000000000067d789"
+        }
+        ["bytesRead"]=>
+        int(81)
+        ["bytesWritten"]=>
+        int(28)
+        ["id"]=>
+        int(2)
+        ["_id":protected]=>
+        int(2)
+        ["maxSendBufferSize"]=>
+        int(10240000)
+        ["maxPackageSize"]=>
+        int(10485760)
+        ["_socket":protected]=>
+        resource(48) of type (stream)
+        ["_sendBuffer":protected]=>
+        string(0) ""
+        ["_recvBuffer":protected]=>
+        string(0) ""
+        ["_currentPackageLength":protected]=>
+        int(0)
+        ["_status":protected]=>
+        int(2)
+        ["_remoteAddress":protected]=>
+        string(15) "127.0.0.1:49555"
+        ["_isPaused":protected]=>
+        bool(false)
+        ["_sslHandshakeCompleted":protected]=>
+        bool(false)
+        ["authorized"]=>
+        bool(true)
+        ["key"]=>
+        string(30) "127.0.0.1:BusinessWorkerTest:0"
+      }
+    }
+    ["_innerTcpWorker":protected]=>
+    object(Workerman\Worker)#6 (27) {
+      ["id"]=>
+      int(0)
+      ["name"]=>
+      string(18) "GatewayInnerWorker"
+      ["count"]=>
+      int(1)
+      ["user"]=>
+      string(0) ""
+      ["group"]=>
+      string(0) ""
+      ["reloadable"]=>
+      bool(true)
+      ["reusePort"]=>
+      bool(false)
+      ["onWorkerStart"]=>
+      NULL
+      ["onConnect"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onWorkerConnect"
+      }
+      ["onMessage"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onWorkerMessage"
+      }
+      ["onClose"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onWorkerClose"
+      }
+      ["onError"]=>
+      NULL
+      ["onBufferFull"]=>
+      NULL
+      ["onBufferDrain"]=>
+      NULL
+      ["onWorkerStop"]=>
+      NULL
+      ["onWorkerReload"]=>
+      NULL
+      ["transport"]=>
+      string(3) "tcp"
+      ["connections"]=>
+      array(1) {
+        [2]=>
+        object(Workerman\Connection\TcpConnection)#12 (24) {
+          ["onMessage"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerMessage"
+          }
+          ["onClose"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(13) "onWorkerClose"
+          }
+          ["onError"]=>
+          NULL
+          ["onBufferFull"]=>
+          NULL
+          ["onBufferDrain"]=>
+          NULL
+          ["protocol"]=>
+          string(25) "Protocols\GatewayProtocol"
+          ["transport"]=>
+          string(3) "tcp"
+          ["worker"]=>
+          *RECURSION*
+          ["bytesRead"]=>
+          int(81)
+          ["bytesWritten"]=>
+          int(28)
+          ["id"]=>
+          int(2)
+          ["_id":protected]=>
+          int(2)
+          ["maxSendBufferSize"]=>
+          int(10240000)
+          ["maxPackageSize"]=>
+          int(10485760)
+          ["_socket":protected]=>
+          resource(48) of type (stream)
+          ["_sendBuffer":protected]=>
+          string(0) ""
+          ["_recvBuffer":protected]=>
+          string(0) ""
+          ["_currentPackageLength":protected]=>
+          int(0)
+          ["_status":protected]=>
+          int(2)
+          ["_remoteAddress":protected]=>
+          string(15) "127.0.0.1:49555"
+          ["_isPaused":protected]=>
+          bool(false)
+          ["_sslHandshakeCompleted":protected]=>
+          bool(false)
+          ["authorized"]=>
+          bool(true)
+          ["key"]=>
+          string(30) "127.0.0.1:BusinessWorkerTest:0"
+        }
+      }
+      ["protocol"]=>
+      string(25) "Protocols\GatewayProtocol"
+      ["_autoloadRootPath":protected]=>
+      string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+      ["_pauseAccept":protected]=>
+      bool(false)
+      ["stopping"]=>
+      bool(false)
+      ["_mainSocket":protected]=>
+      resource(41) of type (stream)
+      ["_socketName":protected]=>
+      string(32) "GatewayProtocol://127.0.0.1:2901"
+      ["_localSocket":protected]=>
+      NULL
+      ["_context":protected]=>
+      resource(40) of type (stream-context)
+      ["workerId"]=>
+      string(32) "000000001a27d83a000000000067d789"
+    }
+    ["_onWorkerStart":protected]=>
+    NULL
+    ["_onConnect":protected]=>
+    object(Closure)#4 (1) {
+      ["parameter"]=>
+      array(1) {
+        ["$connection"]=>
+        string(10) "<required>"
+      }
+    }
+    ["_onMessage":protected]=>
+    NULL
+    ["_onClose":protected]=>
+    NULL
+    ["_onWorkerStop":protected]=>
+    NULL
+    ["_startTime":protected]=>
+    int(1612681351)
+    ["_gatewayPort":protected]=>
+    string(4) "8282"
+    ["id"]=>
+    int(1)
+    ["name"]=>
+    string(14) "AppGatewayTest"
+    ["count"]=>
+    int(2)
+    ["user"]=>
+    string(8) "yufuping"
+    ["group"]=>
+    string(0) ""
+    ["reusePort"]=>
+    bool(false)
+    ["onWorkerStart"]=>
+    array(2) {
+      [0]=>
+      *RECURSION*
+      [1]=>
+      string(13) "onWorkerStart"
+    }
+    ["onConnect"]=>
+    array(2) {
+      [0]=>
+      *RECURSION*
+      [1]=>
+      string(15) "onClientConnect"
+    }
+    ["onMessage"]=>
+    array(2) {
+      [0]=>
+      *RECURSION*
+      [1]=>
+      string(15) "onClientMessage"
+    }
+    ["onClose"]=>
+    array(2) {
+      [0]=>
+      *RECURSION*
+      [1]=>
+      string(13) "onClientClose"
+    }
+    ["onError"]=>
+    NULL
+    ["onBufferFull"]=>
+    NULL
+    ["onBufferDrain"]=>
+    NULL
+    ["onWorkerStop"]=>
+    array(2) {
+      [0]=>
+      *RECURSION*
+      [1]=>
+      string(12) "onWorkerStop"
+    }
+    ["onWorkerReload"]=>
+    NULL
+    ["transport"]=>
+    string(3) "tcp"
+    ["connections"]=>
+    array(1) {
+      [3]=>
+      *RECURSION*
+    }
+    ["protocol"]=>
+    string(29) "Workerman\Protocols\Websocket"
+    ["_autoloadRootPath":protected]=>
+    string(52) "/Users/yufuping/work/php/think-backend/app/workerman"
+    ["_pauseAccept":protected]=>
+    bool(false)
+    ["stopping"]=>
+    bool(false)
+    ["_mainSocket":protected]=>
+    resource(31) of type (stream)
+    ["_socketName":protected]=>
+    string(24) "websocket://0.0.0.0:8282"
+    ["_localSocket":protected]=>
+    NULL
+    ["_context":protected]=>
+    resource(21) of type (stream-context)
+    ["workerId"]=>
+    string(32) "000000001a27d83e000000000067d789"
+    ["socket"]=>
+    string(24) "websocket://0.0.0.0:8282"
+    ["status"]=>
+    string(13) "<g> [OK] </g>"
+  }
+  ["bytesRead"]=>
+  int(509)
+  ["bytesWritten"]=>
+  int(0)
+  ["id"]=>
+  int(1)
+  ["_id":protected]=>
+  int(3)
+  ["maxSendBufferSize"]=>
+  int(1024000)
+  ["maxPackageSize"]=>
+  int(10485760)
+  ["_socket":protected]=>
+  resource(49) of type (stream)
+  ["_sendBuffer":protected]=>
+  string(0) ""
+  ["_recvBuffer":protected]=>
+  string(0) ""
+  ["_currentPackageLength":protected]=>
+  int(0)
+  ["_status":protected]=>
+  int(2)
+  ["_remoteAddress":protected]=>
+  string(15) "127.0.0.1:49574"
+  ["_isPaused":protected]=>
+  bool(false)
+  ["_sslHandshakeCompleted":protected]=>
+  bool(false)
+  ["gatewayHeader"]=>
+  array(7) {
+    ["local_ip"]=>
+    int(2130706433)
+    ["local_port"]=>
+    int(2901)
+    ["client_ip"]=>
+    int(2130706433)
+    ["client_port"]=>
+    int(49574)
+    ["gateway_port"]=>
+    string(4) "8282"
+    ["connection_id"]=>
+    int(1)
+    ["flag"]=>
+    int(0)
+  }
+  ["session"]=>
+  string(0) ""
+  ["pingNotResponseCount"]=>
+  int(-1)
+  ["onWebSocketConnect"]=>
+  array(2) {
+    [0]=>
+    object(GatewayWorker\Gateway)#2 (53) {
+      ["lanIp"]=>
+      string(9) "127.0.0.1"
+      ["lanPort"]=>
+      int(2901)
+      ["startPort"]=>
+      int(2900)
+      ["registerAddress"]=>
+      array(1) {
+        [0]=>
+        string(14) "127.0.0.1:1238"
+      }
+      ["reloadable"]=>
+      bool(false)
+      ["pingInterval"]=>
+      int(10)
+      ["pingNotResponseLimit"]=>
+      int(0)
+      ["pingData"]=>
+      string(15) "{"type":"ping"}"
+      ["secretKey"]=>
+      string(0) ""
+      ["router"]=>
+      array(2) {
+        [0]=>
+        string(22) "\GatewayWorker\Gateway"
+        [1]=>
+        string(10) "routerBind"
+      }
+      ["sendToWorkerBufferSize"]=>
+      int(10240000)
+      ["sendToClientBufferSize"]=>
+      int(1024000)
+      ["protocolAccelerate"]=>
+      bool(false)
+      ["_clientConnections":protected]=>
+      array(1) {
+        [1]=>
+        *RECURSION*
+      }
+      ["_uidConnections":protected]=>
+      array(0) {
+      }
+      ["_groupConnections":protected]=>
+      array(0) {
+      }
+      ["_workerConnections":protected]=>
+      array(1) {
+        ["127.0.0.1:BusinessWorkerTest:0"]=>
+        object(Workerman\Connection\TcpConnection)#12 (24) {
+          ["onMessage"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(15) "onWorkerMessage"
+          }
+          ["onClose"]=>
+          array(2) {
+            [0]=>
+            *RECURSION*
+            [1]=>
+            string(13) "onWorkerClose"
+          }
+          ["onError"]=>
+          NULL
+          ["onBufferFull"]=>
+          NULL
+          ["onBufferDrain"]=>
+          NULL
+          ["protocol"]=>
+          string(25) "Protocols\GatewayProtocol"
+          ["transport"]=>
+          string(3) "tcp"
+          ["worker"]=>
+          object(Workerman\Worker)#6 (27) {
+            ["id"]=>
+            int(0)
+            ["name"]=>
+            string(18) "GatewayInnerWorker"
+            ["count"]=>
+            int(1)
+            ["user"]=>
+            string(0) ""
+            ["group"]=>
+            string(0) ""
+            ["reloadable"]=>
+            bool(true)
+            ["reusePort"]=>
+            bool(false)
+            ["onWorkerStart"]=>
+            NULL
+            ["onConnect"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerConnect"
+            }
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["onWorkerStop"]=>
+            NULL
+            ["onWorkerReload"]=>
+            NULL
+            ["transport"]=>
+            string(3) "tcp"
+            ["connections"]=>
+            array(1) {
+              [2]=>
+              *RECURSION*
+            }
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["_autoloadRootPath":protected]=>
+            string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+            ["_pauseAccept":protected]=>
+            bool(false)
+            ["stopping"]=>
+            bool(false)
+            ["_mainSocket":protected]=>
+            resource(41) of type (stream)
+            ["_socketName":protected]=>
+            string(32) "GatewayProtocol://127.0.0.1:2901"
+            ["_localSocket":protected]=>
+            NULL
+            ["_context":protected]=>
+            resource(40) of type (stream-context)
+            ["workerId"]=>
+            string(32) "000000001a27d83a000000000067d789"
+          }
+          ["bytesRead"]=>
+          int(81)
+          ["bytesWritten"]=>
+          int(28)
+          ["id"]=>
+          int(2)
+          ["_id":protected]=>
+          int(2)
+          ["maxSendBufferSize"]=>
+          int(10240000)
+          ["maxPackageSize"]=>
+          int(10485760)
+          ["_socket":protected]=>
+          resource(48) of type (stream)
+          ["_sendBuffer":protected]=>
+          string(0) ""
+          ["_recvBuffer":protected]=>
+          string(0) ""
+          ["_currentPackageLength":protected]=>
+          int(0)
+          ["_status":protected]=>
+          int(2)
+          ["_remoteAddress":protected]=>
+          string(15) "127.0.0.1:49555"
+          ["_isPaused":protected]=>
+          bool(false)
+          ["_sslHandshakeCompleted":protected]=>
+          bool(false)
+          ["authorized"]=>
+          bool(true)
+          ["key"]=>
+          string(30) "127.0.0.1:BusinessWorkerTest:0"
+        }
+      }
+      ["_innerTcpWorker":protected]=>
+      object(Workerman\Worker)#6 (27) {
+        ["id"]=>
+        int(0)
+        ["name"]=>
+        string(18) "GatewayInnerWorker"
+        ["count"]=>
+        int(1)
+        ["user"]=>
+        string(0) ""
+        ["group"]=>
+        string(0) ""
+        ["reloadable"]=>
+        bool(true)
+        ["reusePort"]=>
+        bool(false)
+        ["onWorkerStart"]=>
+        NULL
+        ["onConnect"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerConnect"
+        }
+        ["onMessage"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(15) "onWorkerMessage"
+        }
+        ["onClose"]=>
+        array(2) {
+          [0]=>
+          *RECURSION*
+          [1]=>
+          string(13) "onWorkerClose"
+        }
+        ["onError"]=>
+        NULL
+        ["onBufferFull"]=>
+        NULL
+        ["onBufferDrain"]=>
+        NULL
+        ["onWorkerStop"]=>
+        NULL
+        ["onWorkerReload"]=>
+        NULL
+        ["transport"]=>
+        string(3) "tcp"
+        ["connections"]=>
+        array(1) {
+          [2]=>
+          object(Workerman\Connection\TcpConnection)#12 (24) {
+            ["onMessage"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(15) "onWorkerMessage"
+            }
+            ["onClose"]=>
+            array(2) {
+              [0]=>
+              *RECURSION*
+              [1]=>
+              string(13) "onWorkerClose"
+            }
+            ["onError"]=>
+            NULL
+            ["onBufferFull"]=>
+            NULL
+            ["onBufferDrain"]=>
+            NULL
+            ["protocol"]=>
+            string(25) "Protocols\GatewayProtocol"
+            ["transport"]=>
+            string(3) "tcp"
+            ["worker"]=>
+            *RECURSION*
+            ["bytesRead"]=>
+            int(81)
+            ["bytesWritten"]=>
+            int(28)
+            ["id"]=>
+            int(2)
+            ["_id":protected]=>
+            int(2)
+            ["maxSendBufferSize"]=>
+            int(10240000)
+            ["maxPackageSize"]=>
+            int(10485760)
+            ["_socket":protected]=>
+            resource(48) of type (stream)
+            ["_sendBuffer":protected]=>
+            string(0) ""
+            ["_recvBuffer":protected]=>
+            string(0) ""
+            ["_currentPackageLength":protected]=>
+            int(0)
+            ["_status":protected]=>
+            int(2)
+            ["_remoteAddress":protected]=>
+            string(15) "127.0.0.1:49555"
+            ["_isPaused":protected]=>
+            bool(false)
+            ["_sslHandshakeCompleted":protected]=>
+            bool(false)
+            ["authorized"]=>
+            bool(true)
+            ["key"]=>
+            string(30) "127.0.0.1:BusinessWorkerTest:0"
+          }
+        }
+        ["protocol"]=>
+        string(25) "Protocols\GatewayProtocol"
+        ["_autoloadRootPath":protected]=>
+        string(74) "/Users/yufuping/work/php/think-backend/vendor/workerman/gateway-worker/src"
+        ["_pauseAccept":protected]=>
+        bool(false)
+        ["stopping"]=>
+        bool(false)
+        ["_mainSocket":protected]=>
+        resource(41) of type (stream)
+        ["_socketName":protected]=>
+        string(32) "GatewayProtocol://127.0.0.1:2901"
+        ["_localSocket":protected]=>
+        NULL
+        ["_context":protected]=>
+        resource(40) of type (stream-context)
+        ["workerId"]=>
+        string(32) "000000001a27d83a000000000067d789"
+      }
+      ["_onWorkerStart":protected]=>
+      NULL
+      ["_onConnect":protected]=>
+      object(Closure)#4 (1) {
+        ["parameter"]=>
+        array(1) {
+          ["$connection"]=>
+          string(10) "<required>"
+        }
+      }
+      ["_onMessage":protected]=>
+      NULL
+      ["_onClose":protected]=>
+      NULL
+      ["_onWorkerStop":protected]=>
+      NULL
+      ["_startTime":protected]=>
+      int(1612681351)
+      ["_gatewayPort":protected]=>
+      string(4) "8282"
+      ["id"]=>
+      int(1)
+      ["name"]=>
+      string(14) "AppGatewayTest"
+      ["count"]=>
+      int(2)
+      ["user"]=>
+      string(8) "yufuping"
+      ["group"]=>
+      string(0) ""
+      ["reusePort"]=>
+      bool(false)
+      ["onWorkerStart"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onWorkerStart"
+      }
+      ["onConnect"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onClientConnect"
+      }
+      ["onMessage"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(15) "onClientMessage"
+      }
+      ["onClose"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(13) "onClientClose"
+      }
+      ["onError"]=>
+      NULL
+      ["onBufferFull"]=>
+      NULL
+      ["onBufferDrain"]=>
+      NULL
+      ["onWorkerStop"]=>
+      array(2) {
+        [0]=>
+        *RECURSION*
+        [1]=>
+        string(12) "onWorkerStop"
+      }
+      ["onWorkerReload"]=>
+      NULL
+      ["transport"]=>
+      string(3) "tcp"
+      ["connections"]=>
+      array(1) {
+        [3]=>
+        *RECURSION*
+      }
+      ["protocol"]=>
+      string(29) "Workerman\Protocols\Websocket"
+      ["_autoloadRootPath":protected]=>
+      string(52) "/Users/yufuping/work/php/think-backend/app/workerman"
+      ["_pauseAccept":protected]=>
+      bool(false)
+      ["stopping"]=>
+      bool(false)
+      ["_mainSocket":protected]=>
+      resource(31) of type (stream)
+      ["_socketName":protected]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["_localSocket":protected]=>
+      NULL
+      ["_context":protected]=>
+      resource(21) of type (stream-context)
+      ["workerId"]=>
+      string(32) "000000001a27d83e000000000067d789"
+      ["socket"]=>
+      string(24) "websocket://0.0.0.0:8282"
+      ["status"]=>
+      string(13) "<g> [OK] </g>"
+    }
+    [1]=>
+    string(18) "onWebsocketConnect"
+  }
+  ["_onWebSocketConnect"]=>
+  object(Closure)#14 (1) {
+    ["parameter"]=>
+    array(1) {
+      ["$connection"]=>
+      string(10) "<required>"
+    }
+  }
+  ["businessworker_address"]=>
+  string(30) "127.0.0.1:BusinessWorkerTest:0"
+  ["websocketDataBuffer"]=>
+  string(0) ""
+  ["websocketCurrentFrameLength"]=>
+  int(0)
+  ["websocketCurrentFrameBuffer"]=>
+  string(0) ""
+  ["websocketType"]=>
+  string(1) "�"
+}
