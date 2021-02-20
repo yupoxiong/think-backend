@@ -38,6 +38,9 @@ abstract class Addons
     // 插件路径
     protected $addon_path;
     // 视图模型
+    /**
+     * @var \think\View
+     */
     protected $view;
     // 插件配置
     protected $addon_config;

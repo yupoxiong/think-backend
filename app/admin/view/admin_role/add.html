@@ -16,7 +16,7 @@
                     </div>
                 </div>
 
-                <form class="form-horizontal" role="form" id="dataForm" action="" method="post"
+                <form class="form-horizontal dataForm" role="form" id="dataForm" action="" method="post"
                       enctype="multipart/form-data">
                     <div class="card-body">
 
@@ -104,33 +104,19 @@
     /** 表单验证 **/
     $('#dataForm').validate({
         rules: {
-            'role[]': {
+            'name': {
                 required: true,
             },
-            'username': {
+            'description': {
                 required: true,
             },
-            'nickname': {
-                required: true,
-            },
-            'password': {
-                required: true,
-            },
-
-
         },
         messages: {
-            'role[]': {
-                required: "请选择角色",
+            'name': {
+                required: "名称不能为空",
             },
-            'username': {
-                required: "用户名不能为空",
-            },
-            'nickname': {
-                required: "昵称不能为空",
-            },
-            'password': {
-                required: "密码不能为空",
+            'description': {
+                required: "介绍不能为空",
             },
         }
     });

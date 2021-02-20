@@ -7,10 +7,10 @@
 declare (strict_types=1);
 
 
-namespace util\generate;
+namespace app\api\service;
 
 
-class Generate
+class ApiBaseService
 {
 
 }

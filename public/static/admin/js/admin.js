@@ -35,6 +35,9 @@ $(document).on('submit', '.searchForm', function (event) {
 
 /** 表单验证 */
 $.validator.setDefaults({
+    errorElement: "span",
+    errorClass: "help-block error",
+
     errorPlacement: function (error, element) {
         error.addClass('invalid-feedback');
         element.closest('.input-group').append(error);
@@ -48,7 +51,6 @@ $.validator.setDefaults({
     },
     submitHandler: function (form) {
         console.log('前端验证成功，开始提交表单');
-
         submitForm(form);
         return false;
     }

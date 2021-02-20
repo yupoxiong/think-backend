@@ -7,10 +7,10 @@
 declare (strict_types=1);
 
 
-namespace app\admin\event;
+namespace app\api\service;
 
 
-class AdminUser
+class AuthService extends ApiBaseService
 {
 
 }

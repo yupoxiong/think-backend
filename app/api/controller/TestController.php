@@ -25,6 +25,16 @@ class TestController extends ApiBaseController
 
     }
 
+    public function room()
+    {
+        return api_success([
+            'room_list'=>[
+                'wait_room_1v1',
+                'wait_room_2v2',
+            ],
+        ]);
+    }
+
     public function index()
     {
         Gateway::sendToClient('7f0000010b5400000001','dddd');

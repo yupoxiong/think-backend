@@ -22,6 +22,9 @@ class PluginController extends AdminBaseController
     }
 
 
+    /**
+     * 本地插件
+     */
     public function local()
     {
 

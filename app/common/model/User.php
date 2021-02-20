@@ -7,10 +7,10 @@
 declare (strict_types=1);
 
 
-namespace util\generate\stub;
+namespace app\common\model;
 
 
-class Controller
+class User extends CommonBaseModel
 {
-    public $header = '';
+
 }

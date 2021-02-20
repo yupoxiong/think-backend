@@ -22,11 +22,10 @@ use think\response\Redirect;
 class AuthController extends AdminBaseController
 {
 
-    protected $authExcept = [
+    protected $loginExcept = [
         'admin/auth/login',
         'admin/auth/logout',
     ];
-
 
     /**
      * 登录
@@ -80,7 +79,7 @@ class AuthController extends AdminBaseController
      */
     public function logout(AuthService $service): Redirect
     {
-        $service->logout($this->adminUser);
+        $service->logout($this->user);
 
         return redirect(url('admin/index/index')->build());
     }
