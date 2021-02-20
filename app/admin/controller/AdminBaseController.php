@@ -67,8 +67,8 @@ class AdminBaseController
 
         $this->view =  app()->make(View::class);
 
-        $this->admin['admin_per_page'] = cookie('admin_per_page') ?? 10;
-        $this->admin['admin_per_page'] = $this->admin['admin_per_page'] < 100 ? $this->admin['admin_per_page'] : 100;
+        $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
+        $this->admin['admin_list_rows'] = $this->admin['admin_list_rows'] < 100 ? $this->admin['admin_list_rows'] : 100;
     }
 
 

@@ -1,14 +1,25 @@
-//启用
-public function enable($id,[MODEL_NAME] $model)
-{
-    $result = $model->whereIn('id',$id)->update(['status'=>1]);
-    return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
-}
+
+    /**
+     * 启用
+     * @param mixed $id
+     * @param [MODEL_NAME] $model
+     * @return Json
+     */
+    public function enable($id, [MODEL_NAME] $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
 
 
-//禁用
-public function disable($id,[MODEL_NAME] $model)
-{
-    $result = $model->whereIn('id',$id)->update(['status'=>0]);
-    return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
-}
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param [MODEL_NAME] $model
+     * @return Json
+     */
+    public function disable($id, [MODEL_NAME] $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }

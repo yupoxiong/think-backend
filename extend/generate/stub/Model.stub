@@ -7,7 +7,7 @@ namespace app\[MODEL_MODULE]\model;
 
 [SOFT_DELETE_USE1]
 
-class [MODEL_NAME] extends Model
+class [MODEL_NAME] extends CommonBaseModel
 {
     // 自定义选择数据
     [SELECT_DATA_LIST]

@@ -1,24 +1,24 @@
 <?php
 /**
- * [NAME]控制器
+ * 用户等级控制器
  */
 
-namespace app\[CONTROLLER_MODULE]\controller;
+namespace app\admin\controller;
 
 use think\Request;
-use app\[MODEL_MODULE]\model\[MODEL_NAME];
-[RELATION_1]
-use app\[VALIDATE_MODULE]\validate\[VALIDATE_NAME]Validate;
+use app\common\model\UserLevel;
 
-class [CONTROLLER_NAME]Controller extends AdminBaseController
+use app\common\validate\UserLevelValidate;
+
+class UserLevelController extends AdminBaseController
 {
 
     //列表
-    public function index(Request $request, [MODEL_NAME] $model)
+    public function index(Request $request, UserLevel $model)
     {
         $param = $request->param();
-        $model  = $model[RELATION_WITH]->scope('where', $param);
-        [EXPORT_CODE]
+        $model  = $model->scope('where', $param);
+        
         $data = $model->paginate([
             'list_rows' => $this->admin['admin_list_rows'],
             'var_page'  => 'page',
@@ -31,13 +31,13 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            [SEARCH_DATA_LIST]
+            
         ]);
         return $this->fetch();
     }
 
     //添加
-    public function add(Request $request, [MODEL_NAME] $model, [VALIDATE_NAME]Validate $validate)
+    public function add(Request $request, UserLevel $model, UserLevelValidate $validate)
     {
         if ($request->isPost()) {
             $param           = $request->param();
@@ -45,7 +45,16 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            [ADD_FIELD_CODE]
+                        //处理图片上传
+            $attachment_img = new \app\common\model\Attachment;
+            $file_img       = $attachment_img->upload('img');
+            if ($file_img) {
+                $param['img'] = $file_img->url;
+            } else {
+                return admin_error($attachment_img->getError());
+            }
+            
+
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -56,13 +65,13 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
             return $result ? admin_success('添加成功',$url) : admin_error();
         }
 
-        [RELATION_2]
+        
 
         return $this->fetch();
     }
 
     //修改
-    public function edit($id, Request $request, [MODEL_NAME] $model, [VALIDATE_NAME]Validate $validate)
+    public function edit($id, Request $request, UserLevel $model, UserLevelValidate $validate)
     {
 
         $data = $model::get($id);
@@ -72,21 +81,30 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            [EDIT_FIELD_CODE]
+                        //处理图片上传
+            if (!empty($_FILES['img']['name'])) {
+                $attachment_img = new \app\common\model\Attachment;
+                $file_img       = $attachment_img->upload('img');
+                if ($file_img) {
+                    $param['img'] = $file_img->url;
+                }
+            }
+            
+
             $result = $data->save($param);
             return $result ? admin_success() : admin_error();
         }
 
         $this->assign([
             'data' => $data,
-            [RELATION_3]
+            
         ]);
         return $this->fetch('add');
 
     }
 
     //删除
-    public function del($id, [MODEL_NAME] $model)
+    public function del($id, UserLevel $model)
     {
         if (count($model->noDeletionId) > 0) {
             if (is_array($id)) {
@@ -107,5 +125,5 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
         return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
     }
 
-    [ENABLE_CODE]
+    
 }

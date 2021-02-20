@@ -69,8 +69,10 @@ class Generate
     public function __construct($data = [], $config = null)
     {
 
-        $root_path  = Env::get('root_path');
-        $app_path   = Env::get('app_path');
+
+
+        $root_path  = app()->getRootPath();
+        $app_path   = app()->getBasePath();
         $config_tmp = [
             //模版目录
             'template' => [
@@ -1073,11 +1075,7 @@ class Generate
                     $form_body  .= $class::create($value);
 
                 } catch (\Exception $exception) {
-                    echo $exception->getMessage();
-                    exit();
-                } catch (\Error $error) {
-                    echo $error->getMessage();
-                    exit();
+                    return $exception->getMessage();
                 }
 
                 //验证暂时不处理图片和文件
@@ -1190,7 +1188,7 @@ class Generate
         try {
 
             if (AdminMenu::where('url', $url_prefix . '/index')->find()) {
-                exception('菜单已存在');
+                throw new \think\Exception('菜单已存在');
             }
 
             $parent = [
@@ -1528,9 +1526,7 @@ class Generate
             $html  = $class::rule($field_data['field_length']);
 
         } catch (\Exception $exception) {
-            echo $exception->getMessage();
-        } catch (\Error $error) {
-            echo $error->getMessage();
+            return $exception->getMessage();
         }
 
         return $html;

@@ -460,9 +460,9 @@ function ajaxRequest(url, method, data, go) {
 //改变每页数量
 function changePerPage(obj) {
     if (adminDebug) {
-        console.log('当前每页数量' + Cookies.get(cookiePrefix + 'admin_per_page'));
+        console.log('当前每页数量' + Cookies.get(cookiePrefix + 'admin_list_rows'));
     }
-    Cookies.set(cookiePrefix + 'admin_per_page', obj.value, {expires: 30});
+    Cookies.set(cookiePrefix + 'admin_list_rows', obj.value, {expires: 30});
     $.pjax.reload();
 }
 

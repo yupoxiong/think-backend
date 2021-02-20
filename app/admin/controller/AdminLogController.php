@@ -28,7 +28,7 @@ class AdminLogController extends AdminBaseController
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
-                'list_rows' => $this->admin['admin_per_page'],
+                'list_rows' => $this->admin['admin_list_rows'],
                 'var_page'  => 'page',
                 'query'     => $request->get()
             ]);
