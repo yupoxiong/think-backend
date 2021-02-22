@@ -17,7 +17,6 @@ class AdminLogController extends AdminBaseController
 
     /**
      * 列表
-     *
      * @param Request $request
      * @param AdminLog $model
      * @return string

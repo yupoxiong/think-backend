@@ -5,6 +5,7 @@
 
 namespace app\admin\controller;
 
+use Exception;
 use think\Request;
 use app\common\model\UserLevel;
 
@@ -13,13 +14,19 @@ use app\common\validate\UserLevelValidate;
 class UserLevelController extends AdminBaseController
 {
 
-    //列表
+    /**
+     * 列表
+     * @param Request $request
+     * @param UserLevel $model
+     * @return string
+     * @throws Exception
+     */
     public function index(Request $request, UserLevel $model)
     {
         $param = $request->param();
-        $model  = $model->scope('where', $param);
+        $data  = $model->scope('where', $param);
         
-        $data = $model->paginate([
+        $data = $data->paginate([
             'list_rows' => $this->admin['admin_list_rows'],
             'var_page'  => 'page',
             'query'     => $request->get()

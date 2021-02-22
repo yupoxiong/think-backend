@@ -5,6 +5,7 @@
 
 namespace app\[CONTROLLER_MODULE]\controller;
 
+use Exception;
 use think\Request;
 use app\[MODEL_MODULE]\model\[MODEL_NAME];
 [RELATION_1]
@@ -13,13 +14,19 @@ use app\[VALIDATE_MODULE]\validate\[VALIDATE_NAME]Validate;
 class [CONTROLLER_NAME]Controller extends AdminBaseController
 {
 
-    //列表
-    public function index(Request $request, [MODEL_NAME] $model)
+    /**
+     * 列表
+     * @param Request $request
+     * @param [MODEL_NAME] $model
+     * @return string
+     * @throws Exception
+     */
+    public function index(Request $request, [MODEL_NAME] $model): string
     {
         $param = $request->param();
-        $model  = $model[RELATION_WITH]->scope('where', $param);
+        $data  = $model[RELATION_WITH]->scope('where', $param);
         [EXPORT_CODE]
-        $data = $model->paginate([
+        $data = $data->paginate([
             'list_rows' => $this->admin['admin_list_rows'],
             'var_page'  => 'page',
             'query'     => $request->get()

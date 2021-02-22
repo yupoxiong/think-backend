@@ -26,7 +26,6 @@ class AdminRoleController extends AdminBaseController
      * @param Request $request
      * @param AdminRole $model
      * @return string
-     * @throws DbException
      * @throws Exception
      */
     public function index(Request $request, AdminRole $model): string
