@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
+use think\response\Json;
 use app\common\model\UserLevel;
 
 use app\common\validate\UserLevelValidate;
@@ -18,14 +19,30 @@ class UserLevelController extends AdminBaseController
      * 列表
      * @param Request $request
      * @param UserLevel $model
-     * @return string
+     * @return mixed
      * @throws Exception
      */
     public function index(Request $request, UserLevel $model)
     {
         $param = $request->param();
         $data  = $model->scope('where', $param);
-        
+        if (isset($param['export_data']) && (int)$param['export_data'] === 1) {
+            $header = ['ID', '名称', '简介', '图片', '是否启用', '创建时间',];
+            $body   = [];
+            $data   = $model->select();
+            foreach ($data as $item) {
+                $record                = [];
+                $record['id']          = $item->id;
+                $record['name']        = $item->name;
+                $record['description'] = $item->description;
+                $record['img']         = $item->img;
+                $record['status']      = $item->status_text;
+                $record['create_time'] = $item->create_time;
+
+                $body[] = $record;
+            }
+            return $this->exportData($header, $body, 'user_level-' . date('Y-m-d-H-i-s'));
+        }
         $data = $data->paginate([
             'list_rows' => $this->admin['admin_list_rows'],
             'var_page'  => 'page',
@@ -38,7 +55,7 @@ class UserLevelController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+
         ]);
         return $this->fetch();
     }
@@ -52,63 +69,54 @@ class UserLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-                        //处理图片上传
-            $attachment_img = new \app\common\model\Attachment;
-            $file_img       = $attachment_img->upload('img');
-            if ($file_img) {
-                $param['img'] = $file_img->url;
-            } else {
-                return admin_error($attachment_img->getError());
-            }
-            
 
             $result = $model::create($param);
 
             $url = URL_BACK;
-            if(isset($param['_create']) && $param['_create']==1){
-               $url = URL_RELOAD;
+            if (isset($param['_create']) && (int)$param['_create'] === 1) {
+                $url = URL_RELOAD;
             }
 
-            return $result ? admin_success('添加成功',$url) : admin_error();
+            return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
 
-        
 
         return $this->fetch();
     }
 
-    //修改
+    /**
+     * 修改
+     *
+     * @param int $id
+     * @param Request $request
+     * @param AdminRole $model
+     * @param AdminRoleValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
     public function edit($id, Request $request, UserLevel $model, UserLevelValidate $validate)
     {
-
-        $data = $model::get($id);
+        $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
-            $param           = $request->param();
-            $validate_result = $validate->scene('edit')->check($param);
-            if (!$validate_result) {
+            $param = $request->param();
+            $check = $validate->scene('admin_edit')->check($param);
+            if (!$check) {
                 return admin_error($validate->getError());
             }
-                        //处理图片上传
-            if (!empty($_FILES['img']['name'])) {
-                $attachment_img = new \app\common\model\Attachment;
-                $file_img       = $attachment_img->upload('img');
-                if ($file_img) {
-                    $param['img'] = $file_img->url;
-                }
-            }
-            
 
             $result = $data->save($param);
-            return $result ? admin_success() : admin_error();
+
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
             'data' => $data,
-            
-        ]);
-        return $this->fetch('add');
 
+        ]);
+
+        return $this->fetch('add');
     }
+
 
     //删除
     public function del($id, UserLevel $model)
@@ -132,5 +140,30 @@ class UserLevelController extends AdminBaseController
         return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
     }
 
-    
+
+    /**
+     * 启用
+     * @param mixed $id
+     * @param UserLevel $model
+     * @return Json
+     */
+    public function enable($id, UserLevel $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param UserLevel $model
+     * @return Json
+     */
+    public function disable($id, UserLevel $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
 }

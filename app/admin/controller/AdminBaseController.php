@@ -12,12 +12,13 @@ use Exception;
 use think\View;
 use think\facade\Env;
 use app\admin\model\{AdminMenu,AdminUser};
-use app\admin\traits\{AdminAuthTrait,AdminTreeTrait};
+use app\admin\traits\{AdminAuthTrait, AdminPhpOffice, AdminTreeTrait};
 
 class AdminBaseController
 {
     use AdminTreeTrait;
     use AdminAuthTrait;
+    use AdminPhpOffice;
 
     /**
      * 后台主变量

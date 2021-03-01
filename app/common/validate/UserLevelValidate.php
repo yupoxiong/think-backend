@@ -10,6 +10,7 @@ class UserLevelValidate extends CommonBaseValidate
     protected $rule = [
             'name|名称' => 'require',
     'description|简介' => 'require',
+    'img|图片' => 'require',
     'status|是否启用' => 'require',
 
     ];
@@ -17,13 +18,14 @@ class UserLevelValidate extends CommonBaseValidate
     protected $message = [
             'name.require' => '名称不能为空',
     'description.require' => '简介不能为空',
+    'img.require' => '图片不能为空',
     'status.require' => '是否启用不能为空',
 
     ];
 
     protected $scene = [
-        'add'  => ['name','description','status',],
-'edit' => ['name','description','status',],
+        'add'  => ['name','description','img','status',],
+'edit' => ['name','description','img','status',],
 
     ];
 

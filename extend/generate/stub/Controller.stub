@@ -7,6 +7,7 @@ namespace app\[CONTROLLER_MODULE]\controller;
 
 use Exception;
 use think\Request;
+use think\response\Json;
 use app\[MODEL_MODULE]\model\[MODEL_NAME];
 [RELATION_1]
 use app\[VALIDATE_MODULE]\validate\[VALIDATE_NAME]Validate;
@@ -56,41 +57,50 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
             $result = $model::create($param);
 
             $url = URL_BACK;
-            if(isset($param['_create']) && $param['_create']==1){
+            if (isset($param['_create']) && (int)$param['_create'] === 1) {
                $url = URL_RELOAD;
             }
 
-            return $result ? admin_success('添加成功',$url) : admin_error();
+            return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
 
         [RELATION_2]
 
         return $this->fetch();
     }
-
-    //修改
+    /**
+     * 修改
+     *
+     * @param int $id
+     * @param Request $request
+     * @param AdminRole $model
+     * @param AdminRoleValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
     public function edit($id, Request $request, [MODEL_NAME] $model, [VALIDATE_NAME]Validate $validate)
     {
-
-        $data = $model::get($id);
+        $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
-            $param           = $request->param();
-            $validate_result = $validate->scene('edit')->check($param);
-            if (!$validate_result) {
+            $param = $request->param();
+            $check = $validate->scene('admin_edit')->check($param);
+            if (!$check) {
                 return admin_error($validate->getError());
             }
             [EDIT_FIELD_CODE]
             $result = $data->save($param);
-            return $result ? admin_success() : admin_error();
+
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
             'data' => $data,
             [RELATION_3]
         ]);
-        return $this->fetch('add');
 
+        return $this->fetch('add');
     }
+
 
     //删除
     public function del($id, [MODEL_NAME] $model)

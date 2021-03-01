@@ -442,7 +442,7 @@ class Generate
                 if ($this->data['view']['export'] == 1) {
                     $export_header .= "'" . $value['form_name'] . "',";
                     if ($value['getter_setter'] === 'switch') {
-                        $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
+                        $export_body .= '        $record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
                     } else if ($value['is_relation'] == 1 && $value['relation_type'] == 1) {
 
                         $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
@@ -812,16 +812,16 @@ class Generate
 
         //OPERATION_ICON
         //OPERATION_TEXT
-        $operation_del_icon = '<i class="fa fa-trash"></i>';
+        $operation_del_icon = '<i class="fas fa-trash-alt"></i>';
         $operation_del_text = '删除';
 
-        $operation_edit_icon = '<i class="fa fa-pencil"></i>';
+        $operation_edit_icon = '<i class="fas fa-pen"></i>';
         $operation_edit_text = '修改';
 
-        $operation_disable_icon = '<i class="fa fa-circle"></i>';
+        $operation_disable_icon = '<i class="fas fa-ban"></i>';
         $operation_disable_text = '禁用';
 
-        $operation_enable_icon = '<i class="fa fa-circle"></i>';
+        $operation_enable_icon = '<i class="far fa-circle"></i>';
         $operation_enable_text = '启用';
 
 
