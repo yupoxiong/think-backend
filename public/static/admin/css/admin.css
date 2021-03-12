@@ -25,3 +25,9 @@
 .dataSearch .searchGroup{
     margin-right: 5px;
 }
+
+
+/*数据列表导入表单*/
+.dataImport .importGroup{
+    margin-right: 5px;
+}

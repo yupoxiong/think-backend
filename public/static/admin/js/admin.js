@@ -63,6 +63,8 @@ $(function () {
 
     initMenuClick();
 
+    //initInputFileText();
+
     let $body = $('body');
     /* 返回按钮 */
     $body.on('click', '.BackButton', function (event) {
@@ -78,6 +80,15 @@ $(function () {
 
 
 });
+
+function initInputFileText(){
+    $('.inputFile').each(function (){
+        $(this).inputFileText({
+            text: '选择文件1',
+        });
+    });
+
+}
 
 /* 清除搜索表单 */
 function clearSearchForm() {

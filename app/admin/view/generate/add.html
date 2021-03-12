@@ -10,72 +10,7 @@
 
 </script>
 <section class="content">
-    <style scoped>
-        #dataBody th, #dataBody td {
-            min-width: 60px;
-        }
-
-        td label {
-            font-weight: normal;
-        }
-
-        .box-header .select2 {
-            min-width: 130px;
-        }
-
-        .form-type-th {
-            min-width: 150px;
-        }
-
-        .form-validate-th {
-            min-width: 200px;
-        }
-
-        .form-validate-label, .form-validate-select, .form-type-label, .form-type-select {
-            width: 100%;
-        }
-
-        #create_menu_list {
-            min-width: 400px;
-        }
-
-        #controller_action_list {
-            min-width: 400px;
-        }
-
-        .form-inline .form-group {
-            margin-right: 20px;
-        }
-
-        .extend-div {
-            display: none;
-            position: absolute;
-            z-index: 2;
-        }
-
-        #model_relation .form-group {
-            margin-bottom: 10px;
-        }
-
-        .more-setting .extend-div {
-            width: 700px;
-            margin-right: 0;
-            margin-left: -630px;
-        }
-
-        .more-setting .more-from {
-            margin-bottom: 20px;
-        }
-
-        .modelRelationDiv .form-group .form-control {
-            margin-right: 20px;
-        }
-
-        .validateScene {
-            min-width: 450px;
-            width: 550px;
-        }
-    </style>
+   {include file='generate/css' /}
 
     <form id="dataForm" class="dataForm" action="{:url('generate/create')}" method="post">
         <div class="row">
@@ -169,6 +104,8 @@
                                     <option value="3" selected>修改</option>
                                     <option value="4" selected>删除</option>
                                     <option value="5">启用/禁用</option>
+                                    <option value="6">导出</option>
+                                    <option value="7">导入</option>
                                 </select>
                             </div>
 
@@ -180,7 +117,7 @@
                         <div class="form-inline">
 
                             <div class="form-group">
-                                <label for="create_controller">控制器</label>
+                                <label for="create_controller">后台控制器</label>
                                 <select data-id="create_controller" name="create_controller"
                                         class="select2 form-control input-sm"
                                         id="create_controller" data-placeholder="默认生成">
@@ -205,11 +142,46 @@
                                     <option value="3" selected>修改</option>
                                     <option value="4" selected>删除</option>
                                     <option value="5">启用/禁用</option>
+                                    <option value="6">导出</option>
+                                    <option value="7">导入</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    <div class="card-header with-border">
+                        <div class="form-inline">
+
+                            <div class="form-group">
+                                <label for="create_api_controller">Api控制器</label>
+                                <select data-id="create_api_controller" name="create_api_controller"
+                                        class="select2 form-control input-sm"
+                                        id="create_api_controller" data-placeholder="默认生成">
+                                    <option value="1">生成</option>
+                                    <option value="0">不生成</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="api_controller_name">控制器名</label>
+                                <input name="api_controller_name" id="api_controller_name"
+                                       class="form-control input-sm" title="默认会根据表名自动生成" placeholder="请填写控制器名"
+                                       data-toggle="tooltip">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="api_controller_action_list">控制器方法</label>
+                                <select name="api_controller_action_list[]" class="select2 form-control input-sm"
+                                        id="api_controller_action_list" multiple="multiple" data-placeholder="默认生成增删改方法">
+                                    <option value="1" selected>列表</option>
+                                    <option value="2" selected>添加</option>
+                                    <option value="3" selected>修改</option>
+                                    <option value="4" selected>删除</option>
+                                    <option value="5">启用/禁用</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="card-header with-border">
                         <div class="form-inline">
@@ -311,6 +283,12 @@
                                 <label><input type="checkbox" value="1" id="list_export"
                                               name="list_export"
                                               title="列表导出功能" data-toggle="tooltip">列表导出</label>
+                            </div>
+
+                            <div class="form-group checkbox">
+                                <label><input type="checkbox" value="1" id="list_import"
+                                              name="list_import"
+                                              title="列表导入功能" data-toggle="tooltip">列表导入</label>
                             </div>
 
                             <div class="form-group checkbox">
@@ -471,6 +449,8 @@
     $('#create_menu_list').select2();
     //是否生成控制器
     $('#create_controller').select2();
+    //是否生成api控制器
+    $('#create_api_controller').select2();
 
     //是否生成模型
     $('#create_model').select2();
@@ -485,6 +465,9 @@
 
     //控制器方法表
     $('#controller_action_list').select2();
+
+    //api控制器方法表
+    $('#api_controller_action_list').select2();
     //选择父级菜单
     $('#create_menu').select2();
 
@@ -538,6 +521,7 @@
                 //如果是自动生成类名
                 if ($('#auto_class_name').is(':checked')) {
                     $("#controller_name").val(controller.name);
+                    $("#api_controller_name").val(controller.name);
                     $("#model_name").val(model.name);
                     $("#validate_name").val(validate.name);
                 }

@@ -18,4 +18,6 @@ class CommonBaseModel extends Model
     public const BOOLEAN_TEXT = [0 => '否', 1 => '是'];
 
     protected $defaultSoftDelete = 0;
+
+    public $noDeletionIds = [];
 }

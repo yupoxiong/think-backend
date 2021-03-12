@@ -68,15 +68,18 @@ if (!function_exists('api_result')) {
             $header = ['Access-Control-Allow-Origin' => '*'];
             if (request()->isOptions()) {
                 $header = config('api.cross_domain.header');
-                return json('', 200, $header);
+                return json($data, 200, $header);
             }
         }
+
+        // http code是否同步业务code
+        $http_code = config('api.response.http_code_sync') ? $code : 200;
 
         return json([
             'code' => $code,
             'msg'  => $msg,
             'data' => $data,
-        ], $code, $header);
+        ], $http_code, $header);
     }
 }
 

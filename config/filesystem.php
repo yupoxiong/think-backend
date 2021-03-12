@@ -19,6 +19,21 @@ return [
             // 可见性
             'visibility' => 'public',
         ],
+
+        // 后台导入配置
+        'admin_import' => [
+            // 磁盘类型
+            'type'       => 'local',
+            // 磁盘路径
+            'root'       => app()->getRootPath() . 'import',
+            // 磁盘路径对应的外部URL路径
+            'url'        => '',
+            // 可见性
+            'visibility' => 'private',
+            'validate'   => [
+                'file' => ['fileSize:2048000', 'fileExt:xlsx']
+            ],
+        ],
         // 更多的磁盘配置信息
     ],
 ];

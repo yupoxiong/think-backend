@@ -17,50 +17,43 @@ class UserLevelController extends AdminBaseController
 
     /**
      * 列表
+     *
      * @param Request $request
      * @param UserLevel $model
-     * @return mixed
+     * @return string
      * @throws Exception
      */
-    public function index(Request $request, UserLevel $model)
+    public function index(Request $request, UserLevel $model): string
     {
         $param = $request->param();
-        $data  = $model->scope('where', $param);
-        if (isset($param['export_data']) && (int)$param['export_data'] === 1) {
-            $header = ['ID', '名称', '简介', '图片', '是否启用', '创建时间',];
-            $body   = [];
-            $data   = $model->select();
-            foreach ($data as $item) {
-                $record                = [];
-                $record['id']          = $item->id;
-                $record['name']        = $item->name;
-                $record['description'] = $item->description;
-                $record['img']         = $item->img;
-                $record['status']      = $item->status_text;
-                $record['create_time'] = $item->create_time;
-
-                $body[] = $record;
-            }
-            return $this->exportData($header, $body, 'user_level-' . date('Y-m-d-H-i-s'));
-        }
-        $data = $data->paginate([
-            'list_rows' => $this->admin['admin_list_rows'],
-            'var_page'  => 'page',
-            'query'     => $request->get()
+        $data  = $model->scope('where', $param)
+            ->paginate([
+                 'list_rows' => $this->admin['admin_list_rows'],
+                 'var_page'  => 'page',
+                 'query'     => $request->get()
         ]);
-        //关键词，排序等赋值
+
+        // 关键词，排序等赋值
         $this->assign($request->get());
 
         $this->assign([
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-
+            
         ]);
         return $this->fetch();
     }
 
-    //添加
+    /**
+     * 添加
+     *
+     * @param Request $request
+     * @param UserLevel $model
+     * @param UserLevelValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
     public function add(Request $request, UserLevel $model, UserLevelValidate $validate)
     {
         if ($request->isPost()) {
@@ -69,17 +62,18 @@ class UserLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-
+            
             $result = $model::create($param);
 
             $url = URL_BACK;
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
-                $url = URL_RELOAD;
+               $url = URL_RELOAD;
             }
 
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
 
+        
 
         return $this->fetch();
     }
@@ -87,10 +81,10 @@ class UserLevelController extends AdminBaseController
     /**
      * 修改
      *
-     * @param int $id
+     * @param $id
      * @param Request $request
-     * @param AdminRole $model
-     * @param AdminRoleValidate $validate
+     * @param UserLevel $model
+     * @param UserLevelValidate $validate
      * @return string|Json
      * @throws Exception
      */
@@ -103,7 +97,7 @@ class UserLevelController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-
+            
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -111,22 +105,27 @@ class UserLevelController extends AdminBaseController
 
         $this->assign([
             'data' => $data,
-
+            
         ]);
 
         return $this->fetch('add');
     }
 
-
-    //删除
-    public function del($id, UserLevel $model)
+    /**
+     * 删除
+     *
+     * @param mixed $id
+     * @param UserLevel $model
+     * @return Json
+     */
+    public function del($id, UserLevel $model): Json
     {
-        if (count($model->noDeletionId) > 0) {
+        if (count($model->noDeletionIds) > 0) {
             if (is_array($id)) {
-                if (array_intersect($model->noDeletionId, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionId) . '的数据无法删除');
+                if (array_intersect($model->noDeletionIds, $id)) {
+                    return admin_error('ID为' . implode(',', $model->noDeletionIds) . '的数据无法删除');
                 }
-            } else if (in_array($id, $model->noDeletionId)) {
+            }  else if (in_array((int)$id, $model->noDeletionIds, true)) {
                 return admin_error('ID为' . $id . '的数据无法删除');
             }
         }
@@ -140,30 +139,25 @@ class UserLevelController extends AdminBaseController
         return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
     }
 
+    
 
-    /**
-     * 启用
-     * @param mixed $id
-     * @param UserLevel $model
+    
+
+        /**
+     * @param Request $request
      * @return Json
      */
-    public function enable($id, UserLevel $model): Json
+    public function import(Request $request): Json
     {
-        $result = $model->whereIn('id', $id)->update(['status' => 1]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+        $param           = $request->param();
+        $field_name_list = ['名称','简介','图片','是否启用',];
+        if (isset($param['action']) && $param['action'] === 'download_example') {
+            $this->downloadExample($field_name_list);
+        }
+
+        $field_list = ['name','description','img','status',];
+        $result = $this->importData('file','user_level',$field_list);
+
+        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }
-
-
-    /**
-     * 禁用
-     * @param mixed $id
-     * @param UserLevel $model
-     * @return Json
-     */
-    public function disable($id, UserLevel $model): Json
-    {
-        $result = $model->whereIn('id', $id)->update(['status' => 0]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
-    }
-
 }

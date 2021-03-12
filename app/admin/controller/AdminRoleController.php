@@ -11,7 +11,6 @@ namespace app\admin\controller;
 use app\admin\model\AdminRole;
 use app\admin\validate\AdminRoleValidate;
 use Exception;
-use think\db\exception\DbException;
 use think\db\Query;
 use think\Request;
 use think\Response;
@@ -48,6 +47,7 @@ class AdminRoleController extends AdminBaseController
         ]);
         return $this->fetch();
     }
+
 
     /**
      * 添加

@@ -13,4 +13,8 @@ namespace app\api\controller;
 class IndexController extends ApiBaseController
 {
 
+    public function index()
+    {
+        return api_success();
+    }
 }

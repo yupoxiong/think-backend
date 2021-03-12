@@ -9,32 +9,35 @@ namespace app\admin\traits;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use think\exception\ValidateException;
+use think\facade\Db;
+use think\facade\Filesystem;
 use XLSXWriter;
 
 trait AdminPhpOffice
 {
 
     /**
-     * @param $head
-     * @param $body
+     * 普通导出，少于1万条数据可使用，1万+数据用exportXlsx
+     * @param array $head
+     * @param array $body
      * @param string $name
-     * @param string $version
      * @param string $title
      * @return mixed
      */
-    public function exportData($head, $body, $name = '', $version = '2007', $title = '导出记录')
+    protected function exportData(array $head, array $body, $name = '', $title = '导出记录')
     {
         try {
-            // 输出 Excel 文件头
+
             if (empty($name)) {
                 $name = date('Y-m-d-H-i-s');
             }
 
-            $spreadsheet   = new Spreadsheet();
-            $sheetPHPExcel = $spreadsheet->setActiveSheetIndex(0);
-            $char_index    = range('A', 'Z');
-            //处理超过26列
+            $spreadsheet = new Spreadsheet();
+            $sheet       = $spreadsheet->setActiveSheetIndex(0);
+            $char_index  = range('A', 'Z');
+
+            // 处理超过26列
             $a = 'A';
             foreach ($char_index as $item) {
                 $char_index[] = $a . $item;
@@ -42,119 +45,177 @@ trait AdminPhpOffice
 
             // Excel 表格头
             foreach ($head as $key => $val) {
-                $sheetPHPExcel->setCellValue("{$char_index[$key]}1", $val);
+                $sheet->setCellValue($char_index[$key] . '1', $val);
             }
-
-            $spreadsheet->getActiveSheet()->setTitle($title);
 
             // Excel body 部分
             foreach ($body as $key => $val) {
                 $row = $key + 2;
                 $col = 0;
                 foreach ($val as $k => $v) {
-                    $spreadsheet->getActiveSheet()->setCellValue("{$char_index[$col]}{$row}", $v);
+                    $sheet->setCellValue($char_index[$col] . $row, $v);
                     $col++;
                 }
             }
 
-            // 版本差异信息
-            $version_opt = [
-                '2007' => [
-                    'mime'       => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'ext'        => '.xlsx',
-                    'write_type' => 'Xlsx',
-                ],
-                '2003' => ['mime'       => 'application/vnd.ms-excel',
-                           'ext'        => '.xls',
-                           'write_type' => 'Xls',
-                ],
-                'pdf'  => ['mime'       => 'application/pdf',
-                           'ext'        => '.pdf',
-                           'write_type' => 'PDF',
-                ],
-                'ods'  => ['mime'       => 'application/vnd.oasis.opendocument.spreadsheet',
-                           'ext'        => '.ods',
-                           'write_type' => 'OpenDocument',
-                ],
-            ];
+            $spreadsheet->getActiveSheet()->setTitle($title);
 
-            header('Content-Type: ' . $version_opt[$version]['mime']);
-            header('Content-Disposition: attachment;filename="' . $name . $version_opt[$version]['ext'] . '"');
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $name . '.xlsx"');
             header('Cache-Control: max-age=0');
 
             $objWriter = IOFactory::createWriter($spreadsheet, 'Xlsx');
-            return $objWriter->save('php://output');
+            $objWriter->save('php://output');
+            exit();
         } catch (Exception $e) {
-            return $e->getMessage() . '(' . $e->getFile() . $e->getLine() . ')';
+            exit($e->getMessage() . '(' . $e->getFile() . '-' . $e->getLine() . ')');
         }
     }
 
-
     /**
-     * 测试导出10条数据到csv
-     * @param $header
-     * @param $body
-     * @param string $name
-     * @return string
+     * 导入数据到数据库
+     * @param string $name 文件名
+     * @param string $table 表名(不含前缀)
+     * @param array $field_list 字段列表
+     * @param int $limit 批量插入数据库每次的条数，默认100
+     * @param bool $del 导入成功后是否删除文件
+     * @return bool|string
      */
-    public function exportCsv($header, $body, $name = ''): ?string
+    protected function importData(string $name, string $table, array $field_list, $limit = 100, $del = true)
     {
-        if (empty($name)) {
-            $name = date('Y-m-d-H-i-s');
-        }
+        $config = config('filesystem.disks.admin_import');
+
+        $file = request()->file($name);
 
         try {
-            $spreadsheet = new Spreadsheet();
+            validate($config['validate'])->check([$name => $file]);
 
-            $worksheet   = $spreadsheet->getActiveSheet();
-            foreach ($header as $key => $value) {
-                $worksheet->setCellValueByColumnAndRow($key + 1, 1, $value);
+            $file_name = Filesystem::disk('admin_import')->putFile($table, $file);
+            if ($file_name === false) {
+                return '上传文文件失败';
             }
-            $row = 2;
-            foreach ($body as $item) {
-                $column = 1;
-                foreach ($item as $value) {
-                    $worksheet->setCellValueByColumnAndRow($column, $row, $value . "\t");
-                    $column++;
-                }
-                $row++;
-            }
-            $writer = IOFactory::createWriter($spreadsheet, 'Csv');
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename=' . $name . '.csv');
-            header('Cache-Control: max-age=0');
-
-            config('app.app_trace',false);
-            return $writer->save('php://output');
-        } catch (Exception $e) {
-            return $e->getMessage() . '(' . $e->getFile() . $e->getLine() . ')';
+        } catch (ValidateException $e) {
+            return $e->getMessage();
         }
 
+        $path = $config['root'] . '/' . $file_name;
+
+        $spreadsheet = IOFactory::load($path);
+        $excel_array = $spreadsheet->getActiveSheet()->toArray();
+        array_shift($excel_array);
+
+        Db::startTrans();
+        try {
+
+            $time     = time();
+            $all_data = [];
+            foreach ($excel_array as $key => $value) {
+
+                $data = [];
+                foreach ($field_list as $field_key => $field_value) {
+                    if (!isset($value[$field_key])) {
+                        throw new Exception('第 ' . ($key + 2) . ' 行第 ' . $field_key . ' 列缺少数据');
+                    }
+                    $data[$field_value] = $value[$field_key];
+                }
+                // 有创建时间和更新时间的处理
+                $data['create_time'] = $time;
+                $data['update_time'] = $time;
+
+                $all_data[] = $data;
+            }
+
+
+            Db::name($table)
+                ->limit($limit)
+                ->insertAll($all_data);
+
+            Db::commit();
+            $result = true;
+        } catch (Exception $exception) {
+            Db::rollback();
+            $result = '导入失败，信息：' . $exception->getMessage();
+        }
+        if ($del) {
+            unlink($file);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 下载导入模版
+     * @param array $field_name_list 字段名称列表
+     * @param string $name 文件名
+     */
+    protected function downloadExample(array $field_name_list, string $name = ''): void
+    {
+        try {
+
+            if (empty($name)) {
+                $name = date('导入模版');
+            }
+
+            $spreadsheet = new Spreadsheet();
+            $sheet       = $spreadsheet->setActiveSheetIndex(0);
+            $char_index  = range('A', 'Z');
+
+            // 处理超过26列
+            $a = 'A';
+            foreach ($char_index as $item) {
+                $char_index[] = $a . $item;
+            }
+
+            // Excel 表格头
+            foreach ($field_name_list as $key => $val) {
+                $sheet->setCellValue($char_index[$key] . '1', $val);
+            }
+
+            $spreadsheet->getActiveSheet()->setTitle($name);
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $name . '.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $objWriter = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $objWriter->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            exit($e->getMessage() . '(' . $e->getFile() . '-' . $e->getLine() . ')');
+        }
     }
 
 
     /**
+     * 简单导出，占用内存低，导出1-10万条数据使用
+     *
      * @param $header
      * @param $body
      * @param string $name
-     * @return string
      */
-    public function exportXlsx($header, $body, $name = ''): string
+    public function exportXlsx($header, $body, $name = ''): void
     {
         if (empty($name)) {
             $name = date('Y-m-d-H-i-s');
         }
 
+        header('Content-disposition: attachment; filename="' . XLSXWriter::sanitize_filename($name) . '.xlsx"');
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+
         $writer = new XLSXWriter();
-        $writer->writeSheetHeader('Sheet1', $header);
+        $writer->writeSheetRow('Sheet1', $header);
         foreach ($body as $row) {
-            $writer->writeSheetRow('Sheet1', $row);
+            $row_data = [];
+            foreach ($row as $item) {
+                $row_data[] = $item;
+            }
+            $writer->writeSheetRow('Sheet1', $row_data);
         }
-        $file_path = app()->getRootPath() . 'public/' . $name . '.xlsx';
-        $writer->writeToFile($file_path);
-
-        return $file_path;
-
+        $writer->writeToStdOut();
+        exit();
     }
 
 }

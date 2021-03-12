@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.4",
         "topthink/framework": "^6.0.0",
         "topthink/think-orm": "^2.0",
         "topthink/think-multi-app": "^1.0",
@@ -34,7 +34,8 @@
         "workerman/gatewayclient": "^3.0",
         "phpoffice/phpspreadsheet": "^1.16",
         "phpoffice/phpword": "^0.18.0",
-        "mk-j/php_xlsxwriter": "^0.38.0"
+        "mk-j/php_xlsxwriter": "^0.38.0",
+        "ext-openssl": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

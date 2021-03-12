@@ -72,6 +72,12 @@ class GenerateController extends AdminBaseController
                 'name'   => $param['controller_name'],
                 'action' => $param['controller_action_list'],
             ],
+            'api_controller' => [
+                'module' => 'api',
+                'create' => $param['create_api_controller'] ?? 0,
+                'name'   => $param['api_controller_name'],
+                'action' => $param['api_controller_action_list'],
+            ],
             'model'      => [
                 'module'      => 'common',
                 'create'      => $param['create_model'] ?? 0,
@@ -92,6 +98,7 @@ class GenerateController extends AdminBaseController
                 'delete'       => $param['list_delete'] ?? 0,
                 'create'       => $param['list_create'] ?? 0,
                 'export'       => $param['list_export'] ?? 0,
+                'import'       => $param['list_import'] ?? 0,
                 'refresh'      => $param['list_refresh'] ?? 0,
             ],
             'module'     => [

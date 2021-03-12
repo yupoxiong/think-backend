@@ -18,4 +18,9 @@ return [
             'Access-Control-Request-Headers' => 'Origin, content-Type, Accept, token',
         ],
     ],
+    // api响应配置
+    'response'=>[
+        // http状态码同步
+        'http_code_sync'=>env('api.http_code_sync', true),
+    ],
 ];
