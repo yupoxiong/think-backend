@@ -1,16 +1,16 @@
 <?php
 /**
- * [NAME]控制器
+ * 会员等级控制器
  */
 
 namespace app\api\controller;
 
 use think\response\Json;
 use app\api\service\[SERVICE_NAME]Service;
-use app\common\validate\[VALIDATE_NAME]Validate;
+use app\common\validate\MemberLevelValidate;
 use app\api\exception\ApiServiceException;
 
-class [CONTROLLER_NAME]Controller extends ApiBaseController
+class MemberLevelController extends ApiBaseController
 {
     [ACTION_INDEX]
 

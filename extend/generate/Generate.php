@@ -75,6 +75,16 @@ class Generate
         $config_tmp = [
             //模版目录
             'template' => [
+                'api'            => [
+                    'controller'         => $root_path . 'extend/generate/stub/Controller.stub',
+                    'controller_index'   => $root_path . 'extend/generate/stub/api_controller/api_index.stub',
+                    'controller_add'     => $root_path . 'extend/generate/stub/api_controller/api_add.stub',
+                    'controller_info'    => $root_path . 'extend/generate/stub/api_controller/api_info.stub',
+                    'controller_edit'    => $root_path . 'extend/generate/stub/api_controller/api_edit.stub',
+                    'controller_del'     => $root_path . 'extend/generate/stub/api_controller/api_del.stub',
+                    'controller_disable' => $root_path . 'extend/generate/stub/api_controller/api_disable.stub',
+                    'controller_enable'  => $root_path . 'extend/generate/stub/api_controller/api_enable.stub',
+                ],
                 'path'           => $root_path . 'extend/generate/stub/',
                 'controller'     => $root_path . 'extend/generate/stub/Controller.stub',
                 'api_controller' => $root_path . 'extend/generate/stub/ApiController.stub',
@@ -97,6 +107,7 @@ class Generate
             'file_dir' => [
                 'controller'     => $app_path . 'admin/controller/',
                 'api_controller' => $app_path . 'api/controller/',
+                'api_service'    => $app_path . 'api/service/',
                 'model'          => $app_path . 'common/model/',
                 'validate'       => $app_path . 'common/validate/',
                 'view'           => $app_path . 'admin/view/',
@@ -1302,59 +1313,13 @@ class Generate
     {
 
         //不生成控制器
-        if ($this->data['api_controller']['create'] == 0) {
+        if (!$this->data['api_controller']['create']) {
             return true;
         }
 
-        $add_field_code  = '';
-        $edit_field_code = '';
+        $create = new ApiController($this->data, $this->config);
+        return $create->create();
 
-        //关联代码
-        $relation_1 = '';
-        $relation_2 = '';
-        $relation_3 = '';
-
-
-        $export_code   = '';
-        //with代码
-        $relation_with = '';
-
-        $import_code      = '';
-
-        //列表页关联查询
-        $index_select = '';
-
-
-        //启用禁用
-        $enable_code = '';
-        if (in_array(5, $this->data['api_controller']['action'])) {
-            $enable_tmp  = file_get_contents($this->config['template']['path'] . 'api_controller/api_enable.stub');
-            $enable_tmp  = str_replace('[MODEL_NAME]', $this->data['model']['name'], $enable_tmp);
-            $enable_code = $enable_tmp;
-        }
-
-
-        $file = $this->config['template']['api_controller'];
-        $code = file_get_contents($file);
-
-        //控制器添加方法特殊字段处理
-        //控制器修改方法特殊字段处理
-        $code = str_replace(
-            array('[NAME]', '[CONTROLLER_NAME]', '[CONTROLLER_MODULE]', '[MODEL_NAME]', '[MODEL_MODULE]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]', '[ADD_FIELD_CODE]', '[EDIT_FIELD_CODE]', '[RELATION_1]', '[RELATION_2]', '[RELATION_3]', '[EXPORT_CODE]', '[IMPORT_CODE]', '[ENABLE_CODE]', '[RELATION_WITH]', '[SEARCH_DATA_LIST]'),
-            array($this->data['cn_name'], $this->data['api_controller']['name'], $this->data['api_controller']['module'], $this->data['model']['name'], $this->data['model']['module'], $this->data['validate']['name'], $this->data['validate']['module'], $add_field_code, $edit_field_code, $relation_1, $relation_2, $relation_3, $export_code, $import_code, $enable_code, $relation_with, $index_select),
-            $code
-        );
-
-
-        $msg = '';
-        try {
-            file_put_contents($this->config['file_dir']['api_controller'] . $this->data['api_controller']['name'] . 'Controller' . '.php', $code);
-            $result = true;
-        } catch (\Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
     }
 
     // 创建API模块控制器
@@ -1375,11 +1340,11 @@ class Generate
         $relation_3 = '';
 
 
-        $export_code   = '';
+        $export_code = '';
         //with代码
         $relation_with = '';
 
-        $import_code      = '';
+        $import_code = '';
 
         //列表页关联查询
         $index_select = '';
@@ -1416,7 +1381,6 @@ class Generate
         }
         return $result ?? $msg;
     }
-
 
 
     //创建目录

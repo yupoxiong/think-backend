@@ -74,7 +74,7 @@ class GenerateController extends AdminBaseController
             ],
             'api_controller' => [
                 'module' => 'api',
-                'create' => $param['create_api_controller'] ?? 0,
+                'create' => (bool)($param['create_api_controller'] ?? 0),
                 'name'   => $param['api_controller_name'],
                 'action' => $param['api_controller_action_list'],
             ],

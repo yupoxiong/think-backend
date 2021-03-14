@@ -52,6 +52,32 @@ class UserLevelController extends ApiBaseController
     }
 
     /**
+     * 详情
+     *
+     * @param UserLevelValidate $validate
+     * @param UserLevelService $service
+     * @return Json
+     */
+    public function info(UserLevelValidate $validate, UserLevelService $service): Json
+    {
+        $check = $validate->scene('api_info')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+
+            $result = $service->getDataInfo($this->id);
+            return api_success([
+                'user_level' => $result,
+            ]);
+
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+    /**
      * 修改
      * @param UserLevelService $service
      * @param UserLevelValidate $validate
@@ -93,8 +119,45 @@ class UserLevelController extends ApiBaseController
         }
     }
 
-    public function enable()
+    /**
+     * 禁用
+     * @param UserLevelService $service
+     * @param UserLevelValidate $validate
+     * @return Json
+     */
+    public function disable(UserLevelService $service, UserLevelValidate $validate): Json
     {
+        $check = $validate->scene('api_disable')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
 
+        try {
+            $service->disableData($this->id);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+    /**
+     * 启用
+     * @param UserLevelService $service
+     * @param UserLevelValidate $validate
+     * @return Json
+     */
+    public function enable(UserLevelService $service, UserLevelValidate $validate): Json
+    {
+        $check = $validate->scene('api_enable')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+            $service->enableData($this->id);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
     }
 }
