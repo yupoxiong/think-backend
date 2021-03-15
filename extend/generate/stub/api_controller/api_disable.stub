@@ -1,10 +1,10 @@
 /**
      * 禁用
-     * @param UserLevelService $service
-     * @param UserLevelValidate $validate
+     * @param [SERVICE_NAME]Service $service
+     * @param [VALIDATE_NAME]Validate $validate
      * @return Json
      */
-    public function disable(UserLevelService $service, UserLevelValidate $validate): Json
+    public function disable([SERVICE_NAME]Service $service, [VALIDATE_NAME]Validate $validate): Json
     {
         $check = $validate->scene('api_disable')->check($this->param);
         if (!$check) {
