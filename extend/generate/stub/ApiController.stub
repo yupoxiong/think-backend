@@ -3,10 +3,10 @@
  * [NAME]控制器
  */
 
-namespace app\api\controller;
+namespace app\[CONTROLLER_MODULE]\controller;
 
 use think\response\Json;
-use app\api\service\[SERVICE_NAME]Service;
+use app\api\service\[CONTROLLER_NAME]Service;
 use app\common\validate\[VALIDATE_NAME]Validate;
 use app\api\exception\ApiServiceException;
 
@@ -25,5 +25,4 @@ class [CONTROLLER_NAME]Controller extends ApiBaseController
     [ACTION_DISABLE]
 
     [ACTION_ENABLE]
-
 }

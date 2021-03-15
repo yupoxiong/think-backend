@@ -1,18 +1,18 @@
-/**
-     * 启用
+    /**
+     * 禁用
      * @param UserLevelService $service
      * @param UserLevelValidate $validate
      * @return Json
      */
-    public function enable(UserLevelService $service, UserLevelValidate $validate): Json
+    public function disable([SERVICE_NAME]Service $service, [VALIDATE_NAME]Validate $validate): Json
     {
-        $check = $validate->scene('api_enable')->check($this->param);
+        $check = $validate->scene('api_disable')->check($this->param);
         if (!$check) {
             return api_error($validate->getError());
         }
 
         try {
-            $service->enableData($this->id);
+            $service->disableData($this->id);
             return api_success();
         } catch (ApiServiceException $e) {
             return api_error($e->getMessage());

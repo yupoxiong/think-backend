@@ -1,8 +1,8 @@
-/**
+    /**
      * 详情
      *
-     * @param [VALIDATE_NAME]Validate $validate
-     * @param [SERVICE_NAME]Service $service
+     * @param UserLevelValidate $validate
+     * @param UserLevelService $service
      * @return Json
      */
     public function info([SERVICE_NAME]Validate $validate, [VALIDATE_NAME]Service $service): Json

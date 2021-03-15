@@ -1,4 +1,4 @@
-    /**
+/**
      * 禁用
      * @param UserLevelService $service
      * @param UserLevelValidate $validate

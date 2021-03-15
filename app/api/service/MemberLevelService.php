@@ -7,17 +7,17 @@ declare (strict_types=1);
 
 namespace app\api\service;
 
-use app\common\model\[MODEL_NAME];
+use app\common\model\MemberLevel;
 use app\api\exception\ApiServiceException;
 use think\db\exception\{DbException, ModelNotFoundException, DataNotFoundException};
 
-class [SERVICE_NAME]Service extends ApiBaseService
+class MemberLevelService extends ApiBaseService
 {
-    protected [MODEL_NAME] $model;
+    protected MemberLevel $model;
 
     public function __construct()
     {
-        $this->model = new [MODEL_NAME]();
+        $this->model = new MemberLevel();
     }
 
     /**

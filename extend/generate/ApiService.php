@@ -10,7 +10,9 @@ declare (strict_types=1);
 namespace generate;
 
 
-class ApiController
+use Exception;
+
+class ApiService
 {
 
     /**
@@ -37,7 +39,7 @@ class ApiController
 
         $this->template = $this->config['template']['api'];
 
-        $this->code = file_get_contents($this->template['controller']);
+        $this->code = file_get_contents($this->template['service']);
     }
 
     /**
@@ -47,15 +49,11 @@ class ApiController
     public function create()
     {
 
-        $this->createAction();
-
-        $out_file = $this->config['file_dir']['api_controller'] . $this->data['api_controller']['name'] . 'Controller' . '.php';
+        $out_file = $this->config['file_dir']['api_service'] . $this->data['api_controller']['name'] . 'Service' . '.php';
 
         $replace_content = [
             '[NAME]'              => $this->data['cn_name'],
             '[TABLE_NAME]'        => $this->data['table'],
-            '[CONTROLLER_NAME]'   => $this->data['api_controller']['name'],
-            '[CONTROLLER_MODULE]' => $this->data['api_controller']['module'],
             '[MODEL_NAME]'        => $this->data['model']['name'],
             '[MODEL_MODULE]'      => $this->data['model']['module'],
             '[VALIDATE_NAME]'     => $this->data['validate']['name'],
@@ -73,34 +71,12 @@ class ApiController
         try {
             file_put_contents($out_file, $this->code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
         return $result ?? $msg;
 
     }
-
-    protected function createAction(): void
-    {
-
-        foreach ($this->actionList as $action) {
-            if (!in_array($action, $this->data['api_controller']['action'], true)) {
-                $upper      = strtoupper($action);
-                $this->code = str_replace('[ACTION_' . $upper . ']', '', $this->code);
-            }
-        }
-
-        foreach ($this->data['api_controller']['action'] as $action) {
-
-            $upper = strtoupper($action);
-            if (false !== strpos($this->code, $upper)) {
-                $tmp_code   = file_get_contents($this->template['controller_' . $action]);
-                $this->code = str_replace('[ACTION_' . $upper . ']', $tmp_code, $this->code);
-            }
-        }
-
-    }
-
 
 }
