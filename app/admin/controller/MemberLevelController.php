@@ -158,62 +158,8 @@ class MemberLevelController extends AdminBaseController
     }
 
     
-    /**
-     * 启用
-     * @param mixed $id
-     * @param MemberLevel $model
-     * @return Json
-     */
-    public function enable($id, MemberLevel $model): Json
-    {
-        $result = $model->whereIn('id', $id)->update(['status' => 1]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
-    }
 
-
-    /**
-     * 禁用
-     * @param mixed $id
-     * @param MemberLevel $model
-     * @return Json
-     */
-    public function disable($id, MemberLevel $model): Json
-    {
-        $result = $model->whereIn('id', $id)->update(['status' => 0]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
-    }
-
-
-        /**
-     * 导出
-     *
-     * @param Request $request
-     * @param MemberLevel $model
-     * @return mixed
-     * @throws Exception
-     */
-    public function export(Request $request, MemberLevel $model)
-    {
-        $param = $request->param();
-        $data  = $model->scope('where', $param)->select();
-
-        $header = ['ID','名称','简介','图片','是否启用','创建时间',];
-        $body   = [];
-        foreach ($data as $item) {
-            $record                = [];
-            $record['id'] = $item->id;
-$record['name'] = $item->name;
-$record['description'] = $item->description;
-$record['img'] = $item->img;
-        $record['status'] = $item->status_text;
-$record['create_time'] = $item->create_time;
-
-
-            $body[] = $record;
-        }
-        return $this->exportData($header, $body, 'member_level-' . date('YmdHis'));
-
-    }
+    
 
         /**
      * @param Request $request

@@ -3,14 +3,14 @@
 {include file='public/content_header' /}
 <script>
     //收起左侧菜单，留出更大空间
-    let $body =$('body');
+    let $body = $('body');
     if (!$body.hasClass('sidebar-collapse')) {
         $body.addClass('sidebar-collapse');
     }
 
 </script>
 <section class="content">
-   {include file='generate/css' /}
+    {include file='generate/css' /}
 
     <form id="dataForm" class="dataForm" action="{:url('generate/create')}" method="post">
         <div class="row">
@@ -53,14 +53,18 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="input-group iconpicker-container">
-                                    <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                <div class="input-group ">
+                                    <div class="input-group-prepend iconpicker-container">
+                                        <span class="input-group-addon input-group-text">
+                                            <i class="fas fa-bars"></i></span>
+                                    </div>
                                     <input maxlength="50" id="module_icon" name="module_icon"
-                                           value="fa-list" class="form-control "
+                                           value="fas fa-bars" class="form-control "
                                            placeholder="请输入图标class"
                                            title="模块图标，比如用户模块，可以选择[fa-user]作为图标，默认为[fa-list]"
                                            data-toggle="tooltip">
                                 </div>
+
                             </div>
                             <script>
                                 $('#module_icon').iconpicker({placement: 'bottomLeft'});
@@ -172,7 +176,8 @@
                             <div class="form-group">
                                 <label for="api_controller_action_list">控制器方法</label>
                                 <select name="api_controller_action_list[]" class="select2 form-control input-sm"
-                                        id="api_controller_action_list" multiple="multiple" data-placeholder="默认生成增删改方法">
+                                        id="api_controller_action_list" multiple="multiple"
+                                        data-placeholder="默认生成增删改方法">
                                     <option value="index" selected>列表</option>
                                     <option value="add" selected>添加</option>
                                     <option value="info" selected>详情</option>
@@ -337,7 +342,9 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-primary btn-sm btn-success" onclick="addNewField(null,2)">添加一行</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-success" onclick="addNewField(null,2)">
+                            添加一行
+                        </button>
                         <button class="btn btn-primary btn-sm pull-right" type="submit">提交</button>
                     </div>
                 </div>

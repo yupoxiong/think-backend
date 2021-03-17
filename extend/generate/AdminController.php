@@ -1,6 +1,6 @@
 <?php
 /**
- * api控制器相关
+ * 后台控制器相关
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -10,7 +10,7 @@ declare (strict_types=1);
 namespace generate;
 
 
-class ApiController
+class AdminController
 {
 
     /**
@@ -27,7 +27,7 @@ class ApiController
     protected string $code;
 
     protected array $actionList = [
-        'index', 'add', 'info', 'edit', 'del', 'disable', 'enable'
+        'index', 'add', 'info', 'edit', 'del', 'disable', 'enable','import','export'
     ];
 
     public function __construct($data, $config)
@@ -35,7 +35,7 @@ class ApiController
         $this->data   = $data;
         $this->config = $config;
 
-        $this->template = $this->config['template']['api'];
+        $this->template = $this->config['template']['admin'];
 
         $this->code = file_get_contents($this->template['controller']);
     }
@@ -49,19 +49,19 @@ class ApiController
 
         $this->createAction();
 
-        $out_file = $this->config['file_dir']['api_controller'] . $this->data['api_controller']['name'] . 'Controller' . '.php';
+        $out_file = $this->config['file_dir']['admin_controller'] . $this->data['admin_controller']['name'] . 'Controller' . '.php';
 
         $replace_content = [
             '[NAME]'              => $this->data['cn_name'],
             '[TABLE_NAME]'        => $this->data['table'],
-            '[CONTROLLER_NAME]'   => $this->data['api_controller']['name'],
-            '[CONTROLLER_MODULE]' => $this->data['api_controller']['module'],
+            '[CONTROLLER_NAME]'   => $this->data['admin_controller']['name'],
+            '[CONTROLLER_MODULE]' => $this->data['admin_controller']['module'],
             '[MODEL_NAME]'        => $this->data['model']['name'],
             '[MODEL_MODULE]'      => $this->data['model']['module'],
             '[VALIDATE_NAME]'     => $this->data['validate']['name'],
             '[VALIDATE_MODULE]'   => $this->data['validate']['module'],
-            '[SERVICE_NAME]'      => $this->data['api_controller']['name'],
-            '[SERVICE_MODULE]'    => $this->data['api_controller']['module'],
+            '[SERVICE_NAME]'      => $this->data['admin_controller']['name'],
+            '[SERVICE_MODULE]'    => $this->data['admin_controller']['module'],
         ];
 
         foreach ($replace_content as $key => $value) {
@@ -85,13 +85,13 @@ class ApiController
     {
 
         foreach ($this->actionList as $action) {
-            if (!in_array($action, $this->data['api_controller']['action'], true)) {
+            if (!in_array($action, $this->data['admin_controller']['action'], true)) {
                 $upper      = strtoupper($action);
                 $this->code = str_replace('[ACTION_' . $upper . ']', '', $this->code);
             }
         }
 
-        foreach ($this->data['api_controller']['action'] as $action) {
+        foreach ($this->data['admin_controller']['action'] as $action) {
 
             $upper = strtoupper($action);
             if (false !== strpos($this->code, $upper)) {
