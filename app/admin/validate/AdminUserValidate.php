@@ -12,7 +12,6 @@ namespace app\admin\validate;
 
 class AdminUserValidate extends AdminBaseValidate
 {
-
     protected $rule = [
         'username|帐号'       => 'require|unique:admin_user',
         'password|密码'       => 'require',
@@ -32,8 +31,9 @@ class AdminUserValidate extends AdminBaseValidate
     ];
 
     protected $scene = [
-        'admin_add' => ['username', 'password'],
-        'admin_edit' => ['username', 'password'],
+        'admin_add'   => ['username', 'password'],
+        'admin_edit'  => ['username', 'password'],
+        'admin_login' => ['username', 'password'],
     ];
 
     public function sceneLogin(): void

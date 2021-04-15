@@ -230,7 +230,7 @@ function submitForm(form) {
             success: function (result) {
                 layer.close(loadT);
                 layer.msg(result.msg, {
-                    icon: 1,
+                    icon: result.code === 200 ? 1 : 2,
                     scrollbar: false,
                 });
                 if (adminDebug) {
@@ -356,7 +356,7 @@ $(function () {
 
         //如果没有定义ID去查询data-data属性
         if (dataId === undefined) {
-            let dataData = $(this).data("data") || {};
+             dataData = $(this).data("data") || {};
         } else {
             if (dataId === 'checked') {
                 if (dataSelectIds.length === 0) {
@@ -432,7 +432,7 @@ $(function () {
  * @param go 要跳转的url
  */
 function ajaxRequest(url, method, data, go) {
-    var loadT = layer.msg('正在请求,请稍候…', {icon: 16, time: 0, shade: [0.3, '#000'], scrollbar: false,});
+    let loadT = layer.msg('正在请求,请稍候…', {icon: 16, time: 0, shade: [0.3, '#000'], scrollbar: false,});
     $.ajax({
             url: url,
             dataType: 'json',
@@ -441,7 +441,7 @@ function ajaxRequest(url, method, data, go) {
             success: function (result) {
                 layer.close(loadT);
                 layer.msg(result.msg, {
-                    icon: 1,
+                    icon: result.code === 200 ? 1 : 2,
                     scrollbar: false,
                 });
 

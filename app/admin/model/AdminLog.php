@@ -8,12 +8,13 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
+use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
 use think\model\relation\HasOne;
 
 class AdminLog extends AdminBaseModel
 {
-
+    use SoftDelete;
     /**
      * @var array 搜索的字段：操作，URL
      */

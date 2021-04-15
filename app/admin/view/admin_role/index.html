@@ -101,10 +101,11 @@
                                         修改
                                     </a>
 
-                                    <button class="btn btn-danger btn-sm AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
-                                        <i class="fas fa-trash"></i>
-                                        删除
-                                    </button>
+                                    <a href="{:url('access',['id'=>$item.id])}"
+                                       class="btn btn-default btn-sm" title="修改授权" data-toggle="tooltip">
+                                        <i class="fas fa-key"></i>
+                                        授权
+                                    </a>
 
                                     {if $item.status==1}
                                     <button class="btn btn-warning btn-sm AjaxButton" data-toggle="tooltip" title="禁用"
@@ -123,6 +124,11 @@
                                         启用
                                     </button>
                                     {/if}
+
+                                    <button class="btn btn-danger btn-sm AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
+                                        <i class="fas fa-trash"></i>
+                                        删除
+                                    </button>
                                 </td>
                             </tr>
                             {/foreach}

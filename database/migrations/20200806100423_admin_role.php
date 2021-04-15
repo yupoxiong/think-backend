@@ -12,8 +12,11 @@ class AdminRole extends Migrator
         $table
             ->addColumn('name', 'string', ['limit' => 50, 'default' => '', 'comment' => '名称'])
             ->addColumn('description', 'string', ['limit' => 100, 'default' => '', 'comment' => '简介'])
-            ->addColumn('url', 'string', ['limit' => 1000, 'default' => '', 'comment' => '权限'])
+            ->addColumn('url', 'string', ['limit' => 3000, 'default' => '', 'comment' => '权限'])
             ->addColumn('status', 'boolean', ['signed' => false, 'limit' => 1, 'default' => 1, 'comment' => '是否启用'])
+            ->addColumn('create_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '创建时间'])
+            ->addColumn('update_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '更新时间'])
+            ->addColumn('delete_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '删除时间'])
             ->create();
         $this->insertData();
     }

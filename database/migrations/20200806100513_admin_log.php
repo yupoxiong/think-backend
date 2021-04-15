@@ -14,7 +14,9 @@ class AdminLog extends Migrator
             ->addColumn('url', 'string', ['limit' => 100, 'default' => '', 'comment' => 'URL'])
             ->addColumn('log_method', 'string', ['limit' => 8, 'default' => '不记录', 'comment' => '记录日志方法'])
             ->addColumn('log_ip', 'string', ['limit' => 20, 'default' => '', 'comment' => '操作IP'])
-            ->addColumn('create_time', 'integer', ['signed' => false, 'limit' => 10, 'comment' => '操作时间'])
+            ->addColumn('create_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '创建时间'])
+            ->addColumn('update_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '更新时间'])
+            ->addColumn('delete_time', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '删除时间'])
             ->create();
 
     }

@@ -19,7 +19,7 @@ class AdminRoleValidate extends AdminBaseValidate
     ];
 
     protected $scene = [
-        'add'  => ['name', 'description'],
-        'edit' => ['name', 'description'],
+        'admin_add'  => ['name', 'description'],
+        'admin_edit' => ['name', 'description'],
     ];
 }

@@ -9,6 +9,8 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
+use think\model\concern\SoftDelete;
+
 /**
  * Class AdminMenu
  * @package app\admin\model
@@ -17,6 +19,7 @@ namespace app\admin\model;
  */
 class AdminMenu extends AdminBaseModel
 {
+    use SoftDelete;
     /**
      * @var array 不允许被删除的菜单ID
      */

@@ -27,8 +27,8 @@ class AdminMenuValidate extends AdminBaseValidate
     ];
 
     protected $scene = [
-        'add'  => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
-        'edit' => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
+        'admin_add'  => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
+        'admin_edit' => ['parent_id', 'title', 'url', 'icon', 'sort_number', 'is_show', 'log_method'],
     ];
 
 }

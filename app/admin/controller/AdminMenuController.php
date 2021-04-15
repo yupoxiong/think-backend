@@ -114,6 +114,11 @@ class AdminMenuController extends AdminBaseController
     public function del($id, AdminMenu $model): Response
     {
 
+        $check = $model->checkDeleteId($id);
+        if ($check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
+        }
+
         $result = $model::destroy(static function ($query) use ($id) {
             /** @var Query $query */
             $query->whereIn('id', $id);
@@ -144,7 +149,7 @@ class AdminMenuController extends AdminBaseController
         }
 
         $str = "<tr id='node-\$id' data-level='\$level' \$parent_id_node><td><input type='checkbox' onclick='checkThis(this)'
-                     name='data-checkbox' data-id='\$id\' class='checkbox data-list-check' value='\$id' placeholder='选择/取消'>
+                     name='dataCheckbox' data-id='\$id\' class='checkbox dataListCheck' value='\$id' placeholder='选择/取消'>
                     </td><td>\$id</td><td>\$spacer\$name</td><td>\$url</td>
                     <td>\$parent_id</td><td><i class='fa \$icon'></i><span>(\$icon)</span></td>
                     <td>\$sort_number</td><td>\$is_show</td><td>\$log_method</td><td class='td-do'>\$str_manage</td></tr>";

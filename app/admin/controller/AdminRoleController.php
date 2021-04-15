@@ -8,6 +8,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminMenu;
 use app\admin\model\AdminRole;
 use app\admin\validate\AdminRoleValidate;
 use Exception;
@@ -109,9 +110,44 @@ class AdminRoleController extends AdminBaseController
         return $this->fetch('add');
     }
 
-    public function access()
+    /**
+     * 授权
+     * @param $id
+     * @param Request $request
+     * @param AdminRole $model
+     * @param AdminRoleValidate $validate
+     */
+    public function access($id, Request $request, AdminRole $model, AdminRoleValidate $validate)
     {
+        $data = $model->findOrEmpty($id);
+        if ($request->isPost()) {
+            $param = $request->param();
+            if (!isset($param['url'])) {
+                return admin_error('请至少选择一项权限');
+            }
+            if (!in_array(1, $param['url'])) {
+                return admin_error('首页权限必选');
+            }
 
+            asort( $param['url']);
+
+            if (false !== $data->save($param)) {
+                return admin_success('操作成功',[],URL_BACK);
+            }
+            return admin_error();
+        }
+
+        $menu = AdminMenu::order('sort_number', 'asc')
+            ->order('id', 'asc')
+            ->column('*', 'id');
+        $html = $this->authorizeHtml($menu, $data->url);
+
+        $this->assign([
+            'data' => $data,
+            'html' => $html,
+        ]);
+
+        return $this->fetch();
     }
 
     /**

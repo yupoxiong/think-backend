@@ -10,11 +10,12 @@ declare (strict_types=1);
 namespace app\admin\model;
 
 
+use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
 
 class AdminLogData extends AdminBaseModel
 {
-
+    use SoftDelete;
     /**
      * 关联log
      * @return BelongsTo

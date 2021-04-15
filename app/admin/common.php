@@ -76,7 +76,7 @@ if (!function_exists('admin_result')) {
             'url'    => $url,
         ];
 
-        return json($data, $code, $header, $options);
+        return json($data, 200, $header, $options);
 
     }
 }

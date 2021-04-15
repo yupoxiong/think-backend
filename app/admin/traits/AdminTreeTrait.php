@@ -392,4 +392,53 @@ trait AdminTreeTrait
     }
 
 
+    /**
+     * 生成授权html
+     * @param $menu
+     * @param array $auth_menus
+     * @return string
+     */
+    protected function authorizeHtml($menu, $auth_menus = [])
+    {
+        foreach ($menu as $n => $t) {
+            $menu[$n]['checked'] = in_array($t['id'], $auth_menus) ? ' checked' : '';
+            $menu[$n]['level']   = $this->getLevel($t['id'], $menu);
+            $menu[$n]['width']   = 100 - $menu[$n]['level'];
+        }
+
+        $this->initTree($menu);
+        $this->text = [
+            'other' => "<label class='checkbox'  >
+                        <input \$checked  name='url[]' value='\$id' level='\$level'
+                        onclick='javascript:checkNode(this);' type='checkbox'>
+                       \$name
+                   </label>",
+            '0'     => [
+                '0' => "<dl class='checkMod'>
+                    <dt class='hd'>
+                        <label class='checkbox'>
+                            <input \$checked name='url[]' value='\$id' level='\$level'
+                             onclick='javascript:checkNode(this);'
+                             type='checkbox'>
+                            \$name
+                        </label>
+                    </dt>
+                    <dd class='bd'>",
+                '1' => '</dd></dl>',
+            ],
+            '1'     => [
+                '0' => "
+                        <div class='menu_parent'>
+                            <label class='checkbox'>
+                                <input \$checked  name='url[]' value='\$id' level='\$level'
+                                onclick='javascript:checkNode(this);' type='checkbox'>
+                               \$name
+                            </label>
+                        </div>
+                        <div class='rule_check' style='width: \$width%;'>",
+                '1' => "</div><span class='child_row'></span>",
+            ]
+        ];
+        return $this->getAuthTreeAccess(0);
+    }
 }

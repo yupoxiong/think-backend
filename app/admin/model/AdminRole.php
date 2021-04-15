@@ -6,6 +6,8 @@
 
 namespace app\admin\model;
 
+use think\model\concern\SoftDelete;
+
 /**
  * Class AdminRole
  * @package app\admin\model
@@ -13,6 +15,7 @@ namespace app\admin\model;
  */
 class AdminRole extends AdminBaseModel
 {
+    use SoftDelete;
 
     protected $searchField = [
         'name'
