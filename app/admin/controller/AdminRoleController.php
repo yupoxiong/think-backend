@@ -109,6 +109,11 @@ class AdminRoleController extends AdminBaseController
         return $this->fetch('add');
     }
 
+    public function access()
+    {
+
+    }
+
     /**
      * 删除
      *

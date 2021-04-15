@@ -173,7 +173,6 @@ trait AdminTreeTrait
     //获取权限树
     public function getAuthTreeAccess($my_id): string
     {
-        $id    = '';
         $n_str = '';
         $child = $this->getChild($my_id);
 
@@ -217,7 +216,7 @@ trait AdminTreeTrait
 
         foreach ($menu as $k => $v) {
             if ($v['id'] === $current_id) {
-                $parent_ids = $this->getMenuParent($menu, $v['id']);
+                $parent_ids = $this->getParentIdsById($menu, $v['id']);
                 $current_id = $v['id'];
             }
         }
@@ -286,19 +285,22 @@ trait AdminTreeTrait
         return $this->getLeftMenuTree(0, $current_id, $parent_ids);
     }
 
-    //获取父级菜单
-    protected function getMenuParent($arr, $my_id, $parent_ids = array())
+    /**
+     * 获取某个ID的所有父级ID
+     * @param array $data
+     * @param $my_id
+     * @param array $parent_ids
+     * @return array
+     */
+    protected function getParentIdsById(array $data, $my_id, $parent_ids = array()): array
     {
-        $a = array();
-        if (is_array($arr)) {
-            foreach ($arr as $id => $a) {
-                if (($a['id'] === $my_id) && $a['parent_id'] !== 0) {
-                    $parent_ids[] = $a['parent_id'];
-                    $parent_ids   = $this->getMenuParent($arr, $a['parent_id'], $parent_ids);
-                }
+        foreach ($data as $key => $item) {
+            if (($item['id'] === $my_id) && $item['parent_id'] !== 0) {
+                $parent_ids[] = $item['parent_id'];
+                $parent_ids   = $this->getParentIdsById($data, $item['parent_id'], $parent_ids);
             }
         }
-        return !empty($parent_ids) ? $parent_ids : false;
+        return $parent_ids;
     }
 
     /**

@@ -10,12 +10,12 @@ class AdminMenu extends Migrator
     public function change()
     {
         $table = $this->table('admin_menu', ['comment' => '后台菜单', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('parent_id', 'integer', ['limit' => 10, 'default' => 0, 'comment' => '父级菜单'])
+        $table->addColumn('parent_id', 'integer', ['signed' => false, 'limit' => 10, 'default' => 0, 'comment' => '父级菜单'])
             ->addColumn('name', 'string', ['limit' => 50, 'default' => '', 'comment' => '名称'])
             ->addColumn('url', 'string', ['limit' => 100, 'default' => '', 'comment' => 'url'])
             ->addColumn('icon', 'string', ['limit' => 50, 'default' => 'fas fa-list', 'comment' => '图标'])
-            ->addColumn('is_show', 'boolean', ['limit' => 1, 'default' => 1, 'comment' => '等级'])
-            ->addColumn('sort_number', 'integer', ['limit' => 10, 'default' => 1000, 'comment' => '排序号'])
+            ->addColumn('is_show', 'boolean', ['signed' => false, 'limit' => 1, 'default' => 1, 'comment' => '是否显示'])
+            ->addColumn('sort_number', 'integer', ['signed' => false, 'limit' => 10, 'default' => 1000, 'comment' => '排序号'])
             ->addColumn('log_method', 'string', ['limit' => 8, 'default' => '不记录', 'comment' => '记录日志方法'])
             ->addIndex(['url'], ['name' => 'index_url'])
             ->create();

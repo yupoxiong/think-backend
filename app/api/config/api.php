@@ -9,7 +9,7 @@ return [
     // api跨域设置
     'cross_domain' => [
         // 是否允许跨域
-        'allow'  => true,
+        'allow'  => env('api.allow_cross_domain', true),
         // header设置
         'header' => [
             'Access-Control-Allow-Origin'    => '*',
@@ -19,8 +19,8 @@ return [
         ],
     ],
     // api响应配置
-    'response'=>[
-        // http状态码同步
-        'http_code_sync'=>env('api.http_code_sync', true),
+    'response'     => [
+        // HTTP状态码和业务状态码同步
+        'http_code_sync' => env('api.http_code_sync', false),
     ],
 ];

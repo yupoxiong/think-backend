@@ -8,12 +8,12 @@ class AdminRole extends Migrator
 {
     public function change()
     {
-        $table = $this->table('admin_role', ['comment'=>'后台角色','engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('admin_role', ['comment' => '后台角色', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);
         $table
             ->addColumn('name', 'string', ['limit' => 50, 'default' => '', 'comment' => '名称'])
             ->addColumn('description', 'string', ['limit' => 100, 'default' => '', 'comment' => '简介'])
             ->addColumn('url', 'string', ['limit' => 1000, 'default' => '', 'comment' => '权限'])
-            ->addColumn('status', 'boolean', ['limit' => 1, 'default' => 1, 'comment' => '是否启用'])
+            ->addColumn('status', 'boolean', ['signed' => false, 'limit' => 1, 'default' => 1, 'comment' => '是否启用'])
             ->create();
         $this->insertData();
     }
@@ -25,7 +25,7 @@ class AdminRole extends Migrator
                 'id'          => 1,
                 'name'        => '管理员',
                 'description' => '后台管理员角色',
-                'url'         => range(1,48),
+                'url'         => range(1, 48),
                 'status'      => 1
             ],
         ];

@@ -13,8 +13,6 @@ namespace app\api\service;
 use app\api\exception\ApiServiceException;
 use app\common\service\DateService;
 use app\common\service\StringService;
-use JsonException;
-
 use think\facade\Env;
 use util\jwt\Jwt;
 use util\jwt\JwtException;
@@ -22,7 +20,7 @@ use util\jwt\JwtException;
 class TokenService extends ApiBaseService
 {
     /** @var string */
-    protected string $key;
+    protected $key;
 
     /** @var string 颁发者 */
     protected $iss;
@@ -39,14 +37,23 @@ class TokenService extends ApiBaseService
     /** @var Jwt */
     protected Jwt $jwt;
 
-    public function __construct()
+    public function __construct($config = null)
     {
         $this->jwt = new Jwt();
 
-        $this->key = Env::get('jwt.key');
-        $this->iss = Env::get('jwt.iss');
-        $this->aud = Env::get('jwt.aud');
-        $this->exp = (int)Env::get('jwt.exp') ?: $this->exp;
+        if ($config !== null && is_array($config)) {
+            $this->key = $config['key'] ?: $this->key;
+            $this->iss = $config['iss'] ?: $this->iss;
+            $this->aud = $config['aud'] ?: $this->aud;
+            $this->exp = $config['exp'] ?: $this->exp;
+        } else {
+            $this->key = Env::get('jwt.key');
+            $this->iss = Env::get('jwt.iss');
+            $this->aud = Env::get('jwt.aud');
+            $this->exp = (int)Env::get('jwt.exp') ?: $this->exp;
+
+        }
+
 
         if (!$this->key || !$this->iss || !$this->aud) {
             throw new ApiServiceException('请在.env文件中配置jwt信息');
@@ -96,7 +103,11 @@ class TokenService extends ApiBaseService
      */
     public function checkToken($token)
     {
-        $check = $this->jwt->setKey($this->key)->checkToken($token);
+        try {
+            $check = $this->jwt->setKey($this->key)->checkToken($token);
+        } catch (JwtException $e) {
+            throw  new ApiServiceException($e->getMessage());
+        }
         if ($check) {
             return $this->jwt->getUid();
         }

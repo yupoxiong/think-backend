@@ -137,8 +137,8 @@ class AdminMenuController extends AdminBaseController
         foreach ($result as $n => $r) {
             $result[$n]['level']          = $this->getLevel($r['id'], $result);
             $result[$n]['parent_id_node'] = $r['parent_id'] ? ' class="child-of-node-' . $r['parent_id'] . '"' : '';
-            $result[$n]['str_manage']     = '<a href="' . url('edit', ['id' => $r['id']]) . '" class="btn btn-primary btn-sm" title="修改" data-toggle="tooltip"><i class="fas fa-pen"></i>修改</a> ';
-            $result[$n]['str_manage']     .= '<button class="btn btn-danger btn-sm AjaxButton" data-id="' . $r['id'] . '" data-url="del.html"  data-confirm-title="删除确认" data-confirm-content=\'您确定要删除ID为 <span class="text-red"> ' . $r['id'] . ' </span> 的数据吗\'  data-toggle="tooltip" title="删除"><i class="fas fa-trash"></i>删除</button>';
+            $result[$n]['str_manage']     = '<a href="' . url('edit', ['id' => $r['id']]) . '" class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip"><i class="fas fa-pen"></i>修改</a> ';
+            $result[$n]['str_manage']     .= '<button class="btn btn-danger btn-xs AjaxButton" data-id="' . $r['id'] . '" data-url="del.html"  data-confirm-title="删除确认" data-confirm-content=\'您确定要删除ID为 <span class="text-red"> ' . $r['id'] . ' </span> 的数据吗\'  data-toggle="tooltip" title="删除"><i class="fas fa-trash"></i>删除</button>';
             $result[$n]['is_show']        = (int)$r['is_show'] === 1 ? '显示' : '隐藏';
             $result[$n]['log_method']     = $r['log_method'];
         }

@@ -22,9 +22,14 @@ class MemberLevelValidate extends CommonBaseValidate
     ];
 
     protected $scene = [
-        'add'  => ['name','description','status',],
-'edit' => ['name','description','status',],
-
+        'admin_add'   => ['name','description','status',],
+        'admin_edit'  => ['name','description','status',],
+        'api_add'     => ['name','description','status',],
+        'api_info'    => ['name','description','status',],
+        'api_edit'    => ['name','description','status',],
+        'api_del'     => ['name','description','status',],
+        'api_disable' => ['name','description','status',],
+        'api_enable'  => ['name','description','status',],
     ];
 
     

@@ -103,7 +103,6 @@ EOF;
 EOF;
 
 
-
     //图片字段显示
     public static $listImgHtml = <<<EOF
 <td><img class="dataListImg" src="{\$item.[FIELD_NAME]}"></td>\n
@@ -141,10 +140,16 @@ EOF;
 
 
     //验证器场景
-    public static $validateSceneCode =
+    public static string $validateSceneCode =
         <<<EOF
-'add'  => [[RULE_FIELD]],
-'edit' => [[RULE_FIELD]],\n
+'admin_add'   => [[RULE_FIELD]],
+        'admin_edit'  => [[RULE_FIELD]],
+        'api_add'     => [[RULE_FIELD]],
+        'api_info'    => [[RULE_FIELD]],
+        'api_edit'    => [[RULE_FIELD]],
+        'api_del'     => [[RULE_FIELD]],
+        'api_disable' => [[RULE_FIELD]],
+        'api_enable'  => [[RULE_FIELD]],
 EOF;
 
 
@@ -348,7 +353,7 @@ EOF;
     public static function createHtmlRule($rule)
     {
         $html = '';
-        if (key_exists($rule, self::$rules)) {
+        if (array_key_exists($rule, self::$rules)) {
             $html .= '';
         }
     }

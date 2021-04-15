@@ -12,13 +12,15 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+use app\api\exception\ApiServiceException;
+use app\api\service\TokenService;
 use Workerman\Connection\TcpConnection;
 use Workerman\Lib\Timer;
 use \Workerman\Worker;
 use \GatewayWorker\Gateway;
 use \GatewayWorker\BusinessWorker;
 use \Workerman\Autoloader;
-
+use think\facade\Event;
 
 // 自动加载类
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -57,17 +59,22 @@ $gateway->onConnect = function ($connection) {
     $connection->onMessage = function ($connection, $msg) {
 
         try {
-            $msg = json_decode($msg, true);
+            $msg = json_decode($msg, true, 512, JSON_THROW_ON_ERROR);
             if (is_array($msg) && isset($msg['type'])) {
                 switch ($msg['type']) {
                     case 'login':
-                        // 验证成功，删除定时器，防止连接被关闭
-                        Timer::del($connection->auth_timer_id);
+
+                        if(isset($msg['token'])){
+
+                            // TODO::这里得加token的验证才行
+                            // 验证成功，删除定时器，防止连接被关闭
+                            Timer::del($connection->auth_timer_id);
+                        }
                         break;
                 }
             }
         } catch (\Exception $e) {
-            printf($e->getMessage());
+            printf($e->getMessage().$e->getFile().$e->getLine());
         }
 
     };

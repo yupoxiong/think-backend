@@ -10,10 +10,10 @@ declare (strict_types=1);
 namespace app\common\service;
 
 
-use app\common\exception\ServiceException;
+use app\common\exception\CommonServiceException;
 use Exception;
 
-class StringService extends CommonService
+class StringService extends CommonBaseService
 {
 
     public const STR_NUMBER = '0123456789';
@@ -28,7 +28,7 @@ class StringService extends CommonService
      * @param bool $capital
      * @param bool $punctuation
      * @return string
-     * @throws ServiceException
+     * @throws CommonServiceException
      */
     public static function getRandString($length = 10, $number = true, $lower_case = true, $capital = true, $punctuation = true): string
     {
@@ -48,7 +48,7 @@ class StringService extends CommonService
         }
 
         if ($str === '') {
-            throw new ServiceException('请至少选择一种字符串');
+            throw new CommonServiceException('请至少选择一种字符串');
         }
 
         $max    = strlen($str) - 1;
@@ -57,7 +57,7 @@ class StringService extends CommonService
             try {
                 $rand = random_int(0, $max);
             } catch (Exception $e) {
-                throw new ServiceException('rand_int函数执行错误，参考错误信息:' . $e->getMessage());
+                throw new CommonServiceException('rand_int函数执行错误，参考错误信息:' . $e->getMessage());
             }
             $result .= $str[$rand];
         }

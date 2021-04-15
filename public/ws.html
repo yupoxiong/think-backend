@@ -71,7 +71,7 @@
     let ws1 = new WebSocket(wsServerUrl);
 
     let apiPrefix = 'http://thinkbackend.site/api'
-    let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6ImU0Yjk3NjI5ZTQ1ZDI0MDU1NDdhNGZhMzNiNmYzM2MyIn0.eyJpc3MiOiJzZXJ2ZXIiLCJhdWQiOiJhcHAiLCJqdGkiOiJlNGI5NzYyOWU0NWQyNDA1NTQ3YTRmYTMzYjZmMzNjMiIsImlhdCI6MTU5NjU5NzQyMiwibmJmIjoxNTk2NTk3NDIyLCJleHAiOjE1OTc0NjE0MjIsInVpZCI6MTg5NTUsImNpdHlfaWQiOiIxNTciLCJjb25maWdfaWQiOiIxIiwicGxhdGZvcm0iOiIyIn0.TGupY1Z-KjaYtNXuIm9JBmn4m0tiRtyikTCgtdukCfE';
+    let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDI4Nzg4NzEsImp0aSI6IjQ2YjkzNjJhNzJjYzhlZjVlZGRjYzg4YWFkYmNlYTVkIiwidWlkIjoxfQ.4RW2XnAEDPFh50plwVCF3yyDMZ9vw87UPcqBLQ2ugl4';
 
     let client_id = ''
 
@@ -80,6 +80,7 @@
     getRoomList();
 
     ws1.onopen = function () {
+        wsLogin();
         ws1Ping = wsPing(ws1);
         console.log(ws1Ping);
         console.log("连接成功");
@@ -122,10 +123,10 @@
         let content = document.getElementById('text').value;
 
         $.ajax({
-            'url': apiPrefix + '/test/room',
+            url: apiPrefix + '/test/room',
             headers: {
-                token: token,
-                clientId: client_id,
+                'token': token,
+                'clientId': client_id,
             },
             type: 'POST',
             dataType: 'JSON',
@@ -195,7 +196,10 @@
     {
         $.ajax({
             'url': apiPrefix + '/test/room',
-
+            headers: {
+                'token': token,
+                'clientId': client_id,
+            },
             type: 'POST',
             dataType: 'JSON',
             data: {},
@@ -208,6 +212,17 @@
                 console.log(error)
             }
         });
+    }
+
+    function wsLogin() {
+
+        let obj = {
+            type:'login',
+            'token':token
+        };
+
+        let text = JSON.stringify(obj);
+        ws1.send(text);
     }
 </script>
 
