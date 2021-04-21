@@ -7,17 +7,17 @@ declare (strict_types=1);
 
 namespace app\api\service;
 
-use app\common\model\UserLevel;
+use app\common\model\User;
 use app\api\exception\ApiServiceException;
 use think\db\exception\{DbException, ModelNotFoundException, DataNotFoundException};
 
-class UserLevelService extends ApiBaseService
+class UserService extends ApiBaseService
 {
-    protected UserLevel $model;
+    protected User $model;
 
     public function __construct()
     {
-        $this->model = new UserLevel();
+        $this->model = new User();
     }
 
     /**

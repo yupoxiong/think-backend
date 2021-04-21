@@ -29,6 +29,7 @@
                         overwriteInitial: false,  //不能重载初始预览
                         initialPreviewAsData: true,      // 确定传入预览数据，而不是原生标记语言
                         initialPreviewFileType: fileType,
+                        showRemove:false,
                         uploadExtraData: {
                             min_file_count: minFileCount,
                             max_file_count: maxFileCount,
@@ -77,6 +78,7 @@
         // 把相关的URL返回给调用的input框，单文件返回一个URL，多文件返回逗号隔开的URL。
         parent. $('#'+domId).val(uploadResult);
         parent.layer.close(indexWindow);
+        parent.inputImgShow(parent.$('#'+domId));
     }
 
     /**

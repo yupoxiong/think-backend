@@ -1,6 +1,6 @@
 <?php
 /**
- * 用户等级控制器
+ * 用户控制器
  */
 
 namespace app\admin\controller;
@@ -8,25 +8,26 @@ namespace app\admin\controller;
 use Exception;
 use think\Request;
 use think\response\Json;
+use app\common\model\User;
 use app\common\model\UserLevel;
 
-use app\common\validate\UserLevelValidate;
+use app\common\validate\UserValidate;
 
-class UserLevelController extends AdminBaseController
+class UserController extends AdminBaseController
 {
 
     /**
      * 列表
      *
      * @param Request $request
-     * @param UserLevel $model
+     * @param User $model
      * @return string
      * @throws Exception
      */
-    public function index(Request $request, UserLevel $model): string
+    public function index(Request $request, User $model): string
     {
         $param = $request->param();
-        $data  = $model->scope('where', $param)
+        $data  = $model->with('user_level')->scope('where', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',
@@ -49,12 +50,12 @@ class UserLevelController extends AdminBaseController
      * 添加
      *
      * @param Request $request
-     * @param UserLevel $model
-     * @param UserLevelValidate $validate
+     * @param User $model
+     * @param UserValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function add(Request $request, UserLevel $model, UserLevelValidate $validate)
+    public function add(Request $request, User $model, UserValidate $validate)
     {
         if ($request->isPost()) {
             $param           = $request->param();
@@ -62,7 +63,8 @@ class UserLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-                     
+
+
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -73,7 +75,12 @@ class UserLevelController extends AdminBaseController
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
 
-        
+        $this->assign([
+    'user_level_list' => UserLevel::select(),
+
+]);
+
+
 
         return $this->fetch();
     }
@@ -83,12 +90,12 @@ class UserLevelController extends AdminBaseController
      *
      * @param $id
      * @param Request $request
-     * @param UserLevel $model
-     * @param UserLevelValidate $validate
+     * @param User $model
+     * @param UserValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function edit($id, Request $request, UserLevel $model, UserLevelValidate $validate)
+    public function edit($id, Request $request, User $model, UserValidate $validate)
     {
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
@@ -97,7 +104,16 @@ class UserLevelController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-                       
+                        //处理头像上传
+            if (!empty($_FILES['avatar']['name'])) {
+                $attachment_avatar = new \app\common\model\Attachment;
+                $file_avatar       = $attachment_avatar->upload('avatar');
+                if ($file_avatar) {
+                    $param['avatar'] = $file_avatar->url;
+                }
+            }
+            
+
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -105,7 +121,8 @@ class UserLevelController extends AdminBaseController
 
         $this->assign([
             'data' => $data,
-            
+            'user_level_list' => UserLevel::select(),
+
         ]);
 
         return $this->fetch('add');
@@ -115,10 +132,10 @@ class UserLevelController extends AdminBaseController
      * 删除
      *
      * @param mixed $id
-     * @param UserLevel $model
+     * @param User $model
      * @return Json
      */
-    public function del($id, UserLevel $model): Json
+    public function del($id, User $model): Json
     {
         if (count($model->noDeletionIds) > 0) {
             if (is_array($id)) {
@@ -150,13 +167,13 @@ class UserLevelController extends AdminBaseController
     public function import(Request $request): Json
     {
         $param           = $request->param();
-        $field_name_list = ['名称','简介','图片','是否启用',];
+        $field_name_list = ['用户等级','账号','密码','手机号','昵称','头像','是否启用',];
         if (isset($param['action']) && $param['action'] === 'download_example') {
             $this->downloadExample($field_name_list);
         }
 
-        $field_list = ['name','description','img','status',];
-        $result = $this->importData('file','user_level',$field_list);
+        $field_list = ['user_level_id','username','password','mobile','nickname','avatar','status',];
+        $result = $this->importData('file','user',$field_list);
 
         return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }

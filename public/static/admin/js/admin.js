@@ -59,11 +59,14 @@ $.validator.setDefaults({
 /* 初始化 */
 $(function () {
 
+    // 初始化提示
     initToolTip();
-
+    // 初始化菜单点击高亮
     initMenuClick();
+    // 初始化图片预览
+    imgViewer();
 
-
+    bindChangeImg();
     //initInputFileText();
 
     let $body = $('body');
@@ -114,7 +117,6 @@ function clearSearchForm() {
     $.pjax({url: url, container: '#pjaxContainer'});
 }
 
-
 /**
  * 点击菜单高亮
  */
@@ -133,6 +135,45 @@ function initMenuClick() {
     $('[data-toggle="popover"]').popover();
 }
 
+
+function imgViewer() {
+
+    $('.dataListImg').viewer({
+        url: 'src',
+        title: function (obj) {
+            return obj.alt;
+        }
+    });
+
+    $('.imgViewer').viewer({
+        url: 'src',
+        title: function (obj) {
+            return obj.alt;
+        }
+    });
+}
+
+
+/**
+ * 改变图片后更改预览图片
+ */
+function bindChangeImg() {
+    $(".field-image").bind("input propertychange", function () {
+        let $obj = $(this);
+        inputImgShow($obj);
+    });
+}
+
+/**
+ * 显示表单预览图片
+ * @param $obj
+ */
+function inputImgShow($obj) {
+    let $dom = $('#' + $obj.attr('id') + 'Show');
+    $dom.attr("src", $obj.val());
+    imgViewer();
+}
+
 /**
  * 显示上传文件页面
  * @param domId
@@ -142,7 +183,7 @@ function showFileUpload(domId, fileType) {
 
     layer.open({
         type: 2,
-        area: ['80%', '60%'],
+        area: ['80%', '70%'],
         title: '上传文件',
         closeBtn: 1,
         shift: 0,
@@ -356,7 +397,7 @@ $(function () {
 
         //如果没有定义ID去查询data-data属性
         if (dataId === undefined) {
-             dataData = $(this).data("data") || {};
+            dataData = $(this).data("data") || {};
         } else {
             if (dataId === 'checked') {
                 if (dataSelectIds.length === 0) {

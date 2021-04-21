@@ -110,14 +110,14 @@ EOF;
 
 
     public static $listMultiImgHtml = <<<EOF
-<td class="dataListMultiImg" id="[FIELD_NAME]ImgViewer{\$data_key}">
+<td class="dataListMultiImg" id="[FIELD_NAME]dataListImg{\$data_key}">
 {foreach name='item.[FIELD_NAME]' id='item_[FIELD_NAME]'}
 <img class="dataListImg" data-img="{\$item_[FIELD_NAME]}" src="{\$item_[FIELD_NAME]}">
 {/foreach}
 </td>
 <script>
     $(function () {
-        $('#[FIELD_NAME]ImgViewer{\$data_key}').viewer({
+        $('#[FIELD_NAME]dataListImg{\$data_key}').viewer({
             url:'data-img',
         });
     });

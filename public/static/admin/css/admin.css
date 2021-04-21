@@ -31,3 +31,14 @@
 .dataImport .importGroup{
     margin-right: 5px;
 }
+/* 缩略图展示 */
+.imgViewer{
+    padding: 5px;
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.dataListImg{
+    max-width: 32px;
+    max-height: 32px;
+}

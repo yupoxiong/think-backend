@@ -1,28 +1,28 @@
 <?php
 /**
- * 用户等级控制器
+ * 用户控制器
  */
 
 namespace app\api\controller;
 
 use think\response\Json;
-use app\api\service\UserLevelService;
-use app\common\validate\UserLevelValidate;
+use app\api\service\UserService;
+use app\common\validate\UserValidate;
 use app\api\exception\ApiServiceException;
 
-class UserLevelController extends ApiBaseController
+class UserController extends ApiBaseController
 {
     /**
      * 列表
-     * @param UserLevelService $service
+     * @param UserService $service
      * @return Json
      */
-    public function index(UserLevelService $service): Json
+    public function index(UserService $service): Json
     {
         try {
             $data   = $service->getList($this->param, $this->page, $this->limit);
             $result = [
-                'user_level' => $data,
+                'user' => $data,
             ];
 
             return api_success($result);
@@ -34,11 +34,11 @@ class UserLevelController extends ApiBaseController
     /**
      * 添加
      *
-     * @param UserLevelValidate $validate
-     * @param UserLevelService $service
+     * @param UserValidate $validate
+     * @param UserService $service
      * @return Json
      */
-    public function add(UserLevelValidate $validate, UserLevelService $service): Json
+    public function add(UserValidate $validate, UserService $service): Json
     {
         $check = $validate->scene('api_add')->check($this->param);
         if (!$check) {
@@ -53,11 +53,11 @@ class UserLevelController extends ApiBaseController
     /**
      * 详情
      *
-     * @param UserLevelValidate $validate
-     * @param UserLevelService $service
+     * @param UserValidate $validate
+     * @param UserService $service
      * @return Json
      */
-    public function info(UserLevelValidate $validate, UserLevelService $service): Json
+    public function info(UserValidate $validate, UserService $service): Json
     {
         $check = $validate->scene('api_info')->check($this->param);
         if (!$check) {
@@ -78,11 +78,11 @@ class UserLevelController extends ApiBaseController
 
     /**
      * 修改
-     * @param UserLevelService $service
-     * @param UserLevelValidate $validate
+     * @param UserService $service
+     * @param UserValidate $validate
      * @return Json
      */
-    public function edit(UserLevelService $service, UserLevelValidate $validate): Json
+    public function edit(UserService $service, UserValidate $validate): Json
     {
         $check = $validate->scene('api_edit')->check($this->param);
         if (!$check) {
@@ -99,11 +99,11 @@ class UserLevelController extends ApiBaseController
 
     /**
      * 删除
-     * @param UserLevelService $service
-     * @param UserLevelValidate $validate
+     * @param UserService $service
+     * @param UserValidate $validate
      * @return Json
      */
-    public function del(UserLevelService $service, UserLevelValidate $validate): Json
+    public function del(UserService $service, UserValidate $validate): Json
     {
         $check = $validate->scene('api_del')->check($this->param);
         if (!$check) {
