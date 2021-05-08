@@ -11,6 +11,7 @@ namespace app\admin\controller;
 use Exception;
 use think\Request;
 use app\admin\model\AdminLog;
+use think\response\Json;
 
 class AdminLogController extends AdminBaseController
 {
@@ -54,9 +55,29 @@ class AdminLogController extends AdminBaseController
         $data = $model->with('adminLogData')->findOrEmpty($id);
 
         $this->assign([
-            'data'=>$data,
+            'data' => $data,
         ]);
 
         return $this->fetch();
+    }
+
+    /**
+     * 获取操作的定位
+     * @param $id
+     * @param AdminLog $model
+     * @return Json
+     * @throws \JsonException
+     */
+    public function position($id, AdminLog $model): Json
+    {
+        $data = $model->findOrEmpty($id);
+        $json = file_get_contents('https://restapi.amap.com/v3/ip?ip=' . $data->log_ip . '&key=' . config('map.amap.key'));
+        $arr  = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+
+        if (isset($arr['status']) && $arr['status'] === '1') {
+            return admin_success('', ['city' => !empty($arr['city']) ? $arr : '']);
+        }
+
+        return admin_error('获取定位失败');
     }
 }

@@ -40,7 +40,7 @@
                                 <th class="text-bold">IP地址</th>
                                 <td>{$data.log_ip}</td>
                                 <th class="text-bold">IP定位</th>
-                                <td>{$data.log_ip}</td>
+                                <td><span id="position">正在查询，请稍候……</span></td>
                             </tr>
                             <tr>
                                 <th colspan="4" class="text-bold text-center">数据详情</th>
@@ -58,4 +58,22 @@
         </div>
     </div>
 </section>
+<script>
+    $(function (){
+        $.ajax({
+            url:'{:url("admin/adminLog/position")}',
+            method:'POST',
+            data:{id:'{$data.id}'},
+            type:'JSON',
+            success:function (result){
+                console.log(result);
+                if(result.code===200){
+                    $('#position').html(result.result.city);
+                }else{
+                    $('#position').html(result.msg);
+                }
+            }
+        });
+    });
+</script>
 {/block}

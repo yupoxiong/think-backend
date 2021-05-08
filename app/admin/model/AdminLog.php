@@ -12,6 +12,11 @@ use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
 use think\model\relation\HasOne;
 
+/**
+ * Class AdminLog
+ * @package app\admin\model
+ * @property string $log_ip
+ */
 class AdminLog extends AdminBaseModel
 {
     use SoftDelete;

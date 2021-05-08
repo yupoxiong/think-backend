@@ -82,6 +82,8 @@ $(function () {
         $.pjax.reload();
     });
 
+
+
     /* 全屏按钮 */
     $body.on('click', '.FullScreenButton', function (event) {
         event.preventDefault();

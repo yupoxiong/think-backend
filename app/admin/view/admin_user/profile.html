@@ -29,21 +29,21 @@
                     <div class="card-header p-0 border-bottom-0">
                         <ul class="nav nav-tabs" id="profileTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="userInfo" data-toggle="pill"
+                                <a class="nav-link active" id="userInfo" data-toggle="tab"
                                    href="#userInfoTab" role="tab" aria-controls="userInfoTab"
                                    aria-selected="true">
                                     个人信息
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="userPassword" data-toggle="pill"
+                                <a class="nav-link" id="userPassword" data-toggle="tab"
                                    href="#userPasswordTab" role="tab" aria-controls="userPasswordTab"
                                    aria-selected="false">
                                     修改密码
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="userAvatar" data-toggle="pill"
+                                <a class="nav-link" id="userAvatar" data-toggle="tab"
                                    href="#userAvatarTab" role="tab"
                                    aria-controls="userAvatarTab" aria-selected="false">
                                     修改头像
@@ -54,7 +54,7 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="profileTabContent">
-                            <div class="tab-pane fade show active" id="userInfoTab" role="tabpanel" aria-labelledby="userInfo">
+                            <div class="tab-pane fade" id="userInfoTab" role="tabpanel" aria-labelledby="userInfo">
 
                                 <form class="form-horizontal" role="form" id="dataForm1" action="" method="post"
                                       enctype="multipart/form-data">
@@ -65,7 +65,8 @@
                                                 <input type="text" class="form-control"
                                                        id="nickname" name="nickname" value="{$data.nickname|default=''}"
                                                        placeholder="请输入昵称">
-                                                <input type="hidden" value="profile" name="update_type" placeholder="请勿修改">
+                                                <input type="hidden" value="profile" name="update_type"
+                                                       placeholder="请勿修改">
                                             </div>
                                         </div>
                                     </div>
@@ -163,14 +164,16 @@
                                                            id="avatar" name="avatar" value="{$data.avatar|default=''}"
                                                            placeholder="请输入头像地址">
                                                     <div class="input-group-append">
-                                                        <span class="input-group-text" onclick="showFileUpload('avatar','image')">
+                                                        <span class="input-group-text"
+                                                              onclick="showFileUpload('avatar','image')">
                                                             <i class="fas fa-upload"></i>
                                                             上传
                                                         </span>
                                                     </div>
                                                 </div>
 
-                                                <input type="hidden" value="avatar" name="update_type" placeholder="请勿修改">
+                                                <input type="hidden" value="avatar" name="update_type"
+                                                       placeholder="请勿修改">
 
                                             </div>
                                         </div>
@@ -209,4 +212,17 @@
 
     </div>
 </section>
+<script>
+
+
+    $(function () {
+        var hash = document.location.hash;
+        if (hash) {
+            $('.nav-tabs a[href="' + hash + '"]').tab('show');
+        }
+        $('.nav-tabs .nav-item .nav-link').on('click',function (){
+            document.location.hash = $(this).attr('href');
+        })
+    });
+</script>
 {/block}

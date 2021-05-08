@@ -14,10 +14,19 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 
-class TestController
+class TestController extends AdminBaseController
 {
 
-    use AdminPhpOffice;
+
+
+    public function index()
+    {
+
+
+
+
+        return $this->fetch();
+    }
 
     public function index1()
     {

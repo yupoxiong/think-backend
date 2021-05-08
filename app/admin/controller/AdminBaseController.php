@@ -108,11 +108,12 @@ class AdminBaseController
         $this->admin['upload_url'] = url('admin/file/upload')->build();
 
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
-            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu());
+            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(),$menu->id??0);
         }
 
         $this->admin['debug'] = Env::get('app_debug');
         $this->admin['top_nav'] = 0;
+
         $this->admin['top_search'] = 0;
         $this->admin['top_message'] = 0;
         $this->admin['top_notification'] = 0;

@@ -15,7 +15,7 @@ class Image extends Field
             <div class="input-group">
                 <input id="[FIELD_NAME]" name="[FIELD_NAME]"  value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}"   placeholder="请输入[FORM_NAME]的URL" type="text" class="form-control field-image" >
                 <div class="input-group-append">
-                     <span class="input-group-text" onclick="showFileUpload('avatar','image')">
+                     <span class="input-group-text" onclick="showFileUpload('[FIELD_NAME]','image')">
                           <i class="fas fa-upload"></i>上传
                      </span>
                 </div>
@@ -25,7 +25,7 @@ class Image extends Field
     </div>
     
     <div>
-    <img id="[FIELD_NAME]Show" class="imgViewer">
+    <img id="[FIELD_NAME]Show" class="imgViewer" src="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" alt="[FORM_NAME]">
     </div>\n
 EOF;
 
@@ -54,7 +54,7 @@ EOF;
     public static function create($data)
     {
         $html = self::$html;
-        $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($data['form_name'], $data['field_name']), $html);
+        $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'), array($data['form_name'], $data['field_name'], $data['field_default']), $html);
         return $html;
     }
 }

@@ -237,12 +237,14 @@ trait AdminTreeTrait
 
         $text_base_one = "<li class='nav-item has-treeview";
 
-        $text_base_two   = "'><a href='#' class='nav-link' >
+        $text_base_two   = "'><a href='#' class='nav-link ' >
 <i class='\$icon'></i>
 <p>\$name<i class='right fas fa-angle-left'></i></p>
 
                              </a>
                              <ul class='nav nav-treeview";
+
+        $text_base_two_open   = "'><a href='#' class='nav-link active' ><i class='\$icon'></i><p>\$name<i class='right fas fa-angle-left'></i></p></a><ul class='nav nav-treeview";
         $text_open       = ' menu-open';
         $text_base_three = "'>";
 
@@ -260,7 +262,7 @@ trait AdminTreeTrait
         //echo $text_0.'<br/><br/><br/>';
 
         // 有子菜单，打开
-        $text_1 = $text_base_one . $text_open . $text_base_two . $text_base_three;
+        $text_1 = $text_base_one . $text_open . $text_base_two_open . $text_base_three;
         //echo $text_1.'<br/><br/><br/>';
 
         $text_2 = '</ul></li>';
