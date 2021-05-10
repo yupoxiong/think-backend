@@ -42,3 +42,7 @@
     max-width: 32px;
     max-height: 32px;
 }
+
+.login-logo a{
+    color: #fbfcfc;
+}

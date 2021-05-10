@@ -38,9 +38,9 @@ class AuthService extends AdminService
     {
         $this->model = new AdminUser();
 
-        $this->admin_key      = config('admin.admin_key') ?? $this->admin_key;
-        $this->store_uid_key  = config('admin.store_uid_key') ?? $this->store_uid_key;
-        $this->store_sign_key = config('admin.store_sign_key') ?? $this->store_sign_key;
+        $this->admin_key      = config('admin.safe.admin_key') ?? $this->admin_key;
+        $this->store_uid_key  = config('admin.safe.store_uid_key') ?? $this->store_uid_key;
+        $this->store_sign_key = config('admin.safe.store_sign_key') ?? $this->store_sign_key;
     }
 
     /**
@@ -155,6 +155,11 @@ class AuthService extends AdminService
         Event::trigger('AdminUserLogout', $admin_user);
 
         $this->clearAuthInfo();
+    }
+
+    public function checkImageCaptcha($param)
+    {
+
     }
 
     /**

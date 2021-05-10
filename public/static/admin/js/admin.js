@@ -50,7 +50,9 @@ $.validator.setDefaults({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function (form) {
-        console.log('前端验证成功，开始提交表单');
+        if (adminDebug) {
+            console.log('前端验证成功，开始提交表单');
+        }
         submitForm(form);
         return false;
     }
@@ -81,7 +83,6 @@ $(function () {
         event.preventDefault();
         $.pjax.reload();
     });
-
 
 
     /* 全屏按钮 */
@@ -249,8 +250,16 @@ function checkAll(obj) {
 }
 
 
-/* 表单提交 */
-function submitForm(form) {
+/**
+ * 表单提交
+ * @param form 表单dom
+ * @param successCallback 成功回调
+ * @param failCallback 失败回调
+ * @param errorCallback 错误回调
+ * @param showMsg 是否显示弹出信息
+ * @returns {boolean}
+ */
+function submitForm(form, successCallback, failCallback, errorCallback, showMsg = true) {
     let loadT = layer.msg('正在提交，请稍候…', {icon: 16, time: 0, shade: [0.3, "#000"], scrollbar: false,});
     let action = $(form).attr('action');
     let method = $(form).attr('method');
@@ -272,19 +281,31 @@ function submitForm(form) {
             processData: false,
             success: function (result) {
                 layer.close(loadT);
-                layer.msg(result.msg, {
-                    icon: result.code === 200 ? 1 : 2,
-                    scrollbar: false,
-                });
+                if (showMsg) {
+                    layer.msg(result.msg, {
+                        icon: result.code === 200 ? 1 : 2,
+                        scrollbar: false,
+                    });
+                }
+
+                // 调试信息
                 if (adminDebug) {
                     console.log('submit success!');
-                    if (result.code === 200) {
-                        console.log('%cresult success', ';color:#00a65a');
+                    result.code === 200 ? console.log('%cresult success', ';color:#00a65a') : console.log('%cresult fail', ';color:#f39c12');
+                }
+                if (result.code === 200) {
+                    if (successCallback) {
+                        successCallback(result);
                     } else {
-                        console.log('%cresult fail', ';color:#f39c12');
+                        goUrl(result.url);
+                    }
+                } else {
+                    if (failCallback) {
+                        failCallback(result);
+                    } else {
+                        goUrl(result.url);
                     }
                 }
-                goUrl(result.url);
             },
 
             error: function (xhr, type, errorThrown) {
@@ -298,13 +319,18 @@ function submitForm(form) {
                     console.log("errorThrown:" + errorThrown);
                 }
 
-                if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
-                    errorTitle = xhr.responseJSON.msg;
-                } else {
-                    errorTitle = '系统繁忙,状态码' + xhr.status;
+                if (showMsg) {
+                    if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
+                        errorTitle = xhr.responseJSON.msg;
+                    } else {
+                        errorTitle = '系统繁忙,状态码' + xhr.status;
+                    }
+                    layer.msg(errorTitle, {icon: 2, scrollbar: false,});
                 }
 
-                layer.msg(errorTitle, {icon: 2, scrollbar: false,});
+                if (errorCallback) {
+                    errorCallback(xhr)
+                }
 
             },
         }

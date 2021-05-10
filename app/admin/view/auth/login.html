@@ -5,17 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{$admin.name|default='后台系统'}</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     {include file='public/head_css' /}
     {include file='public/head_js' /}
+    <!-- 登录背景相关 -->
+    {include file='auth/login_bg' /}
+
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a><b>{$admin.name|default='登录'}</b></a>
+        <a class="adminTitle"><b>{$admin.name|default='登录'}</b></a>
     </div>
-    <!-- /.login-logo -->
+
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg">请输入账号密码进行登录</p>
@@ -37,6 +40,16 @@
                         </div>
                     </div>
                 </div>
+
+
+                {if $login_config.captcha==1}
+                {include file='auth/captcha' /}
+                {else/}
+                {if $login_config.captcha==2}
+                {include file='auth/gee_test' /}
+                {/if}
+                {/if}
+
                 <div class="row">
                     <div class="col-8">
                         <div class="icheck-primary">
@@ -46,48 +59,81 @@
                             </label>
                         </div>
                     </div>
-                    <!-- /.col -->
                     <div class="col-4">
                         {:token_field()}
-                        <button type="submit" class="btn btn-primary btn-block">登录</button>
+                        <button type="submit" class="btn btn-primary btn-block" id="loginButton">登录</button>
                     </div>
-                    <!-- /.col -->
                 </div>
 
 
             </form>
         </div>
-        <!-- /.login-card-body -->
     </div>
 </div>
-<!-- /.login-box -->
 
 <script>
 
-    $(document).ready(function () {
 
-        $('#dataForm').validate({
+    $(document).ready(function () {
+        $("#dataForm").validate({
             rules: {
                 username: {
                     required: true,
+                    minlength: 2
                 },
                 password: {
                     required: true,
-                    minlength: 5
+                    minlength: 6
                 },
             },
             messages: {
                 username: {
-                    required: "账号不能为空",
+                    required: "请输入用户名",
+                    minlength: "用户名长度不能小于2"
                 },
                 password: {
-                    required: "密码不能为空",
-                    minlength: "Your password must be at least 5 characters long"
+                    required: "请输入密码",
+                    minlength: "密码长度不能小于6"
                 },
             },
-
+            submitHandler: function (form) {
+                console.log(typeof refreshCaptcha === "function");
+                return  submitForm(form, false, typeof refreshCaptcha === "function" ? refreshCaptcha : false);
+            }
         });
+        $('#username').focus();
     });
+
+
+    checkBrowser();
+
+    /*检查浏览器*/
+    function checkBrowser() {
+        if (isIE()) {
+            if (adminDebug) {
+                console.log('古代浏览器');
+            }
+            layer.open({
+                type: 1,
+                content: $('#browser_warning').html(),
+                icon: 5,
+                title: '警告',
+                area: ['500px', '300px'],
+                closeBtn: 0,
+                moveType: 1,
+                resize: false
+            });
+        } else {
+            if (adminDebug) {
+                console.log('现代浏览器');
+            }
+        }
+    }
+
+    function isIE() {
+        return !!window.ActiveXObject || "ActiveXObject" in window;
+    }
+
 
 </script>
 </body>

@@ -42,7 +42,7 @@ class AdminBaseController
      * 无需验证登录的url
      * @var array
      */
-    protected $loginExcept =[];
+    protected array $loginExcept =[];
 
     /**
      * 无需验证权限的URL

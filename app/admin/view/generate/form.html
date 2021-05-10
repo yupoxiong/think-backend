@@ -5,10 +5,10 @@
 <section class="content">
     <div class="row">
         <div class="col-md-6">
-            <div class="box box-primary">
+            <div class="card">
 
                 <!-- 表单头部 -->
-                <div class="box-header with-border">
+                <div class="card-header with-border">
                     <div class="btn-group">
                         <a class="btn flat btn-sm btn-default BackButton">
                             <i class="fas fa-arrow-left"></i>
@@ -19,7 +19,7 @@
 
                 <form id="dataForm" class="form-horizontal dataForm" action="formField" method="post"
                       enctype="multipart/form-data">
-                    <div class="box-body">
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="form_name" class="col-sm-2 control-label">名称</label>
                             <div class="col-sm-10 col-md-4">
@@ -84,7 +84,7 @@
                         </script>
 
                     </div>
-                    <div class="box-footer">
+                    <div class="card-footer">
                         {:token_field()}
                         <div class="col-sm-2">
                         </div>
@@ -107,15 +107,15 @@
         </div>
 
         <div class="col-md-6">
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">生成结果</h3>
+            <div class="card">
+                <div class="card-header with-border">
+                    <h3 class="card-title">生成结果</h3>
 
                 </div>
-                <div class="box-body">
+                <div class="card-body">
                     <textarea id="code" style="width: 100%" placeholder="生成结果" rows="6"></textarea>
                 </div>
-                <div class="box-footer">
+                <div class="card-footer">
                     <div class="col-sm-2">
                     </div>
                     <div class="col-sm-10 col-md-4">
@@ -177,11 +177,11 @@
                         success: function (result) {
                             layer.close(loadT);
                             layer.msg(result.msg, {
-                                icon: result.code ? 1 : 2
+                                icon: result.code===200 ? 1 : 2
                             });
                             console.log('submit success!');
-                            if (result.code === 1) {
-                                addCode(result.data);
+                            if (result.code === 200) {
+                                addCode(result.result);
                                 console.log('%cresult success', ';color:#00a65a');
                             } else {
                                 addCode('');
