@@ -38,7 +38,7 @@ EOF;
 
     //列表关联筛选
     public static $listSearchRelationHtml = <<<EOF
-<div class="form-group">
+<div class="input-group input-group-sm searchGroup">
     <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
         <option value="">[FORM_NAME]</option>
         {foreach name='[FIELD_NAME1]_list' id='item'}

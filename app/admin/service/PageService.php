@@ -122,7 +122,7 @@ class PageService extends Paginator
             }
 
             return sprintf(
-                '<ul class="pagination pagination-md float-right ">%s %s %s</ul>',
+                '<ul class="pagination pagination-sm m-0 float-right">%s %s %s</ul>',
                 $this->getPreviousButton(),
                 $this->getLinks(),
                 $this->getNextButton()

@@ -21,7 +21,7 @@ class Setting extends CommonBaseModel
     protected $name = 'setting';
     protected $autoWriteTimestamp = true;
 
-    public $noDeletionId = [
+    public array $noDeletionIds = [
         1, 2, 3, 4, 5,
     ];
 

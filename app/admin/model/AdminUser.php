@@ -27,7 +27,7 @@ class AdminUser extends AdminBaseModel
 
     use SoftDelete;
 
-    public $noDeletionId = [1];
+    public array $noDeletionId = [1];
 
     /**
      * @param AdminUser $data

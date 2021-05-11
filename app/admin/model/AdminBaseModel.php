@@ -20,16 +20,16 @@ class AdminBaseModel extends Model
     protected $defaultSoftDelete = 0;
 
     // 可作为搜索关键词的字段
-    protected $searchField = [];
+    protected array $searchField = [];
 
     // 可作为条件查询的字段
-    protected $whereField = [];
+    protected array $whereField = [];
 
     // 可作为时间范围查询的字段
-    protected $timeField = [];
+    protected array $timeField = [];
 
     // 禁止删除的数据id
-    public $noDeletionId = [];
+    public array $noDeletionIds = [];
 
     /**
      * 查询处理
@@ -38,7 +38,7 @@ class AdminBaseModel extends Model
      */
     public function scopeWhere($query, $param): void
     {
-        //关键词like搜索
+        // 关键词like搜索
         $keywords = $param['_keywords'] ?? '';
         if ('' !== $keywords && count($this->searchField) > 0) {
             $this->searchField = implode('|', $this->searchField);
@@ -80,14 +80,14 @@ class AdminBaseModel extends Model
         $query->order($order ?: 'id', $by ?: 'desc');
     }
 
-    public function checkDeleteId($id)
+    public function isNoDeletionId($id)
     {
-        if (count($this->noDeletionId) > 0) {
+        if (count($this->noDeletionIds) > 0) {
             if (is_array($id)) {
-                if (array_intersect($this->noDeletionId, $id)) {
+                if (array_intersect($this->noDeletionIds, $id)) {
                     return implode(',', $id);
                 }
-            } else if (in_array((int)$id, $this->noDeletionId, true)) {
+            } else if (in_array((int)$id, $this->noDeletionIds, true)) {
                 return $id;
             }
         }

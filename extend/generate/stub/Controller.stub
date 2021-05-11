@@ -7,6 +7,7 @@ namespace app\[CONTROLLER_MODULE]\controller;
 
 use Exception;
 use think\Request;
+use think\db\Query;
 use think\response\Json;
 use app\[MODEL_MODULE]\model\[MODEL_NAME];
 [RELATION_1]
@@ -120,23 +121,17 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
      */
     public function del($id, [MODEL_NAME] $model): Json
     {
-        if (count($model->noDeletionIds) > 0) {
-            if (is_array($id)) {
-                if (array_intersect($model->noDeletionIds, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionIds) . '的数据无法删除');
-                }
-            }  else if (in_array((int)$id, $model->noDeletionIds, true)) {
-                return admin_error('ID为' . $id . '的数据无法删除');
-            }
+        $check = $model->isNoDeletionIds($id);
+        if (false !== $check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
         }
 
-        if ($model->softDelete) {
-            $result = $model->whereIn('id', $id)->useSoftDelete('delete_time', time())->delete();
-        } else {
-            $result = $model->whereIn('id', $id)->delete();
-        }
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
 
-        return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
     [ENABLE_CODE]

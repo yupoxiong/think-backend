@@ -6,6 +6,7 @@
 namespace app\admin\controller;
 
 use Exception;
+use think\db\Query;
 use think\Request;
 use app\common\model\Setting;
 use app\common\model\SettingGroup;
@@ -160,26 +161,24 @@ class SettingController extends AdminBaseController
 
     }
 
-    //删除
-    public function del($id, Setting $model)
+    /**
+     * @param $id
+     * @param Setting $model
+     * @return Json
+     */
+    public function del($id, Setting $model): Json
     {
-        if (count($model->noDeletionId) > 0) {
-            if (is_array($id)) {
-                if (array_intersect($model->noDeletionId, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionId) . '的数据无法删除');
-                }
-            } else if (in_array((int)$id, $model->noDeletionId, true)) {
-                return admin_error('ID为' . $id . '的数据无法删除');
-            }
+        $check = $model->isNoDeletionIds($id);
+        if (false !== $check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
         }
 
-        if ($model->softDelete) {
-            $result = $model->whereIn('id', $id)->useSoftDelete('delete_time', time())->delete();
-        } else {
-            $result = $model->whereIn('id', $id)->delete();
-        }
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
 
-        return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
 

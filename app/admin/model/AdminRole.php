@@ -17,7 +17,7 @@ class AdminRole extends AdminBaseModel
 {
     use SoftDelete;
 
-    protected $searchField = [
+    protected array $searchField = [
         'name'
     ];
 

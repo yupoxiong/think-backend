@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
+use think\db\Query;
 use think\response\Json;
 use app\common\model\User;
 use app\common\model\UserLevel;
@@ -41,7 +42,8 @@ class UserController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+            'user_level_list' => UserLevel::select(),
+
         ]);
         return $this->fetch();
     }
@@ -63,8 +65,7 @@ class UserController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-
-
+                     
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -104,16 +105,7 @@ class UserController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-                        //处理头像上传
-            if (!empty($_FILES['avatar']['name'])) {
-                $attachment_avatar = new \app\common\model\Attachment;
-                $file_avatar       = $attachment_avatar->upload('avatar');
-                if ($file_avatar) {
-                    $param['avatar'] = $file_avatar->url;
-                }
-            }
-            
-
+                       
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -137,28 +129,78 @@ class UserController extends AdminBaseController
      */
     public function del($id, User $model): Json
     {
-        if (count($model->noDeletionIds) > 0) {
-            if (is_array($id)) {
-                if (array_intersect($model->noDeletionIds, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionIds) . '的数据无法删除');
-                }
-            }  else if (in_array((int)$id, $model->noDeletionIds, true)) {
-                return admin_error('ID为' . $id . '的数据无法删除');
-            }
+        $check = $model->isNoDeletionIds($id);
+        if (false !== $check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
         }
 
-        if ($model->softDelete) {
-            $result = $model->whereIn('id', $id)->useSoftDelete('delete_time', time())->delete();
-        } else {
-            $result = $model->whereIn('id', $id)->delete();
-        }
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
 
-        return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
     
+    /**
+     * 启用
+     * @param mixed $id
+     * @param User $model
+     * @return Json
+     */
+    public function enable($id, User $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
 
-    
+
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param User $model
+     * @return Json
+     */
+    public function disable($id, User $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+
+        /**
+     * 导出
+     *
+     * @param Request $request
+     * @param User $model
+     * @return mixed
+     * @throws Exception
+     */
+    public function export(Request $request, User $model)
+    {
+        $param = $request->param();
+        $data  = $model->scope('where', $param)->select();
+
+        $header = ['ID','用户等级','账号','手机号','昵称','头像','是否启用','创建时间',];
+        $body   = [];
+        foreach ($data as $item) {
+            $record                = [];
+            $record['id'] = $item->id;
+$record['user_level_id'] = $item->user_level->name?? '';
+$record['username'] = $item->username;
+$record['mobile'] = $item->mobile;
+$record['nickname'] = $item->nickname;
+$record['avatar'] = $item->avatar;
+        $record['status'] = $item->status_text;
+$record['create_time'] = $item->create_time;
+
+
+            $body[] = $record;
+        }
+        return $this->exportData($header, $body, 'user-' . date('YmdHis'));
+
+    }
 
         /**
      * @param Request $request

@@ -114,8 +114,8 @@ class AdminMenuController extends AdminBaseController
     public function del($id, AdminMenu $model): Response
     {
 
-        $check = $model->checkDeleteId($id);
-        if ($check) {
+        $check = $model->isNoDeletionId($id);
+        if (false !== $check) {
             return admin_error('ID为' . $check . '的数据不能被删除');
         }
 

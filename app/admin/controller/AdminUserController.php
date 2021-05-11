@@ -125,8 +125,9 @@ class AdminUserController extends AdminBaseController
      */
     public function del($id, AdminUser $model): Response
     {
-        $check = $model->checkDeleteId($id);
-        if (true !== $check) {
+        $check = $model->isNoDeletionId($id);
+
+        if (false !== $check) {
             return admin_error('ID 为' . $check . '的数据无法删除');
         }
 

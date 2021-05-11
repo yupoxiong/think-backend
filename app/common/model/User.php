@@ -18,10 +18,10 @@ class User extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     //可搜索字段
-    protected $searchField = [];
+    protected $searchField = ['username',];
 
     //可作为条件的字段
-    protected $whereField = [];
+    protected $whereField = ['user_level_id',];
 
     //可做为时间
     protected $timeField = [];
