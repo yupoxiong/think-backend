@@ -33,7 +33,7 @@ class AdminMenu extends AdminBaseModel
     /**
      * @var array 日志记录方法列表
      */
-    public static $logMethodList = [
+    public static array $logMethodList = [
         [
             'id'   => 'GET',
             'name' => 'GET',

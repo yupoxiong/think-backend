@@ -9,7 +9,7 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
-use think\db\exception\ModelNotFoundException;
+use think\Model;
 use think\model\concern\SoftDelete;
 
 /**
@@ -27,7 +27,7 @@ class AdminUser extends AdminBaseModel
 
     use SoftDelete;
 
-    public array $noDeletionId = [1];
+    public array $noDeletionIds = [1];
 
     /**
      * @param AdminUser $data
@@ -76,15 +76,11 @@ class AdminUser extends AdminBaseModel
      * 获取用户的角色列表
      * @param $value
      * @param $data
-     * @return array|\think\Model
+     * @return array|Model
      */
     public function getRoleListAttr($value, $data)
     {
-        try {
-            return (new AdminRole)->whereIn('id', $data['role'])->selectOrFail();
-        } catch (ModelNotFoundException $exception) {
-            return [];
-        }
+        return (new AdminRole)->whereIn('id', $data['role'])->selectOrFail();
     }
 
 
@@ -131,17 +127,23 @@ class AdminUser extends AdminBaseModel
         return base64_encode(password_hash($password, 1));
     }
 
-    public function getAuthUrlAttr($value,$data)
+    /**
+     * 获取授权的URL
+     * @param $value
+     * @param $data
+     * @return array
+     */
+    public function getAuthUrlAttr($value, $data): array
     {
-        $role_urls  = AdminRole::where('id', 'in', $data['role'])->where('status', 1)->column('url');
+        $role_urls  = (new AdminRole)->where('id', 'in', $data['role'])->where('status', 1)->column('url');
         $url_id_str = '';
         foreach ($role_urls as $key => $val) {
-            $url_id_str .= $key == 0 ? $val : ',' . $val;
+            $url_id_str .= $key === 0 ? $val : ',' . $val;
         }
         $url_id   = array_unique(explode(',', $url_id_str));
         $auth_url = [];
         if (count($url_id) > 0) {
-            $auth_url = AdminMenu::where('id', 'in', $url_id)->column('url');
+            $auth_url = (new AdminMenu)->where('id', 'in', $url_id)->column('url');
         }
         return $auth_url;
     }

@@ -23,7 +23,7 @@ class AdminLog extends AdminBaseModel
     /**
      * @var array 搜索的字段：操作，URL
      */
-    protected array $searchField = [
+    public array $searchField = [
         'name',
         'url',
     ];
