@@ -57,7 +57,7 @@ EOF;
 
     //列表自定义筛选数据
     public static $listSearchSelectHtml = <<<EOF
-<div class="form-group">
+<div class="input-group input-group-sm searchGroup">
                         <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
                             <option value="">[FORM_NAME]</option>
                             {foreach \$[FIELD_LIST] as \$key=>\$value}
@@ -77,7 +77,7 @@ EOF;
 
     //列表日期筛选
     public static $listSearchDate = <<<EOF
-<div class="form-group">
+<div class="input-group input-group-sm searchGroup">
     <input value="{\$[FIELD_NAME]|default=''}" readonly name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm indexSearchDateRange" placeholder="[FORM_NAME]">
 </div>
 <script>
@@ -90,7 +90,7 @@ EOF;
 
     //列表日期时间筛选
     public static $listSearchDatatime = <<<EOF
-<div class="form-group">
+<div class="input-group input-group-sm searchGroup">
     <input value="{\$[FIELD_NAME]|default=''}" readonly name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm indexSearchDatetimeRange" placeholder="[FORM_NAME]">
 </div>
 <script>

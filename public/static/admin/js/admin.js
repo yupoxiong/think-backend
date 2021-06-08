@@ -26,6 +26,8 @@ $(document).on('pjax:send', function (xhr) {
 });
 $(document).on('pjax:complete', function (xhr) {
     initToolTip();
+    imgViewer();
+    setNavTab();
     NProgress.done();
 });
 //列表页搜索pjax
@@ -60,7 +62,7 @@ $.validator.setDefaults({
 
 /* 初始化 */
 $(function () {
-
+    setNavTab();
     // 初始化提示
     initToolTip();
     // 初始化菜单点击高亮
@@ -110,6 +112,21 @@ function initInputFileText() {
         });
     });
 
+}
+
+// 设置tab激活选项卡
+function setNavTab(){
+    if($('.NavTab').length===1){
+        let hash = document.location.hash;
+        if (hash) {
+            $('.NavTab a[href="' + hash + '"]').tab('show');
+        }else{
+            $('.NavTab a:first').tab('show');
+        }
+        $('.NavTab .nav-item .nav-link').on('click',function (){
+            document.location.hash = $(this).attr('href');
+        })
+    }
 }
 
 /* 清除搜索表单 */

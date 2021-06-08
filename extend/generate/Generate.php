@@ -572,8 +572,6 @@ class Generate
         $auto_time      = 'protected $autoWriteTimestamp = true;';
         $soft_delete1   = 'use think\model\concern\SoftDelete;';
         $soft_delete2   = 'use SoftDelete;';
-        $soft_delete3_1 = 'public $softDelete = true;';
-        $soft_delete3_2 = 'public $softDelete = false;';
 
         $file = $file = $this->config['template']['model'];
         $code = file_get_contents($file);
@@ -581,9 +579,9 @@ class Generate
 
         //软删除
         if ($this->data['model']['soft_delete']) {
-            $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]', '[SOFT_DELETE_USE3]'), array($soft_delete1, $soft_delete2, $soft_delete3_1), $code);
+            $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]', ), array($soft_delete1, $soft_delete2), $code);
         } else {
-            $code = str_replace(array("\n" . '[SOFT_DELETE_USE1]' . "\n", "\n    " . '[SOFT_DELETE_USE2]', '[SOFT_DELETE_USE3]'), array('', '', $soft_delete3_2), $code);
+            $code = str_replace(array("\n" . '[SOFT_DELETE_USE1]' . "\n", "\n    " . '[SOFT_DELETE_USE2]'), array('', ''), $code);
         }
 
         //自动时间戳

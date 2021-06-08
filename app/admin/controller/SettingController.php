@@ -168,7 +168,7 @@ class SettingController extends AdminBaseController
      */
     public function del($id, Setting $model): Json
     {
-        $check = $model->isNoDeletionIds($id);
+        $check = $model->inNoDeletionIds($id);
         if (false !== $check) {
             return admin_error('ID为' . $check . '的数据不能被删除');
         }

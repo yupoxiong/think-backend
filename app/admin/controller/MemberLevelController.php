@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
+use think\db\Query;
 use think\response\Json;
 use app\common\model\MemberLevel;
 
@@ -62,16 +63,7 @@ class MemberLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-                        //处理图片上传
-            $attachment_img = new \app\common\model\Attachment;
-            $file_img       = $attachment_img->upload('img');
-            if ($file_img) {
-                $param['img'] = $file_img->url;
-            } else {
-                return admin_error($attachment_img->getError());
-            }
-            
-
+                     
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -106,16 +98,7 @@ class MemberLevelController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-                        //处理图片上传
-            if (!empty($_FILES['img']['name'])) {
-                $attachment_img = new \app\common\model\Attachment;
-                $file_img       = $attachment_img->upload('img');
-                if ($file_img) {
-                    $param['img'] = $file_img->url;
-                }
-            }
-            
-
+                       
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -138,23 +121,17 @@ class MemberLevelController extends AdminBaseController
      */
     public function del($id, MemberLevel $model): Json
     {
-        if (count($model->noDeletionIds) > 0) {
-            if (is_array($id)) {
-                if (array_intersect($model->noDeletionIds, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionIds) . '的数据无法删除');
-                }
-            }  else if (in_array((int)$id, $model->noDeletionIds, true)) {
-                return admin_error('ID为' . $id . '的数据无法删除');
-            }
+        $check = $model->isNoDeletionIds($id);
+        if (false !== $check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
         }
 
-        if ($model->softDelete) {
-            $result = $model->whereIn('id', $id)->useSoftDelete('delete_time', time())->delete();
-        } else {
-            $result = $model->whereIn('id', $id)->delete();
-        }
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
 
-        return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
     

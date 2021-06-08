@@ -34,7 +34,8 @@
         "mk-j/php_xlsxwriter": "^0.38.0",
         "ext-json": "*",
         "ext-openssl": "*",
-        "topthink/think-captcha": "^3.0"
+        "topthink/think-captcha": "^3.0",
+        "yupoxiong/region": "^1.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

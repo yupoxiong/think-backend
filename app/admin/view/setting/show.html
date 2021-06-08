@@ -24,10 +24,10 @@
             <div class="card card-primary card-outline card-outline-tabs">
 
                 <div class="card-header p-0 border-bottom-0">
-                    <ul class="nav nav-tabs" id="settingTab" role="tablist">
+                    <ul class="nav nav-tabs NavTab" id="settingTab" role="tablist">
                         {foreach name='data_config' id='item'}
                         <li class="nav-item">
-                            <a class="nav-link {if $key==0}active{/if}" href="#tab_{$key}" role="tab" aria-controls="tab_{$key}"
+                            <a class="nav-link " href="#tab_{$key}" role="tab" aria-controls="tab_{$key}"
                                aria-selected="true" data-toggle="tab">{$item.name}</a>
                         </li>
                         {/foreach}
@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         {foreach name='data_config' id='item'}
-                        <div class="tab-pane fade {if $key==0}active show{/if}" id="tab_{$key}" >
+                        <div class="tab-pane fade" id="tab_{$key}" >
 
                             <form class="form-horizontal dataForm" action="{:url('setting/update')}" method="post"
                                   enctype="multipart/form-data">
@@ -88,15 +88,6 @@
         $(item).validate({});
     })
 
-    $(function () {
-        var hash = document.location.hash;
-        if (hash) {
-            $('.nav-tabs a[href="' + hash + '"]').tab('show');
-        }
-        $('.nav-tabs .nav-item .nav-link').on('click',function (){
-            document.location.hash = $(this).attr('href');
-        })
-    });
 </script>
 
 {/block}

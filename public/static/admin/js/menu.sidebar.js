@@ -89,7 +89,7 @@
             $('body').removeClass('layout-navbar-fixed')
         }
     })
-    var $header_fixed_container = $('<div />', {class: 'mb-1'}).append($header_fixed_checkbox).append('<span>Fixed</span>')
+    var $header_fixed_container = $('<div />', {class: 'mb-1'}).append($header_fixed_checkbox).append('<span>固定</span>')
     $container.append($header_fixed_container)
 
     var $dropdown_legacy_offset_checkbox = $('<input />', {
@@ -119,7 +119,7 @@
             $('.main-header').removeClass('border-bottom-0')
         }
     })
-    var $no_border_container = $('<div />', {class: 'mb-4'}).append($no_border_checkbox).append('<span>No border</span>')
+    var $no_border_container = $('<div />', {class: 'mb-4'}).append($no_border_checkbox).append('<span>无边框</span>')
     $container.append($no_border_container)
 
     $container.append('<h6>侧边栏选项</h6>')
@@ -390,7 +390,7 @@
             $('.main-footer').removeClass('text-sm')
         }
     })
-    var $text_sm_footer_container = $('<div />', {class: 'mb-4'}).append($text_sm_footer_checkbox).append('<span>Footer</span>')
+    var $text_sm_footer_container = $('<div />', {class: 'mb-4'}).append($text_sm_footer_checkbox).append('<span>页脚</span>')
     $container.append($text_sm_footer_container)
 
     // Color Arrays

@@ -17,14 +17,14 @@ class UserLevel extends CommonBaseModel
     protected $name = 'user_level';
     protected $autoWriteTimestamp = true;
 
-    //可搜索字段
-    protected $searchField = [];
+    // 可搜索字段
+    public array $searchField = [];
 
-    //可作为条件的字段
-    protected $whereField = [];
+    // 可作为条件的字段
+    public array $whereField = [];
 
-    //可做为时间
-    protected $timeField = [];
+    // 可做为时间
+    public array $timeField = [];
 
     //是否启用获取器
 public function getStatusTextAttr($value, $data)

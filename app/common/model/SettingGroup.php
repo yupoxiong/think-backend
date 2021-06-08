@@ -28,12 +28,12 @@ class SettingGroup extends CommonBaseModel
     protected $name = 'setting_group';
     protected $autoWriteTimestamp = true;
 
-    public $noDeletionId  =[
+    public array $noDeletionIds   =[
         1,2,3,4,5,
     ];
 
     //可搜索字段
-    protected array $searchField = ['name', 'description', 'code',];
+    public array $searchField = ['name', 'description', 'code',];
 
 
     //关联设置

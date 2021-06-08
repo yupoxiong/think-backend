@@ -42,8 +42,7 @@ class UserController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            'user_level_list' => UserLevel::select(),
-
+            
         ]);
         return $this->fetch();
     }
@@ -143,64 +142,8 @@ class UserController extends AdminBaseController
     }
 
     
-    /**
-     * 启用
-     * @param mixed $id
-     * @param User $model
-     * @return Json
-     */
-    public function enable($id, User $model): Json
-    {
-        $result = $model->whereIn('id', $id)->update(['status' => 1]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
-    }
 
-
-    /**
-     * 禁用
-     * @param mixed $id
-     * @param User $model
-     * @return Json
-     */
-    public function disable($id, User $model): Json
-    {
-        $result = $model->whereIn('id', $id)->update(['status' => 0]);
-        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
-    }
-
-
-        /**
-     * 导出
-     *
-     * @param Request $request
-     * @param User $model
-     * @return mixed
-     * @throws Exception
-     */
-    public function export(Request $request, User $model)
-    {
-        $param = $request->param();
-        $data  = $model->scope('where', $param)->select();
-
-        $header = ['ID','用户等级','账号','手机号','昵称','头像','是否启用','创建时间',];
-        $body   = [];
-        foreach ($data as $item) {
-            $record                = [];
-            $record['id'] = $item->id;
-$record['user_level_id'] = $item->user_level->name?? '';
-$record['username'] = $item->username;
-$record['mobile'] = $item->mobile;
-$record['nickname'] = $item->nickname;
-$record['avatar'] = $item->avatar;
-        $record['status'] = $item->status_text;
-$record['create_time'] = $item->create_time;
-
-
-            $body[] = $record;
-        }
-        return $this->exportData($header, $body, 'user-' . date('YmdHis'));
-
-    }
+    
 
         /**
      * @param Request $request

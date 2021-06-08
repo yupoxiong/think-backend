@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use Exception;
 use app\admin\model\AdminMenu;
+use think\db\Query;
 use think\Request;
 use app\common\model\SettingGroup;
 
@@ -15,7 +16,7 @@ use think\response\Json;
 
 class SettingGroupController extends AdminBaseController
 {
-    protected $codeBlacklist = [
+    protected array $codeBlacklist = [
         'app', 'cache', 'database', 'console', 'cookie', 'log', 'middleware', 'session', 'template', 'trace',
         'ueditor', 'api', 'attachment', 'geetest', 'generate', 'admin', 'paginate',
     ];
@@ -89,7 +90,7 @@ class SettingGroupController extends AdminBaseController
         return $this->fetch();
     }
 
-    //修改
+    // 修改
     public function edit($id, Request $request, SettingGroup $model, SettingGroupValidate $validate)
     {
         /** @var SettingGroup $data */
@@ -126,17 +127,13 @@ class SettingGroupController extends AdminBaseController
      */
     public function del($id, SettingGroup $model)
     {
-        if (count($model->noDeletionId) > 0) {
-            if (is_array($id)) {
-                if (array_intersect($model->noDeletionId, $id)) {
-                    return admin_error('ID为' . implode(',', $model->noDeletionId) . '的数据无法删除');
-                }
-            } else if (in_array($id, $model->noDeletionId)) {
-                return admin_error('ID为' . $id . '的数据无法删除');
-            }
+        $check = $model->inNoDeletionIds($id);
+
+        if (false !== $check) {
+            return admin_error('ID 为' . $check . '的数据无法删除');
         }
 
-        //删除限制
+        // 删除限制
         $relation_name    = 'setting';
         $relation_cn_name = '设置';
         $tips             = '下有' . $relation_cn_name . '数据，请删除' . $relation_cn_name . '数据后再进行删除操作';
@@ -156,13 +153,12 @@ class SettingGroupController extends AdminBaseController
             }
         }
 
-        if ($model->softDelete) {
-            $result = $model->whereIn('id', $id)->useSoftDelete('delete_time', time())->delete();
-        } else {
-            $result = $model->whereIn('id', $id)->delete();
-        }
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
 
-        return $result ? admin_success('操作成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
 

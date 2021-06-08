@@ -46,3 +46,15 @@
 .login-logo a{
     color: #fbfcfc;
 }
+
+.searchForm .form-group{
+    margin-left: 5px;
+}
+
+.searchGroup .indexSearchDateRange{
+    min-width: 190px;
+}
+
+.searchGroup .indexSearchDatetimeRange{
+    min-width: 320px;
+}

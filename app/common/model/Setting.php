@@ -26,7 +26,7 @@ class Setting extends CommonBaseModel
     ];
 
     //可搜索字段
-    protected $searchField = ['name', 'description', 'code',];
+    protected array $searchField = ['name', 'description', 'code',];
 
 
     //关联设置分组

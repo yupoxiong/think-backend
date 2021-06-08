@@ -13,6 +13,9 @@ namespace app\common\model;
 use think\db\Query;
 use think\Model;
 
+/**
+ * @method getFieldType(string $key)
+ */
 class CommonBaseModel extends Model
 {
     // 是否字段，使用场景：用户的是否冻结，文章是否为热门等等。
@@ -20,6 +23,13 @@ class CommonBaseModel extends Model
 
     protected $defaultSoftDelete = 0;
 
+    // 可作为搜索关键词的字段
+    public array $searchField = [];
+    // 可作为条件查询的字段
+    public array $whereField = [];
+    // 可作为时间范围查询的字段
+    public array $timeField = [];
+    // 不可删除的数据ID
     public array $noDeletionIds = [];
 
     /**
@@ -32,14 +42,14 @@ class CommonBaseModel extends Model
         //关键词like搜索
         $keywords = $param['_keywords'] ?? '';
         if ('' !== $keywords && count($this->searchField) > 0) {
-            $this->searchField = implode('|', $this->searchField);
-            $query->where($this->searchField, 'like', '%' . $keywords . '%');
+            $searchField = implode('|', $this->searchField);
+            $query->where($searchField, 'like', '%' . $keywords . '%');
         }
 
         //字段条件查询
         if (count($this->whereField) > 0 && count($param) > 0) {
             foreach ($param as $key => $value) {
-                if ($value !== '' && in_array((string)$key, $this->whereField, true)) {
+                if ($value !== '' && in_array($key, $this->whereField, true)) {
                     $query->where($key, $value);
                 }
             }
@@ -48,19 +58,19 @@ class CommonBaseModel extends Model
         //时间范围查询
         if (count($this->timeField) > 0 && count($param) > 0) {
             foreach ($param as $key => $value) {
-                if ($value !== '' && in_array((string)$key, $this->timeField, true)) {
-                    $field_type = $this->getFieldsType($this->table, $key);
+                if ($value !== '' && in_array($key, $this->timeField, true)) {
+                    $field_type = $this->getFieldType($key);
                     $time_range = explode(' - ', $value);
                     [$start_time, $end_time] = $time_range;
                     //如果是int，进行转换
                     if (false !== strpos($field_type, 'int')) {
                         $start_time = strtotime($start_time);
                         if (strlen($end_time) === 10) {
-                            $end_time .= '23:59:59';
+                            $end_time .= ' 23:59:59';
                         }
                         $end_time = strtotime($end_time);
                     }
-                    $query->where($key, 'between', [$start_time, $end_time]);
+                    $query->whereBetweenTime($key, $start_time, $end_time);
                 }
             }
         }
@@ -71,7 +81,14 @@ class CommonBaseModel extends Model
         $query->order($order ?: 'id', $by ?: 'desc');
     }
 
-    public function isNoDeletionIds($id)
+
+
+    /**
+     * 当前ID是否包含在不可删除的ID中
+     * @param $id
+     * @return false|string
+     */
+    public function inNoDeletionIds($id)
     {
         if (count($this->noDeletionIds) > 0) {
             if (is_array($id)) {
@@ -83,5 +100,17 @@ class CommonBaseModel extends Model
             }
         }
         return false;
+    }
+
+
+    /**
+     * 是否状态获取器
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getStatusTextAttr($value, $data)
+    {
+        return self::BOOLEAN_TEXT[$data['status']];
     }
 }

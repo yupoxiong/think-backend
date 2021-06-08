@@ -5,26 +5,21 @@
 
 namespace app\common\model;
 
-use think\model\concern\SoftDelete;
-
 class User extends CommonBaseModel
 {
     // 自定义选择数据
     
 
-    use SoftDelete;
-    public $softDelete = true;
+
     protected $name = 'user';
-    protected $autoWriteTimestamp = true;
+        // 可搜索字段
+    public array $searchField = [];
 
-    //可搜索字段
-    protected $searchField = ['username',];
+    // 可作为条件的字段
+    public array $whereField = [];
 
-    //可作为条件的字段
-    protected $whereField = ['user_level_id',];
-
-    //可做为时间
-    protected $timeField = [];
+    // 可做为时间
+    public array $timeField = ['create_time',];
 
     //是否启用获取器
 public function getStatusTextAttr($value, $data)
