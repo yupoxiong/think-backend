@@ -117,6 +117,9 @@ function initInputFileText() {
 // 设置tab激活选项卡
 function setNavTab(){
     if($('.NavTab').length===1){
+        if(adminDebug){
+            console.log('选项卡初始化');
+        }
         let hash = document.location.hash;
         if (hash) {
             $('.NavTab a[href="' + hash + '"]').tab('show');

@@ -16,7 +16,7 @@ use think\Request;
 class FileController extends AdminBaseController
 {
 
-    protected $authExcept = [
+    protected array $authExcept = [
         'upload',
         'index',
     ];

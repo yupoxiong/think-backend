@@ -13,7 +13,7 @@ class UserLevel extends CommonBaseModel
     
 
     use SoftDelete;
-    public $softDelete = true;
+
     protected $name = 'user_level';
     protected $autoWriteTimestamp = true;
 

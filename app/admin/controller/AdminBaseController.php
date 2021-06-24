@@ -24,19 +24,19 @@ class AdminBaseController
      * 后台主变量
      * @var array
      */
-    protected $admin;
+    protected array $admin;
 
     /**
      * 视图变量
      * @var View
      */
-    protected $view;
+    protected View $view;
 
     /**
      * 当前访问的URL
      * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * 无需验证登录的url
@@ -48,13 +48,13 @@ class AdminBaseController
      * 无需验证权限的URL
      * @var array
      */
-    protected $authExcept = [];
+    protected array $authExcept = [];
 
     /**
      * 当前后台用户
      * @var AdminUser
      */
-    protected $user;
+    protected AdminUser $user;
 
     public function __construct()
     {
