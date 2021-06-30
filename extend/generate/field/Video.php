@@ -8,11 +8,11 @@ namespace generate\field;
 
 class Video extends Field
 {
-    public static $html = <<<EOF
-    <div class="form-group">
+    public static string $html = <<<EOF
+    <div class="form-group row">
         <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-        <div class="col-sm-10 col-md-4"> 
-            <input id="[FIELD_NAME]" name="[FIELD_NAME]"  placeholder="请上传[FORM_NAME]" data-initial-preview="{\$data.[FIELD_NAME]|default=''}" type="file" class="form-control field-video" >
+        <div class="col-sm-10 col-md-4 formInputDiv"> 
+            <input id="[FIELD_NAME]" name="[FIELD_NAME]"  placeholder="请上传[FORM_NAME]" data-initial-preview="{\$data.[FIELD_NAME]|default=''}" type="file" class="form-control fieldVideo" >
         </div>
     </div>
     <script>
@@ -39,7 +39,7 @@ class Video extends Field
     </script>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required'   => '非空',
         'file_size'  => '文件大小限制',
         'file_video' => '视频类型',
@@ -48,7 +48,7 @@ EOF;
 
 
     //控制器添加上传
-    public static $controllerAddCode =
+    public static string $controllerAddCode =
         <<<EOF
             //处理[FORM_NAME]上传
             \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
@@ -63,7 +63,7 @@ EOF;
 
 
     //控制器修改上传
-    public static $controllerEditCode =
+    public static string $controllerEditCode =
         <<<EOF
             //处理[FORM_NAME]上传
             if (!empty(\$_FILES['[FIELD_NAME]']['name'])) {

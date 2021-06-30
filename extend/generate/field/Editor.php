@@ -8,8 +8,8 @@ namespace generate\field;
 
 class Editor extends Field
 {
-    public static $html = <<<EOF
-<div class="form-group">
+    public static string $html = <<<EOF
+<div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
         <div class="col-sm-10">
             <script id="[FIELD_NAME]" name="[FIELD_NAME]" type="text/plain">{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</script>
@@ -23,7 +23,7 @@ class Editor extends Field
 </script>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required' => '非空',
         'regular'  => '自定义正则'
     ];

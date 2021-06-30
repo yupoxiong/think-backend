@@ -1,6 +1,6 @@
 <?php
 /**
- * 用户控制器
+ * 会员控制器
  */
 
 namespace app\admin\controller;
@@ -9,26 +9,26 @@ use Exception;
 use think\Request;
 use think\db\Query;
 use think\response\Json;
-use app\common\model\User;
-use app\common\model\UserLevel;
+use app\common\model\Member;
+use app\common\model\MemberLevel;
 
-use app\common\validate\UserValidate;
+use app\common\validate\MemberValidate;
 
-class UserController extends AdminBaseController
+class MemberController extends AdminBaseController
 {
 
     /**
      * 列表
      *
      * @param Request $request
-     * @param User $model
+     * @param Member $model
      * @return string
      * @throws Exception
      */
-    public function index(Request $request, User $model): string
+    public function index(Request $request, Member $model): string
     {
         $param = $request->param();
-        $data  = $model->with('user_level')->scope('where', $param)
+        $data  = $model->with('member_level')->scope('where', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',
@@ -51,12 +51,12 @@ class UserController extends AdminBaseController
      * 添加
      *
      * @param Request $request
-     * @param User $model
-     * @param UserValidate $validate
+     * @param Member $model
+     * @param MemberValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function add(Request $request, User $model, UserValidate $validate)
+    public function add(Request $request, Member $model, MemberValidate $validate)
     {
         if ($request->isPost()) {
             $param           = $request->param();
@@ -76,7 +76,7 @@ class UserController extends AdminBaseController
         }
 
         $this->assign([
-    'user_level_list' => UserLevel::select(),
+    'member_level_list' => MemberLevel::select(),
 
 ]);
 
@@ -90,12 +90,12 @@ class UserController extends AdminBaseController
      *
      * @param $id
      * @param Request $request
-     * @param User $model
-     * @param UserValidate $validate
+     * @param Member $model
+     * @param MemberValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function edit($id, Request $request, User $model, UserValidate $validate)
+    public function edit($id, Request $request, Member $model, MemberValidate $validate)
     {
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
@@ -112,7 +112,7 @@ class UserController extends AdminBaseController
 
         $this->assign([
             'data' => $data,
-            'user_level_list' => UserLevel::select(),
+            'member_level_list' => MemberLevel::select(),
 
         ]);
 
@@ -123,10 +123,10 @@ class UserController extends AdminBaseController
      * 删除
      *
      * @param mixed $id
-     * @param User $model
+     * @param Member $model
      * @return Json
      */
-    public function del($id, User $model): Json
+    public function del($id, Member $model): Json
     {
         $check = $model->inNoDeletionIds($id);
         if (false !== $check) {
@@ -152,13 +152,13 @@ class UserController extends AdminBaseController
     public function import(Request $request): Json
     {
         $param           = $request->param();
-        $field_name_list = ['用户等级','账号','密码','手机号','昵称','头像','是否启用',];
+        $field_name_list = ['会员等级','账号','密码','手机号','昵称','图片','是否启用',];
         if (isset($param['action']) && $param['action'] === 'download_example') {
             $this->downloadExample($field_name_list);
         }
 
-        $field_list = ['user_level_id','username','password','mobile','nickname','avatar','status',];
-        $result = $this->importData('file','user',$field_list);
+        $field_list = ['member_level_id','username','password','mobile','nickname','avatar','status',];
+        $result = $this->importData('file','member',$field_list);
 
         return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }

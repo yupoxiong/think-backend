@@ -8,9 +8,9 @@ namespace generate\field;
 
 class Map extends Field
 {
-    public static $html = <<<EOF
+    public static string $html = <<<EOF
     
-<div class="form-group">
+<div class="form-group row">
     <label class="col-sm-2 control-label">[FORM_NAME]</label>
     <div class="col-sm-8 ">
         <div style="z-index: 20;position: absolute;width: 100%;text-align: center;top:15px;">
@@ -86,7 +86,7 @@ class Map extends Field
 </script>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required' => '非空',
         'lng_lat'  => '经纬度',
         'regular'  => '自定义正则'

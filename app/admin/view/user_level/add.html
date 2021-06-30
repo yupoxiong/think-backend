@@ -20,19 +20,19 @@
                     <div class="card-body">
                         <div class="form-group">
     <label for="name" class="col-sm-2 control-label">名称</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="text" class="form-control field-text">
     </div>
 </div>
 <div class="form-group">
     <label for="description" class="col-sm-2 control-label">简介</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control field-text">
     </div>
 </div>
     <div class="form-group">
         <label for="img" class="col-sm-2 control-label">图片</label>
-        <div class="col-sm-10 col-md-4"> 
+        <div class="col-sm-10 col-md-4 formInputDiv">
             <div class="input-group">
                 <input id="img" name="img"  value="{$data.img|default='/static/index/images/user_level_default.png'}"   placeholder="请输入图片的URL" type="text" class="form-control field-image" >
                 <div class="input-group-append">
@@ -50,7 +50,7 @@
     </div>
 <div class="form-group">
     <label for="status" class="col-sm-2 control-label">是否启用</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
     <input class="switch field-switch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
     </div>
@@ -73,7 +73,7 @@
                         {:token_field()}
                         <div class="col-sm-2">
                         </div>
-                        <div class="col-sm-10 col-md-4">
+                        <div class="col-sm-10 col-md-4 formInputDiv">
                             {if !isset($data)}
                                 <div class="btn-group pull-right">
                                     <label class="createContinue">

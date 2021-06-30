@@ -8,28 +8,30 @@ namespace generate\field;
 
 class Image extends Field
 {
-    public static $html = <<<EOF
-    <div class="form-group">
+    public static string $html = <<<EOF
+    <div class="form-group row">
         <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-        <div class="col-sm-10 col-md-4"> 
+        <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
-                <input id="[FIELD_NAME]" name="[FIELD_NAME]"  value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}"   placeholder="请输入[FORM_NAME]的URL" type="text" class="form-control field-image" >
+                <input id="[FIELD_NAME]" name="[FIELD_NAME]"  value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}"   placeholder="请输入[FORM_NAME]的URL" type="text" class="form-control fieldImage" >
                 <div class="input-group-append">
                      <span class="input-group-text" onclick="showFileUpload('[FIELD_NAME]','image')">
                           <i class="fas fa-upload"></i>上传
                      </span>
                 </div>
             </div>
+            
+            <div>
+                <img id="[FIELD_NAME]Show" class="imgViewer" src="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" alt="[FORM_NAME]">
+            </div>
         </div>
         
     </div>
     
-    <div>
-    <img id="[FIELD_NAME]Show" class="imgViewer" src="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" alt="[FORM_NAME]">
-    </div>\n
+   
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required'   => '非空',
         'file_size'  => '文件大小限制',
         'file_image' => '图片类型',
@@ -38,14 +40,14 @@ EOF;
 
 
     //控制器添加上传
-    public static $controllerAddCode =
+    public static string $controllerAddCode =
         <<<EOF
          
 EOF;
 
 
     //控制器修改上传
-    public static $controllerEditCode =
+    public static string $controllerEditCode =
         <<<EOF
            
 EOF;

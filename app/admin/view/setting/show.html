@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         {foreach name='data_config' id='item'}
-                        <div class="tab-pane fade" id="tab_{$key}" >
+                        <div class="tab-pane" id="tab_{$key}" >
 
                             <form class="form-horizontal dataForm" action="{:url('setting/update')}" method="post"
                                   enctype="multipart/form-data">
@@ -57,7 +57,7 @@
                                     {:token_field()}
                                     <div class="col-sm-2">
                                     </div>
-                                    <div class="col-sm-10 col-md-4">
+                                    <div class="col-sm-10 col-md-4 formInputDiv">
                                         <div class="btn-group">
                                             <button type="submit" class="btn flat btn-info dataFormSubmit">
                                                 保存

@@ -8,7 +8,7 @@ namespace generate\field;
 
 class Radio extends Field
 {
-    public static $html = <<<EOF
+    public static string $html = <<<EOF
 <div class="radio">
     <label>
         <input type="radio" name="[FIELD_NAME]" value="" checked="">
@@ -16,7 +16,7 @@ class Radio extends Field
     </label>
 </div>\n
 EOF;
-    public static $rules = [
+    public static array $rules = [
         'required'   => '非空',
         'regular'    => '自定义正则'
     ];

@@ -25,14 +25,14 @@
                         <div class="form-inline">
                             <div class="form-group">
                                 <label for="table_name">选择表</label>
-                                <select data-id="table_name" name="table_name" class="select2 form-control input-sm"
+                                <select data-id="table_name" name="table_name" class="select2 form-control form-control-sm"
                                         id="table_name" data-placeholder="请选择表">
                                     <option value=""></option>
                                     {foreach name='table' id='item'}
                                     <option value="{$item}">{$item}</option>
                                     {/foreach}
                                 </select>
-                                <button onclick="refreshTable()" type="button" class="btn btn-flat btn-success"
+                                <button onclick="refreshTable()" type="button" class="btn btn-flat btn-success btn-sm"
                                         data-toggle="tooltip" title="刷新表数据">
                                     <i class="fas fa-sync"></i>
                                 </button>
@@ -40,13 +40,13 @@
 
                             <div class="form-group">
                                 <label for="cn_name">中文名</label>
-                                <input name="cn_name" id="cn_name" class="form-control input-sm" placeholder="请填写中文名"
+                                <input name="cn_name" id="cn_name" class="form-control form-control-sm" placeholder="请填写中文名"
                                        title="表及功能的中文名字，例如用户表，就填写[用户]" data-toggle="tooltip">
                             </div>
 
                             <div class="form-group">
                                 <label for="module_name_suffix">模块名称后缀</label>
-                                <input name="module_name_suffix" id="module_name_suffix" class="form-control input-sm"
+                                <input name="module_name_suffix" id="module_name_suffix" class="form-control form-control-sm"
                                        placeholder="模块名称后缀，可空"
                                        title="默认为[管理]，例如前面的中文名叫[用户]，这里填写的是[管理]，那生成的菜单名称就叫[用户管理]" value="管理"
                                        data-toggle="tooltip">
@@ -59,7 +59,7 @@
                                             <i class="fas fa-bars"></i></span>
                                     </div>
                                     <input maxlength="50" id="module_icon" name="module_icon"
-                                           value="fas fa-bars" class="form-control "
+                                           value="fas fa-bars" class="form-control form-control-sm"
                                            placeholder="请输入图标class"
                                            title="模块图标，比如用户模块，可以选择[fa-user]作为图标，默认为[fa-list]"
                                            data-toggle="tooltip">
@@ -86,13 +86,13 @@
 
                             <div class="form-group">
                                 <label for="create_menu">菜 单</label>
-                                <select data-id="create_menu" name="create_menu" class="select2 form-control input-sm"
+                                <select data-id="create_menu" name="create_menu" class="select2 form-control form-control-sm"
                                         id="create_menu" data-placeholder="不选择为不生成菜单">
                                     <option value="-1">不生成</option>
                                     <option value="0">顶级菜单</option>
                                     {$menus|raw}
                                 </select>
-                                <button onclick="refreshMenu()" type="button" class="btn btn-flat btn-success"
+                                <button onclick="refreshMenu()" type="button" class="btn btn-flat btn-sm btn-success"
                                         data-toggle="tooltip" title="刷新菜单">
                                     <i class="fas fa-sync"></i>
                                 </button>
@@ -101,7 +101,7 @@
 
                             <div class="form-group">
                                 <label for="create_menu_list">菜单选择</label>
-                                <select name="create_menu_list[]" class="select2 form-control input-sm"
+                                <select name="create_menu_list[]" class="select2 form-control form-control-sm"
                                         id="create_menu_list" multiple="multiple" data-placeholder="默认生成增删改菜单">
                                     <option value="1" disabled selected>列表</option>
                                     <option value="2" selected>添加</option>
@@ -123,7 +123,7 @@
                             <div class="form-group">
                                 <label for="create_controller">后台控制器</label>
                                 <select data-id="create_controller" name="create_controller"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="create_controller" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>
@@ -133,13 +133,13 @@
                             <div class="form-group">
                                 <label for="controller_name">控制器名</label>
                                 <input name="controller_name" id="controller_name"
-                                       class="form-control input-sm" title="默认会根据表名自动生成" placeholder="请填写控制器名"
+                                       class="form-control form-control-sm" title="默认会根据表名自动生成" placeholder="请填写控制器名"
                                        data-toggle="tooltip">
                             </div>
 
                             <div class="form-group">
                                 <label for="controller_action_list">控制器方法</label>
-                                <select name="controller_action_list[]" class="select2 form-control input-sm"
+                                <select name="controller_action_list[]" class="select2 form-control form-control-sm"
                                         id="controller_action_list" multiple="multiple" data-placeholder="默认生成增删改方法">
                                     <option value="1" selected>列表</option>
                                     <option value="2" selected>添加</option>
@@ -159,7 +159,7 @@
                             <div class="form-group">
                                 <label for="create_api_controller">Api控制器</label>
                                 <select data-id="create_api_controller" name="create_api_controller"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="create_api_controller" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>
@@ -169,13 +169,13 @@
                             <div class="form-group">
                                 <label for="api_controller_name">控制器名</label>
                                 <input name="api_controller_name" id="api_controller_name"
-                                       class="form-control input-sm" title="默认会根据表名自动生成" placeholder="请填写控制器名"
+                                       class="form-control form-control-sm" title="默认会根据表名自动生成" placeholder="请填写控制器名"
                                        data-toggle="tooltip">
                             </div>
 
                             <div class="form-group">
                                 <label for="api_controller_action_list">控制器方法</label>
-                                <select name="api_controller_action_list[]" class="select2 form-control input-sm"
+                                <select name="api_controller_action_list[]" class="select2 form-control form-control-sm"
                                         id="api_controller_action_list" multiple="multiple"
                                         data-placeholder="默认生成增删改方法">
                                     <option value="index" selected>列表</option>
@@ -194,7 +194,7 @@
                         <div class="form-inline">
                             <div class="form-group">
                                 <label for="create_model">模 型</label>
-                                <select data-id="create_model" name="create_model" class="select2 form-control input-sm"
+                                <select data-id="create_model" name="create_model" class="select2 form-control form-control-sm"
                                         id="create_model" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>
@@ -203,7 +203,7 @@
 
                             <div class="form-group">
                                 <label for="model_name">模型名</label>
-                                <input name="model_name" id="model_name" class="form-control input-sm"
+                                <input name="model_name" id="model_name" class="form-control form-control-sm"
                                        placeholder="模型名" title="默认会根据表名自动生成" data-toggle="tooltip">
                             </div>
 
@@ -227,7 +227,7 @@
                             <div class="form-group">
                                 <label for="create_validate">验证器</label>
                                 <select data-id="create_validate" name="create_validate"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="create_validate" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>
@@ -237,7 +237,7 @@
 
                             <div class="form-group">
                                 <label for="validate_name">验证器名</label>
-                                <input name="validate_name" id="validate_name" class="form-control input-sm"
+                                <input name="validate_name" id="validate_name" class="form-control form-control-sm"
                                        placeholder="验证器名" title="默认会根据表名自动生成" data-toggle="tooltip">
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                             <div class="form-group">
                                 <label for="create_view_index">列表视图</label>
                                 <select data-id="create_view_index" name="create_view_index"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="create_view_index" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>
@@ -261,7 +261,7 @@
                             <div class="form-group">
                                 <label for="index_operation_button">操作按钮形式</label>
                                 <select data-id="index_operation_button" name="index_operation_button"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="index_operation_button" data-placeholder="默认纯图标">
                                     <option value="1">图标</option>
                                     <option value="2">文字</option>
@@ -313,7 +313,7 @@
                             <div class="form-group">
                                 <label for="create_view_add">表单视图</label>
                                 <select data-id="create_view_add" name="create_view_add"
-                                        class="select2 form-control input-sm"
+                                        class="select2 form-control form-control-sm"
                                         id="create_view_add" data-placeholder="默认生成">
                                     <option value="1">生成</option>
                                     <option value="0">不生成</option>

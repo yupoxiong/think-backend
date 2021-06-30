@@ -8,20 +8,20 @@ namespace generate\field;
 
 class Checkbox extends Field
 {
-    public static $html = <<<EOF
-            <div class="form-group">
+    public static string $html = <<<EOF
+            <div class="form-group row">
                 <label class="col-sm-2 control-label">[FORM_NAME]</label>
-                <div class="col-sm-10 col-md-4">
+                <div class="col-sm-10 col-md-4 formInputDiv">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="[FIELD_NAME][]" class="field-checkbox"> [FORM_NAME]
+                            <input type="checkbox" name="[FIELD_NAME][]" class="fieldCheckbox"> [FORM_NAME]
                         </label>
                     </div>
                 </div>
             </div>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required' => '非空',
         'regular'  => '自定义正则'
     ];

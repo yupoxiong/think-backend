@@ -8,11 +8,11 @@ namespace generate\field;
 
 class MultiFile extends Field
 {
-    public static $html = <<<EOF
-<div class="form-group">
+    public static string $html = <<<EOF
+<div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
     <div class="col-sm-8"> 
-        <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control field-multi-file" >
+        <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control fieldMultiFile" >
     </div>
 </div>
 <script>
@@ -36,7 +36,7 @@ class MultiFile extends Field
 </script>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required'  => '非空',
         'file_size' => '文件大小限制',
         'file_ext'  => '文件后缀限制',
@@ -46,7 +46,7 @@ EOF;
 
 
     //控制器添加上传多图
-    public static $controllerAddCode = <<<EOF
+    public static string $controllerAddCode = <<<EOF
 //处理[FORM_NAME]上传
 \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
 \$file       = \$attachment_[FIELD_NAME]->uploadMulti('[FIELD_NAME]');
@@ -59,7 +59,7 @@ if (\$file) {
 EOF;
 
     //控制器修改上传多图
-    public static $controllerEditCode = <<<EOF
+    public static string $controllerEditCode = <<<EOF
 //处理[FORM_NAME]上传
 if (!empty(\$_FILES['[FIELD_NAME]']['name'][0])) {
     \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;

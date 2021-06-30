@@ -8,12 +8,12 @@ namespace generate\field;
 
 class MultiImage extends Field
 {
-    public static $html = <<<EOF
+    public static string $html = <<<EOF
 
-<div class="form-group">
+<div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4"> 
-        <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control field-multi-image" >
+    <div class="col-sm-10 col-md-4 formInputDiv"> 
+        <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control fieldMultiImage" >
     </div>
 </div>
 <script>
@@ -41,7 +41,7 @@ EOF;
 
 
     //控制器添加上传多图
-    public static $controllerAddCode = <<<EOF
+    public static string $controllerAddCode = <<<EOF
 //处理[FORM_NAME]上传
 \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
 \$file       = \$attachment_[FIELD_NAME]->uploadMulti('[FIELD_NAME]');
@@ -54,7 +54,7 @@ if (\$file) {
 EOF;
 
     //控制器修改上传多图
-    public static $controllerEditCode = <<<EOF
+    public static string $controllerEditCode = <<<EOF
 //处理[FORM_NAME]上传
 if (!empty(\$_FILES['[FIELD_NAME]']['name'][0])) {
     \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
@@ -70,7 +70,7 @@ EOF;
 
 
     //多图上传模型内修改器与获取器
-    public static $modelAttrCode = <<<EOF
+    public static string $modelAttrCode = <<<EOF
 //[FORM_NAME]获取器
 public function get[FIELD_NAME]Attr(\$value)
 {
@@ -86,7 +86,7 @@ public function set[FIELD_NAME]Attr(\$value)
 EOF;
 
 
-    public static $rules = [
+    public static array $rules = [
         'required'   => '非空',
         'file_size'  => '文件大小限制',
         'file_image' => '图片类型',

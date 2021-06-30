@@ -13,7 +13,7 @@ class Field
 
 
     //当前字段可用规则
-    public static $rules = [
+    public static array $rules = [
         //非空
         'required'   => '非空',
         'wechat'     => '微信号',
@@ -27,17 +27,17 @@ class Field
 
 
     //列表名字
-    public static $listNameHtml = <<<EOF
+    public static string $listNameHtml = <<<EOF
             <th>[FORM_NAME]</th>\n
 EOF;
 
     //列表字段
-    public static $listFieldHtml = <<<EOF
+    public static string $listFieldHtml = <<<EOF
             <td>{\$item.[FIELD_NAME]}</td>\n
 EOF;
 
     //列表关联筛选
-    public static $listSearchRelationHtml = <<<EOF
+    public static string $listSearchRelationHtml = <<<EOF
 <div class="input-group input-group-sm searchGroup">
     <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
         <option value="">[FORM_NAME]</option>
@@ -56,7 +56,7 @@ EOF;
 EOF;
 
     //列表自定义筛选数据
-    public static $listSearchSelectHtml = <<<EOF
+    public static string $listSearchSelectHtml = <<<EOF
 <div class="input-group input-group-sm searchGroup">
                         <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
                             <option value="">[FORM_NAME]</option>
@@ -76,7 +76,7 @@ EOF;
 
 
     //列表日期筛选
-    public static $listSearchDate = <<<EOF
+    public static string $listSearchDate = <<<EOF
 <div class="input-group input-group-sm searchGroup">
     <input value="{\$[FIELD_NAME]|default=''}" readonly name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm indexSearchDateRange" placeholder="[FORM_NAME]">
 </div>
@@ -89,7 +89,7 @@ EOF;
 EOF;
 
     //列表日期时间筛选
-    public static $listSearchDatatime = <<<EOF
+    public static string $listSearchDatatime = <<<EOF
 <div class="input-group input-group-sm searchGroup">
     <input value="{\$[FIELD_NAME]|default=''}" readonly name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm indexSearchDatetimeRange" placeholder="[FORM_NAME]">
 </div>
@@ -104,12 +104,12 @@ EOF;
 
 
     //图片字段显示
-    public static $listImgHtml = <<<EOF
+    public static string $listImgHtml = <<<EOF
 <td><img class="dataListImg" src="{\$item.[FIELD_NAME]}"></td>\n
 EOF;
 
 
-    public static $listMultiImgHtml = <<<EOF
+    public static string $listMultiImgHtml = <<<EOF
 <td class="dataListMultiImg" id="[FIELD_NAME]dataListImg{\$data_key}">
 {foreach name='item.[FIELD_NAME]' id='item_[FIELD_NAME]'}
 <img class="dataListImg" data-img="{\$item_[FIELD_NAME]}" src="{\$item_[FIELD_NAME]}">
@@ -124,7 +124,7 @@ EOF;
 </script>\n
 EOF;
 
-    public static $listMultiFileHtml = <<<EOF
+    public static string $listMultiFileHtml = <<<EOF
 <td class="dataListMultiFile">
 {foreach name='item.[FIELD_NAME]' id='item_[FIELD_NAME]'}
 <a target="_blank" href="{\$item_[FIELD_NAME]}">查看文件</a>
@@ -134,7 +134,7 @@ EOF;
 
 
     //status字段获取器为switch的时候自动显示为field_name_text
-    public static $listSwitchHtml = <<<EOF
+    public static string $listSwitchHtml = <<<EOF
 <td>{\$item.[FIELD_NAME]_text}</td>\n
 EOF;
 
@@ -162,58 +162,28 @@ EOF;
             case 'tinyint':
                 $result[0] = 'switch';
                 break;
+            case 'decimal':
+            case 'double':
+            case 'bigint':
+            case 'int':
+            case 'float':
+            case 'mediumint':
             case 'smallint':
                 $result[0] = 'number';
                 break;
-            case 'mediumint':
-                $result[0] = 'number';
-                break;
-            case 'int':
-                $result[0] = 'number';
-                break;
-            case 'bigint':
-                $result[0] = 'number';
-                break;
-            case 'float':
-                $result[0] = 'number';
-                break;
-            case 'double':
-                $result[0] = 'number';
-                break;
-            case 'decimal':
-                $result[0] = 'number';
-                break;
-            case 'char':
-                $result[0] = 'text';
-                break;
-            case 'varchar':
-                $result[0] = 'text';
-                break;
-            case 'tinytext':
-                $result[0] = 'editor';
-                break;
-            case 'tinyblob':
-                $result[0] = 'editor';
-                break;
-            case 'text':
-                $result[0] = 'editor';
-                break;
-            case 'blob':
-                $result[0] = 'editor';
-                break;
-            case 'longtext':
-                $result[0] = 'editor';
-                break;
             case 'longblob':
+            case 'longtext':
+            case 'blob':
+            case 'text':
+            case 'tinyblob':
+            case 'tinytext':
                 $result[0] = 'editor';
                 break;
             case 'date':
                 $result[0] = 'date';
                 break;
-            case 'datetime':
-                $result[0] = 'datetime';
-                break;
             case 'timestamp':
+            case 'datetime':
                 $result[0] = 'datetime';
                 break;
             case 'time':
@@ -237,9 +207,6 @@ EOF;
     public function getValidateOption($type, $length = '')
     {
         switch ($type) {
-            case 'text':
-                $data = Text::rule($length);
-                break;
             case 'number':
                 $data = Number::rule($length);
                 break;
@@ -338,7 +305,7 @@ EOF;
 
 
     //规则
-    public static function rule($length = '')
+    public static function rule($length = ''): string
     {
 
         $html  = '';

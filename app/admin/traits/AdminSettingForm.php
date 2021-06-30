@@ -8,10 +8,10 @@ trait AdminSettingForm
     public $checkboxHtml = <<<EOF
 <div class="form-group">
     <label class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="checkbox">
             <label>
-                <input type="checkbox" name="[FIELD_NAME][]" class="field-checkbox"> [FORM_NAME]
+                <input type="checkbox" name="[FIELD_NAME][]" class="fieldCheckbox"> [FORM_NAME]
             </label>
         </div>
     </div>
@@ -22,9 +22,9 @@ EOF;
     public $colorHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="input-group" id="color-[FIELD_NAME]">
-            <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" class="form-control field-map">
+            <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" class="form-control fieldMap">
             <div class="input-group-addon"><i></i></div>
         </div>
     </div>
@@ -38,7 +38,7 @@ EOF;
     public $dateHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-date">
     </div>
 </div>
@@ -53,7 +53,7 @@ EOF;
     public $dateRangeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-date-range">
     </div>
 </div>
@@ -69,7 +69,7 @@ EOF;
     public $datatimeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-datetime">
     </div>
 </div>
@@ -85,7 +85,7 @@ EOF;
     public $datetimeRangeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-datetime-range">
     </div>
 </div>
@@ -118,8 +118,8 @@ EOF;
     public $emailhtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
-        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="email" class="form-control field-email">
+    <div class="col-sm-10 col-md-4 formInputDiv">
+        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="email" class="form-control fieldEmail">
     </div>
 </div>\n
 EOF;
@@ -128,8 +128,8 @@ EOF;
     public $fileHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4"> 
-        <input id="[FIELD_NAME]" name="[FIELD_NAME]" data-initial-preview="{\$data.[FIELD_NAME]|default=''}" placeholder="请上传[FORM_NAME]" type="file" class="form-control field-file" >
+    <div class="col-sm-10 col-md-4 formInputDiv"> 
+        <input id="[FIELD_NAME]" name="[FIELD_NAME]" data-initial-preview="{\$data.[FIELD_NAME]|default=''}" placeholder="请上传[FORM_NAME]" type="file" class="form-control fieldFile" >
     </div>
 </div>
 <script>
@@ -150,7 +150,7 @@ EOF;
     public $iconHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="input-group iconpicker-container">
             <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
             <input maxlength="30" id="[FIELD_NAME]" name="[FIELD_NAME]"
@@ -168,8 +168,8 @@ EOF;
     public $idCardHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
-        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" maxlength="18" class="form-control field-id-card">
+    <div class="col-sm-10 col-md-4 formInputDiv">
+        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" maxlength="18" class="form-control fieldIdCard">
     </div>
 </div>\n
 EOF;
@@ -177,7 +177,7 @@ EOF;
     public $imageHtml = <<<EOF
     <div class="form-group">
         <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-        <div class="col-sm-10 col-md-4"> 
+        <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
                 <input id="[FIELD_NAME]" name="[FIELD_NAME]"  value="[FIELD_CONTENT]"   placeholder="请输入[FORM_NAME]的URL" type="text" class="form-control field-image" >
                 <div class="input-group-append">
@@ -199,7 +199,7 @@ EOF;
     public $ipHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" class="form-control field-map">
     </div>
 </div>\n
@@ -255,7 +255,7 @@ EOF;
     public $mobileHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="tel" maxlength="11" class="form-control field-mobile">
     </div>
 </div>\n
@@ -295,7 +295,7 @@ EOF;
 
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4"> 
+    <div class="col-sm-10 col-md-4 formInputDiv"> 
         <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control field-multi-image" >
     </div>
 </div>
@@ -326,7 +326,7 @@ EOF;
     public $multiSelectHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
        
         <select name="[FIELD_NAME][]" id="[FIELD_NAME]" data-placeholder="请选择[FORM_NAME]" class="form-control field-multi-select" multiple="multiple">
             <option value=""></option>
@@ -342,7 +342,7 @@ EOF;
     public $numberHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
          <div class="input-group">
             <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="number" class="form-control field-number">
         </div>
@@ -362,7 +362,7 @@ EOF;
     public $passwordHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="password" class="form-control field-password">
     </div>
 </div>\n
@@ -381,7 +381,7 @@ EOF;
     public $selectHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control field-select" data-placeholder="请选择[FORM_NAME]">
             <option value=""></option>
             [OPTION_DATA]
@@ -397,7 +397,7 @@ EOF;
     public $switchHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="[FIELD_NAME]" value="1" [SWITCH_CHECKED] type="checkbox" />
     <input class="switch field-switch" placeholder="[FORM_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" hidden />
     </div>
@@ -419,7 +419,7 @@ EOF;
     public $textHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" class="form-control field-text">
     </div>
 </div>\n
@@ -429,7 +429,7 @@ EOF;
     public $textareaHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <textarea id="[FIELD_NAME]" name="[FIELD_NAME]" class="form-control" rows="[ROWS]" placeholder="请输入[FORM_NAME]">[FIELD_CONTENT]</textarea>
     </div>
 </div>\n
@@ -439,7 +439,7 @@ EOF;
     public $timeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-time">
     </div>
 </div>
@@ -455,7 +455,7 @@ EOF;
     public $timeRangeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-time-range">
     </div>
 </div>
@@ -472,7 +472,7 @@ EOF;
     public $urlHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请输入[FORM_NAME]" type="text" class="form-control field-map">
     </div>
 </div>\n
@@ -482,7 +482,7 @@ EOF;
     public $yearHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-year">
     </div>
 </div>
@@ -498,7 +498,7 @@ EOF;
     public $yearMonthHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-year-month">
     </div>
 </div>
@@ -514,7 +514,7 @@ EOF;
     public $yearMonthRangeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-year-month-range">
     </div>
 </div>
@@ -531,7 +531,7 @@ EOF;
     public $yearRangeHtml = <<<EOF
 <div class="form-group">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
+    <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="[FIELD_CONTENT]" placeholder="请选择[FORM_NAME]" type="text" class="form-control filed-year-range">
     </div>
 </div>

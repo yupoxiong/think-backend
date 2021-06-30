@@ -8,16 +8,16 @@ namespace generate\field;
 
 class IdCard extends Field
 {
-    public static $html = <<<EOF
-<div class="form-group">
+    public static string $html = <<<EOF
+<div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4">
-        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" placeholder="请输入[FORM_NAME]" type="text" maxlength="18" class="form-control field-id-card">
+    <div class="col-sm-10 col-md-4 formInputDiv">
+        <input id="[FIELD_NAME]" name="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" placeholder="请输入[FORM_NAME]" type="text" maxlength="18" class="form-control fieldIdCard">
     </div>
 </div>\n
 EOF;
 
-    public static $rules = [
+    public static array $rules = [
         'required' => '非空',
         'id_card'  => '身份证',
         'regular'  => '自定义正则'
