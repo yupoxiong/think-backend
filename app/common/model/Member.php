@@ -18,7 +18,7 @@ class Member extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = ['username','mobile','nickname',];
+    public array $searchField = ['member_level_id','username','mobile','nickname',];
 
     // 可作为条件的字段
     public array $whereField = [];
@@ -26,8 +26,8 @@ class Member extends CommonBaseModel
     // 可做为时间
     public array $timeField = [];
 
-    //是否启用获取器
-public function getStatusTextAttr($value, $data)
+    // 是否启用获取器
+public function getStatusTextAttr($value, $data): string
 {
     return self::BOOLEAN_TEXT[$data['status']];
 }

@@ -21,6 +21,9 @@ class CommonBaseModel extends Model
     // 是否字段，使用场景：用户的是否冻结，文章是否为热门等等。
     public const BOOLEAN_TEXT = [0 => '否', 1 => '是'];
 
+    /**
+     * @var mixed
+     */
     protected $defaultSoftDelete = 0;
 
     // 可作为搜索关键词的字段
@@ -34,10 +37,11 @@ class CommonBaseModel extends Model
 
     /**
      * 查询处理
-     * @var Query $query
+     *
+     * @param Query $query
      * @var array $param
      */
-    public function scopeWhere($query, $param): void
+    public function scopeAdminWhere(Query $query, array $param): void
     {
         //关键词like搜索
         $keywords = $param['_keywords'] ?? '';
@@ -109,7 +113,7 @@ class CommonBaseModel extends Model
      * @param $data
      * @return string
      */
-    public function getStatusTextAttr($value, $data)
+    public function getStatusTextAttr($value, $data): string
     {
         return self::BOOLEAN_TEXT[$data['status']];
     }

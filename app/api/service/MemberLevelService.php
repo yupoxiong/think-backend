@@ -31,7 +31,7 @@ class MemberLevelService extends ApiBaseService
     public function getList($param, $page, $limit): array
     {
         try {
-            $field = ['id,name'];
+            $field = 'id,name,description,img,status,create_time';
             $data  = $this->model
                 ->scope('ApiWhere', $param)
                 ->page($page, $limit)

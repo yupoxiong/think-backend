@@ -27,7 +27,7 @@ class MemberLevelController extends AdminBaseController
     public function index(Request $request, MemberLevel $model): string
     {
         $param = $request->param();
-        $data  = $model->scope('where', $param)
+        $data  = $model->scope('AdminWhere', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',
@@ -121,7 +121,7 @@ class MemberLevelController extends AdminBaseController
      */
     public function del($id, MemberLevel $model): Json
     {
-        $check = $model->isNoDeletionIds($id);
+        $check = $model->inNoDeletionIds($id);
         if (false !== $check) {
             return admin_error('ID为' . $check . '的数据不能被删除');
         }

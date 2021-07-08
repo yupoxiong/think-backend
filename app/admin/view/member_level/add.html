@@ -6,53 +6,54 @@
         <div class="col-md-12">
             <div class="card">
                 <!-- 表单头部 -->
-                <div class="card-header with-border">
+                <div class="card-header">
                     <div class="btn-group">
-                        <button class="btn flat btn-sm btn-default BackButton">
+                        <a class="btn flat btn-sm btn-default BackButton">
                             <i class="fas fa-arrow-left"></i>
                             返回
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <!-- 表单 -->
                 <form id="dataForm" class="form-horizontal dataForm" action="" method="post" enctype="multipart/form-data">
                     <!-- 表单字段区域 -->
                     <div class="card-body">
-                        <div class="form-group">
+                        <div class="form-group row">
     <label for="name" class="col-sm-2 control-label">名称</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="text" class="form-control field-text">
+        <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="text" class="form-control fieldText">
     </div>
 </div>
-<div class="form-group">
+<div class="form-group row">
     <label for="description" class="col-sm-2 control-label">简介</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control field-text">
+        <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control fieldText">
     </div>
 </div>
-    <div class="form-group">
+    <div class="form-group row">
         <label for="img" class="col-sm-2 control-label">图片</label>
-        <div class="col-sm-10 col-md-4 formInputDiv">
+        <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
-                <input id="img" name="img"  value="{$data.img|default='/static/index/images/user_level_default.png'}"   placeholder="请输入图片的URL" type="text" class="form-control field-image" >
+                <input id="img" name="img"  value="{$data.img|default='/static/index/images/user_level_default.png'}"   placeholder="请输入图片的URL" type="text" class="form-control fieldImage" >
                 <div class="input-group-append">
                      <span class="input-group-text" onclick="showFileUpload('img','image')">
                           <i class="fas fa-upload"></i>上传
                      </span>
                 </div>
             </div>
+            
+            <div>
+                <img id="imgShow" class="imgViewer" src="{$data.img|default='/static/index/images/user_level_default.png'}" alt="图片">
+            </div>
         </div>
         
     </div>
     
-    <div>
-    <img id="imgShow" class="imgViewer" src="{$data.img|default='/static/index/images/user_level_default.png'}" alt="图片">
-    </div>
-<div class="form-group">
+   <div class="form-group row">
     <label for="status" class="col-sm-2 control-label">是否启用</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
-    <input class="switch field-switch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
+    <input class="switch fieldSwitch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
     </div>
 </div>
 
@@ -70,26 +71,30 @@
                     </div>
                     <!-- 表单底部 -->
                     <div class="card-footer">
-                        {:token_field()}
-                        <div class="col-sm-2">
-                        </div>
-                        <div class="col-sm-10 col-md-4 formInputDiv">
-                            {if !isset($data)}
-                                <div class="btn-group pull-right">
-                                    <label class="createContinue">
-                                        <input type="checkbox" value="1" id="_create" name="_create"
-                                                                   title="继续添加数据">继续添加</label>
-                                </div>
-                             {/if}
-                            <div class="btn-group">
-                                <button type="submit" class="btn flat btn-info dataFormSubmit">
-                                    保存
-                                </button>
+                        <div class="row">
+                            <div class="col-sm-2">
                             </div>
-                            <div class="btn-group">
-                                <button type="reset" class="btn flat btn-default dataFormReset">
-                                    重置
-                                </button>
+
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-sm btn-primary dataFormSubmit">
+                                        保 存
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="reset" class="btn btn-sm btn-default dataFormReset">
+                                        重 置
+                                    </button>
+                                </div>
+
+
+                                {if !isset($data)}
+                                <div class="btn-group float-right createContinueDiv">
+                                    <input type="checkbox" class="form-check-input" value="1" id="_create" name="_create" title="继续添加数据">
+                                    <label class="form-check-label" for="_create">继续添加</label>
+                                </div>
+                                {/if}
                             </div>
                         </div>
                     </div>

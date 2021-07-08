@@ -1,7 +1,7 @@
 <?php
 /**
  * 用户等级模型
-*/
+ */
 
 namespace app\common\model;
 
@@ -10,7 +10,7 @@ use think\model\concern\SoftDelete;
 class UserLevel extends CommonBaseModel
 {
     // 自定义选择数据
-    
+
 
     use SoftDelete;
 
@@ -27,12 +27,10 @@ class UserLevel extends CommonBaseModel
     public array $timeField = [];
 
     //是否启用获取器
-public function getStatusTextAttr($value, $data)
-{
-    return self::BOOLEAN_TEXT[$data['status']];
-}
+    public function getStatusTextAttr($value, $data): string
+    {
+        return self::BOOLEAN_TEXT[$data['status']];
+    }
 
-    
 
-    
 }

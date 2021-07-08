@@ -43,7 +43,7 @@ class ApiService
     }
 
     /**
-     * 创建API模块控制器相关代码
+     * 创建API模块Service相关代码
      * @return bool|string
      */
     public function create()
@@ -52,14 +52,15 @@ class ApiService
         $out_file = $this->config['file_dir']['api_service'] . $this->data['api_controller']['name'] . 'Service' . '.php';
 
         $replace_content = [
-            '[NAME]'              => $this->data['cn_name'],
-            '[TABLE_NAME]'        => $this->data['table'],
-            '[MODEL_NAME]'        => $this->data['model']['name'],
-            '[MODEL_MODULE]'      => $this->data['model']['module'],
-            '[VALIDATE_NAME]'     => $this->data['validate']['name'],
-            '[VALIDATE_MODULE]'   => $this->data['validate']['module'],
-            '[SERVICE_NAME]'      => $this->data['api_controller']['name'],
-            '[SERVICE_MODULE]'    => $this->data['api_controller']['module'],
+            '[NAME]'            => $this->data['cn_name'],
+            '[TABLE_NAME]'      => $this->data['table'],
+            '[MODEL_NAME]'      => $this->data['model']['name'],
+            '[MODEL_MODULE]'    => $this->data['model']['module'],
+            '[VALIDATE_NAME]'   => $this->data['validate']['name'],
+            '[VALIDATE_MODULE]' => $this->data['validate']['module'],
+            '[SERVICE_NAME]'    => $this->data['api_controller']['name'],
+            '[SERVICE_MODULE]'  => $this->data['api_controller']['module'],
+            '[FIELD_LIST]'      => $this->getShowFieldList(),
         ];
 
         foreach ($replace_content as $key => $value) {
@@ -78,5 +79,17 @@ class ApiService
         return $result ?? $msg;
 
     }
+
+    protected function getShowFieldList(): string
+    {
+        $field_list = '';
+        foreach ($this->data['data'] as $key => $value) {
+            if ((int)$value['is_list'] === 1) {
+                $field_list .= empty($field_list) ? $value['field_name'] : ',' . $value['field_name'];
+            }
+        }
+        return $field_list;
+    }
+
 
 }

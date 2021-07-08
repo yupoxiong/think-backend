@@ -38,7 +38,7 @@ class Generate
      * 控制器和模型名、验证器名黑名单
      * @var array
      */
-    protected $blacklistName = [
+    protected array $blacklistName = [
         'Auth',
         'Index',
         'AdminUser',
@@ -53,7 +53,7 @@ class Generate
      * 表名黑名单
      * @var array
      */
-    protected $blacklistTable = [
+    protected array $blacklistTable = [
         'admin_user',
         'admin_role',
         'admin_menu',

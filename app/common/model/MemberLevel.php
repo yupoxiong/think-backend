@@ -13,7 +13,7 @@ class MemberLevel extends CommonBaseModel
     
 
     use SoftDelete;
-    public $softDelete = true;
+
     protected $name = 'member_level';
     protected $autoWriteTimestamp = true;
 
@@ -26,8 +26,8 @@ class MemberLevel extends CommonBaseModel
     // 可做为时间
     public array $timeField = [];
 
-    //是否启用获取器
-public function getStatusTextAttr($value, $data)
+    // 是否启用获取器
+public function getStatusTextAttr($value, $data): string
 {
     return self::BOOLEAN_TEXT[$data['status']];
 }

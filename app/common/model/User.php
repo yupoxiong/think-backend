@@ -22,7 +22,7 @@ class User extends CommonBaseModel
     public array $timeField = ['create_time',];
 
     //是否启用获取器
-public function getStatusTextAttr($value, $data)
+public function getStatusTextAttr($value, $data): string
 {
     return self::BOOLEAN_TEXT[$data['status']];
 }

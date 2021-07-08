@@ -31,7 +31,7 @@ class [SERVICE_NAME]Service extends ApiBaseService
     public function getList($param, $page, $limit): array
     {
         try {
-            $field = ['id,name'];
+            $field = '[FIELD_LIST]';
             $data  = $this->model
                 ->scope('ApiWhere', $param)
                 ->page($page, $limit)

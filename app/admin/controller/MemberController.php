@@ -28,7 +28,7 @@ class MemberController extends AdminBaseController
     public function index(Request $request, Member $model): string
     {
         $param = $request->param();
-        $data  = $model->with('member_level')->scope('where', $param)
+        $data  = $model->with('member_level')->scope('AdminWhere', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',
