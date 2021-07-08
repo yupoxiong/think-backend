@@ -11,7 +11,7 @@ namespace app\admin\controller;
 use Exception;
 use think\View;
 use think\facade\Env;
-use app\admin\model\{AdminMenu,AdminUser};
+use app\admin\model\{AdminMenu, AdminUser};
 use app\admin\traits\{AdminAuthTrait, AdminPhpOffice, AdminTreeTrait};
 
 class AdminBaseController
@@ -42,7 +42,7 @@ class AdminBaseController
      * 无需验证登录的url
      * @var array
      */
-    protected array $loginExcept =[];
+    protected array $loginExcept = [];
 
     /**
      * 无需验证权限的URL
@@ -66,7 +66,7 @@ class AdminBaseController
         $this->checkLogin();
         $this->checkAuth();
 
-        $this->view =  app()->make(View::class);
+        $this->view = app()->make(View::class);
 
         $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
         $this->admin['admin_list_rows'] = $this->admin['admin_list_rows'] < 100 ? $this->admin['admin_list_rows'] : 100;
@@ -106,22 +106,23 @@ class AdminBaseController
         $this->admin['name']       = '后台';
         $this->admin['is_pjax']    = request()->isPjax();
         $this->admin['upload_url'] = url('admin/file/upload')->build();
+        $this->admin['logout_url'] = url('admin/auth/logout')->build();
 
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
-            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(),$menu->id??0);
+            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(), $menu->id ?? 0);
         }
 
-        $this->admin['debug'] = Env::get('app_debug');
+        $this->admin['debug']   = Env::get('app_debug');
         $this->admin['top_nav'] = 0;
 
-        $this->admin['top_search'] = 0;
-        $this->admin['top_message'] = 0;
+        $this->admin['top_search']       = 0;
+        $this->admin['top_message']      = 0;
         $this->admin['top_notification'] = 0;
 
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
-            'user'  => $this->user,
+            'user'  => $this->user ?? new AdminUser(),
         ]);
 
         return $this->view->fetch($template, $vars);

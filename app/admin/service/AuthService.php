@@ -149,12 +149,14 @@ class AuthService extends AdminService
      * 退出
      * @param AdminUser $admin_user
      */
-    public function logout($admin_user): void
+    public function logout($admin_user): bool
     {
         // Event_事件 管理用户退出
         Event::trigger('AdminUserLogout', $admin_user);
 
         $this->clearAuthInfo();
+
+        return true;
     }
 
     public function checkImageCaptcha($param)

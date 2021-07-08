@@ -27,9 +27,12 @@ class AuthController extends AdminBaseController
 
     protected array $loginExcept = [
         'admin/auth/login',
-        'admin/auth/logout',
         'admin/auth/captcha',
         'admin/auth/geetest',
+    ];
+
+    protected array $authExcept = [
+        'admin/auth/logout',
     ];
 
     /**
@@ -93,13 +96,19 @@ class AuthController extends AdminBaseController
     /**
      * 退出
      * @param AuthService $service
-     * @return Redirect
+     * @return Json
      */
-    public function logout(AuthService $service): Redirect
+    public function logout(AuthService $service): Json
     {
-        $service->logout($this->user);
+        $result = $service->logout($this->user);
 
-        return redirect(url('admin/index/index')->build());
+        $data   = [
+            'redirect' => url('admin/index/index')->build(),
+        ];
+
+
+        return $result ? admin_success('退出成功', $data) : admin_error();
+
     }
 
     /**
@@ -115,7 +124,7 @@ class AuthController extends AdminBaseController
     public function geetest(Request $request)
     {
 
-        $config = setting('admin.login');
+        $config  = setting('admin.login');
         $geeTest = new GeeTest($config['geetest_id'], $config['geetest_key']);
 
         $ip = $request->ip();
@@ -133,7 +142,7 @@ class AuthController extends AdminBaseController
         session('gt_server', $status);
         session('gt_uid', $data['gt_uid']);
 
-        return admin_success($status,$geeTest->getResponse());
+        return admin_success($status, $geeTest->getResponse());
     }
 
 }

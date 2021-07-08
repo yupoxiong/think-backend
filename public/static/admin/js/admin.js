@@ -655,3 +655,16 @@ function exitFullscreen() {
     }
 
 }
+
+function logout(){
+    $.ajax({
+            url: logoutUrl,
+            dataType: 'json',
+            type: 'POST',
+            data: {},
+            success: function (result) {
+                goUrl(result.result.redirect);
+            }
+        }
+    );
+}

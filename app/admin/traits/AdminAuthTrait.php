@@ -32,6 +32,7 @@ trait AdminAuthTrait
             return true;
         }
 
+
         // 验证登录
         try {
             $this->user = (new AuthService)->getAdminUserAuthInfo();

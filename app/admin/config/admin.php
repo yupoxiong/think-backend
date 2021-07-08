@@ -2,7 +2,7 @@
 
 /**
 * 后台设置:后台管理方面的设置
-* 此配置文件为自动生成，生成时间2021-06-08 14:00:15
+* 此配置文件为自动生成，生成时间2021-07-08 10:17:15
 */
 
 return [
@@ -22,7 +22,7 @@ return [
     //登录token验证
     'token'=>'0',
     //验证码
-    'captcha'=>'2',
+    'captcha'=>'0',
     //登录背景
     'background'=>'/static/admin/images/login-default-bg.jpg',
     //极验ID
