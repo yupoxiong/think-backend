@@ -14,6 +14,7 @@ use app\admin\model\AdminUser;
 use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminLog;
 
+use Exception;
 use think\facade\Db;
 
 class AdminLogService extends AdminService
@@ -51,13 +52,13 @@ class AdminLogService extends AdminService
             ];
 
             $log_data = [
-                'data' => json_encode($data_arr),
+                'data' => json_encode($data_arr, JSON_THROW_ON_ERROR),
             ];
             $log->adminLogData()->save($log_data);
 
             Db::commit();
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Db::rollback();
             throw new AdminServiceException($exception->getMessage());
         }

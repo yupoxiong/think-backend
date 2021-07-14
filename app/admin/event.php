@@ -1,6 +1,7 @@
 <?php
 
 use app\admin\listener\AdminUserLogin;
+use app\admin\listener\AdminUserLogout;
 
 /**
  *
@@ -10,19 +11,22 @@ use app\admin\listener\AdminUserLogin;
 // AdminUserLogin
 
 return [
-    'bind'      => [
+    'bind' => [
 
     ],
 
-    'listen'    => [
-        'AdminUserLogin' => [
+    'listen' => [
+        'AdminUserLogin'  => [
             AdminUserLogin::class,
         ],
-        'AppInit'  => [],
-        'HttpRun'  => [],
-        'HttpEnd'  => [],
-        'LogLevel' => [],
-        'LogWrite' => [],
+        'AdminUserLogout' => [
+            AdminUserLogout::class,
+        ],
+        'AppInit'         => [],
+        'HttpRun'         => [],
+        'HttpEnd'         => [],
+        'LogLevel'        => [],
+        'LogWrite'        => [],
     ],
 
     'subscribe' => [

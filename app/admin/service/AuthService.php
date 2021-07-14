@@ -73,9 +73,6 @@ class AuthService extends AdminService
         // Event_事件 管理用户登录
         Event::trigger('AdminUserLogin', $admin_user);
 
-        // 记录日志
-        (new AdminLogService())->create($admin_user, '登录');
-
         return $admin_user;
     }
 

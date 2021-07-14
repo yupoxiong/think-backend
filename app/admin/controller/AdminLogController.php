@@ -27,7 +27,7 @@ class AdminLogController extends AdminBaseController
     public function index(Request $request, AdminLog $model): string
     {
         $param = $request->param();
-        $data  = $model->scope('where', $param)
+        $data  = $model->with('adminUser')->scope('where', $param)
             ->paginate([
                 'list_rows' => $this->admin['admin_list_rows'],
                 'var_page'  => 'page',
@@ -36,7 +36,6 @@ class AdminLogController extends AdminBaseController
 
         // 关键词，排序等赋值
         $this->assign($request->get());
-
         $this->assign([
             'data'  => $data,
             'page'  => $data->render(),

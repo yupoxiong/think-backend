@@ -10,15 +10,14 @@ declare (strict_types=1);
 namespace app\admin\listener;
 
 
-use think\facade\Log;
+use app\admin\service\AdminLogService;
 
 class AdminUserLogin
 {
     public function handle($user)
     {
-
-        // 事件监听处理
-        Log::error($user);
+        // 记录日志
+        (new AdminLogService())->create($user, '登录');
 
     }
 }
