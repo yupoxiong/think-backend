@@ -23,7 +23,7 @@ class WorkermanTimer
     {
         $worker_id = $businessWorker->id;
         // 获取所有定时器任务配置.
-        $timedTask = config('timer');
+        $timedTask = config('timer.task');
 
         if (is_array($timedTask)) {
             // 循环检测任务绑定.

@@ -27,6 +27,8 @@ class AdminUser extends AdminBaseModel
 
     use SoftDelete;
 
+
+
     public array $noDeletionIds = [1];
 
     /**
@@ -147,4 +149,6 @@ class AdminUser extends AdminBaseModel
         }
         return $auth_url;
     }
+
+
 }

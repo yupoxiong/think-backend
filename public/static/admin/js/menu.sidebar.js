@@ -138,7 +138,7 @@
             $(window).trigger('resize')
         }
     })
-    var $sidebar_collapsed_container = $('<div />', {class: 'mb-1'}).append($sidebar_collapsed_checkbox).append('<span>Collapsed</span>')
+    var $sidebar_collapsed_container = $('<div />', {class: 'mb-1'}).append($sidebar_collapsed_checkbox).append('<span>折叠</span>')
     $container.append($sidebar_collapsed_container)
 
     $(document).on('collapsed.lte.pushmenu', '[data-widget="pushmenu"]', function () {
@@ -162,7 +162,7 @@
             $(window).trigger('resize')
         }
     })
-    var $sidebar_fixed_container = $('<div />', {class: 'mb-1'}).append($sidebar_fixed_checkbox).append('<span>Fixed</span>')
+    var $sidebar_fixed_container = $('<div />', {class: 'mb-1'}).append($sidebar_fixed_checkbox).append('<span>固定</span>')
     $container.append($sidebar_fixed_container)
 
     var $sidebar_mini_checkbox = $('<input />', {
@@ -177,7 +177,7 @@
             $('body').removeClass('sidebar-mini')
         }
     })
-    var $sidebar_mini_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_checkbox).append('<span>Sidebar Mini</span>')
+    var $sidebar_mini_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_checkbox).append('<span>折叠后显示图标</span>')
     $container.append($sidebar_mini_container)
 
     var $sidebar_mini_md_checkbox = $('<input />', {
@@ -192,7 +192,7 @@
             $('body').removeClass('sidebar-mini-md')
         }
     })
-    var $sidebar_mini_md_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_md_checkbox).append('<span>Sidebar Mini MD</span>')
+    var $sidebar_mini_md_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_md_checkbox).append('<span>中等屏幕折叠后显示图标</span>')
     $container.append($sidebar_mini_md_container)
 
     var $sidebar_mini_xs_checkbox = $('<input />', {
@@ -207,7 +207,7 @@
             $('body').removeClass('sidebar-mini-xs')
         }
     })
-    var $sidebar_mini_xs_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_xs_checkbox).append('<span>Sidebar Mini XS</span>')
+    var $sidebar_mini_xs_container = $('<div />', {class: 'mb-1'}).append($sidebar_mini_xs_checkbox).append('<span>超小屏幕折叠后显示图标</span>')
     $container.append($sidebar_mini_xs_container)
 
     var $flat_sidebar_checkbox = $('<input />', {
@@ -222,7 +222,7 @@
             $('.nav-sidebar').removeClass('nav-flat')
         }
     })
-    var $flat_sidebar_container = $('<div />', {class: 'mb-1'}).append($flat_sidebar_checkbox).append('<span>Nav Flat Style</span>')
+    var $flat_sidebar_container = $('<div />', {class: 'mb-1'}).append($flat_sidebar_checkbox).append('<span>导航平面样式</span>')
     $container.append($flat_sidebar_container)
 
     var $legacy_sidebar_checkbox = $('<input />', {
@@ -237,7 +237,7 @@
             $('.nav-sidebar').removeClass('nav-legacy')
         }
     })
-    var $legacy_sidebar_container = $('<div />', {class: 'mb-1'}).append($legacy_sidebar_checkbox).append('<span>Nav Legacy Style</span>')
+    var $legacy_sidebar_container = $('<div />', {class: 'mb-1'}).append($legacy_sidebar_checkbox).append('<span>导航传统样式</span>')
     $container.append($legacy_sidebar_container)
 
     var $compact_sidebar_checkbox = $('<input />', {
@@ -252,7 +252,7 @@
             $('.nav-sidebar').removeClass('nav-compact')
         }
     })
-    var $compact_sidebar_container = $('<div />', {class: 'mb-1'}).append($compact_sidebar_checkbox).append('<span>Nav Compact</span>')
+    var $compact_sidebar_container = $('<div />', {class: 'mb-1'}).append($compact_sidebar_checkbox).append('<span>导航压缩</span>')
     $container.append($compact_sidebar_container)
 
     var $child_indent_sidebar_checkbox = $('<input />', {
@@ -267,7 +267,7 @@
             $('.nav-sidebar').removeClass('nav-child-indent')
         }
     })
-    var $child_indent_sidebar_container = $('<div />', {class: 'mb-1'}).append($child_indent_sidebar_checkbox).append('<span>Nav Child Indent</span>')
+    var $child_indent_sidebar_container = $('<div />', {class: 'mb-1'}).append($child_indent_sidebar_checkbox).append('<span>导航子缩进</span>')
     $container.append($child_indent_sidebar_container)
 
     var $child_hide_sidebar_checkbox = $('<input />', {
@@ -282,7 +282,7 @@
             $('.nav-sidebar').removeClass('nav-collapse-hide-child')
         }
     })
-    var $child_hide_sidebar_container = $('<div />', {class: 'mb-1'}).append($child_hide_sidebar_checkbox).append('<span>Nav Child Hide on Collapse</span>')
+    var $child_hide_sidebar_container = $('<div />', {class: 'mb-1'}).append($child_hide_sidebar_checkbox).append('<span>导航子项折叠时隐藏</span>')
     $container.append($child_hide_sidebar_container)
 
     var $no_expand_sidebar_checkbox = $('<input />', {
@@ -297,7 +297,7 @@
             $('.main-sidebar').removeClass('sidebar-no-expand')
         }
     })
-    var $no_expand_sidebar_container = $('<div />', {class: 'mb-4'}).append($no_expand_sidebar_checkbox).append('<span>Disable Hover/Focus Auto-Expand</span>')
+    var $no_expand_sidebar_container = $('<div />', {class: 'mb-4'}).append($no_expand_sidebar_checkbox).append('<span>禁用悬停/焦点自动展开</span>')
     $container.append($no_expand_sidebar_container)
 
     $container.append('<h6>页脚选项</h6>')
@@ -313,7 +313,7 @@
             $('body').removeClass('layout-footer-fixed')
         }
     })
-    var $footer_fixed_container = $('<div />', {class: 'mb-4'}).append($footer_fixed_checkbox).append('<span>Fixed</span>')
+    var $footer_fixed_container = $('<div />', {class: 'mb-4'}).append($footer_fixed_checkbox).append('<span>固定</span>')
     $container.append($footer_fixed_container)
 
     $container.append('<h6>Small Text Options</h6>')
@@ -330,7 +330,7 @@
             $('body').removeClass('text-sm')
         }
     })
-    var $text_sm_body_container = $('<div />', {class: 'mb-1'}).append($text_sm_body_checkbox).append('<span>Body</span>')
+    var $text_sm_body_container = $('<div />', {class: 'mb-1'}).append($text_sm_body_checkbox).append('<span>正文</span>')
     $container.append($text_sm_body_container)
 
     var $text_sm_header_checkbox = $('<input />', {
@@ -345,7 +345,7 @@
             $('.main-header').removeClass('text-sm')
         }
     })
-    var $text_sm_header_container = $('<div />', {class: 'mb-1'}).append($text_sm_header_checkbox).append('<span>Navbar</span>')
+    var $text_sm_header_container = $('<div />', {class: 'mb-1'}).append($text_sm_header_checkbox).append('<span>导航栏</span>')
     $container.append($text_sm_header_container)
 
     var $text_sm_brand_checkbox = $('<input />', {
@@ -360,7 +360,7 @@
             $('.brand-link').removeClass('text-sm')
         }
     })
-    var $text_sm_brand_container = $('<div />', {class: 'mb-1'}).append($text_sm_brand_checkbox).append('<span>Brand</span>')
+    var $text_sm_brand_container = $('<div />', {class: 'mb-1'}).append($text_sm_brand_checkbox).append('<span>品牌</span>')
     $container.append($text_sm_brand_container)
 
     var $text_sm_sidebar_checkbox = $('<input />', {
@@ -375,7 +375,7 @@
             $('.nav-sidebar').removeClass('text-sm')
         }
     })
-    var $text_sm_sidebar_container = $('<div />', {class: 'mb-1'}).append($text_sm_sidebar_checkbox).append('<span>Sidebar Nav</span>')
+    var $text_sm_sidebar_container = $('<div />', {class: 'mb-1'}).append($text_sm_sidebar_checkbox).append('<span>侧边栏导航</span>')
     $container.append($text_sm_sidebar_container)
 
     var $text_sm_footer_checkbox = $('<input />', {

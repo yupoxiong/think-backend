@@ -12,6 +12,7 @@ namespace app\admin\service;
 
 use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminUser;
+use think\facade\Cache;
 use think\facade\Cookie;
 use think\facade\Event;
 use think\facade\Log;
@@ -76,6 +77,60 @@ class AuthService extends AdminService
         return $admin_user;
     }
 
+    /**
+     * 检测登录限制
+     *
+     * @throws AdminServiceException
+     */
+    public function checkLoginLimit(): bool
+    {
+        $is_limit = (int)setting('admin.login.login_limit');
+        if ($is_limit) {
+            // 最大错误次数
+            $max_count        = (int)setting('admin.login.login_max_count');
+            $login_limit_hour = (int)setting('admin.login.login_limit_hour');
+            // 缓存key
+            $cache_key  = 'login:max:count:' . md5(request()->ip());
+            $have_count = (int)Cache::get($cache_key);
+            if ($have_count >= $max_count) {
+                throw new AdminServiceException('连续' . $max_count . '次登录失败，请' . $login_limit_hour . '小时后再试');
+            }
+            return true;
+        }
+        return true;
+    }
+
+    /**
+     * 设置登录限制
+     * @return bool
+     */
+    public function setLoginLimit(): bool
+    {
+        $is_limit = (int)setting('admin.login.login_limit');
+        if ($is_limit) {
+            // 最大错误次数
+            $login_limit_hour = (int)setting('admin.login.login_limit_hour');
+            // 缓存key
+            $cache_key = 'login:max:count:' . md5(request()->ip());
+            if (Cache::has($cache_key)) {
+                Cache::inc($cache_key);
+                return true;
+            }
+            Cache::set($cache_key, 1, $login_limit_hour * 3600);
+        }
+        return true;
+    }
+
+    /**
+     * 临时手动清除某个ip的限制
+     * @param $ip
+     * @return bool
+     */
+    public function clearLoginLimit($ip): bool
+    {
+        $cache_key = 'login:max:count:' . md5($ip);
+        return Cache::delete($cache_key);
+    }
 
     /**
      * 设置用户登录信息
@@ -101,7 +156,7 @@ class AuthService extends AdminService
         //  当前管理员ID
         $admin_user_id = 0;
         // 当前获取登录信息的方式
-        $store_from    = 0;
+        $store_from = 0;
 
         if (Session::has($this->store_uid_key)) {
             // session

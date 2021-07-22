@@ -1,4 +1,7 @@
 <?php
+/**
+ * 定时器命令行
+ */
 declare (strict_types = 1);
 
 namespace app\command;
@@ -16,10 +19,10 @@ class Timer extends Command
     protected function configure()
     {
         // 指令配置
-        $this->setName('time')
+        $this->setName('timer')
             ->addArgument('action', Argument::OPTIONAL, "start|stop|restart|reload|status|connections", 'start')
             ->addOption('-d', 'd', Option::VALUE_NONE, '以守护进程的方式运行')
-            ->setDescription('基于workerman的定时任务');
+            ->setDescription('基于Workerman的定时任务');
     }
 
     protected function execute(Input $input, Output $output)
@@ -49,7 +52,7 @@ class Timer extends Command
         // 服务名称.
         $worker->name = 'TimerWorkerman';
         // 启动多少个进程数量，这里大家灵活配置，可以参考workerman的文档.
-        $worker->count = 1;
+        $worker->count = config('timer.worker_count');
         // 当workerman的进程启动时的回调方法.
         $worker->onWorkerStart = [WorkermanTimer::class, 'onWorkerStart'];
         // 当workerman的进程关闭时的回调方法.

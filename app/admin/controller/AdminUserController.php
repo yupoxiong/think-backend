@@ -8,14 +8,14 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminRole;
+use app\admin\exception\AdminServiceException;
+use app\admin\service\AdminRoleService;
+use app\admin\service\AdminUserService;
 use Exception;
 use think\Request;
 use think\Response;
 use think\db\Query;
 use think\response\Json;
-use think\db\exception\DbException;
-
 use app\admin\model\AdminUser;
 use app\admin\validate\AdminUserValidate;
 
@@ -55,12 +55,12 @@ class AdminUserController extends AdminBaseController
      * 添加
      *
      * @param Request $request
-     * @param AdminUser $model
+     * @param AdminUserService $service
      * @param AdminUserValidate $validate
      * @return string|Json
      * @throws Exception
      */
-    public function add(Request $request, AdminUser $model, AdminUserValidate $validate)
+    public function add(Request $request, AdminUserService $service, AdminUserValidate $validate)
     {
         if ($request->isPost()) {
             $param = $request->param();
@@ -69,14 +69,18 @@ class AdminUserController extends AdminBaseController
                 return admin_error($validate->getError());
             }
 
-            $result   = $model::create($param);
-            $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
+            try {
+                $result   = $service->create($param);
+                $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
 
-            return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
+                return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
+            } catch (AdminServiceException $e) {
+                return admin_error($e->getMessage());
+            }
         }
 
         $this->assign([
-            'role_list' => (new AdminRole)->select(),
+            'role_list' => (new AdminRoleService())->getAll(),
         ]);
 
         return $this->fetch();
@@ -92,7 +96,7 @@ class AdminUserController extends AdminBaseController
      * @return string|Json
      * @throws Exception
      */
-    public function edit($id, Request $request, AdminUser $model, AdminUserValidate $validate)
+    public function edit($id, Request $request, AdminUser $model, AdminUserService $service, AdminUserValidate $validate)
     {
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
@@ -103,14 +107,14 @@ class AdminUserController extends AdminBaseController
                 return admin_error($validate->getError());
             }
 
-            $result = $data->save($param);
+            $result = $service->update($data, $param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
             'data'      => $data,
-            'role_list' => (new AdminRole)->select(),
+            'role_list' => (new AdminRoleService())->getAll(),
         ]);
 
         return $this->fetch('add');

@@ -2,7 +2,7 @@
 
 /**
 * 后台设置:后台管理方面的设置
-* 此配置文件为自动生成，生成时间2021-07-08 10:17:15
+* 此配置文件为自动生成，生成时间2021-07-22 11:29:22
 */
 
 return [
@@ -29,6 +29,12 @@ return [
     'geetest_id'=>'66cfc0f309e368364b753dad7d2f67f2',
     //极验KEY
     'geetest_key'=>'99750f86ec232c997efaff56c7b30cd3',
+    //登录重试限制
+    'login_limit'=>'0',
+    //限制最大次数
+    'login_max_count'=>'5',
+    //禁止登录时长(小时)
+    'login_limit_hour'=>'2',
 ],
     //首页设置:后台首页参数设置
     'index'=>[
@@ -47,5 +53,9 @@ return [
     'store_uid_key'=>'admin_user_id',
     //SessionKeySign
     'store_sign_key'=>'admin_user_sign',
+    //后台用户密码强度检测
+    'password_check'=>'1',
+    //密码安全强度等级
+    'password_level'=>'2',
 ],
 ];

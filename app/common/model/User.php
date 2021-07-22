@@ -4,7 +4,11 @@
 */
 
 namespace app\common\model;
-
+/**
+ * Class User
+ * @package app\common\model
+ * @property int $status
+ */
 class User extends CommonBaseModel
 {
     // 自定义选择数据

@@ -25,7 +25,7 @@ trait AdminPhpOffice
      * @param string $title
      * @return mixed
      */
-    protected function exportData(array $head, array $body, $name = '', $title = '导出记录')
+    protected function exportData(array $head, array $body, $name = '', $title = 'Sheet1')
     {
         try {
 

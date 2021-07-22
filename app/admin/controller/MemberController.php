@@ -42,7 +42,8 @@ class MemberController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+            'member_level_list' => MemberLevel::select(),
+
         ]);
         return $this->fetch();
     }
@@ -142,8 +143,64 @@ class MemberController extends AdminBaseController
     }
 
     
+    /**
+     * 启用
+     * @param mixed $id
+     * @param Member $model
+     * @return Json
+     */
+    public function enable($id, Member $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
 
-    
+
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param Member $model
+     * @return Json
+     */
+    public function disable($id, Member $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
+
+
+        /**
+     * 导出
+     *
+     * @param Request $request
+     * @param Member $model
+     * @return mixed
+     * @throws Exception
+     */
+    public function export(Request $request, Member $model)
+    {
+        $param = $request->param();
+        $data  = $model->scope('AdminWhere', $param)->select();
+
+        $header = ['ID','会员等级','账号','手机号','昵称','图片','是否启用','创建时间',];
+        $body   = [];
+        foreach ($data as $item) {
+            $record                = [];
+            $record['id'] = $item->id;
+$record['member_level_id'] = $item->member_level->name?? '';
+$record['username'] = $item->username;
+$record['mobile'] = $item->mobile;
+$record['nickname'] = $item->nickname;
+$record['avatar'] = $item->avatar;
+        $record['status'] = $item->status_text;
+$record['create_time'] = $item->create_time;
+
+
+            $body[] = $record;
+        }
+        return $this->exportData($header, $body, 'member-' . date('YmdHis'));
+
+    }
 
         /**
      * @param Request $request

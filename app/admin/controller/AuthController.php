@@ -45,7 +45,6 @@ class AuthController extends AdminBaseController
      */
     public function login(Request $request, AuthService $service, AdminUserValidate $validate)
     {
-
         $redirect = $request->param('redirect') ?? url('admin/index/index');
 
         $login_config = setting('admin.login');
@@ -56,13 +55,13 @@ class AuthController extends AdminBaseController
 
                 $captcha = (int)$login_config['captcha'];
 
-                if ($captcha === 1) {
-                    if (!captcha_check($param['captcha'])) {
-                        return admin_error('验证码错误');
-                    }
+                if (($captcha === 1) && !captcha_check($param['captcha'])) {
+                    return admin_error('验证码错误');
                 }
 
                 $validate->scene('login')->failException(true)->check($param);
+
+                $service->checkLoginLimit();
 
                 $username = $param['username'];
                 $password = $param['password'];
@@ -72,9 +71,12 @@ class AuthController extends AdminBaseController
                 $admin_user = $service->login($username, $password);
                 $service->setAdminUserAuthInfo($admin_user, $remember);
 
-            } catch (ValidateException | AdminServiceException $e) {
+            } catch (ValidateException$e) {
                 $msg = $e->getMessage();
                 return admin_error(lang($msg));
+            } catch (AdminServiceException $e) {
+                $service->setLoginLimit();
+                return admin_error($e->getMessage());
             }
 
             return admin_success('登录成功', [], $redirect);
@@ -102,7 +104,7 @@ class AuthController extends AdminBaseController
     {
         $result = $service->logout($this->user);
 
-        $data   = [
+        $data = [
             'redirect' => url('admin/index/index')->build(),
         ];
 

@@ -10,8 +10,92 @@ declare (strict_types=1);
 namespace app\admin\service;
 
 
+use app\admin\exception\AdminServiceException;
+use app\admin\model\AdminUser;
+
 class AdminUserService
 {
 
+    // 密码强度列表
+    public const  PASSWORD_LEVEL_LIST = [
+        1 => [
+            'name' => '低',
+            'rule' => '/^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/',
+            'desc' => '至少1个字母和1个数字，6-16位',
+
+        ],
+        2 => [
+            'name' => '中',
+            'rule' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$/',
+            'desc' => '至少1个大写字母和1个小写字母和1个数字，8-16位',
+
+        ],
+        3 => [
+            'name' => '高',
+            'rule' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.[$@$!%#?&]).{8,16}$/',
+            'desc' => '至少1个大写字母和1个小写字母和1个数字和1个特殊字符，8-16位',
+        ],
+    ];
+
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = new AdminUser();
+    }
+
+    /**
+     * 创建后台用户
+     * @param $param
+     * @return AdminUser|\think\Model
+     * @throws AdminServiceException
+     */
+    public function create($param)
+    {
+        $password_check = (int)setting('admin.safe.password_check');
+        if ($password_check) {
+            $check_result = $this->checkPasswordLevel($param['password']);
+            if ($check_result !== true) {
+                throw new AdminServiceException($check_result);
+            }
+        }
+
+        return $this->model::create($param);
+    }
+
+    /**
+     * @param $data
+     * @param $param
+     * @return mixed
+     * @throws AdminServiceException
+     */
+    public function update($data, $param)
+    {
+        $password_check = (int)setting('admin.safe.password_check');
+        if ($password_check) {
+            $check_result = $this->checkPasswordLevel($param['password']);
+            if ($check_result !== true) {
+                throw new AdminServiceException($check_result);
+            }
+        }
+        return $data->save($param);
+    }
+
+
+    /**
+     * 检查密码是否符合规则
+     * @param $password
+     * @param int $level
+     * @return bool|string
+     */
+    public function checkPasswordLevel($password, $level = 0)
+    {
+        $level = $level === 0 ? (int)setting('admin.safe.password_level') : $level;
+
+        if (preg_match(self::PASSWORD_LEVEL_LIST[$level]['rule'], $password)) {
+            return true;
+        }
+        return self::PASSWORD_LEVEL_LIST[$level]['desc'];
+    }
 
 }

@@ -14,6 +14,7 @@ use app\api\service\TokenService;
 use app\api\exception\ApiServiceException;
 use app\common\model\User;
 use think\exception\HttpResponseException;
+use think\response\Json;
 
 class ApiBaseController
 {
@@ -55,6 +56,8 @@ class ApiBaseController
         $this->crossDomain();
         // 检查登录
         $this->checkLogin();
+        // 检查登录
+        $this->checkAuth();
         // 初始化部分数据
         $this->initData();
     }
@@ -107,6 +110,15 @@ class ApiBaseController
         }
     }
 
+    /**
+     * 检查权限
+     */
+    public function checkAuth(): void
+    {
+        // TODO::这里可以自定义权限检查
+
+    }
+
     protected function initData(): void
     {
         $this->param = (array)request()->param();
@@ -117,7 +129,7 @@ class ApiBaseController
     }
 
 
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): Json
     {
         return api_error_404();
     }

@@ -621,8 +621,8 @@ function parseParam(param, key) {
 
 /** 导出excel **/
 function exportData(url) {
-    let exportUrl = url || 'index.html';
-    let openUrl = exportUrl + '?export_data=1&' + $("#searchForm").serialize();
+    let exportUrl = url || 'export.html';
+    let openUrl = exportUrl + '?' + $("#searchForm").serialize();
     window.open(openUrl);
 
 }

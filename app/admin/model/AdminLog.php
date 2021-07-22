@@ -28,6 +28,10 @@ class AdminLog extends AdminBaseModel
         'url',
     ];
 
+    public array $whereField = [
+        'admin_user_id'
+    ];
+
     /**
      * 关联用户
      * @return BelongsTo

@@ -8,6 +8,7 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminUser;
 use Exception;
 use think\Request;
 use app\admin\model\AdminLog;
@@ -40,6 +41,7 @@ class AdminLogController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
+            'admin_user_list'=>(new AdminUser())->select(),
         ]);
         return $this->fetch();
     }
