@@ -5,7 +5,19 @@
 <section class="content">
     <!-- 这里写内容即可 -->
 
-    <a href="{:url('index/test')}">test</a>
+    <button class="btn btn-success" onclick="toast()">test</button>
 </section>
+<script>
+    var i=1;
+    function toast() {
+        $(document).Toasts('create', {
+            title: i+'Toast Title'+i,
+            body: i+'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'+i,
+            autohide:true,
+            delay:2000,
+        })
+        i++;
+    }
+</script>
 
 {/block}

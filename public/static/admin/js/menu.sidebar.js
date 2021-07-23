@@ -10,21 +10,29 @@
 (function ($) {
     'use strict'
 
+    // 主题色首字母大小写
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1)
     }
 
+    // 创建皮肤块
     function createSkinBlock(colors, callback, noneSelected) {
         var $block = $('<select />', {
             class: noneSelected ? 'custom-select mb-3 border-0' : 'custom-select mb-3 text-light border-0 ' + colors[0].replace(/accent-|navbar-/, 'bg-')
         })
 
+        var console_content = '';
+
         if (noneSelected) {
+            console_content+=(',没选');
             var $default = $('<option />', {
-                text: 'None Selected'
+                text: '未选择'
             })
+
+            $default.data('color', colors[0])
             if (callback) {
-                $default.on('click', callback)
+                console_content+=(',有回调');
+                $default.attr('onClick', callback)
             }
 
             $block.append($default)
@@ -41,7 +49,7 @@
             $color.data('color', color)
 
             if (callback) {
-                $color.on('click', callback)
+                $color.attr('onClick', callback)
             }
         })
 
@@ -104,7 +112,7 @@
             $('.main-header').removeClass('dropdown-legacy')
         }
     })
-    var $dropdown_legacy_offset_container = $('<div />', {class: 'mb-1'}).append($dropdown_legacy_offset_checkbox).append('<span>Dropdown Legacy Offset</span>')
+    var $dropdown_legacy_offset_container = $('<div />', {class: 'mb-1'}).append($dropdown_legacy_offset_checkbox).append('<span>下拉列表传统偏移</span>')
     $container.append($dropdown_legacy_offset_container)
 
     var $no_border_checkbox = $('<input />', {
@@ -316,7 +324,7 @@
     var $footer_fixed_container = $('<div />', {class: 'mb-4'}).append($footer_fixed_checkbox).append('<span>固定</span>')
     $container.append($footer_fixed_container)
 
-    $container.append('<h6>Small Text Options</h6>')
+    $container.append('<h6>小文本选项</h6>')
 
     var $text_sm_body_checkbox = $('<input />', {
         type: 'checkbox',
@@ -502,6 +510,7 @@
     })
     var navbar_all_colors = navbar_dark_skins.concat(navbar_light_skins)
     var $navbar_variants_colors = createSkinBlock(navbar_all_colors, function () {
+        console.log('导航栏变体颜色');
         var color = $(this).data('color')
         var $main_header = $('.main-header')
         $main_header.removeClass('navbar-dark').removeClass('navbar-light')
@@ -544,6 +553,7 @@
     })
     $container.append($accent_variants)
     $container.append(createSkinBlock(accent_colors, function () {
+        console.log('强调文字颜色变体');
         var color = $(this).data('color')
         var accent_class = color
         var $body = $('body')
@@ -561,8 +571,8 @@
         }
     })
 
-    // $accent_variants.find('option.' + active_accent_color).prop('selected', true)
-    // $accent_variants.removeClass().addClass('custom-select mb-3 text-light border-0 ').addClass(active_accent_color)
+    //$accent_variants.find('option.' + active_accent_color).prop('selected', true)
+    //$accent_variants.removeClass().addClass('custom-select mb-3 text-light border-0 ').addClass(active_accent_color)
 
     $container.append('<h6>深色侧边栏变体</h6>')
     var $sidebar_variants_dark = $('<div />', {
@@ -570,17 +580,20 @@
     })
     $container.append($sidebar_variants_dark)
     var $sidebar_dark_variants = createSkinBlock(sidebar_colors, function () {
+        console.log($(this));
+        console.log('深色侧边栏变体');
         var color = $(this).data('color')
         var sidebar_class = 'sidebar-dark-' + color.replace('bg-', '')
         var $sidebar = $('.main-sidebar')
         sidebar_skins.forEach(function (skin) {
-            $sidebar.removeClass(skin)
-            $sidebar_light_variants.removeClass(skin.replace('sidebar-dark-', 'bg-')).removeClass('text-light')
+            $sidebar.removeClass(skin);
+
+            //$sidebar_light_variants.removeClass(skin.replace('sidebar-dark-', 'bg-')).removeClass('text-light')
         })
 
         $(this).parent().removeClass().addClass('custom-select mb-3 text-light border-0').addClass(color)
 
-        $sidebar_light_variants.find('option').prop('selected', false)
+        //$sidebar_light_variants.find('option').prop('selected', false)
         $sidebar.addClass(sidebar_class)
         $('.sidebar').removeClass('os-theme-dark').addClass('os-theme-light')
     }, true)
@@ -603,6 +616,7 @@
     })
     $container.append($sidebar_variants_light)
     var $sidebar_light_variants = createSkinBlock(sidebar_colors, function () {
+        console.log('浅色侧边栏变体');
         var color = $(this).data('color')
         var sidebar_class = 'sidebar-light-' + color.replace('bg-', '')
         var $sidebar = $('.main-sidebar')
@@ -649,6 +663,7 @@
     })
 
     var $brand_variants = createSkinBlock(logo_skins, function () {
+        console.log('品牌LOGO变体');
         var color = $(this).data('color')
         var $logo = $('.brand-link')
 

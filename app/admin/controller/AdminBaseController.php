@@ -112,7 +112,7 @@ class AdminBaseController
             $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(), $menu->id ?? 0);
         }
 
-        $this->admin['debug']   = Env::get('app_debug');
+        $this->admin['debug']   = Env::get('app_debug') ? 1 : 01;
         $this->admin['top_nav'] = 0;
 
         $this->admin['top_search']       = 0;
