@@ -1,136 +1,137 @@
-<aside id="controlSidebar" class="control-sidebar control-sidebar-dark" style="display: none;">
+<aside id="ControlSidebar" class="control-sidebar control-sidebar-dark" style="display: none;">
 
     <div class="p-3 control-sidebar-content"><h5>自定义后台主题配置</h5>
         <hr class="mb-2">
         <div class="mb-4">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="DarkMode" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="dark-mode">
                 <span>深色模式</span>
             </label>
         </div>
+
         <h6>头部选项</h6>
 
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="HeaderFixed" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="layout-navbar-fixed">
                 <span>固定</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="DropdownLegacyOffset" type="checkbox" value="1" class="mr-1 themeSettingCheckbox"
+                       data-dom=".main-header" data-class="dropdown-legacy">
                 <span>下拉列表传统偏移</span>
             </label>
         </div>
         <div class="mb-4">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="NoBorder" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".main-header" data-class="border-bottom-0">
                 <span>无边框</span>
             </label>
         </div>
         <h6>侧边栏选项</h6>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="SidebarCollapsed" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="sidebar-collapse">
                 <span>折叠</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input type="checkbox" id="SidebarFixed" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="layout-fixed">
                 <span>固定</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" checked="checked"
-                       class="mr-1">
+                <input id="SidebarMini" type="checkbox" value="1" checked="checked" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="sidebar-mini">
                 <span>折叠后显示图标</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="SidebarMiniMd" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="sidebar-mini-md">
                 <span>中等屏幕折叠后显示图标</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="SidebarMiniXs" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="sidebar-mini-xs">
                 <span>超小屏幕折叠后显示图标</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="FlatSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="nav-flat">
                 <span>导航平面样式</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="LegacySidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="nav-legacy">
                 <span>导航传统样式</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="CompactSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="nav-compact">
                 <span>导航压缩</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="ChildIndentSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="nav-child-indent">
                 <span>导航子缩进</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="ChildHideSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="nav-collapse-hide-child">
                 <span>导航子项折叠时隐藏</span>
             </label>
         </div>
         <div class="mb-4">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="NoExpandSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".main-sidebar" data-class="sidebar-no-expand">
                 <span>禁用悬停/焦点自动展开</span>
             </label>
         </div>
         <h6>页脚选项</h6>
         <div class="mb-4">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="FootFixed" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="layout-footer-fixed">
                 <span>固定</span>
             </label>
         </div>
         <h6>小文本选项</h6>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="TextSmBody" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body" data-class="text-sm">
                 <span>正文</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
-                <span>导航栏</span>
+                <input id="TextSmHeader" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".main-header" data-class="text-sm">
+                <span>头部</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="TextSmBrand" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".brand-link" data-class="text-sm">
                 <span>品牌</span>
             </label>
         </div>
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="TextSmSidebar" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".nav-sidebar" data-class="text-sm">
                 <span>侧边栏导航</span>
             </label>
         </div>
         <div class="mb-4">
             <label class="controlSidebarCheckLabel">
-                <input type="checkbox" value="1" class="mr-1">
+                <input id="TextSmFooter" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom=".main-footer" data-class="text-sm">
                 <span>页脚</span>
             </label>
         </div>
@@ -138,7 +139,7 @@
         <h6>导航栏变体</h6>
         <label style="display: none" for="NavbarVariants"></label>
         <div class="d-flex">
-            <select id="NavbarVariants" class="custom-select mb-3 text-light border-0 bg-light">
+            <select id="NavbarVariants" class="custom-select mb-3 text-light border-0 bg-white themeSettingSelect">
                 <option class="bg-primary">Primary</option>
                 <option class="bg-secondary">Secondary</option>
                 <option class="bg-info">Info</option>
@@ -164,7 +165,7 @@
         <div class="d-flex">
             <label style="display: none" for="AccentColorVariants"></label>
         </div>
-        <select id="AccentColorVariants" class="custom-select mb-3 border-0">
+        <select id="AccentColorVariants" class="custom-select mb-3 border-0 themeSettingSelect">
             <option>未选择</option>
             <option class="bg-primary">Primary</option>
             <option class="bg-warning">Warning</option>
@@ -188,7 +189,7 @@
         <div class="d-flex">
             <label style="display: none" for="DarkSidebarVariants"></label>
         </div>
-        <select id="DarkSidebarVariants" class="custom-select mb-3 border-0">
+        <select id="DarkSidebarVariants" class="custom-select mb-3 border-0 themeSettingSelect">
             <option>未选择</option>
             <option class="bg-primary">Primary</option>
             <option class="bg-warning">Warning</option>
@@ -212,7 +213,7 @@
         <div class="d-flex">
             <label style="display: none" for="LightSidebarVariants"></label>
         </div>
-        <select id="LightSidebarVariants" class="custom-select mb-3 text-light border-0 bg-olive">
+        <select id="LightSidebarVariants" class="custom-select mb-3 border-0 themeSettingSelect">
             <option>未选择</option>
             <option class="bg-primary">Primary</option>
             <option class="bg-warning">Warning</option>
@@ -236,7 +237,7 @@
         <div class="d-flex">
             <label style="display: none" for="BrandLogoVariants"></label>
         </div>
-        <select id="BrandLogoVariants" class="custom-select mb-3 text-light border-0 bg-orange">
+        <select id="BrandLogoVariants" class="custom-select mb-3 border-0 themeSettingSelect">
             <option>未选择</option>
             <option class="bg-primary">Primary</option>
             <option class="bg-secondary">Secondary</option>
@@ -261,3 +262,57 @@
     </div>
 </aside>
 <div id="sidebar-overlay"></div>
+<script>
+    $(function () {
+        $(document).on('collapsed.lte.pushmenu', '[data-widget="pushmenu"]', function () {
+            $('#SidebarCollapsed').prop('checked', true)
+        })
+        $(document).on('shown.lte.pushmenu', '[data-widget="pushmenu"]', function () {
+            $('#SidebarCollapsed').prop('checked', false)
+        })
+
+        // 初始设置
+        var $themeSettingCheckbox = $('.themeSettingCheckbox');
+        $themeSettingCheckbox.each(function (index) {
+            let CookieKey = $(this).attr('id');
+            let isTrue = getSettingContent(CookieKey);
+            isTrue ? $(this).prop("checked", true) : $(this).prop("checked", false);
+            setSettingContent(this);
+        })
+
+        function getSettingContent(CookieKey) {
+            return parseInt(Cookies.get(CookieKey));
+        }
+
+        function setSettingContent(dom) {
+
+            let CookieKey = $(dom).attr('id');
+            let isTrue = $(dom).is(':checked');
+            let $class = $(dom).data('class');
+            let $dom = $(dom).data('dom');
+            console.log(CookieKey,isTrue,$class,$dom);
+
+            Cookies.set(CookieKey, isTrue ? 1 : 0);
+            isTrue ? $($dom).addClass($class) : $($dom).removeClass($class);
+        }
+
+        $themeSettingCheckbox.on('click', function () {
+            // 这里先统一加上吧
+            $(window).trigger('resize');
+            setSettingContent(this);
+        });
+
+
+
+        var $themeSettingSelect = $('.themeSettingSelect');
+        $themeSettingSelect.each(function (index) {
+            let CookieKey = $(this).attr('id');
+            let isTrue = getSettingContent(CookieKey);
+            isTrue ? $(this).prop("checked", true) : $(this).prop("checked", false);
+            setSettingContent(this);
+        })
+    });
+
+
+
+</script>
