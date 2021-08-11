@@ -12,54 +12,104 @@
 }
 
 /*重置表单*/
-.dataFormReset{
+.dataFormReset {
     margin-left: 30px;
 }
 
 /*添加数据页面继续添加div*/
-.createContinueDiv{
+.createContinueDiv {
     margin-top: 4px;
 }
 
 /*数据列表筛选表单*/
-.dataSearch .searchGroup{
+.dataSearch .searchGroup {
     margin-right: 5px;
 }
 
 
 /*数据列表导入表单*/
-.dataImport .importGroup{
+.dataImport .importGroup {
     margin-right: 5px;
 }
+
 /* 缩略图展示 */
-.imgViewer{
+.imgViewer {
     padding: 5px;
     max-width: 64px;
     max-height: 64px;
 }
 
-.dataListImg{
+.dataListImg {
     max-width: 32px;
     max-height: 32px;
 }
 
-.login-logo a{
+.login-logo a {
     color: #fbfcfc;
 }
 
-.searchForm .form-group{
+.searchForm .form-group {
     margin-left: 5px;
 }
 
-.searchGroup .indexSearchDateRange{
+.searchGroup .indexSearchDateRange {
     min-width: 190px;
 }
 
-.searchGroup .indexSearchDatetimeRange{
+.searchGroup .indexSearchDatetimeRange {
     min-width: 320px;
 }
 
-#ControlSidebar .controlSidebarCheckLabel{
+#ControlSidebar .controlSidebarCheckLabel {
     color: #c2c7d0;
     font-weight: normal;
 }
+
+.skinUl .skinLi {
+    float: left;
+    width: 33.33333%;
+    padding: 5px;
+}
+
+.skinLi .skinA {
+    display: block;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+
+.skinLi .skinA:hover {
+    box-shadow: 0 0 6px rgb(255 255 255);
+    transition: all .2s ease-in-out;
+}
+
+
+.skinA .skinLogoSpan {
+    display: block;
+    width: 20%;
+    float: left;
+    height: 7px;
+}
+
+.skinA .skinNavbarSpan {
+    display: block;
+    width: 80%;
+    float: left;
+    height: 7px;
+}
+
+
+.skinA .skinSidebarSpan {
+    display: block;
+    width: 20%;
+    float: left;
+    height: 20px;
+}
+
+.skinA .skinContentSpan {
+    display: block;
+    width: 80%;
+    float: left;
+    height: 20px;
+}
+

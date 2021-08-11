@@ -34,6 +34,7 @@
             </label>
         </div>
         <h6>侧边栏选项</h6>
+
         <div class="mb-1">
             <label class="controlSidebarCheckLabel">
                 <input id="SidebarCollapsed" type="checkbox" value="1" class="mr-1 themeSettingCheckbox" data-dom="body"
@@ -159,358 +160,280 @@
 
         <h6>皮肤</h6>
         <div class="mb-1">
-            <ul class="list-unstyled clearfix">
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-blue"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
+            <ul class="list-unstyled clearfix skinUl">
+
+                <li class="skinLi">
+                    <a data-skin="dark-white-dark" class="clearfix full-opacity-hover skinA">
                         <div>
-                                <span style="display:block; width: 20%; float: left; height: 7px; background: #367fa9">
-                                </span>
-                            <span class="bg-light-blue"
-                                  style="display:block; width: 80%; float: left; height: 7px;">
+                            <span class="skinLogoSpan bg-dark">
+                            </span>
+                            <span class="skinNavbarSpan bg-white">
                             </span>
                         </div>
                         <div>
-                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32">
-
+                            <span class="skinSidebarSpan control-sidebar-dark">
                             </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-
-                                </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin">蓝 黑</p>
+                    <p class="text-center no-margin">默认</p>
                 </li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-black"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
-                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                            <span style="display:block; width: 20%; float: left; height: 7px; background: #fefefe">
+
+                <li class="skinLi">
+                    <a data-skin="dark-primary-primary" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-primary">
                             </span>
-
-                            <span style="display:block; width: 80%; float: left; height: 7px; background: #fefefe">
-                        </span>
-                        </div>
-                        <div>
-                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222">
-
-                        </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-
-                        </span>
-                        </div>
-                    </a>
-                    <p class="text-center no-margin">白 黑</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-purple"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
-                        <div>
-                            <span style="display:block; width: 20%; float: left; height: 7px;"
-                                  class="bg-purple-active">
-                        </span>
-                            <span class="bg-purple" style="display:block; width: 80%; float: left; height: 7px;">
-                                </span>
-                        </div>
-                        <div>
-                            <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32">
-                        </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-                        </span>
-                        </div>
-                    </a>
-                    <p class="text-center no-margin">紫 黑</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-green"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
-                        <div>
-                                <span style="display:block; width: 20%; float: left; height: 7px;"
-                                      class="bg-green-active">
-                            </span>
-                            <span class="bg-green" style="display:block; width: 80%; float: left; height: 7px;">
+                            <span class="skinNavbarSpan bg-primary">
                             </span>
                         </div>
                         <div>
-                                <span style="display:block; width: 20%; float: left; height: 20px; background: #222d32">
-                        </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-                        </span>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin">绿 黑</p>
+                    <p class="text-center no-margin">主蓝色</p>
                 </li>
-                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)"
-                                                                           data-skin="skin-red"
-                                                                           style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                                                                           class="clearfix full-opacity-hover">
-                    <div><span style="display:block; width: 20%; float: left; height: 7px;"
-                               class="bg-red-active"></span><span class="bg-red"
-                                                                  style="display:block; width: 80%; float: left; height: 7px;">
 
-                        </span>
-                    </div>
-                    <div><span
-                            style="display:block; width: 20%; float: left; height: 20px; background: #222d32">
-
-                        </span><span
-                            style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-
-                        </span>
-                    </div>
-                </a>
-                    <p class="text-center no-margin">红 黑</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)"
-                                                                           data-skin="skin-yellow"
-                                                                           style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                                                                           class="clearfix full-opacity-hover">
-                    <div><span style="display:block; width: 20%; float: left; height: 7px;"
-                               class="bg-yellow-active"></span><span class="bg-yellow"
-                                                                     style="display:block; width: 80%; float: left; height: 7px;"></span>
-                    </div>
-                    <div><span
-                            style="display:block; width: 20%; float: left; height: 20px; background: #222d32">
-
-                        </span>
-                        <span
-                                style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                    </div>
-                </a>
-                    <p class="text-center no-margin">黄 黑</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)"
-                                                                           data-skin="skin-blue-light"
-                                                                           style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                                                                           class="clearfix full-opacity-hover">
-                    <div><span
-                            style="display:block; width: 20%; float: left; height: 7px; background: #367fa9">
-
-                        </span>
-                        <span
-                                class="bg-light-blue"
-                                style="display:block; width: 80%; float: left; height: 7px;"></span>
-                    </div>
-                    <div><span
-                            style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc">
-
-                        </span>
-                        <span
-                                style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-
+                <li class="skinLi">
+                    <a data-skin="dark-warning-warning" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-warning">
                             </span>
-                    </div>
-                </a>
-                    <p class="text-center no-margin" style="font-size: 12px">蓝 白</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-black-light"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
-                        <div style="box-shadow: 0 0 2px rgba(0,0,0,0.1)" class="clearfix">
-                            <span
-                                    style="display:block; width: 20%; float: left; height: 7px; background: #fefefe">
-
-                            </span><span
-                                style="display:block; width: 80%; float: left; height: 7px; background: #fefefe">
-
-                        </span>
+                            <span class="skinNavbarSpan bg-warning">
+                            </span>
                         </div>
-                        <div><span
-                                style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc">
-
-                        </span><span
-                                style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-
-                        </span>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin" style="font-size: 12px">黑 白</p></li>
-                <li style="float:left; width: 33.33333%; padding: 5px;"><a href="javascript:void(0)"
-                                                                           data-skin="skin-purple-light"
-                                                                           style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                                                                           class="clearfix full-opacity-hover">
-                    <div><span style="display:block; width: 20%; float: left; height: 7px;"
-                               class="bg-purple-active"></span><span class="bg-purple"
-                                                                     style="display:block; width: 80%; float: left; height: 7px;"></span>
-                    </div>
-                    <div><span
-                            style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc"></span><span
-                            style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7"></span>
-                    </div>
-                </a>
-                    <p class="text-center no-margin" style="font-size: 12px">紫 白</p>
+                    <p class="text-center no-margin">警告色</p>
                 </li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-green-light"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
-                        <div><span style="display:block; width: 20%; float: left; height: 7px;"
-                                   class="bg-green-active"></span><span class="bg-green"
-                                                                        style="display:block; width: 80%; float: left; height: 7px;"></span>
-                        </div>
-                        <div>
-                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc">
-                        </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
 
-                                </span>
+                <li class="skinLi">
+                    <a data-skin="dark-info-info" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-info">
+                            </span>
+                            <span class="skinNavbarSpan bg-info">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin" style="font-size: 12px">纯 白</p>
+                    <p class="text-center no-margin">信息色</p>
                 </li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-red-light"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
+
+                <li class="skinLi">
+                    <a data-skin="dark-danger-danger" class="clearfix full-opacity-hover skinA">
                         <div>
-                                <span style="display:block; width: 20%; float: left; height: 7px;"
-                                      class="bg-red-active">
+                            <span class="skinLogoSpan bg-danger">
                             </span>
-                            <span class="bg-red" style="display:block; width: 80%; float: left; height: 7px;">
-                        </span>
+                            <span class="skinNavbarSpan bg-danger">
+                            </span>
                         </div>
                         <div>
-                                <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc">
-                                </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
+                            <span class="skinSidebarSpan control-sidebar-dark">
                             </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin" style="font-size: 12px">红 白</p>
+                    <p class="text-center no-margin">红 色</p>
                 </li>
-                <li style="float:left; width: 33.33333%; padding: 5px;">
-                    <a href="javascript:void(0)"
-                       data-skin="skin-yellow-light"
-                       style="display: block; box-shadow: 0 0 3px rgba(0,0,0,0.4)"
-                       class="clearfix full-opacity-hover">
+                <li class="skinLi">
+                    <a data-skin="dark-success-success" class="clearfix full-opacity-hover skinA">
                         <div>
-                            <span style="display:block; width: 20%; float: left; height: 7px;" class="bg-yellow-active">
+                            <span class="skinLogoSpan bg-success">
                             </span>
-                            <span class="bg-yellow" style="display:block; width: 80%; float: left; height: 7px;">
-                                </span>
+                            <span class="skinNavbarSpan bg-success">
+                            </span>
                         </div>
                         <div>
-                            <span style="display:block; width: 20%; float: left; height: 20px; background: #f9fafc">
+                            <span class="skinSidebarSpan control-sidebar-dark">
                             </span>
-                            <span style="display:block; width: 80%; float: left; height: 20px; background: #f4f5f7">
-                                </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
                         </div>
                     </a>
-                    <p class="text-center no-margin" style="font-size: 12px">黄 白</p>
+                    <p class="text-center no-margin">成功色</p>
                 </li>
+
+                <li class="skinLi">
+                    <a data-skin="dark-indigo-indigo" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-indigo">
+                            </span>
+                            <span class="skinNavbarSpan bg-indigo">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">靛 蓝</p>
+                </li>
+
+
+                <li class="skinLi">
+                    <a data-skin="dark-lightblue-lightblue" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-lightblue">
+                            </span>
+                            <span class="skinNavbarSpan bg-lightblue">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">浅 蓝</p>
+                </li>
+
+                <li class="skinLi">
+                    <a data-skin="dark-navy-navy" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-navy">
+                            </span>
+                            <span class="skinNavbarSpan bg-navy">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">海军蓝</p>
+                </li>
+
+                <li class="skinLi">
+                    <a data-skin="dark-purple-purple" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-purple">
+                            </span>
+                            <span class="skinNavbarSpan bg-purple">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">紫 色</p>
+                </li>
+
+
+                <li class="skinLi">
+                    <a data-skin="dark-pink-pink" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-pink">
+                            </span>
+                            <span class="skinNavbarSpan bg-pink">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">粉 色</p>
+                </li>
+
+                <li class="skinLi">
+                    <a data-skin="dark-maroon-maroon" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-maroon">
+                            </span>
+                            <span class="skinNavbarSpan bg-maroon">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">褐 红</p>
+                </li>
+                <li class="skinLi">
+                    <a data-skin="dark-orange-orange" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-orange">
+                            </span>
+                            <span class="skinNavbarSpan bg-orange">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">橙 色</p>
+                </li>
+
+                <li class="skinLi">
+                    <a data-skin="dark-teal-teal" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-teal">
+                            </span>
+                            <span class="skinNavbarSpan bg-teal">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">蓝 绿</p>
+                </li>
+                <li class="skinLi">
+                    <a data-skin="dark-olive-olive" class="clearfix full-opacity-hover skinA">
+                        <div>
+                            <span class="skinLogoSpan bg-olive">
+                            </span>
+                            <span class="skinNavbarSpan bg-olive">
+                            </span>
+                        </div>
+                        <div>
+                            <span class="skinSidebarSpan control-sidebar-dark">
+                            </span>
+                            <span class="skinContentSpan control-sidebar-light">
+                             </span>
+                        </div>
+                    </a>
+                    <p class="text-center no-margin">橄榄绿</p>
+                </li>
+
             </ul>
         </div>
 
-
-        <h6>导航栏背景色</h6>
-        <label style="display: none" for="NavbarVariants"></label>
-        <div class="d-flex">
-            <select id="NavbarVariants" data-dom=".main-header" onchange="changeNavbarVariants(this)"
-                    class="custom-select mb-3 text-light border-0 bg-white themeSettingSelect">
-                <option class="bg-primary" id="bg">Primary</option>
-                <option class="bg-secondary">Secondary</option>
-                <option class="bg-info">Info</option>
-                <option class="bg-success">Success</option>
-                <option class="bg-danger">Danger</option>
-                <option class="bg-indigo">Indigo</option>
-                <option class="bg-purple">Purple</option>
-                <option class="bg-pink">Pink</option>
-                <option class="bg-navy">Navy</option>
-                <option class="bg-lightblue">Lightblue</option>
-                <option class="bg-teal">Teal</option>
-                <option class="bg-cyan">Cyan</option>
-                <option class="bg-dark">Dark</option>
-                <option class="bg-gray-dark">Gray dark</option>
-                <option class="bg-gray">Gray</option>
-                <option class="bg-light">Light</option>
-                <option class="bg-warning">Warning</option>
-                <option class="bg-white">White</option>
-                <option class="bg-orange">Orange</option>
-            </select>
-        </div>
-
-        <h6>深色侧边栏变体</h6>
-        <div class="d-flex">
-            <label style="display: none" for="DarkSidebarVariants"></label>
-        </div>
-        <select id="DarkSidebarVariants" data-dom=".main-sidebar" onchange="changeDarkSidebarVariants(this)"
-                class="custom-select mb-3 border-0 bg-white themeSettingSelect">
-            <option class="bg-primary">未选择</option>
-            <option class="bg-primary">Primary</option>
-            <option class="bg-warning">Warning</option>
-            <option class="bg-info">Info</option>
-            <option class="bg-danger">Danger</option>
-            <option class="bg-success">Success</option>
-            <option class="bg-indigo">Indigo</option>
-            <option class="bg-lightblue">Lightblue</option>
-            <option class="bg-navy">Navy</option>
-            <option class="bg-purple">Purple</option>
-            <option class="bg-fuchsia">Fuchsia</option>
-            <option class="bg-pink">Pink</option>
-            <option class="bg-maroon">Maroon</option>
-            <option class="bg-orange">Orange</option>
-            <option class="bg-lime">Lime</option>
-            <option class="bg-teal">Teal</option>
-            <option class="bg-olive">Olive</option>
-        </select>
-
-        <h6>浅色侧边栏变体</h6>
-        <div class="d-flex">
-            <label style="display: none" for="LightSidebarVariants"></label>
-        </div>
-        <select id="LightSidebarVariants" data-dom=".main-sidebar" onchange="changeLightSidebarVariants(this)"
-                class="custom-select mb-3 border-0 bg-white themeSettingSelect">
-            <option class="bg-primary">Primary</option>
-            <option class="bg-warning">Warning</option>
-            <option class="bg-info">Info</option>
-            <option class="bg-danger">Danger</option>
-            <option class="bg-success">Success</option>
-            <option class="bg-indigo">Indigo</option>
-            <option class="bg-lightblue">Lightblue</option>
-            <option class="bg-navy">Navy</option>
-            <option class="bg-purple">Purple</option>
-            <option class="bg-fuchsia">Fuchsia</option>
-            <option class="bg-pink">Pink</option>
-            <option class="bg-maroon">Maroon</option>
-            <option class="bg-orange">Orange</option>
-            <option class="bg-lime">Lime</option>
-            <option class="bg-teal">Teal</option>
-            <option class="bg-olive">Olive</option>
-        </select>
-
-        <h6>品牌LOGO变体</h6>
-        <div class="d-flex">
-            <label style="display: none" for="BrandLogoVariants"></label>
-        </div>
-        <select id="BrandLogoVariants" data-dom=".brand-link" onchange="changeBrandLogoVariants(this)"
-                class="custom-select mb-3 border-0 bg-white themeSettingSelect">
-            <option class="bg-primary">Primary</option>
-            <option class="bg-secondary">Secondary</option>
-            <option class="bg-info">Info</option>
-            <option class="bg-success">Success</option>
-            <option class="bg-danger">Danger</option>
-            <option class="bg-indigo">Indigo</option>
-            <option class="bg-purple">Purple</option>
-            <option class="bg-pink">Pink</option>
-            <option class="bg-navy">Navy</option>
-            <option class="bg-lightblue">Lightblue</option>
-            <option class="bg-teal">Teal</option>
-            <option class="bg-cyan">Cyan</option>
-            <option class="bg-dark">Dark</option>
-            <option class="bg-gray-dark">Gray dark</option>
-            <option class="bg-gray">Gray</option>
-            <option class="bg-light">Light</option>
-            <option class="bg-warning">Warning</option>
-            <option class="bg-white">White</option>
-            <option class="bg-orange">Orange</option>
-        </select>
     </div>
 </aside>
 <div id="sidebar-overlay"></div>
@@ -524,7 +447,7 @@
         })
 
         // 初始设置
-        var $themeSettingCheckbox = $('.themeSettingCheckbox');
+        let $themeSettingCheckbox = $('.themeSettingCheckbox');
         $themeSettingCheckbox.each(function (index) {
             let CookieKey = $(this).attr('id');
             let isTrue = getSettingContent(CookieKey);
@@ -532,19 +455,37 @@
             setSettingContent(this);
         })
 
-
         $themeSettingCheckbox.on('click', function () {
             // 这里先统一加上吧
             $(window).trigger('resize');
+            if (adminDebug) {
+                console.log('点击checkbox设置');
+            }
             setSettingContent(this);
+
         });
 
-        initNavbarVariants();
-        initDarkSidebarVariants();
-        initLightSidebarVariants();
-        initBrandLogoVariants();
+
+
+        let $skinA = $('.skinA');
+
+        $skinA.on('click', function () {
+            // 这里先统一加上吧
+            $(window).trigger('resize');
+            changeSkin($(this).data('skin'));
+        });
+
+        initThemes();
 
     });
+
+    function initThemes() {
+        let cookieKey = 'BackendTheme';
+        let $cookie = Cookies.get(cookieKey);
+        if($cookie!==undefined && $cookie!==null){
+            changeSkin($cookie);
+        }
+    }
 
     function getSettingContent(CookieKey) {
         return parseInt(Cookies.get(CookieKey));
@@ -556,6 +497,12 @@
         let isTrue = $(dom).is(':checked');
         let $class = $(dom).data('class');
         let $dom = $(dom).data('dom');
+        if (adminDebug) {
+            console.log('cookieKey：' + CookieKey);
+            console.log('当前选中状态：' + isTrue);
+            console.log('操作dom：' + $dom);
+            console.log('添加class：' + $class);
+        }
 
         Cookies.set(CookieKey, isTrue ? 1 : 0);
         isTrue ? $($dom).addClass($class) : $($dom).removeClass($class);
@@ -577,34 +524,23 @@
         'bg-cyan',
         'bg-dark',
         'bg-gray-dark',
-        'bg-gray'
+        'bg-gray',
+        // 后期添加的
+        'bg-warning',
+        'bg-fuchsia',
+        'bg-maroon',
+        'bg-olive',
+        //'bg-lime',
     ]
 
     var navbar_light_skins = [
         'bg-light',
         'bg-warning',
         'bg-white',
-        'bg-orange'
+        'bg-orange',
     ]
 
-    var accent_colors = [
-        'bg-primary',
-        'bg-warning',
-        'bg-info',
-        'bg-danger',
-        'bg-success',
-        'bg-indigo',
-        'bg-lightblue',
-        'bg-navy',
-        'bg-purple',
-        'bg-fuchsia',
-        'bg-pink',
-        'bg-maroon',
-        'bg-orange',
-        'bg-lime',
-        'bg-teal',
-        'bg-olive'
-    ]
+
     var sidebar_colors = [
         'bg-primary',
         'bg-warning',
@@ -663,162 +599,78 @@
 
     var logo_skins = navbar_all_colors;
 
-    function initNavbarVariants() {
-        let CookieKey = 'NavbarVariants';
-        let color = Cookies.get(CookieKey);
-        console.log(color);
-        if (color !== undefined) {
-            $("#NavbarVariants").find("option[class='" + color + "']").attr("selected", true);
-            changeNavbarVariants(document.getElementById('NavbarVariants'));
-        }
-    }
+    function changeNavbar(colors) {
 
+        let color = 'bg-' + colors[1];
+        let $dom = $('.main-header');
 
-    function changeNavbarVariants(obj) {
-
-        console.log('导航栏背景颜色');
-
-        let domId = $(obj).prop('id');
-
-        let options = $("#" + domId + " option:selected");
-        let color = options.attr('class');
-        console.log(color);
-        let $dom = $(obj).data('dom');
-
-        $($dom).removeClass('navbar-dark').removeClass('navbar-light')
+        $dom.removeClass('navbar-dark').removeClass('navbar-light').removeClass('navbar-white');
+        console.log(navbar_all_colors);
         navbar_all_colors.forEach(function (color) {
-            $($dom).removeClass(color)
+            $dom.removeClass(color);
         })
 
-        $(this).removeClass().addClass('custom-select mb-3 text-light border-0 ')
+        $dom.addClass(color);
 
         if (navbar_dark_skins.indexOf(color) > -1) {
-            $($dom).addClass('navbar-dark')
-            $(this).addClass(color).addClass('text-light')
+            $dom.addClass('navbar-dark')
         } else {
-            $($dom).addClass('navbar-light')
-            $(this).addClass(color)
-        }
-
-        $($dom).addClass(color);
-
-        let CookieKey = 'NavbarVariants';
-        Cookies.set(CookieKey, color);
-    }
-
-
-
-
-
-
-
-    function initDarkSidebarVariants() {
-        let CookieKey = 'DarkSidebarVariants';
-        let color = Cookies.get(CookieKey);
-        if (color !== undefined) {
-            $("#DarkSidebarVariants").find("option[class='" + color + "']").attr("selected", true);
-
-            changeDarkSidebarVariants(document.getElementById('DarkSidebarVariants'));
+            $dom.addClass('navbar-light')
         }
     }
 
-    function changeDarkSidebarVariants(obj) {
 
-        console.log('深色侧边栏变体');
-
-        let domId = $(obj).prop('id');
-
-        let options = $("#" + domId + " option:selected");
-        console.log(options.attr('class'));
-        let color = options.attr('class');
-        let showColor = 'sidebar-dark-' + color.replace('bg-', '');
-        console.log(color);
-        let $dom = $(obj).data('dom');
+    function changeSidebar(colors) {
+        let mode = colors[0];
+        let $dom = $('.main-sidebar');
+        let color = 'sidebar-' + mode + '-' + colors[1];
 
         sidebar_skins.forEach(function (skin) {
-            $($dom).removeClass(skin)
+            $dom.removeClass(skin)
         })
+        $dom.addClass(color);
 
-        $($dom).addClass(showColor);
-
-        let CookieKey = 'DarkSidebarVariants';
-        Cookies.set(CookieKey, color);
-        $('.sidebar').removeClass('os-theme-dark').addClass('os-theme-light')
-    }
-
-
-    function initLightSidebarVariants() {
-        let CookieKey = 'LightSidebarVariants';
-        let color = Cookies.get(CookieKey);
-        if (color !== undefined) {
-            $("#LightSidebarVariants").find("option[class='" + color + "']").attr("selected", true);
-
-            changeLightSidebarVariants(document.getElementById('LightSidebarVariants'));
-        }
-    }
-
-    function changeLightSidebarVariants(obj) {
-
-        console.log('浅色侧边栏变体');
-
-        let domId = $(obj).prop('id');
-
-        let options = $("#" + domId + " option:selected");
-        console.log(options.attr('class'));
-        let color = options.attr('class');
-        let showColor = 'sidebar-light-' + color.replace('bg-', '');
-        console.log(color);
-        let $dom = $(obj).data('dom');
-
-        sidebar_skins.forEach(function (skin) {
-            $($dom).removeClass(skin)
-        })
-
-        $($dom).addClass(showColor);
-
-        let CookieKey = 'LightSidebarVariants';
-        Cookies.set(CookieKey, color);
-        $('.sidebar').removeClass('os-theme-light').addClass('os-theme-dark')
-    }
-
-
-    function initBrandLogoVariants() {
-        let CookieKey = 'BrandLogoVariants';
-        let color = Cookies.get(CookieKey);
-        if (color !== undefined) {
-            $("#BrandLogoVariants").find("option[class='" + color + "']").attr("selected", true);
-
-            changeBrandLogoVariants(document.getElementById('BrandLogoVariants'));
-        }
-    }
-
-    function changeBrandLogoVariants(obj) {
-
-        console.log('品牌LOGO变体');
-
-        let domId = $(obj).prop('id');
-
-        let options = $("#" + domId + " option:selected");
-        console.log(options.attr('class'));
-        let color = options.attr('class');
-
-
-        let $dom = $(obj).data('dom');
-
-        if (color === 'navbar-light' || color === 'navbar-white') {
-            $($dom).addClass('text-black')
+        if (mode === 'dark') {
+            $('.sidebar').removeClass('os-theme-dark').addClass('os-theme-light')
         } else {
-            $($dom).removeClass('text-black')
+            $('.sidebar').removeClass('os-theme-light').addClass('os-theme-dark')
+        }
+    }
+
+
+    /**
+     * 改变品牌logo
+     * @param colors
+     */
+    function changeBrandLogo(colors) {
+        let colorPrefix = 'bg-';
+        let color = colorPrefix + colors[2];
+        let $dom = $('.brand-link');
+
+        if (color === colorPrefix + 'light' || color === colorPrefix + 'white') {
+            $dom.addClass('text-black')
+        } else {
+            $dom.removeClass('text-black')
         }
 
         logo_skins.forEach(function (skin) {
-            $($dom).removeClass(skin)
+            $dom.removeClass(skin)
         })
 
-        $($dom).addClass(color);
+        $dom.addClass(color);
+    }
 
-        let CookieKey = 'BrandLogoVariants';
-        Cookies.set(CookieKey, color);
+
+    function changeSkin(skin) {
+        if (adminDebug) {
+            console.log('改变皮肤：' + skin);
+        }
+        let colors = skin.split('-');
+        changeBrandLogo(colors);
+        changeSidebar(colors);
+        changeNavbar(colors);
+        let cookieKey = 'BackendTheme';
+        Cookies.set(cookieKey,skin)
     }
 
 

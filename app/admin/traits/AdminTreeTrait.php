@@ -235,16 +235,22 @@ trait AdminTreeTrait
 
         $this->initTree($menu);
 
-        $text_base_one = "<li class='nav-item has-treeview";
+        $text_base_one = "<li class='nav-item";
 
         $text_base_two   = "'><a href='#' class='nav-link ' >
-<i class='\$icon'></i>
-<p>\$name<i class='right fas fa-angle-left'></i></p>
+<i class='nav-icon \$icon'></i>
+<p> \$name <i class='right fas fa-angle-left'></i></p>
 
                              </a>
                              <ul class='nav nav-treeview";
 
-        $text_base_two_open   = "'><a href='#' class='nav-link active' ><i class='\$icon'></i><p>\$name<i class='right fas fa-angle-left'></i></p></a><ul class='nav nav-treeview";
+        $text_base_two_open   = "'><a href='#' class='nav-link active' >
+<i class='nav-icon \$icon'></i>
+<p> \$name 
+<i class='right fas fa-angle-left'></i>
+</p>
+</a>
+<ul class='nav nav-treeview";
         $text_open       = ' menu-open';
         $text_base_three = "'>";
 
@@ -252,7 +258,7 @@ trait AdminTreeTrait
                             <a class='nav-link ";
         $text_base_five = "' href='\$url'>
                             <i class='nav-icon \$icon'></i>
-                            <p>\$name</p>
+                            <p> \$name </p>
                             </a>
                          </li>";
 
