@@ -22,6 +22,8 @@ class AuthService extends AdminService
 {
     protected $model;
 
+    protected string $limitKeyPrefix = 'admin_login_count_';
+
     /**
      * @var string 保存登录用户信息cookie和session的[ID]key值
      */
@@ -90,7 +92,7 @@ class AuthService extends AdminService
             $max_count        = (int)setting('admin.login.login_max_count');
             $login_limit_hour = (int)setting('admin.login.login_limit_hour');
             // 缓存key
-            $cache_key  = 'login:max:count:' . md5(request()->ip());
+            $cache_key  = $this->limitKeyPrefix . md5(request()->ip());
             $have_count = (int)Cache::get($cache_key);
             if ($have_count >= $max_count) {
                 throw new AdminServiceException('连续' . $max_count . '次登录失败，请' . $login_limit_hour . '小时后再试');
@@ -111,7 +113,7 @@ class AuthService extends AdminService
             // 最大错误次数
             $login_limit_hour = (int)setting('admin.login.login_limit_hour');
             // 缓存key
-            $cache_key = 'login:max:count:' . md5(request()->ip());
+            $cache_key = $this->limitKeyPrefix . md5(request()->ip());
             if (Cache::has($cache_key)) {
                 Cache::inc($cache_key);
                 return true;
@@ -128,7 +130,7 @@ class AuthService extends AdminService
      */
     public function clearLoginLimit($ip): bool
     {
-        $cache_key = 'login:max:count:' . md5($ip);
+        $cache_key = $this->limitKeyPrefix . md5($ip);
         return Cache::delete($cache_key);
     }
 

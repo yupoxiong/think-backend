@@ -8,6 +8,7 @@ namespace generate;
 
 use app\admin\model\AdminMenu;
 use Exception;
+use generate\exception\GenerateException;
 use generate\field\Editor;
 use generate\field\Field;
 use generate\field\File;
@@ -63,7 +64,6 @@ class Generate
         'attachment',
         'setting',
         'setting_group',
-
     ];
 
     public function __construct($data = [], $config = null)
@@ -133,6 +133,8 @@ class Generate
 
     public function run()
     {
+        $adminController = new AdminController($this->data,$this->config);
+
         $this->checkName($this->data);
         $this->checkDir();
 
@@ -170,7 +172,7 @@ class Generate
 
         foreach ($table_data as $key => $value) {
             $current = current($value);
-            if (!in_array($current, $this->blacklistTable)) {
+            if (!in_array($current, $this->blacklistTable, true)) {
                 $table[] = $current;
             }
         }
@@ -180,6 +182,9 @@ class Generate
 
     /**
      * 获取后台已有菜单，以select形式返回
+     * @param int $selected
+     * @param int $current_id
+     * @return string
      */
     public function getMenu($selected = 1, $current_id = 0)
     {
@@ -207,7 +212,11 @@ class Generate
         return count($module) > 0 ? $module : false;
     }
 
-    //检查目录（是否可写）
+    /**
+     * 检查目录（是否可写）
+     * @return bool
+     * @throws Exception
+     */
     protected function checkDir()
     {
         if (!is_dir($this->config['file_dir']['controller'])) {
@@ -228,41 +237,46 @@ class Generate
 
 
         if (!is_writable($this->config['file_dir']['controller'])) {
-            throw new \Exception('控制器目录不可写');
+            throw new GenerateException('控制器目录不可写');
         }
 
         if (!is_writable($this->config['file_dir']['model'])) {
-            throw new \Exception('模型目录不可写');
+            throw new GenerateException('模型目录不可写');
         }
 
         if (!is_writable($this->config['file_dir']['validate'])) {
-            throw new \Exception('验证器目录不可写');
+            throw new GenerateException('验证器目录不可写');
         }
 
         if (!is_writable($this->config['file_dir']['view'])) {
-            throw new \Exception('视图目录不可写');
+            throw new GenerateException('视图目录不可写');
         }
 
         return true;
     }
 
-    //检查名称是在黑名单,表是否存在
-    protected function checkName($data)
+    /**
+     * 检查名称是在黑名单,表是否存在
+     * @param $data
+     * @return bool
+     * @throws GenerateException
+     */
+    protected function checkName($data): bool
     {
-        if (in_array($data['controller'], $this->blacklistName)) {
-            throw new \Exception('控制器名非法');
+        if (in_array($data['controller'], $this->blacklistName, true)) {
+            throw new GenerateException('控制器名非法');
         }
 
-        if (in_array($data['model'], $this->blacklistName)) {
-            throw new \Exception('模型名非法');
+        if (in_array($data['model'], $this->blacklistName, true)) {
+            throw new GenerateException('模型名非法');
         }
 
-        if (in_array($data['validate'], $this->blacklistName)) {
-            throw new \Exception('验证器名非法');
+        if (in_array($data['validate'], $this->blacklistName, true)) {
+            throw new GenerateException('验证器名非法');
         }
 
-        if (in_array($data['table'], $this->blacklistTable)) {
-            throw new \Exception('表名非法');
+        if (in_array($data['table'], $this->blacklistTable, true)) {
+            throw new GenerateException('表名非法');
         }
 
         return true;
@@ -276,7 +290,7 @@ class Generate
      */
     protected function createTable($data = [])
     {
-        if (count($data) == 0) {
+        if (count($data) === 0) {
             $data = $this->data;
         }
 
@@ -290,11 +304,11 @@ class Generate
             // 字段
             $fields[] = " `{$item['field_name']}` {$item['field_type']}"
                 . ($item['not_null'] ? ' NOT NULL' : ' ')
-                . (strtolower($item['default']) == 'null' ? '' : " DEFAULT '{$item['default']}'")
+                . (strtolower($item['default']) === 'null' ? '' : " DEFAULT '{$item['default']}'")
                 . ($item['comment'] === '' ? '' : " COMMENT '{$item['comment']}'");
 
             // 索引
-            if (isset($item['key']) && $item['key'] && $item['name'] != 'id') {
+            if (isset($item['key']) && $item['key'] && $item['name'] !== 'id') {
                 $indexes[] = " KEY `{$item['name']}` (`{$item['name']}`)";
             }
         }
@@ -325,7 +339,7 @@ class Generate
             Db::query($sql);
             Db::commit();
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             $msg    = $e->getMessage();
             $result = false;
@@ -549,7 +563,7 @@ class Generate
         try {
             file_put_contents($this->config['file_dir']['controller'] . $this->data['controller']['name'] . 'Controller' . '.php', $code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
@@ -762,7 +776,7 @@ class Generate
         try {
             file_put_contents($this->config['file_dir']['model'] . $this->data['model']['name'] . '.php', $code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
@@ -828,7 +842,7 @@ class Generate
         try {
             file_put_contents($this->config['file_dir']['validate'] . $this->data['validate']['name'] . 'Validate' . '.php', $code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
@@ -1067,7 +1081,7 @@ class Generate
         try {
             file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/index.html', $code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
@@ -1127,7 +1141,7 @@ class Generate
                     $class      = '\\generate\\field\\' . $class_name;
                     $form_body  .= $class::create($value);
 
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     return $exception->getMessage();
                 }
 
@@ -1174,7 +1188,7 @@ class Generate
 
             file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/add.html', $code);
             $result = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $msg    = $e->getMessage();
             $result = false;
         }
@@ -1307,7 +1321,7 @@ class Generate
             }
 
             Db::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
             Db::rollback();
         }
@@ -1606,7 +1620,7 @@ class Generate
             $class = '\\generate\\field\\' . $class_name;
             $html  = $class::rule($field_data['field_length']);
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $exception->getMessage();
         }
 

@@ -27,10 +27,15 @@ class AdminController
     protected string $code;
 
     protected array $actionList = [
-        'index', 'add', 'info', 'edit', 'del', 'disable', 'enable','import','export'
+        'index', 'add', 'info', 'edit', 'del', 'disable', 'enable', 'import', 'export'
     ];
 
-    public function __construct($data, $config)
+    /**
+     * AdminController constructor.
+     * @param array $data 数据
+     * @param array $config 配置
+     */
+    public function __construct(array $data, array $config)
     {
         $this->data   = $data;
         $this->config = $config;
@@ -41,8 +46,8 @@ class AdminController
     }
 
     /**
-     * 创建API模块控制器相关代码
-     * @return bool|string
+     * 创建admin模块控制器相关代码
+     * @return mixed
      */
     public function create()
     {
