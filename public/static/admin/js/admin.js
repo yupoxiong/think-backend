@@ -115,18 +115,18 @@ function initInputFileText() {
 }
 
 // 设置tab激活选项卡
-function setNavTab(){
-    if($('.NavTab').length===1){
-        if(adminDebug){
+function setNavTab() {
+    if ($('.NavTab').length === 1) {
+        if (adminDebug) {
             console.log('选项卡初始化');
         }
         let hash = document.location.hash;
         if (hash) {
             $('.NavTab a[href="' + hash + '"]').tab('show');
-        }else{
+        } else {
             $('.NavTab a:first').tab('show');
         }
-        $('.NavTab .nav-item .nav-link').on('click',function (){
+        $('.NavTab .nav-item .nav-link').on('click', function () {
             document.location.hash = $(this).attr('href');
         })
     }
@@ -211,6 +211,24 @@ function showFileUpload(domId, fileType) {
         closeBtn: 1,
         shift: 0,
         content: uploadUrl + '?dom_id=' + domId + '&file_type=' + fileType,
+        scrollbar: false,
+    });
+}
+
+/**
+ * 显示上传文件页面
+ * @param domId
+ * @param fileType
+ */
+function showImgUpload(domId, fileType) {
+
+    layer.open({
+        type: 2,
+        area: ['80%', '70%'],
+        title: '上传文件',
+        closeBtn: 1,
+        shift: 0,
+        content:  '/admin/file/img?dom_id=' + domId + '&file_type=' + fileType,
         scrollbar: false,
     });
 }
@@ -417,13 +435,13 @@ $(function () {
         event.preventDefault();
 
         if (adminDebug) {
-            console.log('AjaxButton clicked.');
+            console.log('点击Ajax请求按钮');
         }
 
         let dataData = {};
 
-        //是否弹出提示
-        let layerConfirm = $(this).data("confirm") || 1;
+        // 是否弹出提示
+        let layerConfirm = parseInt($(this).data("confirm") || 1);
         //访问方式，1为直接访问，2为layer窗口显示
         let layerType = parseInt($(this).data("type") || 1);
         //访问的url
@@ -656,7 +674,7 @@ function exitFullscreen() {
 
 }
 
-function logout(){
+function logout() {
     $.ajax({
             url: logoutUrl,
             dataType: 'json',

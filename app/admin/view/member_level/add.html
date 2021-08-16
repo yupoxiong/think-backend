@@ -1,6 +1,7 @@
 {extend name='public/base' /}
 {block name='content'}
 {include file='public/content_header' /}
+{include file='file/single_img' /}
 <section class="content">
     <div class="row">
         <div class="col-md-12">
@@ -15,59 +16,71 @@
                     </div>
                 </div>
                 <!-- 表单 -->
-                <form id="dataForm" class="form-horizontal dataForm" action="" method="post" enctype="multipart/form-data">
+                <form id="dataForm" class="form-horizontal dataForm" action="" method="post"
+                      enctype="multipart/form-data">
                     <!-- 表单字段区域 -->
                     <div class="card-body">
                         <div class="form-group row">
-    <label for="name" class="col-sm-2 control-label">名称</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="text" class="form-control fieldText">
-    </div>
-</div>
-<div class="form-group row">
-    <label for="description" class="col-sm-2 control-label">简介</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control fieldText">
-    </div>
-</div>
-    <div class="form-group row">
-        <label for="img" class="col-sm-2 control-label">图片</label>
-        <div class="col-sm-10 col-md-4 formInputDiv"> 
-            <div class="input-group">
-                <input id="img" name="img"  value="{$data.img|default='/static/index/images/user_level_default.png'}"   placeholder="请输入图片的URL" type="text" class="form-control fieldImage" >
-                <div class="input-group-append">
-                     <span class="input-group-text" onclick="showFileUpload('img','image')">
-                          <i class="fas fa-upload"></i>上传
-                     </span>
-                </div>
-            </div>
-            
-            <div>
-                <img id="imgShow" class="imgViewer" src="{$data.img|default='/static/index/images/user_level_default.png'}" alt="图片">
-            </div>
-        </div>
-        
-    </div>
-    
-   <div class="form-group row">
-    <label for="status" class="col-sm-2 control-label">是否启用</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-    <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
-    <input class="switch fieldSwitch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
-    </div>
-</div>
+                            <label for="name" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称"
+                                       type="text" class="form-control fieldText">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="description" class="col-sm-2 control-label">简介</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input id="description" name="description" value="{$data.description|default=''}"
+                                       placeholder="请输入简介" type="text" class="form-control fieldText">
+                            </div>
+                        </div>
 
-<script>
-    $('#status').bootstrapSwitch({
-        onText: "是",
-        offText: "否",
-        onColor: "success",
-        offColor: "danger",
-        onSwitchChange: function (event, state) {
-            $(event.target).closest('.bootstrap-switch').next().val(state ? '1' : '0').change();
-        }
-    });
-</script>
+
+                        <div class="form-group row">
+                            <label for="img" class="col-sm-2 control-label">图片</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <div class="input-group">
+                                    <input id="img" name="img"
+                                           value="{$data.img|default='/static/index/images/user_level_default.png'}"
+                                           placeholder="请输入图片的URL" type="text" class="form-control fieldImage">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" data-backdrop="static" data-toggle="modal"
+                                              data-target="#uploadSingleImg">
+                                            <i class="fas fa-upload"></i>上传
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <img id="imgShow" class="imgViewer"
+                                         src="{$data.img|default='/static/index/images/user_level_default.png'}"
+                                         alt="图片">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-2 control-label">是否启用</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input class="input-switch" id="status" value="1" {if(!isset($data)
+                                       ||$data.status==1)}checked{/if} type="checkbox"/>
+                                <input class="switch fieldSwitch" placeholder="是否启用" name="status"
+                                       value="{$data.status|default='1'}" hidden/>
+                            </div>
+                        </div>
+
+                        <script>
+                            $('#status').bootstrapSwitch({
+                                onText: "是",
+                                offText: "否",
+                                onColor: "success",
+                                offColor: "danger",
+                                onSwitchChange: function (event, state) {
+                                    $(event.target).closest('.bootstrap-switch').next().val(state ? '1' : '0').change();
+                                }
+                            });
+                        </script>
                     </div>
                     <!-- 表单底部 -->
                     <div class="card-footer">
@@ -91,7 +104,8 @@
 
                                 {if !isset($data)}
                                 <div class="btn-group float-right createContinueDiv">
-                                    <input type="checkbox" class="form-check-input" value="1" id="_create" name="_create" title="继续添加数据">
+                                    <input type="checkbox" class="form-check-input" value="1" id="_create"
+                                           name="_create" title="继续添加数据">
                                     <label class="form-check-label" for="_create">继续添加</label>
                                 </div>
                                 {/if}
@@ -107,27 +121,27 @@
     /** 表单验证 **/
     $('#dataForm').validate({
         rules: {
-                'name': {
-        required: true,
-    },
-    'description': {
-        required: true,
-    },
-    'status': {
-        required: true,
-    },
+            'name': {
+                required: true,
+            },
+            'description': {
+                required: true,
+            },
+            'status': {
+                required: true,
+            },
 
         },
         messages: {
-                'name': {
-        required: "名称不能为空",
-    },
-    'description': {
-        required: "简介不能为空",
-    },
-    'status': {
-        required: "是否启用不能为空",
-    },
+            'name': {
+                required: "名称不能为空",
+            },
+            'description': {
+                required: "简介不能为空",
+            },
+            'status': {
+                required: "是否启用不能为空",
+            },
 
         }
     });

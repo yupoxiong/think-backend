@@ -1,0 +1,88 @@
+<script>
+    var minFileCount = 1;
+    var maxFileCount = 5;
+    var fileType = 'jpg';
+    var domId = 'img';
+    var uploadResult = '';
+
+</script>
+
+<div class="modal fade" id="uploadSingleImg">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">上传图片</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <input id="file" name="file" type="file" class="file-loading" multiple>
+                <input name="uploadResult" id="uploadResult" hidden placeholder="上传结果">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" onclick="uploadCancel()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="uploadOk()">确定</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $fileDom = $("#file");
+    $fileDom.fileinput({
+        theme: 'fas',
+        language: 'zh',
+        showDrag: true,
+        showClose: false,
+        showBrowse: false,
+        showUpload: false,
+        showRemove: false,
+        uploadAsync: true,
+        showCaption: false,
+        showCancel: false,
+        browseOnZoneClick: true,
+        overwriteInitial: false,
+        deleteUrl: '/admin/file/del',
+        initialPreviewAsData: true,
+        uploadUrl: uploadImgUrl,
+        minFileCount: minFileCount,
+        maxFileCount: maxFileCount,
+        initialPreviewFileType: fileType,
+        uploadExtraData: {
+            min_file_count: minFileCount,
+            max_file_count: maxFileCount,
+            file_type: fileType,
+        },
+    }).on("filebatchselected", function (event, files) {
+        $fileDom.fileinput("upload");
+    }).on('fileuploaded', function (event, data, previewId, index) {
+        let response = data.response;
+        if (response.code === 200 && response.result !== undefined) {
+            uploadResult = response.result.url;
+        }
+    });
+</script>
+
+<script>
+    /**
+     * 文件上传确定
+     */
+    function uploadOk() {
+        console.log(uploadResult);
+        let $dom = $('#' + domId);
+        $dom.val(uploadResult);
+        inputImgShow($dom);
+    }
+
+    /**
+     * 文件上传退出
+     */
+    function uploadCancel() {
+        $('#uploadSingleImg').modal('hide');
+    }
+
+</script>

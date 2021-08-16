@@ -5,7 +5,6 @@
 
 namespace app\admin\traits;
 
-use app\admin\model\AdminUser;
 use think\Model;
 
 trait AdminTreeTrait
@@ -406,10 +405,10 @@ trait AdminTreeTrait
      * @param array $auth_menus
      * @return string
      */
-    protected function authorizeHtml($menu, $auth_menus = [])
+    protected function authorizeHtml($menu, $auth_menus = []): string
     {
         foreach ($menu as $n => $t) {
-            $menu[$n]['checked'] = in_array($t['id'], $auth_menus) ? ' checked' : '';
+            $menu[$n]['checked'] = in_array($t['id'], $auth_menus, true) ? ' checked' : '';
             $menu[$n]['level']   = $this->getLevel($t['id'], $menu);
             $menu[$n]['width']   = 100 - $menu[$n]['level'];
         }
@@ -418,7 +417,7 @@ trait AdminTreeTrait
         $this->text = [
             'other' => "<label class='checkbox'  >
                         <input \$checked  name='url[]' value='\$id' level='\$level'
-                        onclick='javascript:checkNode(this);' type='checkbox'>
+                        onclick='checkNode(this);' type='checkbox'>
                        \$name
                    </label>",
             '0'     => [
@@ -426,7 +425,7 @@ trait AdminTreeTrait
                     <dt class='hd'>
                         <label class='checkbox'>
                             <input \$checked name='url[]' value='\$id' level='\$level'
-                             onclick='javascript:checkNode(this);'
+                             onclick='checkNode(this);'
                              type='checkbox'>
                             \$name
                         </label>
@@ -439,7 +438,7 @@ trait AdminTreeTrait
                         <div class='menu_parent'>
                             <label class='checkbox'>
                                 <input \$checked  name='url[]' value='\$id' level='\$level'
-                                onclick='javascript:checkNode(this);' type='checkbox'>
+                                onclick='checkNode(this);' type='checkbox'>
                                \$name
                             </label>
                         </div>
