@@ -57,6 +57,7 @@ class Websocket extends Command
     public function startServer(): void
     {
         $config           = config('websocket');
+        Worker::$pidFile  = $config['pid_file'] ?? $this->app->getRootPath() . 'websocket.pid';
         $register_port    = $config['register']['port'];
         $gateway_port     = $config['gateway']['port'];
         $register_address = $config['register']['ip'] . ':' . $register_port;

@@ -7,6 +7,8 @@
 declare (strict_types=1);
 
 return [
+    // pid file
+    'pid_file' => app()->getAppPath() . 'websocket.pid',
     // Register配置
     'register' => [
         'ip'   => '127.0.0.1',

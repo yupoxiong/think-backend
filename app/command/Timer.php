@@ -2,7 +2,7 @@
 /**
  * 定时器命令行
  */
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\command;
 
@@ -28,7 +28,7 @@ class Timer extends Command
     protected function execute(Input $input, Output $output)
     {
         $action = $input->getArgument('action');
-        $mode = $input->getOption('-d');
+        $mode   = $input->getOption('-d');
 
         // 重新构造命令行参数,以便兼容workerman的命令
         global $argv;
@@ -48,11 +48,13 @@ class Timer extends Command
      */
     public function startServer(): void
     {
-        $worker = new Worker();
+        $config          = config('timer');
+        Worker::$pidFile = $config['pid_file'] ?? $this->app->getRootPath() . 'timer.pid';
+        $worker          = new Worker();
         // 服务名称.
-        $worker->name = 'TimerWorkerman';
+        $worker->name = $config['worker']['name'] ?? 'TimerBusinessWorker';
         // 启动多少个进程数量，这里大家灵活配置，可以参考workerman的文档.
-        $worker->count = config('timer.worker_count');
+        $worker->count = $config['worker']['count'] ?? 1;
         // 当workerman的进程启动时的回调方法.
         $worker->onWorkerStart = [WorkermanTimer::class, 'onWorkerStart'];
         // 当workerman的进程关闭时的回调方法.

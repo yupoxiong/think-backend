@@ -1,10 +1,21 @@
 <?php
 /**
- *
+ * 定时器配置
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 return [
+    // pid file
+    'pid_file'     => app()->getAppPath() . 'timer.pid',
+    //
+    'worker'   => [
+        // worker名称
+        'name'          => 'TimerBusinessWorker',
+        // 启动定时任务的进程数量
+        'count'         => 5,
+    ],
+
+
 
     'task'         => [
         // 定时任务名称.
@@ -35,7 +46,5 @@ return [
             'func'      => 'app\facade\TimerTestService::test10', // 定时执行的方法.
         ],
     ],
-    // 启动定时任务的进程数量
-    'worker_count' => 1,
 
 ];
