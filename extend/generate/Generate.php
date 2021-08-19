@@ -133,8 +133,6 @@ class Generate
 
     public function run()
     {
-        $adminController = new AdminController($this->data,$this->config);
-
         $this->checkName($this->data);
         $this->checkDir();
 

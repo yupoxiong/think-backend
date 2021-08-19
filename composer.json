@@ -47,8 +47,7 @@
             "app\\": "app"
         },
         "psr-0": {
-            "": "extend/",
-            "addons": "addons/"
+            "": "extend/"
         }
     },
     "config": {

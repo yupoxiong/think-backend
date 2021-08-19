@@ -1,7 +1,6 @@
 {extend name='public/base' /}
 {block name='content'}
 {include file='public/content_header' /}
-{include file='file/single_img' /}
 <section class="content">
     <div class="row">
         <div class="col-md-12">
@@ -34,27 +33,18 @@
                                        placeholder="请输入简介" type="text" class="form-control fieldText">
                             </div>
                         </div>
-
-
                         <div class="form-group row">
                             <label for="img" class="col-sm-2 control-label">图片</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <div class="input-group">
-                                    <input id="img" name="img"
-                                           value="{$data.img|default='/static/index/images/user_level_default.png'}"
-                                           placeholder="请输入图片的URL" type="text" class="form-control fieldImage">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" data-backdrop="static" data-toggle="modal"
-                                              data-target="#uploadSingleImg">
-                                            <i class="fas fa-upload"></i>上传
-                                        </span>
-                                    </div>
-                                </div>
 
-                                <div>
-                                    <img id="imgShow" class="imgViewer"
-                                         src="{$data.img|default='/static/index/images/user_level_default.png'}"
-                                         alt="图片">
+                                    <input id="img_file" name="img_file" type="file" class="file-loading"
+                                           data-initial-preview="{if isset($data)}{$data.img}{/if}">
+                                    <input name="img" id="img" value="{$data.img|default=''}" hidden placeholder="图片">
+
+                                    <script>
+                                        initUploadImg('img');
+                                    </script>
                                 </div>
                             </div>
 

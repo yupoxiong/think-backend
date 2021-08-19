@@ -12,7 +12,7 @@ return [
         // worker名称
         'name'          => 'TimerBusinessWorker',
         // 启动定时任务的进程数量
-        'count'         => 5,
+        'count'         => 1,
     ],
 
 
