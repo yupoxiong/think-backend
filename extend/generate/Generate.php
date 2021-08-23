@@ -12,7 +12,6 @@ use generate\exception\GenerateException;
 use generate\field\Editor;
 use generate\field\Field;
 use generate\field\File;
-use generate\field\Image;
 use generate\field\MultiFile;
 use generate\field\MultiImage;
 use generate\field\Video;
@@ -392,14 +391,6 @@ class Generate
                         $add_field_code_tmp  = File::$controllerAddCode;
                         $edit_field_code_tmp = File::$controllerEditCode;
                         break;
-                    case 'image':
-                        $add_field_code_tmp  = Image::$controllerAddCode;
-                        $edit_field_code_tmp = Image::$controllerEditCode;
-                        break;
-                    case 'multi_image':
-                        $add_field_code_tmp  = MultiImage::$controllerAddCode;
-                        $edit_field_code_tmp = MultiImage::$controllerEditCode;
-                        break;
                     case 'video':
                         $add_field_code_tmp  = Video::$controllerAddCode;
                         $edit_field_code_tmp = Video::$controllerEditCode;
@@ -739,8 +730,6 @@ class Generate
         $where_field = '';
         //日期/时间范围查询字段
         $time_field = '';
-        //多文件/多图上传获取器，修改器
-        $multi_field = '';
         foreach ($this->data['data'] as $value) {
             switch ($value['index_search']) {
                 case 'search':
@@ -758,17 +747,10 @@ class Generate
                     break;
             }
 
-            //多图/文件的获取器/修改器处理
-            if ($value['form_type'] === 'multi_image' || $value['form_type'] === 'multi_file') {
-                $multi_field_tmp = MultiImage::$modelAttrCode;
-                $multi_field_tmp = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], parse_name($value['field_name'], 1)), $multi_field_tmp);
-                $multi_field     .= $multi_field_tmp;
-            }
-
         }
         //搜索字段替换
         //替换多图/多文件获取器，修改器
-        $code = str_replace(array('[SEARCH_FIELD]', '[MULTI_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $multi_field, $where_field, $time_field), $code);
+        $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
 
         $msg = '';
         try {

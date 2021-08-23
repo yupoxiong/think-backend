@@ -131,8 +131,11 @@
                                         <td>{$item.id}</td>
             <td>{$item.name}</td>
             <td>{$item.description}</td>
-<td><img class="dataListImg" src="{$item.img}"></td>
-<td>{$item.status_text}</td>
+<td class="imgViewer" id="imgdataListImg{$data_key}">
+{foreach :explode(',', $item.img) as $item_img}
+<img class="dataListImg" data-img="{$item_img}" src="{$item_img}">
+{/foreach}
+</td><td>{$item.status_text}</td>
             <td>{$item.create_time}</td>
 
                             <td class="td-do">

@@ -63,7 +63,7 @@ class MemberLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-                     
+            
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -98,7 +98,7 @@ class MemberLevelController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-                       
+            
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');

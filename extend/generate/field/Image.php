@@ -13,22 +13,14 @@ class Image extends Field
         <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
         <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
-                <input id="[FIELD_NAME]" name="[FIELD_NAME]"  value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}"   placeholder="请输入[FORM_NAME]的URL" type="text" class="form-control fieldImage" >
-                <div class="input-group-append">
-                     <span class="input-group-text" onclick="showFileUpload('[FIELD_NAME]','image')">
-                          <i class="fas fa-upload"></i>上传
-                     </span>
-                </div>
-            </div>
-            
-            <div>
-                <img id="[FIELD_NAME]Show" class="imgViewer" src="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" alt="[FORM_NAME]">
+                <input id="[FIELD_NAME]_file" name="[FIELD_NAME]_file" type="file" class="file-loading " data-initial-preview="{if isset(\$data)}{\$data.[FIELD_NAME]}{/if}">
+                <input name="[FIELD_NAME]" id="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default=''}" hidden placeholder="请上传图片" class="fieldImage">
+                <script>
+                     initUploadImg('[FIELD_NAME]');
+                </script>            
             </div>
         </div>
-        
     </div>
-    
-   
 EOF;
 
     public static array $rules = [

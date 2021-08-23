@@ -160,14 +160,6 @@ function initMenuClick() {
 
 
 function imgViewer() {
-
-    $('.dataListImg').viewer({
-        url: 'src',
-        title: function (obj) {
-            return obj.alt;
-        }
-    });
-
     $('.imgViewer').viewer({
         url: 'src',
         title: function (obj) {

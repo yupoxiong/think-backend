@@ -105,23 +105,16 @@ EOF;
 
     //图片字段显示
     public static string $listImgHtml = <<<EOF
-<td><img class="dataListImg" src="{\$item.[FIELD_NAME]}"></td>\n
+<td class="imgViewer"><img class="dataListImg" src="{\$item.[FIELD_NAME]}"></td>\n
 EOF;
 
 
     public static string $listMultiImgHtml = <<<EOF
-<td class="dataListMultiImg" id="[FIELD_NAME]dataListImg{\$data_key}">
-{foreach name='item.[FIELD_NAME]' id='item_[FIELD_NAME]'}
+<td class="imgViewer" id="[FIELD_NAME]dataListImg{\$data_key}">
+{foreach :explode(',', \$item.[FIELD_NAME]) as \$item_[FIELD_NAME]}
 <img class="dataListImg" data-img="{\$item_[FIELD_NAME]}" src="{\$item_[FIELD_NAME]}">
 {/foreach}
 </td>
-<script>
-    $(function () {
-        $('#[FIELD_NAME]dataListImg{\$data_key}').viewer({
-            url:'data-img',
-        });
-    });
-</script>\n
 EOF;
 
     public static string $listMultiFileHtml = <<<EOF

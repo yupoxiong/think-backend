@@ -34,5 +34,4 @@ public function getStatusTextAttr($value, $data): string
 
     
 
-    
 }

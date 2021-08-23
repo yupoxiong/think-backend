@@ -30,5 +30,4 @@ class [MODEL_NAME] extends CommonBaseModel
 
     [RELATION]
 
-    [MULTI_FIELD]
 }

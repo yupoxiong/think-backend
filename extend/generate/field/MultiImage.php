@@ -12,77 +12,22 @@ class MultiImage extends Field
 
 <div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4 formInputDiv"> 
-        <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control fieldMultiImage" >
+    <div class="col-sm-10 col-md-4 formInputDiv">
+    
+    <div class="input-group">
+        <input id="[FIELD_NAME]_file" name="[FIELD_NAME]_file" type="file" class="file-loading " multiple>
+        <input name="[FIELD_NAME]" id="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default=''}" hidden placeholder="请上传图片" class="fieldMultiImage">
+        <script>
+                initUploadMultiImg('[FIELD_NAME]');
+        </script>            
+    </div>
     </div>
 </div>
-<script>
-$(function() {
-    $('#[FIELD_NAME]').fileinput({
-        "initialPreview":false,
-        overwriteInitial: true,
-        language: 'zh',
-        browseLabel: '浏览',
-        initialPreviewAsData: true,
-        initialPreviewShowDelete:false,
-        dropZoneEnabled: false,
-        showUpload:false,
-        showRemove: false,
-        allowedFileTypes:['image'],
-        //默认限制10M
-        maxFileSize:10240,
-        {if isset(\$data)}
-        initialPreview:{\$data->getData('[FIELD_NAME]')|raw},
-        {/if}
-    });
-})
-</script>\n
-EOF;
-
-
-    //控制器添加上传多图
-    public static string $controllerAddCode = <<<EOF
-//处理[FORM_NAME]上传
-\$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
-\$file       = \$attachment_[FIELD_NAME]->uploadMulti('[FIELD_NAME]');
-if (\$file) {
-    \$param['[FIELD_NAME]'] = \$file;
-} else {
-    return admin_error(\$attachment_[FIELD_NAME]->getError());
-}
-\n
-EOF;
-
-    //控制器修改上传多图
-    public static string $controllerEditCode = <<<EOF
-//处理[FORM_NAME]上传
-if (!empty(\$_FILES['[FIELD_NAME]']['name'][0])) {
-    \$attachment_[FIELD_NAME] = new \app\common\model\Attachment;
-    \$file       = \$attachment_[FIELD_NAME]->uploadMulti('[FIELD_NAME]');
-    if (\$file) {
-        \$param['[FIELD_NAME]'] = \$file;
-    } else {
-        return admin_error(\$attachment_[FIELD_NAME]->getError());
-    }
-}
-\n
 EOF;
 
 
     //多图上传模型内修改器与获取器
     public static string $modelAttrCode = <<<EOF
-//[FORM_NAME]获取器
-public function get[FIELD_NAME]Attr(\$value)
-{
-    return json_decode(\$value,true);
-}
-
-//[FORM_NAME]修改器
-public function set[FIELD_NAME]Attr(\$value)
-{
-    return json_encode(\$value);
-}
-\n
 EOF;
 
 

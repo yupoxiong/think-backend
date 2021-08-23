@@ -11,7 +11,6 @@ namespace app\admin\controller;
 
 
 use think\facade\Filesystem;
-use think\facade\Log;
 use think\Request;
 
 class FileController extends AdminBaseController
@@ -79,8 +78,6 @@ class FileController extends AdminBaseController
                 ]);
             }
 
-            Log::record($file);
-
             $name = Filesystem::putFile($dir, $file);
 
             $url = config('filesystem.disks.public.url') . '/' . $name;
@@ -110,12 +107,9 @@ class FileController extends AdminBaseController
     {
         $file   = urldecode($request->param('file'));
         $path   = app()->getRootPath() . 'public' . $file;
-        $result = unlink($path);
+        //$result = unlink($path);
+        $result = true;
         return $result ? json(['message' => '成功',]) : json(['message' => '失败']);
     }
 
-    public function multiUpload(Request $request)
-    {
-
-    }
 }
