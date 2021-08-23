@@ -12,6 +12,7 @@ namespace app\admin\controller;
 
 use think\facade\Filesystem;
 use think\Request;
+use think\response\Json;
 
 class FileController extends AdminBaseController
 {
@@ -24,7 +25,7 @@ class FileController extends AdminBaseController
 
     /**
      * @param Request $request
-     * @return string
+     * @return string|Json
      * @throws \Exception
      */
     public function upload(Request $request)
@@ -60,10 +61,9 @@ class FileController extends AdminBaseController
 
     /**
      * @param Request $request
-     * @return string
-     * @throws \Exception
+     * @return Json
      */
-    public function img(Request $request)
+    public function img(Request $request): Json
     {
         if ($request->isPost()) {
             $param = $request->param();
@@ -103,12 +103,17 @@ class FileController extends AdminBaseController
         return admin_error('非法访问');
     }
 
-    public function del(Request $request)
+    /**
+     * 删除文件
+     * @param Request $request
+     * @return Json
+     */
+    public function del(Request $request): Json
     {
-        $file   = urldecode($request->param('file'));
-        $path   = app()->getRootPath() . 'public' . $file;
-        //$result = unlink($path);
-        $result = true;
+        $file        = urldecode($request->param('file'));
+        $path        = app()->getRootPath() . 'public' . $file;
+        $true_delete = config('filesystem.form_true_delete');
+        $result      = $true_delete ? @unlink($path) : true;
         return $result ? json(['message' => '成功',]) : json(['message' => '失败']);
     }
 

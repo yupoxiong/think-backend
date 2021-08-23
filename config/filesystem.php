@@ -2,14 +2,14 @@
 
 return [
     // 默认磁盘
-    'default' => env('filesystem.driver', 'local'),
+    'default'     => env('filesystem.driver', 'local'),
     // 磁盘列表
-    'disks'   => [
-        'local'  => [
+    'disks'       => [
+        'local'        => [
             'type' => 'local',
             'root' => app()->getRuntimePath() . 'storage',
         ],
-        'public' => [
+        'public'       => [
             // 磁盘类型
             'type'       => 'local',
             // 磁盘路径
@@ -36,4 +36,6 @@ return [
         ],
         // 更多的磁盘配置信息
     ],
+    // 表单内是否真实删除文件
+    'form_true_delete' => false,
 ];
