@@ -28,7 +28,7 @@ function initUploadImg(field, fileId = '') {
         autoReplace: true,
         initialPreviewShowDelete: false,
         dropZoneTitle: '点此上传图片或将图片拖到这里…',
-        dropZoneClickTitle: '(或可点击下方选择按钮)',
+        dropZoneClickTitle: '(或点击下方选择按钮)',
         fileActionSettings: {
             showDrag: false,
             showDownload: false,
@@ -99,6 +99,8 @@ function initUploadMultiImg(field, fileId = '') {
         minFileCount: 1,
         maxFileCount: 10,
         initialPreviewShowDelete: true,
+        dropZoneTitle: '点此上传图片或将图片拖到这里(支持多图上传)<br/>',
+        dropZoneClickTitle: '(或点击下方选择按钮)',
         fileActionSettings: {
             showDownload: false,
             showDrag: true,

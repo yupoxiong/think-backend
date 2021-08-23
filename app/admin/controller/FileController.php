@@ -111,6 +111,7 @@ class FileController extends AdminBaseController
     public function del(Request $request): Json
     {
         $file        = urldecode($request->param('file'));
+
         $path        = app()->getRootPath() . 'public' . $file;
         $true_delete = config('filesystem.form_true_delete');
         $result      = $true_delete ? @unlink($path) : true;
