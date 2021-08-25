@@ -5,36 +5,34 @@
 <section class="content">
 
     <!--顶部搜索筛选-->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header dataSearch">
-                <form class="form-inline searchForm" id="searchForm" action="{:url('index')}" method="GET">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header dataSearch">
+                    <form class="form-inline searchForm" id="searchForm" action="{:url('index')}" method="GET">
 
-                    <div class="input-group input-group-sm searchGroup">
-                        <input value="{$_keywords ? $_keywords : '' ;}"
-                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
-                    </div>
-                    
-                    
+                        <div class="input-group input-group-sm searchGroup">
+                            <input value="{$_keywords ? $_keywords : '' ;}"
+                                   name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
+                        </div>
 
-                    <div class="form-group searchGroup">
-                        <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
-                        </button>
-                    </div>
-                    
-                    <div class="form-group searchGroup">
-                        <button onclick="clearSearchForm()" class="btn btn-sm btn-default" type="button"><i
-                                class="fa  fa-eraser"></i> 清空查询
-                        </button>
-                    </div>
-                </form>
+
+                        <div class="form-group searchGroup">
+                            <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
+                            </button>
+                        </div>
+
+                        <div class="form-group searchGroup">
+                            <button onclick="clearSearchForm()" class="btn btn-sm btn-default" type="button"><i
+                                    class="fa  fa-eraser"></i> 清空查询
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-    
 
     <div class="row">
         <div class="col-md-12">
@@ -43,32 +41,35 @@
                 <!--数据列表顶部-->
                 <div class="card-header">
                     <div>
-                        <a title="添加" data-toggle="tooltip" class="btn btn-primary btn-sm "  href="{:url('add')}">
-    <i class="fa fa-plus"></i> 添加
-</a>
-                        <button class="btn btn-danger btn-sm AjaxButton" data-toggle="tooltip" title="删除选中数据" data-confirm-title="删除确认" data-confirm-content="您确定要删除选中的数据吗？" data-id="checked" data-url="{:url('del')}">
-    <i class="fa fa-trash"></i> 删除
-</button>
-                        
-                        <button class="btn btn-success btn-sm ReloadButton" data-toggle="tooltip" title="刷新">
-    <i class="fas fa-redo"></i> 刷新
-</button>
+                        <a title="添加" data-toggle="tooltip" class="btn btn-primary btn-sm " href="{:url('add')}">
+                            <i class="fa fa-plus"></i> 添加
+                        </a>
+                        <button class="btn btn-danger btn-sm AjaxButton" data-toggle="tooltip" title="删除选中数据"
+                                data-confirm-title="删除确认" data-confirm-content="您确定要删除选中的数据吗？" data-id="checked"
+                                data-url="{:url('del')}">
+                            <i class="fa fa-trash"></i> 删除
+                        </button>
+
+                        <button class="btn btn-default btn-sm ReloadButton" data-toggle="tooltip" title="刷新">
+                            <i class="fas fa-redo"></i> 刷新
+                        </button>
                     </div>
                 </div>
 
-                <div class="card-body table-responsive">
-                    <table class="table table-hover table-bordered dataTable">
+                <div class="card-body table-responsive p-0" >
+                    <table class="table table-hover table-bordered dataTable text-nowrap">
                         <thead>
                         <tr>
                             <th>
-    <input id="dataCheckAll" type="checkbox" onclick="checkAll(this)" class="checkbox" placeholder="全选/取消">
-</th>
-                                        <th>ID</th>
-            <th>名称</th>
-            <th>简介</th>
-            <th>图片</th>
-            <th>是否启用</th>
-            <th>创建时间</th>
+                                <input id="dataCheckAll" type="checkbox" onclick="checkAll(this)" class="checkbox"
+                                       placeholder="全选/取消">
+                            </th>
+                            <th>ID</th>
+                            <th>名称</th>
+                            <th>简介</th>
+                            <th>图片</th>
+                            <th>是否启用</th>
+                            <th>创建时间</th>
 
                             <th>操作</th>
                         </tr>
@@ -77,26 +78,31 @@
                         {foreach name='data' id='item' key='data_key'}
                         <tr>
                             <td>
-    <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox" data-id="{$item.id}" class="checkbox dataListCheck" value="{$item.id}" placeholder="选择/取消">
-</td>
-                                        <td>{$item.id}</td>
-            <td>{$item.name}</td>
-            <td>{$item.description}</td>
-<td><img class="dataListImg" src="{$item.img}"></td>
-<td>{$item.status_text}</td>
-            <td>{$item.create_time}</td>
+                                <input type="checkbox" onclick="checkThis(this)" name="dataCheckbox"
+                                       data-id="{$item.id}" class="checkbox dataListCheck" value="{$item.id}"
+                                       placeholder="选择/取消">
+                            </td>
+                            <td>{$item.id}</td>
+                            <td>{$item.name}</td>
+                            <td>{$item.description}</td>
+                            <td><img class="dataListImg" src="{$item.img}"></td>
+                            <td>{$item.status_text}</td>
+                            <td>{$item.create_time}</td>
 
                             <td class="td-do">
                                 <a href="{:url('edit',['id'=>$item.id])}"
                                    class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
                                     <i class="fas fa-pen"></i>
-                                    
+
                                 </a>
-                                <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
-    <i class="fas fa-trash-alt"></i>
-    
-</button>
-                                
+                                <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"
+                                        data-id="{$item.id}" data-confirm-title="删除确认"
+                                        data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗'
+                                        data-url="{:url('del')}">
+                                    <i class="fas fa-trash-alt"></i>
+
+                                </button>
+
                             </td>
                         </tr>
                         {/foreach}

@@ -94,7 +94,6 @@ class AdminUserController extends AdminBaseController
      * @param AdminUser $model
      * @param AdminUserValidate $validate
      * @return string|Json
-     * @throws Exception
      */
     public function edit($id, Request $request, AdminUser $model, AdminUserService $service, AdminUserValidate $validate)
     {
@@ -107,14 +106,19 @@ class AdminUserController extends AdminBaseController
                 return admin_error($validate->getError());
             }
 
-            $result = $service->update($data, $param);
+            try {
+                $result = $service->update($data, $param);
+            } catch (AdminServiceException $e) {
+                return admin_error($e->getMessage());
+            }
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
-            'data'      => $data,
-            'role_list' => (new AdminRoleService())->getAll(),
+            'data'            => $data,
+            'role_list'       => (new AdminRoleService())->getAll(),
+            'password_config' => $service->getCurrentPasswordLevel()
         ]);
 
         return $this->fetch('add');

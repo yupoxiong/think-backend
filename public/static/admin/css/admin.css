@@ -32,6 +32,11 @@
     margin-right: 5px;
 }
 
+.th-nowrap th{
+    white-space: nowrap!important;
+}
+
+
 
 .dataListImg {
     max-width: 32px;

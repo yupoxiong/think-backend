@@ -95,7 +95,27 @@ class AdminUserService
         if (preg_match(self::PASSWORD_LEVEL_LIST[$level]['rule'], $password)) {
             return true;
         }
-        return self::PASSWORD_LEVEL_LIST[$level]['desc'];
+        return '密码必须符合' . self::PASSWORD_LEVEL_LIST[$level]['desc'];
+    }
+
+    /**
+     * 获取当前密码参数配置内容
+     * @param string $content 可以为all，name,rule,desc
+     * @return false|string|string[]
+     */
+    public function getCurrentPasswordLevel($content = 'all')
+    {
+        $check = (int)setting('admin.safe.password_check');
+        if (!$check) {
+            return false;
+        }
+        $level = (int)setting('admin.safe.password_level');
+
+        if ($content === 'all') {
+            return self::PASSWORD_LEVEL_LIST[$level];
+        }
+
+        return self::PASSWORD_LEVEL_LIST[$level][$content];
     }
 
 }
