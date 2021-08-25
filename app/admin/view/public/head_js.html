@@ -1,5 +1,7 @@
 <script>
+    // 是否为调试模式
     var adminDebug = Boolean('{$admin.debug}');
+    // 退出url
     var logoutUrl = '{$admin.logout_url}';
     // cookie前缀
     var cookiePrefix = "{$cookie_prefix|default=''}";
@@ -7,10 +9,13 @@
     var UEServer = "{:url('editor/server')}";
     // 列表页当前选择的ID
     var dataSelectIds = [];
-
-    var uploadUrl = "{:url('file/upload')}"
-    var uploadImgUrl = "{:url('file/img')}"
-    var fileDelUrl = "{:url('file/del')}"
+    // 上传文件url
+    var uploadUrl = "{:url('file/upload')}";
+    // 删除文件url
+    var fileDelUrl = "{:url('file/del')}";
+    // 刷新token url
+    var tokenUrl = "{:url('auth/token')}";
+    var csrfToken = '{:token()}';
 </script>
 
 <!-- js-cookie -->
@@ -33,7 +38,7 @@
 {js href="__ADMIN_PLUGINS__/fileinput/js/plugins/sortable.min.js" /}
 <!-- fileinput themes -->
 {js href="__ADMIN_PLUGINS__/fileinput/themes/fas/theme.min.js" /}
-
+<!-- 数字输入插件 -->
 {js href="__ADMIN_PLUGINS__/bootstrap-number/bootstrap-number.min.js" /}
 <!-- icon picker -->
 {js href="__ADMIN_PLUGINS__/fontawesome-iconpicker/js/fontawesome-iconpicker.min.js" /}

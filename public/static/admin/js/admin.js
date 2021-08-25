@@ -10,8 +10,10 @@ try {
         fragment: '#pjaxContainer'
     });
     $(document).ajaxStart(function () {
+        // ajax请求的时候显示顶部进度条
         NProgress.start();
     }).ajaxStop(function () {
+        // ajax停止的时候结束进度条
         NProgress.done();
     });
 } catch (e) {
@@ -26,7 +28,7 @@ $(document).on('pjax:send', function (xhr) {
 });
 $(document).on('pjax:complete', function (xhr) {
     initToolTip();
-    imgViewer();
+    initImgViewer();
     setNavTab();
     NProgress.done();
 });
@@ -68,10 +70,7 @@ $(function () {
     // 初始化菜单点击高亮
     initMenuClick();
     // 初始化图片预览
-    imgViewer();
-
-    bindChangeImg();
-    //initInputFileText();
+    initImgViewer();
 
     let $body = $('body');
     /* 返回按钮 */
@@ -104,15 +103,6 @@ $(function () {
     });
 
 });
-
-function initInputFileText() {
-    $('.inputFile').each(function () {
-        $(this).inputFileText({
-            text: '选择文件1',
-        });
-    });
-
-}
 
 // 设置tab激活选项卡
 function setNavTab() {
@@ -158,70 +148,15 @@ function initMenuClick() {
     $('[data-toggle="popover"]').popover();
 }
 
-
-function imgViewer() {
+/**
+ * 图片预览
+ */
+function initImgViewer() {
     $('.imgViewer').viewer({
         url: 'src',
         title: function (obj) {
             return obj.alt;
         }
-    });
-}
-
-
-/**
- * 改变图片后更改预览图片
- */
-function bindChangeImg() {
-    $(".field-image").bind("input propertychange", function () {
-        let $obj = $(this);
-        inputImgShow($obj);
-    });
-}
-
-/**
- * 显示表单预览图片
- * @param $obj
- */
-function inputImgShow($obj) {
-    let $dom = $('#' + $obj.attr('id') + 'Show');
-    $dom.attr("src", $obj.val());
-    imgViewer();
-}
-
-/**
- * 显示上传文件页面
- * @param domId
- * @param fileType
- */
-function showFileUpload(domId, fileType) {
-
-    layer.open({
-        type: 2,
-        area: ['80%', '70%'],
-        title: '上传文件',
-        closeBtn: 1,
-        shift: 0,
-        content: uploadUrl + '?dom_id=' + domId + '&file_type=' + fileType,
-        scrollbar: false,
-    });
-}
-
-/**
- * 显示上传文件页面
- * @param domId
- * @param fileType
- */
-function showImgUpload(domId, fileType) {
-
-    layer.open({
-        type: 2,
-        area: ['80%', '70%'],
-        title: '上传文件',
-        closeBtn: 1,
-        shift: 0,
-        content:  '/admin/file/img?dom_id=' + domId + '&file_type=' + fileType,
-        scrollbar: false,
     });
 }
 
@@ -296,10 +231,10 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
     let data = new FormData($(form)[0]);
 
     if (adminDebug) {
-        console.log('%cajax submit start!', ';color:#333333');
-        console.log('action:' + action);
-        console.log('method:' + method);
-        console.log('data:' + data);
+        console.log('%c开始提交表单!', ';color:#333333');
+        console.log('action:', action);
+        console.log('method:', method);
+        console.log('data:', data);
     }
 
     $.ajax({
@@ -309,6 +244,12 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
             data: data,
             contentType: false,
             processData: false,
+            complete: function () {
+                if(adminDebug){
+                    console.log('表单ajax执行完毕');
+                }
+                refreshCsrfToken();
+            },
             success: function (result) {
                 layer.close(loadT);
                 if (showMsg) {
@@ -320,19 +261,23 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
 
                 // 调试信息
                 if (adminDebug) {
-                    console.log('submit success!');
-                    result.code === 200 ? console.log('%cresult success', ';color:#00a65a') : console.log('%cresult fail', ';color:#f39c12');
+                    console.log('ajax请求成功!');
+                    result.code === 200 ? console.log('%c业务返回成功', ';color:#00a65a') : console.log('%c业务返回失败', ';color:#f39c12');
                 }
                 if (result.code === 200) {
                     if (successCallback) {
+                        // 如果有成功回调函数就走回调函数
                         successCallback(result);
                     } else {
+                        // 没有回调函数跳转url
                         goUrl(result.url);
                     }
                 } else {
                     if (failCallback) {
+                        // 如果有失败回调函数就走回调函数
                         failCallback(result);
                     } else {
+                        // 没有回调函数跳转url
                         goUrl(result.url);
                     }
                 }
@@ -471,12 +416,15 @@ $(function () {
             dataData = JSON.parse(dataData);
         }
 
+        // 操作token
+        dataData.__token__ = csrfToken;
+
         /*需要确认操作*/
-        if (parseInt(layerConfirm) === 1) {
+        if (layerConfirm === 1) {
             //提示窗口的标题
-            var confirmTitle = $(this).data("confirmTitle") || '操作确认';
+            let confirmTitle = $(this).data("confirmTitle") || '操作确认';
             //提示窗口的内容
-            var confirmContent = $(this).data("confirmContent") || '您确定要执行此操作吗?';
+            let confirmContent = $(this).data("confirmContent") || '您确定要执行此操作吗?';
             layer.confirm(confirmContent, {title: confirmTitle, closeBtn: 1, icon: 3}, function () {
                 //如果为直接访问
                 if (layerType === 1) {
@@ -497,26 +445,23 @@ $(function () {
                     }
                 }
             });
-        } else {
-            //不需要操作确认
-            if (layerType === 1) {
-                //直接请求
-                ajaxRequest(url, layerMethod, dataData, go);
-            } else if (layerType === 2) {
-                //弹出窗口
-                //检查权限
-                if (checkAuth(url)) {
-                    //用窗口打开
-                    layer.open({
-                        type: 2,
-                        area: [layerWith, layerHeight],
-                        title: layerTitle,
-                        closeBtn: 1,
-                        shift: 0,
-                        content: url + "?request_type=layer_open&" + parseParam(dataData),
-                        scrollbar: false,
-                    });
-                }
+        } else if (layerType === 1) {
+            //直接请求
+            ajaxRequest(url, layerMethod, dataData, go);
+        } else if (layerType === 2) {
+            //弹出窗口
+            //检查权限
+            if (checkAuth(url)) {
+                //用窗口打开
+                layer.open({
+                    type: 2,
+                    area: [layerWith, layerHeight],
+                    title: layerTitle,
+                    closeBtn: 1,
+                    shift: 0,
+                    content: url + "?request_type=layer_open&" + parseParam(dataData),
+                    scrollbar: false,
+                });
             }
         }
     });
@@ -537,6 +482,9 @@ function ajaxRequest(url, method, data, go) {
             dataType: 'json',
             type: method,
             data: data,
+            complete: function () {
+                refreshCsrfToken();
+            },
             success: function (result) {
                 layer.close(loadT);
                 layer.msg(result.msg, {
@@ -673,7 +621,27 @@ function logout() {
             type: 'POST',
             data: {},
             success: function (result) {
-                goUrl(result.result.redirect);
+                if (adminDebug) {
+                    console.log('退出成功', result);
+                }
+                goUrl(result.data.redirect);
+            }
+        }
+    );
+}
+
+function refreshCsrfToken() {
+    $.ajax({
+            url: tokenUrl,
+            dataType: 'json',
+            type: 'POST',
+            data: {},
+            success: function (result) {
+                if (adminDebug) {
+                    console.log('获取新token', result);
+                }
+                csrfToken = result.data.token;
+                $("input[name='__token__']").val(csrfToken);
             }
         }
     );

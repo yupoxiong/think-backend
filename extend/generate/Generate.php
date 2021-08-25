@@ -13,7 +13,6 @@ use generate\field\Editor;
 use generate\field\Field;
 use generate\field\File;
 use generate\field\MultiFile;
-use generate\field\MultiImage;
 use generate\field\Video;
 use generate\rule\Required;
 use think\facade\Db;

@@ -29,6 +29,7 @@ class AuthController extends AdminBaseController
         'admin/auth/login',
         'admin/auth/captcha',
         'admin/auth/geetest',
+        'admin/auth/token',
     ];
 
     protected array $authExcept = [
@@ -145,6 +146,17 @@ class AuthController extends AdminBaseController
         session('gt_uid', $data['gt_uid']);
 
         return admin_success($status, $geeTest->getResponse());
+    }
+
+    /**
+     * 获取token
+     * @return Json
+     */
+    public function token(): Json
+    {
+        return admin_success('', [
+            'token' => token()
+        ]);
     }
 
 }

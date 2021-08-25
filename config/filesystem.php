@@ -1,10 +1,23 @@
 <?php
 
+// 常用图片后缀
+const IMAGE_EXT  = 'png,jpg,jpeg,gif,bmp,ico,svg';
+// 常用图片mime
+const IMAGE_MIME = 'image/png,image/jpeg,image/gif,image/bmp,image/ico,image/svg';
+// 常用视频后缀
+const VIDEO_EXT = 'mp4,mov,mpg,mpeg,rmvb,avi,rm,mkv,flv,wmv';
+// 常用音频后缀
+const AUDIO_EXT = 'mp4,wav,mid,flac,ape,m4a,ogg,mid';
+// 常用文本后缀
+const TEXT_EXT = 'txt,doc,docx,xls,xlsx,ppt,pptx,pdf,md,xml';
+// 常用压缩文件后缀
+const ARCHIVE_EXT = 'rar,zip,tar,gz,7z,bz2,cab,iso';
+
 return [
     // 默认磁盘
-    'default'     => env('filesystem.driver', 'local'),
+    'default'          => env('filesystem.driver', 'local'),
     // 磁盘列表
-    'disks'       => [
+    'disks'            => [
         'local'        => [
             'type' => 'local',
             'root' => app()->getRuntimePath() . 'storage',
@@ -18,6 +31,17 @@ return [
             'url'        => '/storage',
             // 可见性
             'visibility' => 'public',
+            'validate'   => [
+                'image' => [
+                    'fileSize:2048000',
+                    'fileExt:' . IMAGE_EXT,
+                    'fileMime:' . IMAGE_MIME,
+                ],
+                'file'  => [
+                    'fileSize:2048000',
+                    'fileExt:' . IMAGE_EXT . ',' . VIDEO_EXT . ',' . AUDIO_EXT . ',' . ARCHIVE_EXT . ',' . TEXT_EXT
+                ]
+            ],
         ],
 
         // 后台导入配置
@@ -38,4 +62,5 @@ return [
     ],
     // 表单内是否真实删除文件
     'form_true_delete' => false,
+
 ];

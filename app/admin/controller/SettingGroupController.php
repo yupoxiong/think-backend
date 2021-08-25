@@ -18,7 +18,15 @@ class SettingGroupController extends AdminBaseController
 {
     protected array $codeBlacklist = [
         'app', 'cache', 'database', 'console', 'cookie', 'log', 'middleware', 'session', 'template', 'trace',
-        'ueditor', 'api', 'attachment', 'geetest', 'generate', 'admin', 'paginate',
+        'ueditor', 'api', 'attachment', 'geetest', 'generate', 'admin', 'paginate', 'abstract', 'and', 'array',
+        'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die',
+        'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile',
+        'eval', 'exit', 'extends', 'final', 'finally', 'for', 'foreach', 'function', 'global', 'goto', 'if',
+        'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new',
+        'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch',
+        'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'yield', 'int', 'float', 'bool', 'string', 'true',
+        'false', 'null',
+
     ];
 
     /**
@@ -64,23 +72,21 @@ class SettingGroupController extends AdminBaseController
                 return admin_error($validate->getError());
             }
 
-            if (in_array($param['code'], $this->codeBlacklist)) {
+            if (in_array($param['code'], $this->codeBlacklist, true)) {
                 return admin_error('代码 ' . $param['code'] . ' 在黑名单内，禁止使用');
             }
             /** @var SettingGroup $result */
             $result = $model::create($param);
-
-            $url = URL_BACK;
-            if (isset($param['_create']) && $param['_create'] == 1) {
-                $url = URL_RELOAD;
-            }
 
             /** @var SettingGroup $data */
             $data = $model->find($result->id);
             create_setting_menu($data);
             create_setting_file($data);
 
-            return $result ? admin_success('添加成功', $url) : admin_error();
+            $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
+
+            return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
+
         }
 
         $this->assign([
@@ -90,11 +96,18 @@ class SettingGroupController extends AdminBaseController
         return $this->fetch();
     }
 
-    // 修改
+    /**
+     * @param $id
+     * @param Request $request
+     * @param SettingGroup $model
+     * @param SettingGroupValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
     public function edit($id, Request $request, SettingGroup $model, SettingGroupValidate $validate)
     {
         /** @var SettingGroup $data */
-        $data = $model->find($id);
+        $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
             $param           = $request->param();
             $validate_result = $validate->scene('edit')->check($param);
@@ -199,7 +212,7 @@ class SettingGroupController extends AdminBaseController
         $data = $model->find($id);
 
         $have    = AdminMenu::find(function ($query) use ($data) {
-            $query->where('code', $data->code);
+            $query->where('url', get_setting_menu_url($data));
         });
         $warning = cache('create_setting_menu_' . $data->code);
         if (!$warning && $have) {

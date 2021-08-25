@@ -367,7 +367,7 @@
     function refreshTable() {
         $.post('{:url("admin/generate/getTable")}', function (result) {
             let html = '<option value=""></option>';
-            $.each(result.result.table_list, function (index, item) {
+            $.each(result.data.table_list, function (index, item) {
                 html += '<option value="' + item + '">' + item + '</option>';
             });
             $('#table_name').html(html).select2();
@@ -517,14 +517,14 @@
                 if (adminDebug) {
                     console.time('表信息与相关DOM操作耗时');
                 }
-                let controller = result.result.controller;
-                let model = result.result.model;
-                let validate = result.result.validate;
-                let field = result.result.field;
+                let controller = result.data.controller;
+                let model = result.data.model;
+                let validate = result.data.validate;
+                let field = result.data.field;
                 if (adminDebug) {
                     console.log('字段数量：' + field.length);
                 }
-                let table = result.result.table;
+                let table = result.data.table;
                 //中文名
                 $('#cn_name').val(table.cn_name);
                 //如果是自动生成类名
@@ -631,7 +631,7 @@
 
         $.post('getValidateSelect', {form_type: form_type}, function (result) {
             if (200 === result.code) {
-                $validate_select.html(result.result);
+                $validate_select.html(result.data);
                 $validate_select.select2();
             } else {
                 layer.msg(result.msg);
@@ -645,7 +645,7 @@
     function refreshMenu() {
         $.post('{:url("admin/generate/getMenu")}', function (result) {
             let html = '<option value="-1">不生成</option><option value="0">顶级菜单</option>';
-            html += result.result;
+            html += result.data;
             $('#create_menu').html(html).select2();
         });
     }

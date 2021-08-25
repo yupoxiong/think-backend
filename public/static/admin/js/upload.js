@@ -22,7 +22,7 @@ function initUploadImg(field, fileId = '') {
         browseOnZoneClick: true,
         overwriteInitial: true,
         initialPreviewAsData: true,
-        uploadUrl: uploadImgUrl,
+        uploadUrl: uploadUrl,
         minFileCount: 1,
         maxFileCount: 1,
         autoReplace: true,
@@ -95,7 +95,7 @@ function initUploadMultiImg(field, fileId = '') {
         overwriteInitial: false,
         browseOnZoneClick: true,
         initialPreviewAsData: true,
-        uploadUrl: uploadImgUrl,
+        uploadUrl: uploadUrl,
         minFileCount: 1,
         maxFileCount: 10,
         initialPreviewShowDelete: true,
@@ -163,7 +163,7 @@ function initUploadFile(field, fileId = '') {
         browseOnZoneClick: true,
         overwriteInitial: true,
         initialPreviewAsData: true,
-        uploadUrl: uploadImgUrl,
+        uploadUrl: uploadUrl,
         maxTotalFileCount: 2,
         autoReplace: true,
         initialPreviewShowDelete: false,
@@ -215,6 +215,5 @@ function setNewContent($fileDom, $field) {
     if (adminDebug) {
         console.log(preview_content);
     }
-
     return new_content;
 }

@@ -93,7 +93,6 @@
                                 <td>{$item.name}</td>
                                 <td>{$item.description}</td>
                                 <td>{$item.status_text}</td>
-
                                 <td class="dataListTdAction">
                                     <a href="{:url('edit',['id'=>$item.id])}"
                                        class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
@@ -102,7 +101,7 @@
                                     </a>
 
                                     <a href="{:url('access',['id'=>$item.id])}"
-                                       class="btn btn-default btn-xs" title="修改授权" data-toggle="tooltip">
+                                       class="btn btn-info btn-xs" title="修改授权" data-toggle="tooltip">
                                         <i class="fas fa-key"></i>
                                         授权
                                     </a>

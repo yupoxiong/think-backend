@@ -68,7 +68,7 @@
             success:function (result){
                 console.log(result);
                 if(result.code===200){
-                    $('#position').html(result.result.city);
+                    $('#position').html(result.data.city);
                 }else{
                     $('#position').html(result.msg);
                 }

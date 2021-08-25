@@ -19,8 +19,8 @@
                       enctype="multipart/form-data">
                     <!-- 表单字段区域 -->
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="setting_group_id" class="col-sm-2 control-label">所属分组</label>
+                        <div class="form-group row">
+                            <label for="setting_group_id" class="col-sm-2 col-form-label ">所属分组</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <select name="setting_group_id" id="setting_group_id" class="form-control field-select"
                                         data-placeholder="请选择所属分组">
@@ -37,184 +37,86 @@
                         <script>
                             $('#setting_group_id').select2();
                         </script>
-                        <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">名称</label>
+                        <div class="form-group row">
+                            <label for="name" class="col-sm-2 col-form-label ">名称</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称"
                                        type="text" class="form-control field-text">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="description" class="col-sm-2 control-label">描述</label>
+                        <div class="form-group row">
+                            <label for="description" class="col-sm-2 col-form-label ">描述</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input id="description" name="description" value="{$data.description|default=''}"
                                        placeholder="请输入描述" type="text" class="form-control field-text">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="code" class="col-sm-2 control-label">代码</label>
+                        <div class="form-group row">
+                            <label for="code" class="col-sm-2 col-form-label ">代码</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input id="code" name="code" value="{$data.code|default=''}" placeholder="请输入代码"
                                        type="text" class="form-control field-text">
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">设置配置</label>
-                            <div class="col-sm-10 col-md-8">
-                                <div class="card">
-                                    <div class="card-body table-responsive">
-                                        <table id="goods" class="table table-hover table-bordered datatable"
-                                               width="100%">
-                                            <thead>
-                                            <tr class="input-type">
-                                                <th>操作</th>
-                                                <th>设置类型</th>
-                                                <th>设置名称</th>
-                                                <th>设置字段</th>
-                                                <th>设置内容</th>
-                                                <th>设置选项</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="dataBody">
-                                            {if isset($data)}
-                                            {foreach name='data.content' id='item'}
-                                            <tr>
-                                                <td>
-                                                    <a class="btn btn-xs btn-primary" onclick="addNew(this,1)">插入</a>
-                                                    <a class="btn btn-xs btn-success" onclick="addNew(this,2)">追加</a>
-                                                    <a class="btn btn-xs btn-danger" onclick="delThis(this,1)">删除</a>
-                                                </td>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label ">设置配置</label>
+                            <div class="col-sm-10 col-md-10">
+                                <table id="settingSetting" class="table table-hover table-bordered datatable"
+                                       width="100%">
+                                    <thead>
+                                    <tr class="input-type">
+                                        <th>操作</th>
+                                        <th>设置类型</th>
+                                        <th>设置名称</th>
+                                        <th>设置字段</th>
+                                        <th>设置内容</th>
+                                        <th>设置选项</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="dataBody">
+                                    {if isset($data)}
+                                    {foreach name='data.content' id='item'}
+                                    <tr>
+                                        <td>
+                                            <a class="btn btn-xs btn-primary" onclick="addNew(this,1)">插入</a>
+                                            <a class="btn btn-xs btn-success" onclick="addNew(this,2)">追加</a>
+                                            <a class="btn btn-xs btn-danger" onclick="delThis(this,1)">删除</a>
+                                        </td>
 
-                                                <td>
-                                                    <select name="config_type[]" class="form-control">
-                                                        <option value="text" {if $item.type=='text'}selected{/if}>
-                                                            文本[text]
-                                                        </option>
-                                                        <option value="number" {if $item.type=='number'}selected{/if}>
-                                                            数字[number]
-                                                        </option>
-                                                        <option value="password" {if
-                                                                $item.type=='password'}selected{/if}>密码[password]
-                                                        </option>
-                                                        <option value="mobile" {if $item.type=='mobile'}selected{/if}>
-                                                            手机号[mobile]
-                                                        </option>
-                                                        <option value="email" {if $item.type=='email'}selected{/if}>
-                                                            邮箱[email]
-                                                        </option>
-                                                        <option value="id_card" {if $item.type=='id_card'}selected{/if}>
-                                                            身份证号[id_card]
-                                                        </option>
-                                                        <option value="url" {if $item.type=='url'}selected{/if}>
-                                                            网址[url]
-                                                        </option>
-                                                        <option value="ip" {if $item.type=='ip'}selected{/if}>IP地址[ip]
-                                                        </option>
-                                                        <option value="textarea" {if
-                                                                $item.type=='textarea'}selected{/if}>文本域[textarea]
-                                                        </option>
-                                                        <option value="checkbox" {if
-                                                                $item.type=='checkbox'}selected{/if}>复选[checkbox]
-                                                        </option>
-                                                        <option value="switch" {if $item.type=='switch'}selected{/if}>
-                                                            开关[switch]
-                                                        </option>
-                                                        <option value="radio" {if $item.type=='radio'}selected{/if}>
-                                                            单选[radio]
-                                                        </option>
-                                                        <option value="select" {if $item.type=='select'}selected{/if}>
-                                                            选择列表[select]
-                                                        </option>
-                                                        <option value="multi_select" {if
-                                                                $item.type=='multi_select'}selected{/if}>
-                                                            多项选择列表[multi-select]
-                                                        </option>
-                                                        <option value="image" {if $item.type=='image'}selected{/if}>
-                                                            图片上传[image]
-                                                        </option>
-                                                        <option value="multi_image" {if
-                                                                $item.type=='multi_image'}selected{/if}>
-                                                            多图上传[multi-image]
-                                                        </option>
-                                                        <option value="file" {if $item.type=='file'}selected{/if}>
-                                                            文件上传[file]
-                                                        </option>
-                                                        <option value="multi_file" {if
-                                                                $item.type=='multi_file'}selected{/if}>多文件上传[multi-file]
-                                                        </option>
-                                                        <option value="date" {if $item.type=='date'}selected{/if}>
-                                                            日期[date]
-                                                        </option>
-                                                        <option value="date_range" {if
-                                                                $item.type=='date_range'}selected{/if}>日期范围[date-range]
-                                                        </option>
-                                                        <option value="datetime" {if
-                                                                $item.type=='datetime'}selected{/if}>日期时间[datetime]
-                                                        </option>
-                                                        <option value="datetime_range" {if
-                                                                $item.type=='datetime_range'}selected{/if}>
-                                                            日期时间范围[datetime-range]
-                                                        </option>
-                                                        <option value="year" {if $item.type=='year'}selected{/if}>
-                                                            年[year]
-                                                        </option>
-                                                        <option value="year_range" {if
-                                                                $item.type=='year_range'}selected{/if}>年范围[year-range]
-                                                        </option>
-                                                        <option value="year_month" {if
-                                                                $item.type=='year_month'}selected{/if}>年月[year-month]
-                                                        </option>
-                                                        <option value="year_month_range" {if
-                                                                $item.type=='year_month_range'}selected{/if}>
-                                                            年月范围[year-month-range]
-                                                        </option>
-                                                        <option value="map" {if $item.type=='map'}selected{/if}>
-                                                            地图选点[map]
-                                                        </option>
-                                                        <option value="color" {if $item.type=='color'}selected{/if}>
-                                                            颜色选择[color]
-                                                        </option>
-                                                        <option value="icon" {if $item.type=='icon'}selected{/if}>
-                                                            图标选择[icon]
-                                                        </option>
-                                                        <option value="editor" {if $item.type=='editor'}selected{/if}>
-                                                            富文本编辑器[editor]
-                                                        </option>
-                                                    </select>
-                                                </td>
+                                        <td>
+                                            {include file='setting/config_type' /}
+                                        </td>
 
-                                                <td>
-                                                    <input class="form-control" placeholder="名称" value="{$item.name}"
-                                                           name="config_name[]">
+                                        <td>
+                                            <input class="form-control" placeholder="名称" value="{$item.name}"
+                                                   name="config_name[]">
 
-                                                </td>
-                                                <td>
-                                                    <input class="form-control" placeholder="字段" value="{$item.field}"
-                                                           name="config_field[]">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" placeholder="字段" value="{$item.field}"
+                                                   name="config_field[]">
 
-                                                </td>
+                                        </td>
 
-                                                <td>
-                                                    <input class="form-control" name="config_content[]"
-                                                           value="{$item.content}" placeholder="选项/默认值(默认值为内容或者第一个选项)"/>
-                                                </td>
-                                                <td>
+                                        <td>
+                                            <input class="form-control" name="config_content[]"
+                                                   value="{$item.content}" placeholder="选项/默认值(默认值为内容或者第一个选项)"/>
+                                        </td>
+                                        <td>
                                                     <textarea class="form-control" name="config_option[]"
                                                               placeholder="设置选项(单选，复选，选择列表等需要填写此项。格式为 字段||中文名称+换行符)">{$item.option}</textarea>
-                                                </td>
-                                            </tr>
-                                            {/foreach}
-                                            {/if}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                    {/if}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="sort_number" class="col-sm-2 control-label">排序</label>
+                        <div class="form-group row">
+                            <label for="sort_number" class="col-sm-2 col-form-label ">排序</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <div class="input-group">
                                     <input id="sort_number" name="sort_number"
@@ -283,9 +185,7 @@
                 <option value="url">网址[url]</option>
                 <option value="ip">IP地址[ip]</option>
                 <option value="textarea">文本域[textarea]</option>
-                <option value="checkbox">复选[checkbox]</option>
                 <option value="switch">开关[switch]</option>
-                <option value="radio">单选[radio]</option>
                 <option value="select">选择列表[select]</option>
                 <option value="multi_select">多项选择列表[multi-select]</option>
                 <option value="image">图片上传[image]</option>

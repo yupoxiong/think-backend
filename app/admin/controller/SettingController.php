@@ -70,7 +70,7 @@ class SettingController extends AdminBaseController
                     return admin_error('设置信息不完整');
                 }
 
-                if (in_array($param['config_type'][$key], ['select', 'multi_select', 'radio', 'checkbox']) && ($param['config_option'][$key] == '')) {
+                if (in_array($param['config_type'][$key], ['select', 'multi_select']) && ($param['config_option'][$key] == '')) {
                     return admin_error('设置信息不完整');
                 }
 

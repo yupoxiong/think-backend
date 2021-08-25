@@ -10,6 +10,7 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 
+use think\exception\ValidateException;
 use think\facade\Filesystem;
 use think\Request;
 use think\response\Json;
@@ -17,70 +18,36 @@ use think\response\Json;
 class FileController extends AdminBaseController
 {
 
-    protected array $authExcept = [
-        'upload',
-        'img',
-        'index',
-    ];
-
-    /**
-     * @param Request $request
-     * @return string|Json
-     * @throws \Exception
-     */
-    public function upload(Request $request)
-    {
-        $min_file_count = $request->param('min_file_count') ?? 1;
-        $max_file_count = $request->param('max_file_count') ?? 1;
-        $file_type      = $request->param('file_type') ?? 'image';
-        $dom_id         = $request->param('dom_id') ?? 'img';
-
-        $multiple = $request->param('is_multiple') ? 'multiple="multiple"' : '';
-
-        if ($request->isPost()) {
-
-            $file = $request->file('file');
-            $name = Filesystem::putFile('topic', $file);
-
-            $url = config('filesystem.disks.public.url');
-
-            return admin_success('上传成功', [
-                'url' => $url . '/' . $name
-            ]);
-        }
-
-        $this->assign([
-            'min_file_count' => $min_file_count,
-            'max_file_count' => $max_file_count,
-            'multiple'       => $multiple,
-            'file_type'      => $file_type,
-            'dom_id'         => $dom_id,
-        ]);
-        return $this->fetch();
-    }
-
     /**
      * @param Request $request
      * @return Json
      */
-    public function img(Request $request): Json
+    public function upload(Request $request): Json
     {
         if ($request->isPost()) {
             $param = $request->param();
             $field = $param['file_field'] ?? 'file';
             $dir   = $param['file_dir'] ?? 'uploads';
+            // 文件类型，默认图片
+            $file_type = $param['file_type'] ?? 'image';
+            // 上传到本地，可自行修改为oss之类的
+            $config = config('filesystem.disks.public');
 
-            $file = $request->file($field);
+            $files = $request->file();
 
-            if (!$file) {
+            try {
+                validate([$field => $config['validate'][$file_type]])->check($files);
+            } catch (ValidateException $e) {
                 return json([
-                    'message' => '非法上传'
-                ]);
+                    'message' => $e->getMessage()
+                ], 500);
             }
+
+            $file = $files[$field];
 
             $name = Filesystem::putFile($dir, $file);
 
-            $url = config('filesystem.disks.public.url') . '/' . $name;
+            $url = $config['url'] . '/' . $name;
 
             return json([
                 'code'                 => 200,
@@ -97,7 +64,6 @@ class FileController extends AdminBaseController
                     ]
                 ],
             ]);
-
         }
 
         return admin_error('非法访问');
@@ -110,7 +76,7 @@ class FileController extends AdminBaseController
      */
     public function del(Request $request): Json
     {
-        $file        = urldecode($request->param('file'));
+        $file = urldecode($request->param('file'));
 
         $path        = app()->getRootPath() . 'public' . $file;
         $true_delete = config('filesystem.form_true_delete');

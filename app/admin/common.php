@@ -24,16 +24,16 @@ if (!function_exists('admin_success')) {
     /**
      * 后台返回成功
      * @param string $msg
-     * @param array $result
+     * @param array $data
      * @param int $code
      * @param string $url
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_success($msg = '操作成功', $result = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = []): Json
+    function admin_success($msg = '操作成功', $data = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = []): Json
     {
-        return admin_result($msg, $result, $url, $code, $header, $options);
+        return admin_result($msg, $data, $url, $code, $header, $options);
     }
 }
 
@@ -42,16 +42,16 @@ if (!function_exists('admin_error')) {
     /**
      * 后台返回错误
      * @param string $msg
-     * @param array $result
+     * @param array $data
      * @param string $url
      * @param int $code
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_error($msg = '操作失败', $result = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = []): Json
+    function admin_error($msg = '操作失败', $data = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = []): Json
     {
-        return admin_result($msg, $result, $url, $code, $header, $options);
+        return admin_result($msg, $data, $url, $code, $header, $options);
     }
 }
 
@@ -60,7 +60,7 @@ if (!function_exists('admin_result')) {
 
     /**
      * 后台返回结果
-     * @param array $result
+     * @param array $data
      * @param string $msg
      * @param string $url
      * @param int $code
@@ -68,13 +68,13 @@ if (!function_exists('admin_result')) {
      * @param array $options
      * @return Json
      */
-    function admin_result($msg = '', $result = [], $url = URL_CURRENT, $code = 500, $header = [], $options = []): Json
+    function admin_result($msg = '', $data = [], $url = URL_CURRENT, $code = 500, $header = [], $options = []): Json
     {
 
         $data = [
             'msg'    => $msg,
             'code'   => $code,
-            'result' => empty($result) ? (object)$result : $result,
+            'data' => empty($data) ? (object)$data : $data,
             'url'    => $url,
         ];
 
@@ -91,7 +91,7 @@ if (!function_exists('create_setting_file')) {
      * @param SettingGroup $data
      * @return bool
      */
-    function create_setting_file($data)
+    function create_setting_file($data): bool
     {
         $result = true;
         if ((int)$data->auto_create_file === 1) {
@@ -130,7 +130,7 @@ if (!function_exists('create_setting_menu')) {
      * @param SettingGroup $data
      * @return bool
      */
-    function create_setting_menu($data)
+    function create_setting_menu(SettingGroup $data): bool
     {
 
         $function = <<<EOF
@@ -143,7 +143,7 @@ EOF;
 
         $result = true;
         if ((int)$data->auto_create_menu === 1) {
-            $url  = 'admin/setting/' . $data->code;
+            $url  = get_setting_menu_url($data);
             /** @var AdminMenu $menu */
             $menu = (new app\admin\model\AdminMenu)->findOrEmpty(function ($query) use ($url) {
                 $query->where('url', $url);
@@ -176,5 +176,17 @@ EOF;
         }
 
         return $result ? true : false;
+    }
+}
+
+if (!function_exists('create_setting_menu')) {
+    /**
+     * 获取菜单url
+     * @param $data
+     * @return string
+     */
+    function get_setting_menu_url($data): string
+    {
+        return 'admin/setting/'.$data->code;
     }
 }

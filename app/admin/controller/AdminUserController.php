@@ -174,6 +174,7 @@ class AdminUserController extends AdminBaseController
     /**
      * 个人资料
      * @param Request $request
+     * @param AdminUserValidate $validate
      * @return mixed
      * @throws Exception
      */
@@ -181,20 +182,21 @@ class AdminUserController extends AdminBaseController
     {
         if ($request->isPost()) {
             $param = $request->param();
+
             if ($param['update_type'] === 'password') {
 
-                $validate_result = $validate->scene('password')->check($param);
+                $validate_result = $validate->scene('admin_password')->check($param);
                 if (!$validate_result) {
                     return admin_error($validate->getError());
                 }
 
-                if (!password_verify($param['password'], base64_decode($this->user->password))) {
+                if (!password_verify($param['current_password'], base64_decode($this->user->password))) {
                     return admin_error('当前密码不正确');
                 }
                 $param['password'] = $param['new_password'];
             }
 
-            return $this->user->save($param) ? admin_success('修改成功', URL_RELOAD) : admin_error();
+            return $this->user->save($param) ? admin_success('修改成功', [], URL_RELOAD) : admin_error();
         }
 
         $this->assign([
