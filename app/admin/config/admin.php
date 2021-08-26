@@ -2,7 +2,7 @@
 
 /**
 * 后台设置:后台管理方面的设置
-* 此配置文件为自动生成，生成时间2021-08-26 10:32:12
+* 此配置文件为自动生成，生成时间2021-08-26 11:45:41
 */
 
 return [
@@ -54,7 +54,7 @@ return [
     //SessionKeySign
     'store_sign_key'=>'admin_user_sign',
     //后台用户密码强度检测
-    'password_check'=>'1',
+    'password_check'=>'0',
     //密码安全强度等级
     'password_level'=>'2',
     //单设备登录

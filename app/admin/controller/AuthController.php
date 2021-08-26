@@ -19,7 +19,6 @@ use think\exception\ValidateException;
 use think\Request;
 use think\Response;
 use think\response\Json;
-use think\response\Redirect;
 use util\geetest\GeeTest;
 
 class AuthController extends AdminBaseController
@@ -71,6 +70,8 @@ class AuthController extends AdminBaseController
 
                 $admin_user = $service->login($username, $password);
                 $service->setAdminUserAuthInfo($admin_user, $remember);
+
+                $this->setLoginDeviceId($admin_user);
 
             } catch (ValidateException$e) {
                 $msg = $e->getMessage();

@@ -10,7 +10,7 @@ declare (strict_types=1);
 namespace app\admin\service;
 
 
-class AdminService
+class AdminBaseService
 {
 
 }

@@ -5,6 +5,7 @@
 
 namespace app\admin\traits;
 
+use think\facade\Cache;
 use think\response\Json;
 use think\response\Redirect;
 use app\admin\model\AdminUser;
@@ -14,6 +15,8 @@ use app\admin\exception\AdminServiceException;
 
 trait AdminAuthTrait
 {
+    protected $loginDeviceKey = 'admin_user_current_login_device_id_';
+
     /**
      * 检查登录
      * @return bool
@@ -96,9 +99,83 @@ trait AdminAuthTrait
      * @param string $url
      * @return bool
      */
-    public function checkPermission( AdminUser $user, string $url): bool
+    public function checkPermission(AdminUser $user, string $url): bool
     {
         return in_array($url, $this->authExcept, true) || in_array($url, $user->auth_url, true);
+    }
+
+    /**
+     * 单设备登录检查
+     * @param $user
+     * @return bool
+     */
+    public function checkOneDeviceLogin(): bool
+    {
+        $request = request();
+        $check   = (int)setting('admin.safe.one_device_login');
+        if (!$check) {
+            return true;
+        }
+
+        $login_except = !empty($this->loginExcept) ? array_map('parse_name', $this->loginExcept) : $this->loginExcept;
+
+        if (in_array($this->url, $login_except, true)) {
+            return true;
+        }
+
+        $device_id = (new AuthService)->getDeviceId($this->user);
+
+        $login_device_id = $this->getLoginDeviceId($this->user);
+
+        if ($login_device_id && $login_device_id !== $device_id) {
+            $login_url = url('admin/auth/login')->build();
+            if ($request->isGet()) {
+                throw new HttpResponseException(redirect($login_url));
+            }
+            throw new HttpResponseException(admin_error('未登录', [], $login_url, 401));
+        }
+
+        return $this->setLoginDeviceId($this->user);
+    }
+
+
+    /**
+     * 获取当前登录的设备ID
+     * @param $user
+     * @return string
+     */
+    public function getLoginDeviceId($user): string
+    {
+        $cache_key = $this->loginDeviceKey . $user->id;
+
+        return (string)Cache::get($cache_key);
+    }
+
+    /**
+     * 设置登录的设备ID
+     * @param $user
+     * @return bool
+     */
+    public function setLoginDeviceId($user): bool
+    {
+        $service   = new AuthService();
+        $device_id = $service->getDeviceId($user);
+        $cache_key = $this->loginDeviceKey . $user->id;
+        return Cache::set($cache_key, $device_id);
+    }
+
+    /**
+     * 清除当前登录的设备ID
+     * @param $user
+     * @return bool
+     */
+    public function clearLoginDeviceId($user): bool
+    {
+        $cache_key = $this->loginDeviceKey . $user->id;
+
+        return Cache::delete($cache_key);
+
+
     }
 
 }

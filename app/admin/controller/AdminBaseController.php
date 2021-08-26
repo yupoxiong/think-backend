@@ -18,8 +18,10 @@ class AdminBaseController
 {
     // 引入树相关trait
     use AdminTreeTrait;
+
     // 引入权限判断相关trait
     use AdminAuthTrait;
+
     // 引入office相关trait
     use AdminPhpOffice;
 
@@ -68,6 +70,7 @@ class AdminBaseController
     {
         $this->checkLogin();
         $this->checkAuth();
+        $this->checkOneDeviceLogin();
 
         $this->view = app()->make(View::class);
         // 分页每页数量
@@ -116,13 +119,13 @@ class AdminBaseController
             $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(), $menu->id ?? 0);
         }
 
-        $this->admin['debug']   = Env::get('app_debug') ? 1 : 0;
+        $this->admin['debug'] = Env::get('app_debug') ? 1 : 0;
         // 顶部导航
         $this->admin['top_nav'] = 0;
         // 顶部搜索
-        $this->admin['top_search']       = 0;
+        $this->admin['top_search'] = 0;
         // 顶部消息
-        $this->admin['top_message']      = 0;
+        $this->admin['top_message'] = 0;
         // 顶部通知
         $this->admin['top_notification'] = 0;
         // 文件删除url

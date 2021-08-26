@@ -5,8 +5,9 @@
 
 namespace app\admin\controller;
 
-use app\admin\service\SettingGroupService;
+
 use Exception;
+use RuntimeException;
 use think\db\Query;
 use think\Request;
 use app\common\model\Setting;
@@ -63,28 +64,11 @@ class SettingController extends AdminBaseController
                 return admin_error($validate->getError());
             }
 
-            foreach ($param['config_name'] as $key => $value) {
-                if (($param['config_name'][$key]) === ''
-                    || ($param['config_field'][$key] === '')
-                    || ($param['config_type'][$key] === '')
-                ) {
-                    return admin_error('设置信息不完整');
-                }
-
-                if (in_array($param['config_type'][$key], ['select', 'multi_select']) && ($param['config_option'][$key] == '')) {
-                    return admin_error('设置信息不完整');
-                }
-
-                $content[] = [
-                    'name'    => $value,
-                    'field'   => $param['config_field'][$key],
-                    'type'    => $param['config_type'][$key],
-                    'content' => $param['config_content'][$key],
-                    'option'  => $param['config_option'][$key],
-                ];
+            try {
+                $param['content'] = $this->getContent($param);
+            } catch (RuntimeException $exception) {
+                return admin_error($exception->getMessage());
             }
-
-            $param['content'] = $content;
 
             $result = $model::create($param);
 
@@ -93,15 +77,14 @@ class SettingController extends AdminBaseController
                 $url = URL_RELOAD;
             }
 
-            /** @var SettingGroup $group */
-            $group = SettingGroup::find($result->setting_group_id);
+            $group = (new SettingGroup)->find($result->setting_group_id);
             create_setting_file($group);
 
             return $result ? admin_success('添加成功', $url) : admin_error();
         }
 
         $this->assign([
-            'setting_group_list' => SettingGroup::select(),
+            'setting_group_list' => (new SettingGroup)->select(),
 
         ]);
 
@@ -116,7 +99,7 @@ class SettingController extends AdminBaseController
      * @return string|Json
      * @throws Exception
      */
-    public function edit($id, Request $request, Setting $model, SettingValidate $validate, SettingGroup $settingGroup)
+    public function edit($id, Request $request, Setting $model, SettingValidate $validate)
     {
 
         $data = $model->findOrEmpty($id);
@@ -126,35 +109,17 @@ class SettingController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            $content = [];
-            foreach ($param['config_name'] as $key => $value) {
-                if (($param['config_name'][$key]) === ''
-                    || ($param['config_field'][$key] === '')
-                    || ($param['config_type'][$key] === '')
-                ) {
-                    return admin_error('设置信息不完整');
-                }
 
-                if ($param['config_option'][$key] === '' && in_array($param['config_type'][$key], ['select', 'multi_select'])) {
-                    return admin_error('设置信息不完整');
-                }
-
-                $content[] = [
-                    'name'    => $value,
-                    'field'   => $param['config_field'][$key],
-                    'type'    => $param['config_type'][$key],
-                    'content' => $param['config_content'][$key],
-                    'option'  => $param['config_option'][$key],
-                ];
-
+            try {
+                $param['content'] = $this->getContent($param);
+            } catch (RuntimeException $exception) {
+                return admin_error($exception->getMessage());
             }
-
-            $param['content'] = $content;
 
             $result = $data->save($param);
 
             //自动更新配置文件
-            $group = $settingGroup->findOrEmpty($data->setting_group_id);
+            $group = (new SettingGroup())->findOrEmpty($data->setting_group_id);
             create_setting_file($group);
 
             return $result ? admin_success() : admin_error();
@@ -162,7 +127,7 @@ class SettingController extends AdminBaseController
 
         $this->assign([
             'data'               => $data,
-            'setting_group_list' => $settingGroup->select(),
+            'setting_group_list' => (new SettingGroup())->select(),
 
         ]);
         return $this->fetch('add');
@@ -221,6 +186,38 @@ class SettingController extends AdminBaseController
         ]);
 
         return $this->fetch('show');
+    }
+
+    /**
+     * 获取
+     * @param $param
+     * @return array
+     */
+    protected function getContent($param): array
+    {
+        $content = [];
+        foreach ($param['config_name'] as $key => $value) {
+            if (($param['config_name'][$key]) === ''
+                || ($param['config_field'][$key] === '')
+                || ($param['config_type'][$key] === '')
+            ) {
+                throw new RuntimeException('设置信息不完整');
+            }
+
+            if ($param['config_option'][$key] === '' && in_array($param['config_type'][$key], ['select', 'multi_select'])) {
+                throw new RuntimeException('设置信息不完整');
+            }
+
+            $content[] = [
+                'name'    => $value,
+                'field'   => $param['config_field'][$key],
+                'type'    => $param['config_type'][$key],
+                'content' => $param['config_content'][$key],
+                'option'  => $param['config_option'][$key],
+            ];
+
+        }
+        return $content;
     }
 
 
@@ -288,7 +285,11 @@ class SettingController extends AdminBaseController
     }
 
 
-    //
+    /**
+     * @param $id
+     * @return string
+     * @throws Exception
+     */
     public function info($id): string
     {
 

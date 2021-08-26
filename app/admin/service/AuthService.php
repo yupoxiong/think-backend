@@ -12,13 +12,14 @@ namespace app\admin\service;
 
 use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminUser;
+use app\common\exception\CommonServiceException;
+use app\common\service\StringService;
 use think\facade\Cache;
 use think\facade\Cookie;
 use think\facade\Event;
-use think\facade\Log;
 use think\facade\Session;
 
-class AuthService extends AdminService
+class AuthService extends AdminBaseService
 {
     protected $model;
 
@@ -202,8 +203,9 @@ class AuthService extends AdminService
     /**
      * 退出
      * @param AdminUser $admin_user
+     * @return bool
      */
-    public function logout($admin_user): bool
+    public function logout(AdminUser $admin_user): bool
     {
         // Event_事件 管理用户退出
         Event::trigger('AdminUserLogout', $admin_user);
@@ -211,11 +213,6 @@ class AuthService extends AdminService
         $this->clearAuthInfo();
 
         return true;
-    }
-
-    public function checkImageCaptcha($param)
-    {
-
     }
 
     /**
@@ -240,5 +237,27 @@ class AuthService extends AdminService
         return md5(md5($this->admin_key . $admin_user->id) . $this->admin_key);
     }
 
+    /**
+     * 获取当前设备ID
+     * @param $admin_user
+     * @return string
+     */
+    public function getDeviceId($admin_user): string
+    {
+        $key       = 'device_id_uid_' . $admin_user->id;
+        $device_id = Cookie::get($key);
+        if (!$device_id) {
+            try {
+                $rand_text = StringService::getRandString(20);
+            } catch (CommonServiceException $e) {
+                $rand_text = time() . $admin_user->id . microtime();
+            }
+
+            $device_id = sha1('admin_user_' . $admin_user->id . $rand_text . time());
+            Cookie::set($key, $device_id);
+        }
+
+        return $device_id;
+    }
 
 }

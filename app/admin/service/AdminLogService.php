@@ -17,7 +17,7 @@ use app\admin\model\AdminLog;
 use Exception;
 use think\facade\Db;
 
-class AdminLogService extends AdminService
+class AdminLogService extends AdminBaseService
 {
 
     protected $model;
