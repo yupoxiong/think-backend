@@ -5,6 +5,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\service\SettingGroupService;
 use Exception;
 use think\db\Query;
 use think\Request;
@@ -27,7 +28,7 @@ class SettingController extends AdminBaseController
     public function index(Request $request, Setting $model): string
     {
         $param = $request->param();
-        $data  = $model ->with('setting_group')
+        $data  = $model->with('setting_group')
             ->scope('where', $param)
             ->paginate([
                 'list_rows' => $this->admin['admin_list_rows'],
@@ -107,8 +108,15 @@ class SettingController extends AdminBaseController
         return $this->fetch();
     }
 
-    //修改
-    public function edit($id, Request $request, Setting $model, SettingValidate $validate)
+    /**
+     * @param $id
+     * @param Request $request
+     * @param Setting $model
+     * @param SettingValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
+    public function edit($id, Request $request, Setting $model, SettingValidate $validate, SettingGroup $settingGroup)
     {
 
         $data = $model->findOrEmpty($id);
@@ -118,16 +126,16 @@ class SettingController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-
+            $content = [];
             foreach ($param['config_name'] as $key => $value) {
-                if (($param['config_name'][$key]) == ''
-                    || ($param['config_field'][$key] == '')
-                    || ($param['config_type'][$key] == '')
+                if (($param['config_name'][$key]) === ''
+                    || ($param['config_field'][$key] === '')
+                    || ($param['config_type'][$key] === '')
                 ) {
                     return admin_error('设置信息不完整');
                 }
 
-                if (in_array($param['config_type'][$key], ['select', 'multi_select', 'radio', 'checkbox']) && ($param['config_option'][$key] == '')) {
+                if ($param['config_option'][$key] === '' && in_array($param['config_type'][$key], ['select', 'multi_select'])) {
                     return admin_error('设置信息不完整');
                 }
 
@@ -146,7 +154,7 @@ class SettingController extends AdminBaseController
             $result = $data->save($param);
 
             //自动更新配置文件
-            $group = SettingGroup::findOrEmpty($data->setting_group_id);
+            $group = $settingGroup->findOrEmpty($data->setting_group_id);
             create_setting_file($group);
 
             return $result ? admin_success() : admin_error();
@@ -154,7 +162,7 @@ class SettingController extends AdminBaseController
 
         $this->assign([
             'data'               => $data,
-            'setting_group_list' => SettingGroup::select(),
+            'setting_group_list' => $settingGroup->select(),
 
         ]);
         return $this->fetch('add');
@@ -181,10 +189,14 @@ class SettingController extends AdminBaseController
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
-
-    protected function show($id)
+    /**
+     * @param $id
+     * @return string
+     * @throws Exception
+     */
+    protected function show($id): string
     {
-        $data = Setting::where('setting_group_id', $id)->select();
+        $data = (new Setting)->where('setting_group_id', $id)->select();
 
         foreach ($data as $key => $value) {
 
@@ -201,7 +213,7 @@ class SettingController extends AdminBaseController
         }
 
         //自动更新配置文件
-        $group                = SettingGroup::find($id);
+        $group                = (new SettingGroup)->find($id);
         $this->admin['title'] = $group->name;
 
         $this->assign([
@@ -212,8 +224,12 @@ class SettingController extends AdminBaseController
     }
 
 
-    //更新设置
-    public function update(Request $request, Setting $model)
+    /**
+     * @param Request $request
+     * @param Setting $model
+     * @return Json
+     */
+    public function update(Request $request, Setting $model): Json
     {
         $param = $request->param();
 
@@ -224,36 +240,7 @@ class SettingController extends AdminBaseController
         $content_data = [];
         foreach ($config->content as $key => $value) {
 
-            switch ($value['type']) {
-                case 'image' :
-                case 'file':
-
-                    //处理图片上传
-                    if (!empty($_FILES[$value['field']]['name'])) {
-                        $attachment = new Attachment;
-                        $file       = $attachment->upload($value['field']);
-                        if ($file) {
-                            $value['content'] = $param[$value['field']] = $file->url;
-                        }
-                    }
-                    break;
-
-                case 'multi_file':
-                case 'multi_image':
-
-                    if (!empty($_FILES[$value['field']]['name'])) {
-                        $attachment = new Attachment;
-                        $file       = $attachment->uploadMulti($value['field']);
-                        if ($file) {
-                            $value['content'] = $param[$value['field']] = json_encode($file);
-                        }
-                    }
-                    break;
-
-                default:
-                    $value['content'] = $param[$value['field']];
-                    break;
-            }
+            $value['content'] = $param[$value['field']];
 
             $content_data[] = $value;
         }
@@ -262,18 +249,23 @@ class SettingController extends AdminBaseController
         $result          = $config->save();
 
         //自动更新配置文件
-        $group = SettingGroup::findOrEmpty($config->setting_group_id);
+        $group = (new SettingGroup)->findOrEmpty($config->setting_group_id);
         if (((int)$group->auto_create_file) === 1) {
             create_setting_file($group);
         }
 
-        return $result ? admin_success('修改成功', URL_RELOAD) : admin_error();
+        return $result ? admin_success('修改成功', [], URL_RELOAD) : admin_error();
 
     }
 
 
-    //列表
-    public function all(Request $request, SettingGroup $model)
+    /**
+     * @param Request $request
+     * @param SettingGroup $model
+     * @return string
+     * @throws Exception
+     */
+    public function all(Request $request, SettingGroup $model): string
     {
 
         $param = $request->param();
@@ -296,15 +288,20 @@ class SettingController extends AdminBaseController
     }
 
 
-    //单个配置的详情
-    public function info($id)
+    //
+    public function info($id): string
     {
 
         return $this->show($id);
     }
 
 
-    public function admin()
+    /**
+     * 后台设置
+     * @return string
+     * @throws Exception
+     */
+    public function admin(): string
     {
         return $this->show(1);
     }

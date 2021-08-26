@@ -5,6 +5,7 @@
 
 namespace app\common\model;
 
+use JsonException;
 use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
 
@@ -13,6 +14,8 @@ use think\model\relation\BelongsTo;
  * @package app\common\model
  * @property int $id ID
  * @property int $name 名称
+ * @property array $content 设置内容
+ * @property int $setting_group_id 所属分组ID
  */
 class Setting extends CommonBaseModel
 {
@@ -38,12 +41,20 @@ class Setting extends CommonBaseModel
 
     public function setContentAttr($value)
     {
-        return json_encode($value, JSON_THROW_ON_ERROR);
+        try {
+            return json_encode($value, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return (object)[];
+        }
     }
 
     public function getContentAttr($value)
     {
-        return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+        try {
+            return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return [];
+        }
     }
 
 

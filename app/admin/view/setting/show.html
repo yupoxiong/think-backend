@@ -3,26 +3,10 @@
 {block name='content'}
 {include file='public/content_header' /}
 <section class="content">
-    <div class="row" style="display: none;">
-        <div class="col-md-12">
-            <div class="card card-default">
-                <div class="card-header with-border">
-                    <div class="btn-group">
-                        <a class="btn flat btn-sm btn-default BackButton">
-                            <i class="fa fa-arrow-left"></i>
-                            返回
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12">
 
-
             <div class="card card-primary card-outline card-outline-tabs">
-
                 <div class="card-header p-0 border-bottom-0">
                     <ul class="nav nav-tabs NavTab" id="settingTab" role="tablist">
                         {foreach name='data_config' id='item'}
@@ -34,8 +18,6 @@
                     </ul>
                 </div>
 
-
-                <!-- Custom Tabs -->
                 <div class="card-body">
                     <div class="tab-content">
                         {foreach name='data_config' id='item'}
@@ -45,11 +27,9 @@
                                   enctype="multipart/form-data">
                                 <div class="card-body">
                                     <input name="id" value="{$item.id}" hidden>
-
                                     {foreach name='item.content' id='data' key='kk'}
                                     {$data.form|raw}
                                     {/foreach}
-
                                 </div>
 
                                 <!--表单底部-->
@@ -70,12 +50,9 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </form>
-
                         </div>
                         {/foreach}
-
                     </div>
                 </div>
             </div>
@@ -87,7 +64,6 @@
     $.each($('.dataForm'), function (index, item) {
         $(item).validate({});
     })
-
 </script>
 
 {/block}
