@@ -6,6 +6,7 @@
 namespace app\admin\traits;
 
 use think\facade\Cache;
+use think\facade\Log;
 use think\response\Json;
 use think\response\Redirect;
 use app\admin\model\AdminUser;
@@ -15,7 +16,7 @@ use app\admin\exception\AdminServiceException;
 
 trait AdminAuthTrait
 {
-    protected $loginDeviceKey = 'admin_user_current_login_device_id_';
+    protected string $loginDeviceKey = 'admin_user_current_login_device_id_';
 
     /**
      * 检查登录
@@ -41,6 +42,9 @@ trait AdminAuthTrait
             $this->user = (new AuthService)->getAdminUserAuthInfo();
 
         } catch (AdminServiceException $exception) {
+            if(app()->isDebug()){
+                Log::record('验证登录失败，信息：'.$exception->getMessage());
+            }
 
             $redirect  = url($url)->build();
             $login_url = url('admin/auth/login', ['redirect' => $redirect])->build();

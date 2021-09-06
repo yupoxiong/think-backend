@@ -9,6 +9,7 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
+use think\Log;
 use think\View;
 use think\facade\Env;
 use app\admin\model\{AdminMenu, AdminUser};
@@ -138,5 +139,18 @@ class AdminBaseController
         ]);
 
         return $this->view->fetch($template, $vars);
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @throws Exception
+     */
+    public function __call($name, $arguments)
+    {
+        if(request()->isPost()){
+            return  admin_error('页面未找到');
+        }
+        return $this->fetch('public/404');
     }
 }
