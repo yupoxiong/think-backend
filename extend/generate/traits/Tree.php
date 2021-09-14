@@ -7,23 +7,24 @@ namespace generate\traits;
 
 trait Tree
 {
-    public $text, $html;
+    public string $text;
+    public string $html;
     /**
      * 生成树型结构所需要的2维数组
      * @var array
      */
-    public $array;
+    public array $array;
 
     /**
      * 生成树型结构所需修饰符号，可以换成图片
      * @var array
      */
-    public $icon = array('│', '├', '└');
-    public $space = '&nbsp;&nbsp;';
+    public array $icon = array('│', '├', '└');
+    public string $space = '&nbsp;&nbsp;';
     /**
      * @access private
      */
-    public $ret = '';
+    public string $ret = '';
 
 
     /**
@@ -31,7 +32,7 @@ trait Tree
      * @param array $arr
      * @return bool
      */
-    public function initTree($arr=[])
+    public function initTree($arr=[]): bool
     {
         $this->array = $arr;
         $this->ret   = '';
@@ -48,7 +49,7 @@ trait Tree
      * @param string $str_group
      * @return string
      */
-    public function getTree($my_id, $str, $sid = 0, $adds = '', $str_group = '')
+    public function getTree($my_id, $str, $sid = 0, $adds = '', $str_group = ''): string
     {
         $parent_id = '';
         $n_str      = '';

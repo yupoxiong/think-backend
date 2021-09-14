@@ -40,9 +40,9 @@ class GenerateController extends AdminBaseController
     public function getTable()
     {
         $data = [
-            'table_list'=>(new Generate())->getTable(),
+            'table_list' => (new Generate())->getTable(),
         ];
-        return admin_success('success',$data);
+        return admin_success('success', $data);
     }
 
 
@@ -52,56 +52,58 @@ class GenerateController extends AdminBaseController
     }
 
 
-    //自动生成代码接口
+    /**
+     * 自动生成代码接口
+     * @param Request $request
+     * @return Json
+     */
     public function create(Request $request)
     {
         $param = $request->param();
-
-
-        $data = [
-            'table'      => $param['table_name'],
-            'cn_name'    => $param['cn_name'],
-            'menu'       => [
+        $data  = [
+            'table'          => $param['table_name'],
+            'cn_name'        => $param['cn_name'],
+            'menu'           => [
                 //创建菜单-1为不创建，0为顶级菜单
-                'create' => $param['create_menu'],
+                'create' => (int)$param['create_menu'],
                 'menu'   => $param['create_menu_list']
             ],
-            'controller' => [
+            'controller'     => [
                 'module' => 'admin',
-                'create' => $param['create_controller'] ?? 0,
+                'create' => (int)($param['create_controller'] ?? 0),
                 'name'   => $param['controller_name'],
                 'action' => $param['controller_action_list'],
             ],
             'api_controller' => [
                 'module' => 'api',
-                'create' => (bool)($param['create_api_controller'] ?? 0),
+                'create' => (int)($param['create_api_controller'] ?? 0),
                 'name'   => $param['api_controller_name'],
                 'action' => $param['api_controller_action_list'],
             ],
-            'model'      => [
+            'model'          => [
                 'module'      => 'common',
-                'create'      => $param['create_model'] ?? 0,
+                'create'      => (int)($param['create_model'] ?? 0),
                 'name'        => $param['model_name'],
-                'timestamp'   => $param['auto_timestamp'] ?? 0,
-                'soft_delete' => $param['soft_delete'] ?? 0,
+                'timestamp'   => (int)($param['auto_timestamp'] ?? 0),
+                'soft_delete' => (int)($param['soft_delete'] ?? 0),
             ],
-            'validate'   => [
+            'validate'       => [
                 'module' => 'common',
-                'create' => $param['create_validate'] ?? 0,
+                'create' => (int)($param['create_validate'] ?? 0),
                 'name'   => $param['validate_name'],
             ],
-            'view'       => [
-                'create_index' => $param['create_view_index'] ?? 0,
-                'index_button' => $param['index_operation_button'] ?? 1,
-                'create_add'   => $param['create_view_add'] ?? 0,
-                'enable'       => $param['list_enable'] ?? 0,
-                'delete'       => $param['list_delete'] ?? 0,
-                'create'       => $param['list_create'] ?? 0,
-                'export'       => $param['list_export'] ?? 0,
-                'import'       => $param['list_import'] ?? 0,
-                'refresh'      => $param['list_refresh'] ?? 0,
+            'view'           => [
+                'create_index' => (int)($param['create_view_index'] ?? 0),
+                'index_button' => (int)($param['index_operation_button'] ?? 1),
+                'create_add'   => (int)($param['create_view_add'] ?? 0),
+                'enable'       => (int)($param['list_enable'] ?? 0),
+                'delete'       => (int)($param['list_delete'] ?? 0),
+                'create'       => (int)($param['list_create'] ?? 0),
+                'export'       => (int)($param['list_export'] ?? 0),
+                'import'       => (int)($param['list_import'] ?? 0),
+                'refresh'      => (int)($param['list_refresh'] ?? 0),
             ],
-            'module'     => [
+            'module'         => [
                 'name_suffix' => $param['module_name_suffix'],
                 'icon'        => $param['module_icon'],
             ],
@@ -122,29 +124,29 @@ class GenerateController extends AdminBaseController
                 //表单名称/中文名称
                 'form_name'         => $param['form_name'][$key][0] ?? '',
                 //是否为列表字段
-                'is_list'           => $param['is_list'][$key][0] ?? 0,
+                'is_list'           => (int)($param['is_list'][$key][0] ?? 0),
                 //是否为表单字段
-                'is_form'           => $param['is_form'][$key][0] ?? 0,
+                'is_form'           => (int)($param['is_form'][$key][0] ?? 0),
                 //表单类型
-                'form_type'         => $param['form_type'][$key][0] ?? 0,
+                'form_type'         => $param['form_type'][$key][0] ?? 'text',
                 //验证规则
-                'form_validate'     => $param['form_validate'][$key] ?? 0,
+                'form_validate'     => $param['form_validate'][$key] ?? [],
                 //默认值
-                'field_default'     => $param['field_default'][$key][0] ?? 0,
+                'field_default'     => (int)($param['field_default'][$key][0] ?? 0),
                 //获取器/修改器
-                'getter_setter'     => $param['getter_setter'][$key][0] ?? 0,
+                'getter_setter'     => (int)($param['getter_setter'][$key][0] ?? 0),
                 //是否参与列表排序
-                'list_sort'         => $param['list_sort'][$key][0] ?? 0,
+                'list_sort'         => (int)($param['list_sort'][$key][0] ?? 0),
                 //筛选字段
-                'index_search'      => $param['index_search'][$key][0] ?? 0,
+                'index_search'      => (int)($param['index_search'][$key][0] ?? 0),
                 //筛选自定义select
                 'field_select_data' => $param['field_select_data'][$key][0] ?? '',
                 //验证场景
-                'field_scene'       => $param['field_scene'][$key] ?? 0,
+                'field_scene'       => (int)($param['field_scene'][$key][0] ?? 0),
                 //关联
-                'is_relation'       => $param['is_relation'][$key][0] ?? 0,
+                'is_relation'       => (int)($param['is_relation'][$key][0] ?? 0),
                 //关联类型
-                'relation_type'     => $param['relation_type'][$key][0] ?? 1,
+                'relation_type'     => (int)($param['relation_type'][$key][0] ?? 1),
                 //关联表
                 'relation_table'    => $param['relation_table'][$key][0] ?? '',
                 //关联显示字段
@@ -162,8 +164,8 @@ class GenerateController extends AdminBaseController
             $generate->run();
             $result = true;
         } catch (Exception $e) {
-            Log::error($e);
-            $msg = $e->getMessage();//.$e->getFile().$e->getLine();
+            Log::write(($e->getTrace()));
+            $msg = $e->getMessage();
         }
 
         return $result ? admin_success($msg) : admin_error($msg);

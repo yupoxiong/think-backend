@@ -1,46 +1,124 @@
 <?php
 /**
- *
- * @author yupoxiong<i@yupoxiong.com>
+ * 测试控制器
  */
-
-declare (strict_types=1);
-
 
 namespace app\api\controller;
 
-
-use app\common\model\Member;
-use GatewayClient\Gateway;
-use think\facade\Db;
-use think\Request;
-use util\jwt\Jwt;
+use think\response\Json;
+use app\api\service\TestService;
+use app\common\validate\TestValidate;
+use app\api\exception\ApiServiceException;
 
 class TestController extends ApiBaseController
 {
-    protected array $authExcept = [
-        'index'
-    ];
-
-    public function index(Request $request)
+    /**
+     * 列表
+     * @param TestService $service
+     * @return Json
+     */
+    public function index(TestService $service): Json
     {
-        $data = [];
-        for ($i=1;$i<10000;$i++){
-            $data[] = [
-                'username'=>random_int(1,100000),
-                'mobile'=>'1'.(random_int(5,9)).(random_int(100000000,999999999)),
-                'nickname'=>random_int(1,99999999),
+        try {
+            $data   = $service->getList($this->param, $this->page, $this->limit);
+            $result = [
+                'test' => $data,
             ];
-        }
-        Db::name('member')->insertAll($data);
 
-        return '<script>
-function refreshPage() {
-            window.location.reload();
+            return api_success($result);
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
         }
-        setTimeout("refreshPage()",20000); //指定30秒刷新一次
-
-</script>';
     }
 
+    /**
+     * 添加
+     *
+     * @param TestValidate $validate
+     * @param TestService $service
+     * @return Json
+     */
+    public function add(TestValidate $validate, TestService $service): Json
+    {
+        $check = $validate->scene('api_add')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        $result = $service->createData($this->param);
+
+        return $result ? api_success() : api_error();
+    }
+
+    /**
+     * 详情
+     *
+     * @param TestValidate $validate
+     * @param TestService $service
+     * @return Json
+     */
+    public function info(TestValidate $validate, TestService $service): Json
+    {
+        $check = $validate->scene('api_info')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+
+            $result = $service->getDataInfo($this->id);
+            return api_success([
+                'user_level' => $result,
+            ]);
+
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+    /**
+     * 修改
+     * @param TestService $service
+     * @param TestValidate $validate
+     * @return Json
+     */
+    public function edit(TestService $service, TestValidate $validate): Json
+    {
+        $check = $validate->scene('api_edit')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+            $service->updateData($this->id, $this->param);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+    /**
+     * 删除
+     * @param TestService $service
+     * @param TestValidate $validate
+     * @return Json
+     */
+    public function del(TestService $service, TestValidate $validate): Json
+    {
+        $check = $validate->scene('api_del')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+            $service->deleteData($this->id);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+    
+
+    
 }

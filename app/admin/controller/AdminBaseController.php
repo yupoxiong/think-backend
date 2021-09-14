@@ -131,6 +131,7 @@ class AdminBaseController
         $this->admin['top_notification'] = 0;
         // 文件删除url
         $this->admin['file_del_url'] = url('admin/file/del');
+        $this->admin['map'] = config('map');
 
         // 赋值后台变量
         $this->assign([

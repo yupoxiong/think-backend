@@ -20,7 +20,6 @@ EOF;
     public static array $rules = [
         'required' => '非空',
         'mobile'   => '手机号',
-        'regular'  => '自定义正则'
     ];
 
 

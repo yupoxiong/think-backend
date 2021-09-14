@@ -11,13 +11,15 @@ try {
     });
     $(document).ajaxStart(function () {
         // ajax请求的时候显示顶部进度条
+        console.log('ajax请求开始');
         NProgress.start();
     }).ajaxStop(function () {
         // ajax停止的时候结束进度条
+        console.log('ajax请求停止');
         NProgress.done();
     });
 } catch (e) {
-    console.log(e.message);
+    console.log('初始化pjax报错，信息：'+e.message);
 }
 
 $(document).on('pjax:timeout', function (event) {
@@ -245,7 +247,7 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
             contentType: false,
             processData: false,
             complete: function () {
-                if(adminDebug){
+                if (adminDebug) {
                     console.log('表单ajax执行完毕');
                 }
                 refreshCsrfToken();
@@ -614,6 +616,9 @@ function exitFullscreen() {
 
 }
 
+/**
+ * 退出
+ */
 function logout() {
     $.ajax({
             url: logoutUrl,
@@ -630,6 +635,9 @@ function logout() {
     );
 }
 
+/**
+ * 刷新token
+ */
 function refreshCsrfToken() {
     $.ajax({
             url: tokenUrl,
@@ -646,3 +654,27 @@ function refreshCsrfToken() {
         }
     );
 }
+
+/**
+ * 地图输入组建防止回车提交
+ */
+$(function () {
+    let $mapKey = $(".mapKeywords");
+    $mapKey.keyup(function (e) {
+        if (e.keyCode === 13) {
+            return false;
+        }
+    })
+    $mapKey.keydown(function (e) {
+        if (e.keyCode === 13) {
+            return false;
+        }
+    })
+    $mapKey.keypress(function (e) {
+        if (e.keyCode === 13) {
+            return false;
+        }
+    })
+
+
+});

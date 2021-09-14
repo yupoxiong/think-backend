@@ -15,6 +15,7 @@ class IndexController
 
     public function index()
     {
+
         return 'hi';
     }
 }

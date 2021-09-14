@@ -135,14 +135,17 @@ EOF;
     //验证器场景
     public static string $validateSceneCode =
         <<<EOF
-'admin_add'   => [[RULE_FIELD]],
-        'admin_edit'  => [[RULE_FIELD]],
-        'api_add'     => [[RULE_FIELD]],
-        'api_info'    => [[RULE_FIELD]],
-        'api_edit'    => [[RULE_FIELD]],
-        'api_del'     => [[RULE_FIELD]],
-        'api_disable' => [[RULE_FIELD]],
-        'api_enable'  => [[RULE_FIELD]],
+'admin_add'     => [[RULE_FIELD]],
+        'admin_edit'    => ['id', [RULE_FIELD]],
+        'admin_del'     => ['id', ],
+        'admin_disable' => ['id', ],
+        'admin_enable'  => ['id', ],
+        'api_add'       => [[RULE_FIELD]],
+        'api_info'      => ['id', ],
+        'api_edit'      => ['id', [RULE_FIELD]],
+        'api_del'       => ['id', ],
+        'api_disable'   => ['id', ],
+        'api_enable'    => ['id', ],
 EOF;
 
 
@@ -224,14 +227,8 @@ EOF;
             case 'texterea':
                 $data = Textarea::rule($length);
                 break;
-            case 'checkbox':
-                $data = Checkbox::rule($length);
-                break;
             case 'switch':
                 $data = SwitchField::rule($length);
-                break;
-            case 'radio':
-                $data = Radio::rule($length);
                 break;
             case 'select':
                 $data = Select::rule($length);

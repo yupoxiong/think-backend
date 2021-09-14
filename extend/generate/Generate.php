@@ -26,12 +26,12 @@ class Generate
     use Tree;
     use Tools;
 
+    // 配置
     protected $config = [];
 
-    //主数据
+    // 主数据
     protected $data = [];
 
-    protected $error;
 
     /**
      * 控制器和模型名、验证器名黑名单
@@ -73,7 +73,7 @@ class Generate
         $config_tmp = [
             //模版目录
             'template' => [
-                'api'            => [
+                'api' => [
                     'controller'         => $root_path . 'extend/generate/stub/ApiController.stub',
                     'controller_index'   => $root_path . 'extend/generate/stub/api_controller/api_index.stub',
                     'controller_add'     => $root_path . 'extend/generate/stub/api_controller/api_add.stub',
@@ -128,12 +128,14 @@ class Generate
         $this->data = $data;
     }
 
-
+    /**
+     * @return string
+     * @throws GenerateException
+     */
     public function run()
     {
         $this->checkName($this->data);
         $this->checkDir();
-
         $this->createAddView();
         $this->createIndexView();
         $this->createController();
@@ -211,9 +213,9 @@ class Generate
     /**
      * 检查目录（是否可写）
      * @return bool
-     * @throws Exception
+     * @throws GenerateException
      */
-    protected function checkDir()
+    protected function checkDir(): bool
     {
         if (!is_dir($this->config['file_dir']['controller'])) {
             $this->mkFolder($this->config['file_dir']['controller']);
@@ -230,7 +232,6 @@ class Generate
         if (!is_dir($this->config['file_dir']['view'])) {
             $this->mkFolder($this->config['file_dir']['view']);
         }
-
 
         if (!is_writable($this->config['file_dir']['controller'])) {
             throw new GenerateException('控制器目录不可写');
@@ -352,7 +353,7 @@ class Generate
     {
 
         //不生成控制器
-        if ($this->data['controller']['create'] == 0) {
+        if (!$this->data['controller']['create']) {
             return true;
         }
 
@@ -447,7 +448,7 @@ class Generate
 
             //[SEARCH_DATA_LIST]
             if ($value['index_search'] === 'select') {
-                if ($value['is_relation'] == 1 && $value['relation_type'] == 1) {
+                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
                     $table_name        = $this->getSelectFieldFormat($value['field_name'], 1);
                     $select_class_name = parse_name($table_name, 1);
                     $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
@@ -455,7 +456,7 @@ class Generate
                     $code_select       = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($select_list_name, $select_class_name), $code_select);
 
                     $index_select .= $code_select;
-                } else if ($value['is_relation'] == 0) {
+                } else if ($value['is_relation'] === 0) {
                     // 这里是处理select字段的选择列表
 
                     $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
@@ -468,21 +469,21 @@ class Generate
             }
 
 
-            if ($value['is_list'] == 1) {
+            if ($value['is_list'] === 1) {
 
                 //列表关联显示
-                if ($value['is_relation'] == 1 && $value['relation_type'] == 1) {
+                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
                     $relation_with_name = $this->getSelectFieldFormat($value['field_name'], 1);
                     $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
 
                 }
 
                 //如果有列表导出
-                if ($this->data['view']['export'] == 1) {
+                if ($this->data['view']['export'] === 1) {
                     $export_header .= "'" . $value['form_name'] . "',";
                     if ($value['getter_setter'] === 'switch') {
                         $export_body .= '        $record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
-                    } else if ($value['is_relation'] == 1 && $value['relation_type'] == 1) {
+                    } else if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
 
                         $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
                         $export_body   .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $relation_name . '->' . $value['relation_show'] . '?? ' . "'" . "'" . ";\n";
@@ -571,9 +572,9 @@ class Generate
             return true;
         }
 
-        $auto_time      = 'protected $autoWriteTimestamp = true;';
-        $soft_delete1   = 'use think\model\concern\SoftDelete;';
-        $soft_delete2   = 'use SoftDelete;';
+        $auto_time    = 'protected $autoWriteTimestamp = true;';
+        $soft_delete1 = 'use think\model\concern\SoftDelete;';
+        $soft_delete2 = 'use SoftDelete;';
 
         $file = $file = $this->config['template']['model'];
         $code = file_get_contents($file);
@@ -581,7 +582,7 @@ class Generate
 
         //软删除
         if ($this->data['model']['soft_delete']) {
-            $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]', ), array($soft_delete1, $soft_delete2), $code);
+            $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]',), array($soft_delete1, $soft_delete2), $code);
         } else {
             $code = str_replace(array("\n" . '[SOFT_DELETE_USE1]' . "\n", "\n    " . '[SOFT_DELETE_USE2]'), array('', ''), $code);
         }
@@ -719,13 +720,13 @@ class Generate
                 $switch_field .= "'" . $value['field_name'] . "',";
             }
         }
-        //switch字段替换
+        // switch字段替换
         $code = str_replace('[SWITCH_FIELD]', $switch_field, $code);*/
 
 
-        //搜索字段
+        // 搜索字段
         $search_field = '';
-        //条件字段
+        // 条件字段
         $where_field = '';
         //日期/时间范围查询字段
         $time_field = '';
@@ -747,8 +748,8 @@ class Generate
             }
 
         }
-        //搜索字段替换
-        //替换多图/多文件获取器，修改器
+        // 搜索字段替换
+        // 替换多图/多文件获取器，修改器
         $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
 
         $msg = '';
@@ -762,93 +763,36 @@ class Generate
         return $result ?? $msg;
     }
 
-    //创建验证器
-    protected function createValidate()
+    /**
+     * @return bool
+     * @throws GenerateException
+     */
+    protected function createValidate(): bool
     {
-        //不生成验证器
-        if ($this->data['validate']['create'] == 0) {
-            return true;
-        }
-
-        $file = $this->config['template']['validate'];
-        $code = file_get_contents($file);
-        $code = str_replace(array('[NAME]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]'), array($this->data['cn_name'], $this->data['validate']['name'], $this->data['validate']['module']), $code);
-
-
-        $rule_code      = '';
-        $msg_code       = '';
-        $scene_code     = Field::$validateSceneCode;
-        $scene_code_tmp = '';
-        foreach ($this->data['data'] as $key => $value) {
-            if (is_array($value['form_validate']) && $value['is_form'] == 1) {
-
-                if (in_array('required', $value['form_validate']) && !in_array($value['form_type'], ['file', 'multi_file', 'image', 'video', 'multi_image'])) {
-
-                    $rule_code_tmp = Required::$ruleValidate;
-                    $rule_code_tmp = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], $value['field_name']), $rule_code_tmp);
-
-                    $rule_code .= $rule_code_tmp;
-
-                    $msg_code_tmp = Required::$msgValidate;
-
-                    $msg_code_tmp = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), $msg_code_tmp);
-                    $msg_code     .= $msg_code_tmp;
-
-                    $scene_code_tmp .= "'" . $value['field_name'] . "',";
-
-
-                    //[RULE_FIELD]
-                }
-            }
-        }
-
-        $scene_code = str_replace('[RULE_FIELD]', $scene_code_tmp, $scene_code);
-
-        //规则
-        //消息
-        //场景
-        $code = str_replace(array('[VALIDATE_RULE]', '[VALIDATE_MSG]', '[VALIDATE_SCENE]'), array($rule_code, $msg_code, $scene_code), $code);
-
-        //场景方法
-        $code = str_replace('[VALIDATE_SCENE_FUNC]', '', $code);
-        /*if ($this->data['validate_scene_func']) {
-            $code = str_replace('[VALIDATE_SCENE_FUNC]', '', $code);
-        } else {
-            $code = str_replace('[VALIDATE_SCENE_FUNC]', '', $code);
-        }*/
-
-        $msg = '';
-        try {
-            file_put_contents($this->config['file_dir']['validate'] . $this->data['validate']['name'] . 'Validate' . '.php', $code);
-            $result = true;
-        } catch (Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
+        return (new ValidateBuild($this->data, $this->config))->run();
     }
 
-    //列表视图
+    // 列表视图
     protected function createIndexView()
     {
-        //如果不需要列表视图，直接返回
-        if ($this->data['view']['create_index'] == 0) {
+        // 如果不需要列表视图，直接返回
+        if (!$this->data['view']['create_index']) {
             return true;
         }
 
-        //列表数据名称
+        // 列表数据名称
         $name_list = '';
-        //列表数据字段
+        // 列表数据字段
         $field_list = '';
-        //搜索框显示
+        // 搜索框显示
         $search_name = '';
-        //其他搜索html
+        // 其他搜索html
         $search_html = '';
         $file_fields = ['file', 'image', 'video'];
         $sort_code   = '';
 
-        //OPERATION_ICON
-        //OPERATION_TEXT
+        // OPERATION_ICON
+        // OPERATION_TEXT
         $operation_del_icon = '<i class="fas fa-trash-alt"></i>';
         $operation_del_text = '删除';
 
@@ -865,8 +809,8 @@ class Generate
         foreach ($this->data['data'] as $key => $value) {
 
             // 排序处理
-            if ($value['list_sort'] == 1) {
-                if (strlen($sort_code) == 0) {
+            if ($value['list_sort']) {
+                if ($sort_code === '') {
 
                     $sort_code .= file_get_contents($this->config['template']['view']['index_path'] . 'sort1.stub');
                 }
@@ -876,28 +820,28 @@ class Generate
             }
 
             // 列表处理
-            if ($value['is_list'] == 1) {
-                //名称显示
+            if ($value['is_list']) {
+                // 名称显示
                 $name_list .= str_replace('[FORM_NAME]', $value['form_name'], Field::$listNameHtml);
-                //字段内容显示
+                // 字段内容显示
                 if (in_array($value['form_type'], $file_fields)) {
-                    //图片显示
+                    // 图片显示
                     $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listImgHtml);
                 } else if ($value['form_type'] === 'multi_image') {
-                    //多图显示
+                    // 多图显示
                     $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listMultiImgHtml);
                 } else if ($value['form_type'] === 'multi_file') {
-                    //多文件展示
+                    // 多文件展示
                     $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listMultiFileHtml);
                 } else if ($value['form_type'] === 'switch') {
-                    //status switch显示
+                    // status switch显示
                     if ($value['getter_setter'] === 'switch') {
                         $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listSwitchHtml);
                     }
                 } else if ($value['form_type'] === 'select') {
                     if ($value['is_relation'] == 1) {
                         if ($value['relation_type'] == 1) {
-                            //关联字段显示
+                            // 关联字段显示
                             $field_name = $this->getSelectFieldFormat($value['field_name'], 1) . '.' . $value['relation_show'] . '|default=' . "''";
                             $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
                         }
@@ -907,7 +851,7 @@ class Generate
                         $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
                     }
                 } else {
-                    //普通字段显示
+                    // 普通字段显示
                     $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listFieldHtml);
                 }
 
@@ -924,8 +868,8 @@ class Generate
                     break;
 
                 case 'select':
-                    if ($value['is_relation'] == 1) {
-                        if ($value['relation_type'] == 1) {
+                    if ($value['is_relation']) {
+                        if ($value['relation_type'] === 1) {
                             //关联字段筛选
                             $field_name  = str_replace('_id', '', $value['field_name']);
                             $search_html .= str_replace(array('[FIELD_NAME]', '[FIELD_NAME1]', '[FORM_NAME]', '[RELATION_SHOW]'), array($value['field_name'], $field_name, $value['form_name'], $value['relation_show']), Field::$listSearchRelationHtml);
@@ -935,7 +879,7 @@ class Generate
                         //自定义select
                         $field_select_data = $value['field_select_data'];
                         if (empty($field_select_data)) {
-                            throw new Exception('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
+                            throw new GenerateException('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
                         }
 
                         $field_name_list = $this->getSelectFieldFormat($value['field_name'], 2);
@@ -957,7 +901,7 @@ class Generate
 
         }
 
-        if (strlen($sort_code) > 0) {
+        if ($sort_code !== '') {
             $sort_code .= file_get_contents($this->config['template']['view']['index_path'] . 'sort2.stub');;
         }
 
@@ -966,30 +910,30 @@ class Generate
         $code = file_get_contents($file);
 
 
-        //列表删除判断
+        // 列表删除判断
         $del1 = '';
         $del2 = '';
-        //列表选择
+        // 列表选择
         $select1 = '';
         $select2 = '';
 
-        //列表添加
+        // 列表添加
         $create = '';
 
-        //列表刷新
+        // 列表刷新
         $refresh = '';
 
-        //如果有删除或者启用/禁用，开启选择
+        // 如果有删除或者启用/禁用，开启选择
         if ($this->data['view']['delete'] || $this->data['view']['enable']) {
             $select1 = file_get_contents($this->config['template']['view']['index_select1']);
             $select2 = file_get_contents($this->config['template']['view']['index_select2']);
         }
 
-        //删除按钮处理
+        // 删除按钮处理
         if ($this->data['view']['delete']) {
             $del1 = file_get_contents($this->config['template']['view']['index_del1']);
             $del2 = file_get_contents($this->config['template']['view']['index_del2']);
-            //操作形式处理
+            // 操作形式处理
             if ($this->data['view']['index_button'] == 1) {
                 $operation_del_text = '';
             } else if ($this->data['view']['index_button'] == 2) {
@@ -998,12 +942,12 @@ class Generate
             $del2 = str_replace(array('[OPERATION_DEL_ICON]', '[OPERATION_DEL_TEXT]'), array($operation_del_icon, $operation_del_text), $del2);
         }
 
-        //添加按钮处理
+        // 添加按钮处理
         if ($this->data['view']['create']) {
             $create = file_get_contents($this->config['template']['view']['index_path'] . 'create.stub');
         }
 
-        //刷新按钮处理
+        // 刷新按钮处理
         if ($this->data['view']['refresh']) {
             $refresh = file_get_contents($this->config['template']['view']['index_path'] . 'refresh.stub');
         }
@@ -1011,8 +955,8 @@ class Generate
         $code = str_replace(array('[INDEX_DEL1]', '[INDEX_DEL2]', '[INDEX_SELECT1]', '[INDEX_SELECT2]', '[INDEX_CREATE]', '[INDEX_REFRESH]'), array($del1, $del2, $select1, $select2, $create, $refresh), $code);
 
 
-        //顶部筛选（filter）和导出。筛选功能暂时为必生成
-        //$filter = '';
+        // 顶部筛选（filter）和导出。筛选功能暂时为必生成
+
         $filter = file_get_contents($this->config['template']['view']['index_filter']);
         $code   = str_replace('[INDEX_FILTER]', $filter, $code);
 
@@ -1028,26 +972,26 @@ class Generate
             $import = file_get_contents($this->config['template']['view']['index_import']);
         }
 
-        //启用/禁用
+        // 启用/禁用
         $enable1 = '';
         $enable2 = '';
         if ($this->data['view']['enable']) {
             $enable1 = file_get_contents($this->config['template']['path'] . 'view/index/enable1.stub');
             $enable2 = file_get_contents($this->config['template']['path'] . 'view/index/enable2.stub');
-            //操作形式处理
-            if ($this->data['view']['index_button'] == 1) {
+            // 操作形式处理
+            if ($this->data['view']['index_button'] === 1) {
                 $operation_disable_text = '';
                 $operation_enable_text  = '';
-            } else if ($this->data['view']['index_button'] == 2) {
+            } else if ($this->data['view']['index_button'] === 2) {
                 $operation_disable_icon = '';
                 $operation_enable_icon  = '';
             }
             $enable2 = str_replace(array('[OPERATION_DISABLE_ICON]', '[OPERATION_DISABLE_TEXT]', '[OPERATION_ENABLE_ICON]', '[OPERATION_ENABLE_TEXT]'), array($operation_disable_icon, $operation_disable_text, $operation_enable_icon, $operation_enable_text), $enable2);
         }
 
-        if ($this->data['view']['index_button'] == 1) {
+        if ($this->data['view']['index_button'] === 1) {
             $operation_edit_text = '';
-        } else if ($this->data['view']['index_button'] == 2) {
+        } else if ($this->data['view']['index_button'] === 2) {
             $operation_edit_icon = '';
         }
 
@@ -1067,11 +1011,11 @@ class Generate
         return $result ?? $msg;
     }
 
-    //add视图页面
+    // add视图页面
     protected function createAddView()
     {
-        //如果不需要列表视图，直接返回
-        if ($this->data['view']['create_add'] == 0) {
+        // 如果不需要列表视图，直接返回
+        if (!$this->data['view']['create_add']) {
             return true;
         }
 
@@ -1084,69 +1028,55 @@ class Generate
 
         foreach ($this->data['data'] as $key => $value) {
 
-            if ($value['is_form'] == 1) {
-                try {
+            if ($value['is_form']) {
+                if ($value['form_type'] === 'switch') {
+                    $value['form_type'] = 'switch_field';
+                } else if ($value['form_type'] === 'select') {
+                    $value['relation_data'] = '';
+                    // 这里是关联的
+                    if ($value['is_relation']) {
 
-                    if ($value['form_type'] === 'switch') {
-                        $value['form_type'] = 'switch_field';
-                    } else if ($value['form_type'] === 'select') {
-                        $value['relation_data'] = '';
-                        // 这里是关联的
-                        if ($value['is_relation'] == 1) {
-
-                            if ($value['relation_type'] == 1) {
-                                $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/relation_select_data.stub');
-                                $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
-                                $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
-                                $value['relation_data'] = $list_code;
-                            }
-                        } else {
-                            // 这里是非关联的
-                            $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/customer_select_data.stub');
+                        if ($value['relation_type'] === 1) {
+                            $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/relation_select_data.stub');
                             $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
-                            $list_code              = str_replace(array('[FIELD_LIST]', '[FIELD_NAME]'), array($list_name, $value['field_name']), $list_code);
+                            $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
                             $value['relation_data'] = $list_code;
                         }
-
-
-                    } else if (in_array($value['form_type'], $date_field)) {
-                        //如果是日期控件类字段，默认值各式不符的一律修改成''
-                        if (is_numeric($value['field_default'])) {
-                            $value['field_default'] = '';
-                        }
+                    } else {
+                        // 这里是非关联的
+                        $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/customer_select_data.stub');
+                        $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
+                        $list_code              = str_replace(array('[FIELD_LIST]', '[FIELD_NAME]'), array($list_name, $value['field_name']), $list_code);
+                        $value['relation_data'] = $list_code;
                     }
 
-                    $class_name = parse_name($value['form_type'], 1);
-                    $class      = '\\generate\\field\\' . $class_name;
-                    $form_body  .= $class::create($value);
 
-                } catch (Exception $exception) {
-                    return $exception->getMessage();
+                } else if (in_array($value['form_type'], $date_field, true)) {
+                    //如果是日期控件类字段，默认值各式不符的一律修改成''
+                    if (is_numeric($value['field_default'])) {
+                        $value['field_default'] = '';
+                    }
                 }
 
-                //验证暂时不处理图片和文件
-                if (is_array($value['form_validate'])
-                    && $value['form_type'] !== 'image'
-                    && $value['form_type'] !== 'video'
-                    && $value['form_type'] !== 'file'
-                    && $value['form_type'] !== 'multi_image'
-                    && $value['form_type'] !== 'multi_file') {
+                $class_name = parse_name($value['form_type'], 1);
+                $class      = '\\generate\\field\\' . $class_name;
+                $form_body  .= $class::create($value);
 
-                    if (in_array('required', $value['form_validate'])) {
+                if (in_array('required', $value['form_validate'], true)) {
+                    $Required  = new Required;
+                    $rule_html = $Required->formRule;
 
-                        $rule_html = Required::$ruleForm;
-
-                        //如果是多选select，验证字段使用[]后缀
-                        if ($value['form_type'] === 'multi_select' || $value['form_type'] === 'multi_image' || $value['form_type'] === 'multi_file') {
-                            $value['field_name'] .= '[]';
-                        }
-
-                        $form_rules .= str_replace('[FIELD_NAME]', $value['field_name'], $rule_html);
-
-                        $msg_html      = Required::$msgForm;
-                        $msg_html      = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), $msg_html);
-                        $form_messages .= $msg_html;
+                    //如果是多选select，验证字段使用[]后缀
+                    $multi_field = ['multi_select', 'multi_image', 'multi_file'];
+                    if (in_array($value['form_type'], $multi_field)) {
+                        $value['field_name'] .= '[]';
                     }
+
+                    $form_rules .= str_replace('[FIELD_NAME]', $value['field_name'], $rule_html);
+
+                    $msg_html      = $Required->formMsg;
+                    $msg_html      = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), $msg_html);
+                    $form_messages .= $msg_html;
                 }
             }
         }
@@ -1159,63 +1089,13 @@ class Generate
             array($form_body, $form_rules, $form_messages),
             $code);
 
-        $msg = '';
-        try {
-            if (!is_dir($this->config['file_dir']['view'] . $this->data['table'])) {
-                $this->mkFolder($this->config['file_dir']['view'] . $this->data['table']);
-            }
-
-            file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/add.html', $code);
-            $result = true;
-        } catch (Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
-
-        /*$code = str_replace('[FORM_RULES]', $this->data['validate'], $code);
-        $code = str_replace('[VALIDATE_MODULE]', $this->data['validate_module'], $code);
-
-        //规则
-        if ($this->data['validate_rule']) {
-            $code = str_replace('[VALIDATE_RULE]', '', $code);
-        } else {
-            $code = str_replace('[VALIDATE_RULE]', '', $code);
+        if (!is_dir($this->config['file_dir']['view'] . $this->data['table'])) {
+            $this->mkFolder($this->config['file_dir']['view'] . $this->data['table']);
         }
 
-        //消息
-        if ($this->data['validate_msg']) {
-            $code = str_replace('[VALIDATE_MSG]', '', $code);
-        } else {
-            $code = str_replace('[VALIDATE_MSG]', '', $code);
-        }
+        file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/add.html', $code);
 
-        //场景
-        if ($this->data['validate_scene']) {
-            $code = str_replace('[VALIDATE_SCENE]', '', $code);
-        } else {
-            $code = str_replace('[VALIDATE_SCENE]', '', $code);
-        }
-
-        //场景方法
-        if ($this->data['validate_scene_func']) {
-            $code = str_replace('[VALIDATE_SCENE_FUNC]', '', $code);
-        } else {
-            $code = str_replace('[VALIDATE_SCENE_FUNC]', '', $code);
-        }
-
-         $msg = '';
-        try {
-            file_put_contents($this->appPath . $this->data['vali\date_module'] . '/validate/' . $this->data['validate'] . '.php', $code);
-            $result = true;
-        } catch (\Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
-
-        */
-
+        return true;
     }
 
     //自动添加菜单
@@ -1234,7 +1114,7 @@ class Generate
         try {
 
             if (AdminMenu::where('url', $url_prefix . '/index')->find()) {
-                throw new \think\Exception('菜单已存在');
+                throw new GenerateException('菜单已存在');
             }
 
             $parent = [
@@ -1301,8 +1181,8 @@ class Generate
 
             Db::commit();
         } catch (Exception $e) {
-            $this->error = $e->getMessage();
             Db::rollback();
+            throw new GenerateException($e->getMessage());
         }
 
         return true;
@@ -1336,8 +1216,11 @@ class Generate
     }
 
 
-    //创建目录
-    protected function mkFolder($path)
+    /**
+     * 创建目录
+     * @param $path
+     */
+    protected function mkFolder($path): void
     {
         if (!is_readable($path)) {
             is_file($path) || mkdir($path, 0755) || is_dir($path);
@@ -1345,14 +1228,15 @@ class Generate
     }
 
     //获取目录下的所有类名
-    public function getClassList($dir, $except = [])
+    public function getClassList($dir, $except = []): array
     {
+        $files   = [];
         $handler = opendir($dir);
         while (($filename = readdir($handler)) !== false) {
             if ($filename !== '.' && $filename !== '..') {
                 $filename = str_replace('.php', '', $filename);
 
-                if (!in_array($filename, $except)) {
+                if (!in_array($filename, $except, true)) {
                     $files[] = $filename;
                 }
             }
@@ -1634,7 +1518,7 @@ class Generate
             $field_data['form_type'] = 'datetime';
 
             $ignore_field = ['create_time', 'update_time', 'delete_time'];
-            if (!in_array($field_info['name'], $ignore_field) && $field_info['type'] === 'int') {
+            if ($field_info['type'] === 'int' && !in_array($field_info['name'], $ignore_field, true)) {
                 $field_data['getter_setter'] = 'datetime';
             }
         }

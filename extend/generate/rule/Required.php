@@ -2,25 +2,25 @@
 /**
  * required规则相关
  */
+
 namespace generate\rule;
 
-class Required
+class Required extends Rule
 {
-    public static string $ruleValidate =  <<<EOF
-    '[FIELD_NAME]|[FORM_NAME]' => 'require',\n
-EOF;
 
-    public static string $msgValidate =  <<<EOF
+    public string $validateRule = 'require';
+
+    public string $validateMsg = <<<EOF
     '[FIELD_NAME].require' => '[FORM_NAME]不能为空',\n
 EOF;
 
-    public static string $ruleForm =  <<<EOF
+    public string $formRule = <<<EOF
     '[FIELD_NAME]': {
         required: true,
     },\n
 EOF;
 
-    public static string $msgForm =  <<<EOF
+    public string $formMsg = <<<EOF
     '[FIELD_NAME]': {
         required: "[FORM_NAME]不能为空",
     },\n

@@ -32,10 +32,9 @@
     margin-right: 5px;
 }
 
-.th-nowrap th{
-    white-space: nowrap!important;
+.th-nowrap th {
+    white-space: nowrap !important;
 }
-
 
 
 .dataListImg {
@@ -112,3 +111,12 @@
     height: 20px;
 }
 
+.mapInputContainer {
+    z-index: 20;
+    position: absolute;
+    min-width: 200px;
+    width: 50%;
+    text-align: center;
+    top: 15px;
+    left: 25%;
+}

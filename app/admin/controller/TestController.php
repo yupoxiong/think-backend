@@ -1,72 +1,165 @@
 <?php
 /**
- *
- * @author yupoxiong<i@yupoxiong.com>
+ * 测试控制器
  */
-
-declare (strict_types=1);
-
 
 namespace app\admin\controller;
 
-use app\admin\traits\AdminPhpOffice;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Exception;
+use think\Request;
+use think\db\Query;
+use think\response\Json;
+use app\common\model\Test;
+use app\common\model\UserLevel;
 
+use app\common\validate\TestValidate;
 
 class TestController extends AdminBaseController
 {
 
-
-
-    public function index()
+    /**
+     * 列表
+     *
+     * @param Request $request
+     * @param Test $model
+     * @return string
+     * @throws Exception
+     */
+    public function index(Request $request, Test $model): string
     {
+        $param = $request->param();
+        $data  = $model->with('user_level')->scope('AdminWhere', $param)
+            ->paginate([
+                 'list_rows' => $this->admin['admin_list_rows'],
+                 'var_page'  => 'page',
+                 'query'     => $request->get()
+        ]);
 
+        // 关键词，排序等赋值
+        $this->assign($request->get());
+
+        $this->assign([
+            'data'  => $data,
+            'page'  => $data->render(),
+            'total' => $data->total(),
+            
+        ]);
+        return $this->fetch();
+    }
+
+    /**
+     * 添加
+     *
+     * @param Request $request
+     * @param Test $model
+     * @param TestValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
+    public function add(Request $request, Test $model, TestValidate $validate)
+    {
+        if ($request->isPost()) {
+            $param           = $request->param();
+            $validate_result = $validate->scene('add')->check($param);
+            if (!$validate_result) {
+                return admin_error($validate->getError());
+            }
+            
+            $result = $model::create($param);
+
+            $url = URL_BACK;
+            if (isset($param['_create']) && (int)$param['_create'] === 1) {
+               $url = URL_RELOAD;
+            }
+
+            return $result ? admin_success('添加成功', [], $url) : admin_error();
+        }
+
+        $this->assign([
+    'user_level_list' => UserLevel::select(),
+
+]);
 
 
 
         return $this->fetch();
     }
 
-    public function index1()
+    /**
+     * 修改
+     *
+     * @param $id
+     * @param Request $request
+     * @param Test $model
+     * @param TestValidate $validate
+     * @return string|Json
+     * @throws Exception
+     */
+    public function edit($id, Request $request, Test $model, TestValidate $validate)
     {
-
-        $head = [];
-        for ($i = 1; $i <= 30; $i++) {
-            $head[] = '字段' . $i;
-        }
-
-        $body = [];
-        for($j=1;$j<=100000;$j++){
-            $data1 = [];
-            for ($i = 1; $i <= 30; $i++) {
-                $data1[$i] = $j.'-'.$i;
+        $data = $model->findOrEmpty($id);
+        if ($request->isPost()) {
+            $param = $request->param();
+            $check = $validate->scene('admin_edit')->check($param);
+            if (!$check) {
+                return admin_error($validate->getError());
             }
-            $body[] = $data1;
+            
+            $result = $data->save($param);
+
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
-        // Excel 表格头
-        return $this->exportXlsx($head,$body,'aa');
+        $this->assign([
+            'data' => $data,
+            'user_level_list' => UserLevel::select(),
+
+        ]);
+
+        return $this->fetch('add');
     }
 
-    public function index2()
+    /**
+     * 删除
+     *
+     * @param mixed $id
+     * @param Test $model
+     * @return Json
+     */
+    public function del($id, Test $model): Json
     {
-
-        $head = [];
-        for ($i = 1; $i <= 30; $i++) {
-            $head[] = '字段' . $i;
+        $check = $model->inNoDeletionIds($id);
+        if (false !== $check) {
+            return admin_error('ID为' . $check . '的数据不能被删除');
         }
 
-        $body = [];
-        for($j=1;$j<=100000;$j++){
-            $data1 = [];
-            for ($i = 1; $i <= 30; $i++) {
-                $data1[$i] = $j.'-'.$i;
-            }
-            $body[] = $data1;
+        $result = $model::destroy(static function ($query) use ($id) {
+            /** @var Query $query */
+            $query->whereIn('id', $id);
+        });
+
+        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+    }
+
+    
+
+    
+
+        /**
+     * @param Request $request
+     * @return Json
+     */
+    public function import(Request $request): Json
+    {
+        $param           = $request->param();
+        $field_name_list = ['头像','用户名','昵称','手机号','用户等级','密码','是否启用','经度','纬度','相册',];
+        if (isset($param['action']) && $param['action'] === 'download_example') {
+            $this->downloadExample($field_name_list);
         }
 
-        // Excel 表格头
-        return $this->exportData($head,$body,'aa');
+        $field_list = ['avatar','username','nickname','mobile','user_level_id','password','status','lng','lat','slide',];
+        $result = $this->importData('file','test',$field_list);
+
+        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }
 }
