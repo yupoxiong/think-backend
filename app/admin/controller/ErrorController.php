@@ -13,4 +13,8 @@ namespace app\admin\controller;
 class ErrorController extends AdminBaseController
 {
 
+    public function err403()
+    {
+        return $this->fetch('error/403');
+    }
 }

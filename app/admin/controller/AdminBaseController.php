@@ -9,7 +9,6 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
-use think\Log;
 use think\View;
 use think\facade\Env;
 use app\admin\model\{AdminMenu, AdminUser};
@@ -54,7 +53,11 @@ class AdminBaseController
      * 无需验证权限的URL
      * @var array
      */
-    protected array $authExcept = [];
+    protected array $authExcept = [
+        'admin/error/err403',
+        'admin/error/err404',
+        'admin/error/err500',
+    ];
 
     /**
      * 当前后台用户
@@ -69,11 +72,12 @@ class AdminBaseController
 
     public function initialize(): void
     {
+        $this->view = app()->make(View::class);
+
         $this->checkLogin();
         $this->checkAuth();
         $this->checkOneDeviceLogin();
 
-        $this->view = app()->make(View::class);
         // 分页每页数量
         $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
         // 限制每页数量最多不超过100
@@ -152,6 +156,6 @@ class AdminBaseController
         if(request()->isPost()){
             return  admin_error('页面未找到');
         }
-        return $this->fetch('public/404');
+        return $this->fetch('error/404');
     }
 }

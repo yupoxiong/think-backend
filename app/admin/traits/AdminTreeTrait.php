@@ -408,7 +408,7 @@ trait AdminTreeTrait
     protected function authorizeHtml($menu, $auth_menus = []): string
     {
         foreach ($menu as $n => $t) {
-            $menu[$n]['checked'] = in_array($t['id'], $auth_menus, true) ? ' checked' : '';
+            $menu[$n]['checked'] = in_array($t['id'], $auth_menus, false) ? ' checked' : '';
             $menu[$n]['level']   = $this->getLevel($t['id'], $menu);
             $menu[$n]['width']   = 100 - $menu[$n]['level'];
         }
@@ -417,7 +417,7 @@ trait AdminTreeTrait
         $this->text = [
             'other' => "<label class='checkbox'  >
                         <input \$checked  name='url[]' value='\$id' level='\$level'
-                        onclick='checkNode(this);' type='checkbox'>
+                        onclick='checkNode(this);' type='checkbox' data-url='\$url'>
                        \$name
                    </label>",
             '0'     => [

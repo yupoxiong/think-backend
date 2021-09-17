@@ -462,10 +462,7 @@
                 console.log('点击checkbox设置');
             }
             setSettingContent(this);
-
         });
-
-
 
         let $skinA = $('.skinA');
 
@@ -497,12 +494,6 @@
         let isTrue = $(dom).is(':checked');
         let $class = $(dom).data('class');
         let $dom = $(dom).data('dom');
-        if (adminDebug) {
-            console.log('cookieKey：' + CookieKey);
-            console.log('当前选中状态：' + isTrue);
-            console.log('操作dom：' + $dom);
-            console.log('添加class：' + $class);
-        }
 
         Cookies.set(CookieKey, isTrue ? 1 : 0);
         isTrue ? $($dom).addClass($class) : $($dom).removeClass($class);
@@ -659,7 +650,6 @@
         $dom.addClass(color);
     }
 
-
     function changeSkin(skin) {
         if (adminDebug) {
             console.log('改变皮肤：' + skin);
@@ -671,6 +661,5 @@
         let cookieKey = 'BackendTheme';
         Cookies.set(cookieKey,skin)
     }
-
 
 </script>

@@ -36,7 +36,6 @@ trait AdminAuthTrait
             return true;
         }
 
-
         // 验证登录
         try {
             $this->user = (new AuthService)->getAdminUserAuthInfo();
@@ -61,7 +60,6 @@ trait AdminAuthTrait
 
     /**
      * 检查权限
-     * @return Json|Redirect|boolean
      */
     public function checkAuth()
     {
@@ -85,7 +83,7 @@ trait AdminAuthTrait
 
         // 验证权限
         if ($this->user->id !== 1 && !$this->checkPermission($this->user, $url)) {
-            return $request->isGet() ? $this->fetch('public/error/403') : admin_error('无权限');
+            throw new HttpResponseException($request->isGet() ? redirect(url('error/err403')->build()) : admin_error('无权限'));
         }
 
         // 如果是提前验证权限
