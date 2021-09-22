@@ -16,7 +16,7 @@ trait AdminTreeTrait
      * @var array
      */
 
-    public $array;
+    public array $array;
 
     /**
      * 生成树型结构所需修饰符号，可以换成图片
