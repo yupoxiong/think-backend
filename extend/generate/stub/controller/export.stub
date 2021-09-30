@@ -9,7 +9,7 @@
     public function export(Request $request, [MODEL_NAME] $model)
     {
         $param = $request->param();
-        $data  = $model->scope('AdminWhere', $param)->select();
+        $data  = $model->scope('Where', $param)->select();
 
         $header = [[HEADER_LIST]];
         $body   = [];

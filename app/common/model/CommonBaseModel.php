@@ -41,7 +41,7 @@ class CommonBaseModel extends Model
      * @param Query $query
      * @var array $param
      */
-    public function scopeAdminWhere(Query $query, array $param): void
+    public function scopeWhere(Query $query, array $param): void
     {
         //关键词like搜索
         $keywords = $param['_keywords'] ?? '';

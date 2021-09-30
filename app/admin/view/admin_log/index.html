@@ -10,7 +10,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header dataSearch">
-                        <form class="searchForm form-inline" id="searchForm" action="" method="get">
+                        <form class="searchForm form-inline" id="searchForm" action="{:url('index')}" method="get">
                             <div class="input-group input-group-sm searchGroup">
                                 <input value="{$_keywords|default=''}" name="_keywords" id="_keywords"
                                        class="form-control input-sm"
@@ -35,7 +35,8 @@
                             </script>
 
                             <div class="input-group input-group-sm searchGroup">
-                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
+                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i>
+                                    查询
                                 </button>
                             </div>
 

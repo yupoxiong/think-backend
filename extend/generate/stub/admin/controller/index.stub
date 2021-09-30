@@ -9,7 +9,7 @@
     public function index(Request $request, [MODEL_NAME] $model): string
     {
         $param = $request->param();
-        $data  = $model[RELATION_WITH]->scope('AdminWhere', $param);
+        $data  = $model[RELATION_WITH]->scope('where', $param);
         [EXPORT_CODE]
         $data = $data->paginate([
             'list_rows' => $this->admin['admin_list_rows'],

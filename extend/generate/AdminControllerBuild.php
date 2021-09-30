@@ -1,6 +1,6 @@
 <?php
 /**
- * 后台控制器相关
+ * 后台控制器生成
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -10,7 +10,7 @@ declare (strict_types=1);
 namespace generate;
 
 
-class AdminController
+class AdminControllerBuild
 {
 
     /**

@@ -27,7 +27,7 @@ class [CONTROLLER_NAME]Controller extends AdminBaseController
     public function index(Request $request, [MODEL_NAME] $model): string
     {
         $param = $request->param();
-        $data  = $model[RELATION_WITH]->scope('AdminWhere', $param)
+        $data  = $model[RELATION_WITH]->scope('where', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',

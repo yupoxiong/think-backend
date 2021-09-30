@@ -1,6 +1,6 @@
 <?php
 /**
- * api控制器相关
+ * api控制器相关生成
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -10,7 +10,7 @@ declare (strict_types=1);
 namespace generate;
 
 
-class ApiController
+class ApiControllerBuild
 {
 
     /**

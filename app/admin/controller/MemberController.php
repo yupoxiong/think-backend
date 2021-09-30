@@ -28,7 +28,7 @@ class MemberController extends AdminBaseController
     public function index(Request $request, Member $model): string
     {
         $param = $request->param();
-        $data  = $model->with('member_level')->scope('AdminWhere', $param)
+        $data  = $model->with('member_level')->scope('where', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',
@@ -180,7 +180,7 @@ class MemberController extends AdminBaseController
     public function export(Request $request, Member $model)
     {
         $param = $request->param();
-        $data  = $model->scope('AdminWhere', $param)->select();
+        $data  = $model->scope('where', $param)->select();
 
         $header = ['ID','会员等级','账号','手机号','昵称','图片','是否启用','创建时间',];
         $body   = [];

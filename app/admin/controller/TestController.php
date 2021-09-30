@@ -28,7 +28,7 @@ class TestController extends AdminBaseController
     public function index(Request $request, Test $model): string
     {
         $param = $request->param();
-        $data  = $model->with('user_level')->scope('AdminWhere', $param)
+        $data  = $model->with('user_level')->scope('where', $param)
             ->paginate([
                  'list_rows' => $this->admin['admin_list_rows'],
                  'var_page'  => 'page',

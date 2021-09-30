@@ -564,7 +564,7 @@ class Generate
     /**
      * @return bool
      */
-    protected function createModel()
+    protected function createModel(): bool
     {
         return (new ModelBuild($this->data, $this->config))->run();
     }
