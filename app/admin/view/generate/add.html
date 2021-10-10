@@ -3,10 +3,12 @@
 {include file='public/content_header' /}
 <script>
     //收起左侧菜单，留出更大空间
-    let $body = $('body');
-    if (!$body.hasClass('sidebar-collapse')) {
-        $body.addClass('sidebar-collapse');
-    }
+    $(function () {
+        let $body = $('body');
+        if (!$body.hasClass('sidebar-collapse')) {
+            $body.addClass('sidebar-collapse');
+        }
+    });
 
 </script>
 <section class="content">
@@ -350,27 +352,82 @@
                         </div>
                     </div>
 
-                    <div class="card-body table-responsive">
-                        <table id="dataList" class="table table-hover table-bordered datatable" width="100%">
+                    <div class="card-body table-responsive p-0">
+                        <table id="dataList" class="table table-hover table-bordered datatable">
                             <thead>
                             <tr class="input-type">
-                                <th>操作</th>
-                                <th>
-                                    <span data-toggle="tooltip" title="字段名为小写下划线形式">字段</span>
-                                     |
-                                    <span  data-toggle="tooltip" title="字段类型，例如varchar(255),int(10),decimal(12,2)">类型</span>
+                                <th class="min-width-155">
+                                    <span data-toggle="tooltip" title="字段名为小写下划线形式">
+                                        字段
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip" title="字段类型，例如varchar(255),int(10),decimal(12,2)">
+                                        类型
+                                    </span>
                                 </th>
 
-                                <th>
-                                    <span data-toggle="tooltip" title="中文显示名称">名称</span>
+                                <th class="min-width-155">
+                                    <span data-toggle="tooltip" title="中文显示名称">
+                                        名称
+                                    </span>
                                     |
-                                    <span  data-toggle="tooltip" title="表单内字段默认值，默认为数据库默认值，可自行修改">默认值</span>
+                                    <span data-toggle="tooltip" title="表单内字段默认值，默认为数据库默认值，可自行修改">
+                                        默认值
+                                    </span>
                                 </th>
-                                <th title="是否在列表页显示">列表</th>
-                                <th title="是否为添加/修改页字段">表单</th>
-                                <th class="form-type-th" title="表单类型">表单类型</th>
-                                <th class="form-validate-th" title="表单验证">表单验证</th>
-                                <th title="字段更多设置">更多</th>
+                                <th class="min-width-105">
+                                     <span data-toggle="tooltip" title="是否在后台列表展示">
+                                        列表
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip" title="是否参与后台列表排序">
+                                        排序
+                                    </span>
+                                </th>
+                                <th class="min-width-255">
+                                    <span data-toggle="tooltip" title="是否为后台添加/修改页表单字段">
+                                        表单
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip" title="勾选表单后有效，台添加/修改页表单字段的输入类型">
+                                        表单类型
+                                    </span>
+                                </th>
+                                <th  class="min-width-255">
+
+                                    <span data-toggle="tooltip" title="后台添加/修改时的表单验证">
+                                        表单验证
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip"
+                                          title="参与验证的场景，包括[admin_add,admin_edit,api_add,api_edit]">
+                                        验证场景
+                                    </span>
+                                </th>
+
+                                <th  class="min-width-255">
+                                    <span data-toggle="tooltip" title="该字段是否使用修改器，可选择的有开关，日期，日期时间等">
+                                        修改器
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip" title="选择字段是否为关联字段以及关联的类型">
+                                        关联
+                                    </span>
+                                </th>
+
+                                <th  class="min-width-155">
+                                    <span data-toggle="tooltip"
+                                          title="是否参与列表筛选，可选择的有关键词搜索，下拉列表选择，时间范围筛等">
+                                        列表筛选
+                                    </span>
+                                </th>
+
+                                <th  class="min-width-155">
+                                    <span data-toggle="tooltip"
+                                          title="自定义筛选/select数据，当前字段为 列表选择 的时候生效。格式为：value||name，多个选项换行即可。例如[性别]字段，表单是[select]形式的，数据内容为：0||保密  1||男  2||女。一定要注意value和name的分割竖线为英文竖线，非中文竖线，不同的选项一定要换行">
+                                        自定义列表
+                                    </span>
+                                </th>
                             </tr>
                             </thead>
                             <tbody id="dataBody">
@@ -378,10 +435,7 @@
                         </table>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-primary btn-sm btn-success" onclick="addNewField(null,2)">
-                            添加一行
-                        </button>
-                        <button class="btn btn-primary btn-sm pull-right" type="submit">提交</button>
+                        <button class="btn btn-primary btn-sm pull-right" type="submit">生成代码</button>
                     </div>
                 </div>
             </div>
@@ -390,11 +444,6 @@
     </form>
 
     {include file='generate/template' /}
-
-    <div style="height: 360px;">
-        <!--此div是为了撑开最下面，防止更多设置高度太高导致页面闪跳-->
-    </div>
-
 
 </section>
 <script>
@@ -431,42 +480,7 @@
             $menu_list.select2();
             $action_list.select2();
         });
-
-        //默认添加一行空的字段
-        addNewField(null, 1);
-
-
     });
-
-
-    //添加新的字段
-    function addNewField(obj, type) {
-
-        formIndex++;
-        let template = $("#data-template").html().replace(/FORM_INDEX/g, '[' + formIndex + ']').replace(/INDEX_ID/g, formIndex);
-
-        if (obj == null) {
-            $("#dataBody").append(template);
-        } else {
-            if (type === 1) {
-                $(obj).parent().parent().before(template);
-            } else {
-                $(obj).parent().parent().after(template);
-            }
-        }
-
-        //刷新 dataBody DOM后的操作
-        dataBodyRefreshed();
-    }
-
-
-    //删除当前字段
-    function delThisField(obj) {
-        layer.confirm('您确认删除本行吗？', {title: '删除确认', closeBtn: 1, icon: 3}, function () {
-            $(obj).parent().parent().remove();
-            layer.closeAll();
-        });
-    }
 
     //提交验证
     $("#dataForm").validate({
@@ -519,7 +533,6 @@
     //列表视图操作按钮形式
     initIndexOperationButton();
 
-
     //初始化列表操作按钮形式
     function initIndexOperationButton() {
         let $button = $('#index_operation_button');
@@ -535,11 +548,9 @@
         $button.select2();
     }
 
-
     $(function () {
-        $('#index_operation_button').on('change', function (e) {
-            let $this = this;
-            Cookies(cookiePrefix + 'index_operation_button', $('#index_operation_button').val(), {expires: 30});
+        $('#index_operation_button').on('change', function () {
+            Cookies(cookiePrefix + 'index_operation_button', $('#index_operation_button').val(), {expires: 300});
         });
     });
 
@@ -673,7 +684,6 @@
                 layer.msg(result.msg);
             }
         });
-
     }
 
 
@@ -686,13 +696,6 @@
         });
     }
 
-
-    //字段更多设置
-    $("#pjaxContainer").off('click').on('click', '.MoreSetting', function () {
-        let $dom = $('#field_setting_div_' + $(this).data('id'));
-        $dom.is(":hidden") ? $dom.show() : $dom.hide();
-    });
-
     //选择关联类型防呆设计
     function selectRelation(obj) {
         let $obj = $(obj);
@@ -700,15 +703,15 @@
         let relation_show = $obj.data('relationShow');
         let relation_table = $obj.data('relationTable');
 
-        if (relation_type === 1) {
-            $('input[name="' + relation_table + '"]').attr('readonly', 'readonly');
-            $('input[name="' + relation_show + '"]').removeAttr('readonly');
-        } else if (relation_type === 2) {
-            $('input[name="' + relation_show + '"]').attr('readonly', 'readonly');
-            $('input[name="' + relation_table + '"]').removeAttr('readonly');
+        if (relation_type === 1 || relation_type === 2) {
+            $('input[name="' + relation_table + '"]').hide();
+            $('input[name="' + relation_show + '"]').show();
+        } else if (relation_type === 3 ||relation_type === 4) {
+            $('input[name="' + relation_show + '"]').hide();
+            $('input[name="' + relation_table + '"]').show();
         } else {
-            $('input[name="' + relation_table + '"]').attr('readonly', 'readonly');
-            $('input[name="' + relation_show + '"]').attr('readonly', 'readonly');
+            $('input[name="' + relation_table + '"]').hide();
+            $('input[name="' + relation_show + '"]').hide();
         }
     }
 
