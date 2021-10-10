@@ -66,22 +66,36 @@ class Generate
 
     public function __construct($data = [], $config = null)
     {
-
-
-        $root_path  = app()->getRootPath();
-        $app_path   = app()->getBasePath();
-        $config_tmp = [
-            //模版目录
+        $root_path = app()->getRootPath();
+        $app_path  = app()->getBasePath();
+        
+        $admin_controller_path = $root_path . 'extend/generate/stub/admin_controller/';
+        $apa_controller_path   = $root_path . 'extend/generate/stub/api_controller/';
+        $config_tmp            = [
+            // 模版目录
             'template' => [
-                'api' => [
-                    'controller'         => $root_path . 'extend/generate/stub/ApiController.stub',
-                    'controller_index'   => $root_path . 'extend/generate/stub/api_controller/api_index.stub',
-                    'controller_add'     => $root_path . 'extend/generate/stub/api_controller/api_add.stub',
-                    'controller_info'    => $root_path . 'extend/generate/stub/api_controller/api_info.stub',
-                    'controller_edit'    => $root_path . 'extend/generate/stub/api_controller/api_edit.stub',
-                    'controller_del'     => $root_path . 'extend/generate/stub/api_controller/api_del.stub',
-                    'controller_disable' => $root_path . 'extend/generate/stub/api_controller/api_disable.stub',
-                    'controller_enable'  => $root_path . 'extend/generate/stub/api_controller/api_enable.stub',
+                
+                'admin' => [
+                    'controller'     => $admin_controller_path . 'AminController.stub',
+                    'action_index'   => $admin_controller_path . 'action_index.stub',
+                    'action_add'     => $admin_controller_path . 'action_add.stub',
+                    'action_info'    => $admin_controller_path . 'action_info.stub',
+                    'action_edit'    => $admin_controller_path . 'action_edit.stub',
+                    'action_del'     => $admin_controller_path . 'action_del.stub',
+                    'action_disable' => $admin_controller_path . 'action_disable.stub',
+                    'action_enable'  => $admin_controller_path . 'action_enable.stub',
+                    'relation'  => $admin_controller_path . 'relation_data_list.stub',
+                ],
+                
+                'api'   => [
+                    'controller'         => $apa_controller_path . 'ApiController.stub',
+                    'controller_index'   => $apa_controller_path . 'api_index.stub',
+                    'controller_add'     => $apa_controller_path . 'api_add.stub',
+                    'controller_info'    => $apa_controller_path . 'api_info.stub',
+                    'controller_edit'    => $apa_controller_path . 'api_edit.stub',
+                    'controller_del'     => $apa_controller_path . 'api_del.stub',
+                    'controller_disable' => $apa_controller_path . 'api_disable.stub',
+                    'controller_enable'  => $apa_controller_path . 'api_enable.stub',
 
                     'service'         => $root_path . 'extend/generate/stub/ApiService.stub',
                     'service_index'   => $root_path . 'extend/generate/stub/api_service/api_index.stub',
@@ -92,6 +106,7 @@ class Generate
                     'service_disable' => $root_path . 'extend/generate/stub/api_service/api_disable.stub',
                     'service_enable'  => $root_path . 'extend/generate/stub/api_service/api_enable.stub',
                 ],
+
 
                 'path'           => $root_path . 'extend/generate/stub/',
                 'controller'     => $root_path . 'extend/generate/stub/Controller.stub',
@@ -113,12 +128,12 @@ class Generate
             ],
             //生成文件目录
             'file_dir' => [
-                'controller'     => $app_path . 'admin/controller/',
-                'api_controller' => $app_path . 'api/controller/',
-                'api_service'    => $app_path . 'api/service/',
-                'model'          => $app_path . 'common/model/',
-                'validate'       => $app_path . 'common/validate/',
-                'view'           => $app_path . 'admin/view/',
+                'admin_controller' => $app_path . 'admin/controller/',
+                'api_controller'   => $app_path . 'api/controller/',
+                'api_service'      => $app_path . 'api/service/',
+                'model'            => $app_path . 'common/model/',
+                'validate'         => $app_path . 'common/validate/',
+                'view'             => $app_path . 'admin/view/',
             ],
         ];
 
@@ -138,7 +153,7 @@ class Generate
         $this->checkDir();
         $this->createAddView();
         $this->createIndexView();
-        $this->createController();
+        $this->createAdminController();
         $this->createModel();
         $this->createValidate();
         $this->createMenu();
@@ -348,221 +363,21 @@ class Generate
         return $msg;
     }
 
-    //创建控制器
-    protected function createController()
+    /**
+     * 创建后台控制器
+     * @return bool
+     * @throws GenerateException
+     */
+    protected function createAdminController(): bool
     {
-
-        //不生成控制器
-        if (!$this->data['controller']['create']) {
-            return true;
-        }
-
-        $add_field_code  = '';
-        $edit_field_code = '';
-
-        //关联代码
-        $relation_1 = '';
-        $relation_2 = '';
-        $relation_3 = '';
-
-        //导出代码
-        $export_header = '';
-        $export_body   = '';
-        $export_name   = '';
-        $export_code   = '';
-        //with代码
-        $relation_with = '';
-        //with列表
-        $relation_with_list = '';
-
-        // 导入代码
-        $import_field     = '';
-        $import_code      = '';
-        $import_name_list = '';
-
-        //列表页关联查询
-        $index_select = '';
-
-        foreach ($this->data['data'] as $key => $value) {
-
-            if ($value['is_form'] == 1) {
-                switch ($value['form_type']) {
-                    case 'file':
-                        $add_field_code_tmp  = File::$controllerAddCode;
-                        $edit_field_code_tmp = File::$controllerEditCode;
-                        break;
-                    case 'video':
-                        $add_field_code_tmp  = Video::$controllerAddCode;
-                        $edit_field_code_tmp = Video::$controllerEditCode;
-                        break;
-                    case 'multi_file':
-                        $add_field_code_tmp  = MultiFile::$controllerAddCode;
-                        $edit_field_code_tmp = MultiFile::$controllerEditCode;
-                        break;
-                    case 'editor':
-                        $add_field_code_tmp  = Editor::$controllerAddCode;
-                        $edit_field_code_tmp = Editor::$controllerEditCode;
-                        break;
-                    default:
-                        $add_field_code_tmp  = '';
-                        $edit_field_code_tmp = '';
-                        break;
-                }
-
-                $add_field_code_tmp = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], $value['field_name']), $add_field_code_tmp);
-                $add_field_code     .= $add_field_code_tmp;
-
-                $edit_field_code_tmp = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], $value['field_name']), $edit_field_code_tmp);
-                $edit_field_code     .= $edit_field_code_tmp;
-
-
-                //关联处理
-                if ($value['is_relation'] == 1) {
-                    if ($value['relation_type'] == 1) {
-                        $table_name = $this->getSelectFieldFormat($value['field_name']);
-
-                        $class_name = parse_name($table_name, 1);
-                        $relation_1 .= 'use app\\common\\model\\' . $class_name . ";\n";
-
-                        $code_3     = file_get_contents($this->config['template']['path'] . 'controller/relation_data_list.stub');
-                        $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                        $code_3     = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($list_name, $class_name), $code_3);
-                        $relation_3 .= $code_3;
-                    }
-
-                } else if ($value['form_type'] === 'select') {
-
-                    $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
-                    $assign     = "'$list_name'=>" . $this->data['table'] . '::' . $const_name . ',';
-                    $relation_3 .= $assign;
-                }
-
-                // 这里处理导入，表单字段为导入字段
-                $import_field .= "'" . $value['field_name'] . "',";
-
-                $import_name_list .= "'" . $value['form_name'] . "',";
-
-            }
-
-
-            //[SEARCH_DATA_LIST]
-            if ($value['index_search'] === 'select') {
-                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
-                    $table_name        = $this->getSelectFieldFormat($value['field_name'], 1);
-                    $select_class_name = parse_name($table_name, 1);
-                    $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $code_select       = file_get_contents($this->config['template']['path'] . 'controller/relation_data_list.stub');
-                    $code_select       = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($select_list_name, $select_class_name), $code_select);
-
-                    $index_select .= $code_select;
-                } else if ($value['is_relation'] === 0) {
-                    // 这里是处理select字段的选择列表
-
-                    $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
-                    // '[LIST_NAME]' => [CLASS_NAME]::all(),
-                    $assign = "'$list_name'=>" . $this->data['table'] . '::' . $const_name . ',';
-
-                    $index_select .= $assign;
-                }
-            }
-
-
-            if ($value['is_list'] === 1) {
-
-                //列表关联显示
-                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
-                    $relation_with_name = $this->getSelectFieldFormat($value['field_name'], 1);
-                    $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
-
-                }
-
-                //如果有列表导出
-                if ($this->data['view']['export'] === 1) {
-                    $export_header .= "'" . $value['form_name'] . "',";
-                    if ($value['getter_setter'] === 'switch') {
-                        $export_body .= '        $record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
-                    } else if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
-
-                        $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
-                        $export_body   .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $relation_name . '->' . $value['relation_show'] . '?? ' . "'" . "'" . ";\n";
-                    } else {
-                        $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . ";\n";
-                    }
-                }
-
-            }
-
-        }
-
-
-        //启用禁用
-        $enable_code = '';
-        if (in_array(5, $this->data['controller']['action'])) {
-            $enable_tmp  = file_get_contents($this->config['template']['path'] . 'controller/enable.stub');
-            $enable_tmp  = str_replace('[MODEL_NAME]', $this->data['model']['name'], $enable_tmp);
-            $enable_code = $enable_tmp;
-        }
-
-        // 导出
-        if (strlen($export_header) > 0) {
-            $export_name = $this->data['table'];
-            $code_export = file_get_contents($this->config['template']['path'] . 'controller/export.stub');
-            $code_export = str_replace(array('[HEADER_LIST]', '[BODY_ITEM]', '[FILE_NAME]', '[MODEL_NAME]'), array($export_header, $export_body, $export_name, $this->data['model']['name']), $code_export);
-            $export_code = $code_export;
-        }
-
-        // 导入
-        if (strlen($import_field) > 0) {
-            $table_name  = $this->data['table'];
-            $code_import = file_get_contents($this->config['template']['path'] . 'controller/import.stub');
-            $code_import = str_replace(array('[TABLE_NAME]', '[FILED_LIST]', '[FILED_NAME_LIST]'), array($table_name, $import_field, $import_name_list), $code_import);
-            $import_code = $code_import;
-        }
-
-
-        if (strlen($relation_3) > 0) {
-            $code_2     = file_get_contents($this->config['template']['path'] . 'controller/relation_assign_1.stub');
-            $code_2     = str_replace('[RELATION_LIST]', $relation_3, $code_2);
-            $relation_2 = $code_2;
-        }
-
-
-        //如果有列表显示
-        if (strlen($relation_with_list) > 0) {
-            $relation_with = file_get_contents($this->config['template']['path'] . 'controller/relation_with.stub');
-            $relation_with = str_replace('[WITH_LIST]', $relation_with_list, $relation_with);
-        }
-
-
-        $file = $this->config['template']['controller'];
-        $code = file_get_contents($file);
-
-        //控制器添加方法特殊字段处理
-        //控制器修改方法特殊字段处理
-        $code = str_replace(
-            array('[NAME]', '[CONTROLLER_NAME]', '[CONTROLLER_MODULE]', '[MODEL_NAME]', '[MODEL_MODULE]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]', '[ADD_FIELD_CODE]', '[EDIT_FIELD_CODE]', '[RELATION_1]', '[RELATION_2]', '[RELATION_3]', '[EXPORT_CODE]', '[IMPORT_CODE]', '[ENABLE_CODE]', '[RELATION_WITH]', '[SEARCH_DATA_LIST]'),
-            array($this->data['cn_name'], $this->data['controller']['name'], $this->data['controller']['module'], $this->data['model']['name'], $this->data['model']['module'], $this->data['validate']['name'], $this->data['validate']['module'], $add_field_code, $edit_field_code, $relation_1, $relation_2, $relation_3, $export_code, $import_code, $enable_code, $relation_with, $index_select),
-            $code
-        );
-
-
-        $msg = '';
-        try {
-            file_put_contents($this->config['file_dir']['controller'] . $this->data['controller']['name'] . 'Controller' . '.php', $code);
-            $result = true;
-        } catch (Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
+        return (new AdminControllerBuild($this->data, $this->config))->run();
     }
 
     //创建模型
 
     /**
      * @return bool
+     * @throws GenerateException
      */
     protected function createModel(): bool
     {

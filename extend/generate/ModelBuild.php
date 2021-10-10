@@ -8,6 +8,8 @@ declare (strict_types=1);
 
 namespace generate;
 
+use Exception;
+use generate\exception\GenerateException;
 use think\facade\Db;
 
 class ModelBuild extends Build
@@ -25,8 +27,9 @@ class ModelBuild extends Build
 
     /**
      * 创建模型相关代码
+     * @throws GenerateException
      */
-    public function run()
+    public function run(): bool
     {
         // 不生成模型
         if (!$this->data['model']['create']) {
@@ -40,23 +43,23 @@ class ModelBuild extends Build
         $code = $this->code;
         $code = str_replace(array('[NAME]', '[TABLE_NAME]', '[MODEL_NAME]', '[MODEL_MODULE]'), array($this->data['cn_name'], $this->data['table'], $this->data['model']['name'], $this->data['model']['module']), $code);
 
-        //软删除
+        // 软删除
         if ($this->data['model']['soft_delete']) {
             $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]',), array($soft_delete1, $soft_delete2), $code);
         } else {
             $code = str_replace(array("\n" . '[SOFT_DELETE_USE1]' . "\n", "\n    " . '[SOFT_DELETE_USE2]'), array('', ''), $code);
         }
 
-        //自动时间戳
+        // 自动时间戳
         if ($this->data['model']['timestamp']) {
             $code = str_replace('[AUTO_TIMESTAMP]', $auto_time, $code);
         } else {
             $code = str_replace('[AUTO_TIMESTAMP]' . "\n\n", '', $code);
         }
 
-        //关联
+        // 关联
         $relation_code = '';
-        //获取器/修改器
+        // 获取器/修改器
         $getter_setter_code = '';
         // 自定义选择数据
         $select_data_code = '';
@@ -68,10 +71,10 @@ class ModelBuild extends Build
                 $tmp_code = file_get_contents($this->config['template']['path'] . 'model/relation.stub');
 
                 if ($value['is_relation'] === 1) {
-                    //外键
+                    // 外键
                     $relation_type = 'belongsTo';
                     $table_name    = $this->getSelectFieldFormat($value['field_name'], 1);
-                    //表中文名
+                    // 表中文名
                     $cn_name    = '';
                     $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
                     if ($table_info) {
@@ -82,10 +85,10 @@ class ModelBuild extends Build
                     $tmp_code       = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
                     $relation_code  .= $tmp_code;
 
-                } else if ($value['is_relation'] == 2) {
-                    //主键
+                } else if ($value['is_relation'] === 2) {
+                    // 主键
                     $relation_type = 'hasMany';
-                    if ($value['relation_type'] == 2) {
+                    if ($value['relation_type'] === 2) {
                         $relation_type = 'hasOne';
                     }
 
@@ -113,7 +116,7 @@ class ModelBuild extends Build
                     $field_select_data = $value['field_select_data'];
 
                     if (empty($field_select_data)) {
-                        throw new Exception('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
+                        throw new GenerateException('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
                     }
 
                     $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
@@ -144,7 +147,6 @@ class ModelBuild extends Build
                 }
             }
 
-
             if ($value['getter_setter']) {
                 switch ($value['getter_setter']) {
                     case 'switch':
@@ -166,7 +168,6 @@ class ModelBuild extends Build
                         break;
                 }
             }
-
         }
 
         $code = str_replace(array('[RELATION]', '[GETTER_SETTER]', '[SELECT_DATA_LIST]'), array($relation_code, $getter_setter_code, $select_data_code), $code);
@@ -212,7 +213,11 @@ class ModelBuild extends Build
         // 替换多图/多文件获取器，修改器
         $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
 
-        file_put_contents($this->config['file_dir']['model'] . $this->data['model']['name'] . '.php', $code);
+        try {
+            file_put_contents($this->config['file_dir']['model'] . $this->data['model']['name'] . '.php', $code);
+        } catch (Exception $e) {
+            throw new GenerateException($e->getMessage());
+        }
 
         return true;
     }

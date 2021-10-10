@@ -9,20 +9,25 @@
 
         <td>
             <label>
-                <input class="form-control form-control-sm" name="field_nameFORM_INDEX[]" value="" placeholder="字段"
-                >
+                <input class="form-control form-control-sm" name="field_nameFORM_INDEX[]"
+                       title="字段名，默认为数据库字段名，如非必要，请勿修改" data-toggle="tooltip" value="" placeholder="字段">
             </label>
-        </td>
-        <td>
+            <br>
             <label>
                 <input class="form-control form-control-sm field-type" value="" name="field_typeFORM_INDEX[]"
 
-                       placeholder="字段类型，例如varchar(255),int(10),decimal(12,2)">
+                       title="默认为数据库字段类型，如非必要，请勿修改；修改格式：varchar(255),int(10),decimal(12,2)" data-toggle="tooltip"  placeholder="字段类型">
             </label>
         </td>
         <td>
             <label>
-                <input class="form-control form-control-sm" name="form_nameFORM_INDEX[]" placeholder="名称">
+                <input class="form-control form-control-sm" name="form_nameFORM_INDEX[]"
+                       title="显示中文名称，默认为数据库字段备注" data-toggle="tooltip"  placeholder="名称">
+            </label>
+            <br/>
+            <label>
+                <input class="form-control form-control-sm" name="field_defaultFORM_INDEX[]"
+                       title="表单内字段默认值，默认为数据库默认值，可自行修改" data-toggle="tooltip" placeholder="默认值">
             </label>
         </td>
 
@@ -108,14 +113,6 @@
 
                         <div class="more-from">
                             <div class="form-inline">
-                                <div class="form-group">
-                                    <label for="field_defaultINDEX_ID"></label>
-                                    <input name="field_defaultFORM_INDEX[]"
-                                           class="form-control form-control-sm"
-                                           id="field_defaultINDEX_ID" placeholder="字段默认值"
-                                           title="表单内字段默认值，默认为数据库默认值，可空" data-toggle="tooltip" style="max-width: 90px">
-
-                                </div>
 
                                 <div class="form-group">
                                     <label for="getter_setterFORM_INDEX"></label>

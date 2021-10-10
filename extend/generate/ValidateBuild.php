@@ -1,14 +1,12 @@
 <?php
 /**
- *
+ * 验证器生成
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace generate;
-
 
 use Exception;
 use generate\exception\GenerateException;
@@ -18,7 +16,7 @@ class ValidateBuild extends Build
 {
 
     /**
-     * AdminController constructor.
+     * ValidateBuild constructor.
      * @param array $data 数据
      * @param array $config 配置
      */
@@ -37,9 +35,9 @@ class ValidateBuild extends Build
      * @return bool
      * @throws GenerateException
      */
-    public function run()
+    public function run(): bool
     {
-        //不生成验证器
+        // 不生成验证器
         if (!$this->data['validate']['create']) {
             return true;
         }
@@ -47,7 +45,6 @@ class ValidateBuild extends Build
         $file = $this->config['template']['validate'];
         $code = file_get_contents($file);
         $code = str_replace(array('[NAME]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]'), array($this->data['cn_name'], $this->data['validate']['name'], $this->data['validate']['module']), $code);
-
 
         $rule_code      = '';
         $msg_code       = '';
@@ -65,7 +62,6 @@ class ValidateBuild extends Build
                         $msg_code  .= $newClass->getValidateMsgCode($value);
                     }
                 }
-
                 $scene_code_tmp .= "'" . $value['field_name'] . "', ";
             }
             $rule_code.= $temp_rule_code;
@@ -77,12 +73,11 @@ class ValidateBuild extends Build
 
         try {
             file_put_contents($this->config['file_dir']['validate'] . $this->data['validate']['name'] . 'Validate' . '.php', $code);
-
-            return  true;
         } catch (Exception $e) {
             throw new GenerateException($e->getMessage());
         }
-    }
 
+        return  true;
+    }
 
 }

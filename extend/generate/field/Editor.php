@@ -28,14 +28,17 @@ EOF;
         'regular'  => '自定义正则'
     ];
 
-
-    //控制器内代码
-    public static $controllerAddCode =<<<EOF
+    /**
+     * @var string 富文本字段添加处理
+     */
+    public static string $controllerAddCode =<<<EOF
 \$param['[FIELD_NAME]'] = \$request->param(false)['[FIELD_NAME]'];
 \n
 EOF;
-
-    public static $controllerEditCode =<<<EOF
+    /**
+     * @var string 富文本字段修改处理
+     */
+    public static string $controllerEditCode =<<<EOF
 \$param['[FIELD_NAME]'] = \$request->param(false)['[FIELD_NAME]'];
 \n
 EOF;

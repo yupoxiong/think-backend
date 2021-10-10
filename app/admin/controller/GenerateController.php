@@ -68,10 +68,10 @@ class GenerateController extends AdminBaseController
                 'create' => (int)$param['create_menu'],
                 'menu'   => $param['create_menu_list']
             ],
-            'controller'     => [
+            'admin_controller'     => [
                 'module' => 'admin',
-                'create' => (int)($param['create_controller'] ?? 0),
-                'name'   => $param['controller_name'],
+                'create' => (int)($param['create_admin_controller'] ?? 0),
+                'name'   => $param['admin_controller_name'],
                 'action' => $param['controller_action_list'],
             ],
             'api_controller' => [
