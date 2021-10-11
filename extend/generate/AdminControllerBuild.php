@@ -118,8 +118,12 @@ class AdminControllerBuild extends Build
                 $edit_field_code .= $edit_field_code_tmp;
 
                 //关联处理
-                if ($value['is_relation'] === 1) {
-                    if ($value['relation_type'] === 1) {
+                switch ($value['relation_type']) {
+                    default:
+                        break;
+                    case 1:// 外键一对一
+                    case 2:// 外键一对多
+
                         $table_name = $this->getSelectFieldFormat($value['field_name']);
 
                         $class_name = parse_name($table_name, 1);
@@ -129,13 +133,14 @@ class AdminControllerBuild extends Build
                         $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
                         $code_3     = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($list_name, $class_name), $code_3);
                         $relation_3 .= $code_3;
-                    }
-
-                } else if ($value['form_type'] === 'select') {
-                    $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
-                    $assign     = "'$list_name'=>" . $this->data['table'] . '::' . $const_name . ',';
-                    $relation_3 .= $assign;
+                        break;
+                    case 3:
+                    case 4:
+                        $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
+                        $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
+                        $assign     = "'$list_name'=>" . $this->data['table'] . '::' . $const_name . ',';
+                        $relation_3 .= $assign;
+                        break;
                 }
 
                 // 这里处理导入，表单字段为导入字段
@@ -146,7 +151,8 @@ class AdminControllerBuild extends Build
             }
 
             if ($value['index_search'] === 'select') {
-                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
+
+                if ($value['relation_type'] === 1 || $value['relation_type'] ===2) {
                     $table_name        = $this->getSelectFieldFormat($value['field_name'], 1);
                     $select_class_name = parse_name($table_name, 1);
                     $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
@@ -154,7 +160,7 @@ class AdminControllerBuild extends Build
                     $code_select       = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($select_list_name, $select_class_name), $code_select);
 
                     $index_select .= $code_select;
-                } else if ($value['is_relation'] === 0) {
+                } else if ($value['relation_type'] === 0) {
                     // 这里是处理select字段的选择列表
 
                     $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
@@ -170,7 +176,7 @@ class AdminControllerBuild extends Build
             if ($value['is_list'] === 1) {
 
                 //列表关联显示
-                if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
+                if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     $relation_with_name = $this->getSelectFieldFormat($value['field_name'], 1);
                     $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
 
@@ -181,7 +187,7 @@ class AdminControllerBuild extends Build
                     $export_header .= "'" . $value['form_name'] . "',";
                     if ($value['getter_setter'] === 'switch') {
                         $export_body .= '        $record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
-                    } else if ($value['is_relation'] === 1 && $value['relation_type'] === 1) {
+                    } else if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
 
                         $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
                         $export_body   .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $relation_name . '->' . $value['relation_show'] . '?? ' . "'" . "'" . ";\n";
@@ -197,7 +203,7 @@ class AdminControllerBuild extends Build
         //启用禁用
         $enable_code = '';
         if (in_array(5, $this->data['admin_controller']['action'])) {
-            $enable_tmp  = file_get_contents($this->template['action_enable'] );
+            $enable_tmp  = file_get_contents($this->template['action_enable']);
             $enable_tmp  = str_replace('[MODEL_NAME]', $this->data['model']['name'], $enable_tmp);
             $enable_code = $enable_tmp;
         }

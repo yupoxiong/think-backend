@@ -66,11 +66,9 @@ class ModelBuild extends Build
 
         foreach ($this->data['data'] as $key => $value) {
 
-            if ($value['is_relation']) {
-
+            if($value['relation_type']>0){
                 $tmp_code = file_get_contents($this->config['template']['path'] . 'model/relation.stub');
-
-                if ($value['is_relation'] === 1) {
+                if($value['relation_type'] === 1 || $value['relation_type'] === 2){
                     // 外键
                     $relation_type = 'belongsTo';
                     $table_name    = $this->getSelectFieldFormat($value['field_name'], 1);
@@ -84,13 +82,9 @@ class ModelBuild extends Build
                     $relation_class = parse_name($table_name, 1);
                     $tmp_code       = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
                     $relation_code  .= $tmp_code;
-
-                } else if ($value['is_relation'] === 2) {
+                } else{
                     // 主键
-                    $relation_type = 'hasMany';
-                    if ($value['relation_type'] === 2) {
-                        $relation_type = 'hasOne';
-                    }
+                    $relation_type = $value['relation_type'] === 3?$relation_type = 'hasOne':'hasMany';
 
                     $table_tmp = explode(',', $value['relation_table']);
                     foreach ($table_tmp as $item) {
@@ -109,8 +103,7 @@ class ModelBuild extends Build
                         $relation_code .= $tmp_code_item;
                     }
                 }
-
-            } else {
+            }else{
                 // 如果是select，同时非关联
                 if ($value['form_type'] === 'select') {
                     $field_select_data = $value['field_select_data'];
@@ -143,9 +136,9 @@ class ModelBuild extends Build
                     $tmp_code           = file_get_contents($this->config['template']['path'] . 'model/getter_setter_select.stub');
                     $tmp_code           = str_replace(array('[FIELD_NAME5]', '[FIELD_NAME4]', '[FIELD_NAME]'), array($field5, $field4, $value['field_name']), $tmp_code);
                     $getter_setter_code .= $tmp_code;
-
                 }
             }
+
 
             if ($value['getter_setter']) {
                 switch ($value['getter_setter']) {

@@ -19,14 +19,14 @@ class GenerateController extends AdminBaseController
     //首页
     public function index()
     {
-        $this->admin['title'] = 'AutoCode';
+        //$this->admin['title'] = 'AutoCode';
         return $this->fetch();
     }
 
     //自动生成页面
     public function add()
     {
-        $this->admin['title'] = 'AutoCode';
+        $this->admin['title'] = '代码自动生成';
 
         $this->assign([
             'table' => (new Generate())->getTable(),
@@ -61,38 +61,38 @@ class GenerateController extends AdminBaseController
     {
         $param = $request->param();
         $data  = [
-            'table'          => $param['table_name'],
-            'cn_name'        => $param['cn_name'],
-            'menu'           => [
+            'table'            => $param['table_name'],
+            'cn_name'          => $param['cn_name'],
+            'menu'             => [
                 //创建菜单-1为不创建，0为顶级菜单
                 'create' => (int)$param['create_menu'],
                 'menu'   => $param['create_menu_list']
             ],
-            'admin_controller'     => [
+            'admin_controller' => [
                 'module' => 'admin',
                 'create' => (int)($param['create_admin_controller'] ?? 0),
                 'name'   => $param['admin_controller_name'],
-                'action' => $param['controller_action_list'],
+                'action' => $param['admin_controller_action_list'],
             ],
-            'api_controller' => [
+            'api_controller'   => [
                 'module' => 'api',
                 'create' => (int)($param['create_api_controller'] ?? 0),
                 'name'   => $param['api_controller_name'],
                 'action' => $param['api_controller_action_list'],
             ],
-            'model'          => [
+            'model'            => [
                 'module'      => 'common',
                 'create'      => (int)($param['create_model'] ?? 0),
                 'name'        => $param['model_name'],
                 'timestamp'   => (int)($param['auto_timestamp'] ?? 0),
                 'soft_delete' => (int)($param['soft_delete'] ?? 0),
             ],
-            'validate'       => [
+            'validate'         => [
                 'module' => 'common',
                 'create' => (int)($param['create_validate'] ?? 0),
                 'name'   => $param['validate_name'],
             ],
-            'view'           => [
+            'view'             => [
                 'create_index' => (int)($param['create_view_index'] ?? 0),
                 'index_button' => (int)($param['index_operation_button'] ?? 1),
                 'create_add'   => (int)($param['create_view_add'] ?? 0),
@@ -103,12 +103,11 @@ class GenerateController extends AdminBaseController
                 'import'       => (int)($param['list_import'] ?? 0),
                 'refresh'      => (int)($param['list_refresh'] ?? 0),
             ],
-            'module'         => [
+            'module'           => [
                 'name_suffix' => $param['module_name_suffix'],
                 'icon'        => $param['module_icon'],
             ],
         ];
-
 
         /**
          * 字段数据组装
@@ -116,41 +115,46 @@ class GenerateController extends AdminBaseController
         $field_data = [];
         foreach ($param['field_name'] as $key => $value) {
 
+
             $field_data[] = [
-                //字段名
-                'field_name'        => $param['field_name'][$key][0],
-                //字段类型
-                'field_type'        => $param['field_type'][$key][0],
-                //表单名称/中文名称
-                'form_name'         => $param['form_name'][$key][0] ?? '',
-                //是否为列表字段
-                'is_list'           => (int)($param['is_list'][$key][0] ?? 0),
-                //是否为表单字段
-                'is_form'           => (int)($param['is_form'][$key][0] ?? 0),
-                //表单类型
-                'form_type'         => $param['form_type'][$key][0] ?? 'text',
-                //验证规则
+                // 字段名
+                'field_name'        => $param['field_name'][$key],
+                // 字段类型
+                'field_type'        => $param['field_type'][$key],
+
+                // 表单/中文名称
+                'form_name'         => $param['form_name'][$key] ?? '',
+                // 默认值
+                'field_default'     => $param['field_default'][$key] ?? '',
+
+                // 是否为列表字段
+                'is_list'           => (int)($param['is_list'][$key] ?? 0),
+                // 是否参与列表排序
+                'list_sort'         => (int)($param['list_sort'][$key] ?? 0),
+
+                // 是否为表单字段
+                'is_form'           => (int)($param['is_form'][$key] ?? 0),
+                // 表单类型
+                'form_type'         => $param['form_type'][$key] ?? 'text',
+
+                // 验证规则
                 'form_validate'     => $param['form_validate'][$key] ?? [],
-                //默认值
-                'field_default'     => (int)($param['field_default'][$key][0] ?? 0),
-                //获取器/修改器
-                'getter_setter'     => (int)($param['getter_setter'][$key][0] ?? 0),
-                //是否参与列表排序
-                'list_sort'         => (int)($param['list_sort'][$key][0] ?? 0),
-                //筛选字段
-                'index_search'      => (int)($param['index_search'][$key][0] ?? 0),
-                //筛选自定义select
-                'field_select_data' => $param['field_select_data'][$key][0] ?? '',
-                //验证场景
-                'field_scene'       => (int)($param['field_scene'][$key][0] ?? 0),
-                //关联
-                'is_relation'       => (int)($param['is_relation'][$key][0] ?? 0),
-                //关联类型
-                'relation_type'     => (int)($param['relation_type'][$key][0] ?? 1),
-                //关联表
-                'relation_table'    => $param['relation_table'][$key][0] ?? '',
-                //关联显示字段
-                'relation_show'     => $param['relation_show'][$key][0] ?? 'name',
+                // 验证场景
+                'field_scene'       => $param['field_scene'][$key] ?? [],
+
+                // 获取器/修改器
+                'getter_setter'     => (int)($param['getter_setter'][$key] ?? 0),
+                // 关联类型
+                'relation_type'     => (int)($param['relation_type'][$key] ?? 0),
+                // 关联表
+                'relation_table'    => $param['relation_table'][$key] ?? '',
+                // 关联显示字段
+                'relation_show'     => $param['relation_show'][$key] ?? 'name',
+
+                // 筛选字段
+                'index_search'      => (int)($param['index_search'][$key] ?? 0),
+                // 筛选自定义select
+                'field_select_data' => $param['field_select_data'][$key] ?? '',
             ];
         }
 

@@ -68,13 +68,13 @@ class Generate
     {
         $root_path = app()->getRootPath();
         $app_path  = app()->getBasePath();
-        
+
         $admin_controller_path = $root_path . 'extend/generate/stub/admin_controller/';
         $apa_controller_path   = $root_path . 'extend/generate/stub/api_controller/';
         $config_tmp            = [
             // 模版目录
             'template' => [
-                
+
                 'admin' => [
                     'controller'     => $admin_controller_path . 'AminController.stub',
                     'action_index'   => $admin_controller_path . 'action_index.stub',
@@ -84,10 +84,10 @@ class Generate
                     'action_del'     => $admin_controller_path . 'action_del.stub',
                     'action_disable' => $admin_controller_path . 'action_disable.stub',
                     'action_enable'  => $admin_controller_path . 'action_enable.stub',
-                    'relation'  => $admin_controller_path . 'relation_data_list.stub',
+                    'relation'       => $admin_controller_path . 'relation_data_list.stub',
                 ],
-                
-                'api'   => [
+
+                'api' => [
                     'controller'         => $apa_controller_path . 'ApiController.stub',
                     'controller_index'   => $apa_controller_path . 'api_index.stub',
                     'controller_add'     => $apa_controller_path . 'api_add.stub',
@@ -460,15 +460,13 @@ class Generate
                         $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listSwitchHtml);
                     }
                 } else if ($value['form_type'] === 'select') {
-                    if ($value['is_relation'] == 1) {
-                        if ($value['relation_type'] == 1) {
-                            // 关联字段显示
-                            $field_name = $this->getSelectFieldFormat($value['field_name'], 1) . '.' . $value['relation_show'] . '|default=' . "''";
-                            $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
-                        }
-                    } else {
-                        $field_name = $this->getSelectFieldFormat($value['field_name'], 4);
 
+                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
+                        // 关联字段显示
+                        $field_name = $this->getSelectFieldFormat($value['field_name'], 1) . '.' . $value['relation_show'] . '|default=' . "''";
+                        $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
+                    } else if ($value['relation_type'] === 0) {
+                        $field_name = $this->getSelectFieldFormat($value['field_name'], 4);
                         $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
                     }
                 } else {
@@ -489,14 +487,12 @@ class Generate
                     break;
 
                 case 'select':
-                    if ($value['is_relation']) {
-                        if ($value['relation_type'] === 1) {
-                            //关联字段筛选
-                            $field_name  = str_replace('_id', '', $value['field_name']);
-                            $search_html .= str_replace(array('[FIELD_NAME]', '[FIELD_NAME1]', '[FORM_NAME]', '[RELATION_SHOW]'), array($value['field_name'], $field_name, $value['form_name'], $value['relation_show']), Field::$listSearchRelationHtml);
+                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
+                        //关联字段筛选
+                        $field_name  = str_replace('_id', '', $value['field_name']);
+                        $search_html .= str_replace(array('[FIELD_NAME]', '[FIELD_NAME1]', '[FORM_NAME]', '[RELATION_SHOW]'), array($value['field_name'], $field_name, $value['form_name'], $value['relation_show']), Field::$listSearchRelationHtml);
 
-                        }
-                    } else {
+                    } else if ($value['relation_type'] === 0) {
                         //自定义select
                         $field_select_data = $value['field_select_data'];
                         if (empty($field_select_data)) {
@@ -655,15 +651,13 @@ class Generate
                 } else if ($value['form_type'] === 'select') {
                     $value['relation_data'] = '';
                     // 这里是关联的
-                    if ($value['is_relation']) {
+                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
+                        $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/relation_select_data.stub');
+                        $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
+                        $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
+                        $value['relation_data'] = $list_code;
 
-                        if ($value['relation_type'] === 1) {
-                            $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/relation_select_data.stub');
-                            $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
-                            $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
-                            $value['relation_data'] = $list_code;
-                        }
-                    } else {
+                    } else if ($value['relation_type'] === 0) {
                         // 这里是非关联的
                         $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/customer_select_data.stub');
                         $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);

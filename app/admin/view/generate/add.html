@@ -480,6 +480,9 @@
             $menu_list.select2();
             $action_list.select2();
         });
+
+        //默认添加一行空的字段
+        addNewField(null, 1);
     });
 
     //提交验证
@@ -583,25 +586,25 @@
                 }
                 $dataBody.html('');
                 //字段名
-                let field_name = "#data-template input[name='field_nameFORM_INDEX[]']";
+                let field_name = "#data-template input[name='field_nameFORM_INDEX']";
                 //字段类型
-                let field_type = "#data-template input[name='field_typeFORM_INDEX[]']";
+                let field_type = "#data-template input[name='field_typeFORM_INDEX']";
                 //是否为列表字段
-                let field_list = "#data-template [name='is_listFORM_INDEX[]']";
+                let field_list = "#data-template [name='is_listFORM_INDEX']";
                 //是否为表单字段
-                let field_form = "#data-template [name='is_formFORM_INDEX[]']";
+                let field_form = "#data-template [name='is_formFORM_INDEX']";
                 //中文名称
-                let form_name = "#data-template [name='form_nameFORM_INDEX[]']";
+                let form_name = "#data-template [name='form_nameFORM_INDEX']";
                 //表单类型
-                let form_type = "#data-template [name='form_typeFORM_INDEX[]']";
+                let form_type = "#data-template [name='form_typeFORM_INDEX']";
                 //表单验证
                 let form_validate = "#data-template [name='form_validateFORM_INDEX[]']";
                 //字段默认值
-                let field_form_default = "#data-template [name='field_defaultFORM_INDEX[]']";
+                let field_form_default = "#data-template [name='field_defaultFORM_INDEX']";
                 //获取器/修改器
-                let getter_setter = "#data-template [name='getter_setterFORM_INDEX[]']";
+                let getter_setter = "#data-template [name='getter_setterFORM_INDEX']";
                 //列表排序
-                let list_sort = "#data-template [name='list_sortFORM_INDEX[]']";
+                let list_sort = "#data-template [name='list_sortFORM_INDEX']";
 
                 //
                 let listHtml = '';
@@ -720,6 +723,29 @@
         $('[data-toggle="tooltip"]').tooltip();
         $('#dataBody .select2').select2();
     }
+
+
+    //添加新的字段
+    function addNewField(obj, type) {
+
+        formIndex++;
+        let template = $("#data-template").html().replace(/FORM_INDEX/g, '[' + formIndex + ']').replace(/INDEX_ID/g, formIndex);
+
+        if (obj == null) {
+            $("#dataBody").append(template);
+        } else {
+            if (type === 1) {
+                $(obj).parent().parent().before(template);
+            } else {
+                $(obj).parent().parent().after(template);
+            }
+        }
+
+        //刷新 dataBody DOM后的操作
+        dataBodyRefreshed();
+    }
+
+
 
 </script>
 

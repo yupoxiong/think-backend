@@ -4,12 +4,12 @@
 
         <td>
             <label>
-                <input class="form-control form-control-sm" name="field_nameFORM_INDEX[]"
+                <input class="form-control form-control-sm" name="field_nameFORM_INDEX"
                        title="字段名，默认为数据库字段名，如非必要，请勿修改" data-toggle="tooltip" value="" placeholder="字段">
             </label>
             <br>
             <label>
-                <input class="form-control form-control-sm field-type" value="" name="field_typeFORM_INDEX[]"
+                <input class="form-control form-control-sm field-type" value="" name="field_typeFORM_INDEX"
 
                        title="默认为数据库字段类型，如非必要，请勿修改；修改格式：varchar(255),int(10),decimal(12,2)" data-toggle="tooltip"
                        placeholder="字段类型">
@@ -17,33 +17,33 @@
         </td>
         <td>
             <label>
-                <input class="form-control form-control-sm" name="form_nameFORM_INDEX[]"
+                <input class="form-control form-control-sm" name="form_nameFORM_INDEX"
                        title="显示中文名称，默认为数据库字段备注" data-toggle="tooltip" placeholder="名称">
             </label>
             <br/>
             <label>
-                <input class="form-control form-control-sm" name="field_defaultFORM_INDEX[]"
+                <input class="form-control form-control-sm" name="field_defaultFORM_INDEX"
                        title="表单内字段默认值，默认为数据库默认值，可自行修改" data-toggle="tooltip" placeholder="默认值">
             </label>
         </td>
 
         <td>
             <label class="bodyFormCheckbox">
-                <input type="checkbox" value="1" id="is_listFORM_INDEX[]" name="is_listFORM_INDEX[]">列表
+                <input type="checkbox" value="1" id="is_listFORM_INDEX" name="is_listFORM_INDEX">列表
             </label>
             <br/>
             <label class="bodyFormCheckbox">
-                <input type="checkbox" value="1" id="list_sortFORM_INDEX[]" name="list_sortFORM_INDEX[]">参与排序
+                <input type="checkbox" value="1" id="list_sortFORM_INDEX" name="list_sortFORM_INDEX">参与排序
             </label>
         </td>
 
         <td>
             <label class="bodyFormCheckbox">
-                <input type="checkbox" value="1" id="is_formFORM_INDEX[]" name="is_formFORM_INDEX[]">表单
+                <input type="checkbox" value="1" id="is_formFORM_INDEX" name="is_formFORM_INDEX">表单
             </label>
             <br/>
             <label class="form-type-label">
-                <select class="form-control form-control-sm select2 form-type-select" name="form_typeFORM_INDEX[]"
+                <select class="form-control form-control-sm select2 form-type-select" name="form_typeFORM_INDEX"
                         onchange="selectField(this)">
                     <option value="text">文本[text]</option>
                     <option value="number">数字[number]</option>
@@ -111,7 +111,7 @@
         </td>
         <td>
             <label>
-                <select name="getter_setterFORM_INDEX[]"
+                <select name="getter_setterFORM_INDEX"
                         class="select2 form-control form-control-sm"
                         id="getter_setterFORM_INDEX" data-placeholder="获取/修改器"
                         style="width: 150px;">
@@ -126,12 +126,12 @@
             <div class="form-inline relation-div">
                 <div class="form-group">
                     <label>
-                    <select style="min-width: 125px" name="is_relationFORM_INDEX[]"
+                    <select style="min-width: 125px" name="relation_typeFORM_INDEX"
                             class="select2 form-control form-control-sm"
-                            id="is_relationFORM_INDEX" data-placeholder="是否关联字段"
+                            id="relation_typeFORM_INDEX" data-placeholder="是否关联字段"
                             onchange="selectRelation(this)"
-                            data-relation-table="relation_tableFORM_INDEX[]"
-                            data-relation-show="relation_showFORM_INDEX[]"
+                            data-relation-table="relation_tableFORM_INDEX"
+                            data-relation-show="relation_showFORM_INDEX"
                     >
                         <option value="0">非关联字段</option>
                         <option value="1">外键一对一</option>
@@ -143,13 +143,13 @@
                 </div>
 
                 <div class="form-group">
-                    <input name="relation_showFORM_INDEX[]"
+                    <input name="relation_showFORM_INDEX"
                            class="form-control form-control-sm relation-input"
                            id="relation_showINDEX_ID"
                            title="belongsTo填写，例如文章发布人user_id要显示成User模型的nickname，填写nickname即可"
                            data-toggle="tooltip" placeholder="关联显示字段">
 
-                    <input name="relation_tableFORM_INDEX[]"
+                    <input name="relation_tableFORM_INDEX"
                            class="form-control form-control-sm relation-input"
                            id="relation_tableINDEX_ID"
                            title="一般此字段为表名，belongsTo的无须填写，hasOne/hasMany填写此字段，关联多个模型务必使用英文逗号隔开，例如用户关联多篇文章，多个积分记录，可以写成article,integral_log"
@@ -161,7 +161,7 @@
         <td>
 
             <label>
-                <select name="index_searchFORM_INDEX[]"
+                <select name="index_searchFORM_INDEX"
                         class="select2 form-control form-control-sm"
                         id="index_searchFORM_INDEX" data-placeholder="列表页筛选" style="width: 160px;">
                     <option value="0">不参与列表页筛选</option>
@@ -175,7 +175,7 @@
         <td>
             <label>
                 <textarea class="form-control form-control-sm" id="field_select_dataFORM_INDEX"
-                          name="field_select_dataFORM_INDEX[]"
+                          name="field_select_dataFORM_INDEX"
                           placeholder="自定义筛选/select数据，当前字段为 列表选择 的时候生效。格式为：value||name，多个选项换行即可"
                           title="例如[性别]字段，表单是[select]形式的，数据内容为：0||保密  1||男  2||女。一定要注意value和name的分割竖线为英文竖线，非中文竖线，不同的选项一定要换行"
                           data-toggle="tooltip"></textarea>
