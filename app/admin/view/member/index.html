@@ -13,34 +13,16 @@
 
                     <div class="input-group input-group-sm searchGroup">
                         <input value="{$_keywords ? $_keywords : '' ;}"
-                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="账号/手机号/昵称">
+                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
                     </div>
-                    <div class="input-group input-group-sm searchGroup">
-    <select name="member_level_id" id="member_level_id" class="form-control input-sm index-search">
-        <option value="">会员等级</option>
-        {foreach name='member_level_list' id='item'}
-        <option value="{$item.id}" {if isset($member_level_id) && ''!==$member_level_id && $member_level_id==$item.id}selected{/if}>{$item.name}</option>
-        {/foreach}
-    </select>
-</div>
-<script>
-    $(function () {
-        $('#member_level_id').select2({
-        width:'100%'
-        });
-    });
-</script>
-
+                    
                     
 
                     <div class="form-group searchGroup">
                         <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
                         </button>
                     </div>
-                    <div class="form-group searchGroup">
-    <button onclick="exportData()" class="btn btn-sm btn-info exportData" type="button"><i class="fas fa-file-export"></i> 导出
-    </button>
-</div>
+                    
                     <div class="form-group searchGroup">
                         <button onclick="clearSearchForm()" class="btn btn-sm btn-default" type="button"><i
                                 class="fa  fa-eraser"></i> 清空查询
@@ -52,46 +34,7 @@
     </div>
 </div>
 
-    <!--顶部导入功能-->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header dataImport">
-                <form class="form-inline importForm" id="importForm" action="{:url('import')}" method="POST"  enctype="multipart/form-data">
-
-                    <div class="input-group input-group-sm importGroup">
-                        <input type="file" name="file" id="file" class="form-control input-sm inputFile" accept=".xlsx">
-                    </div>
-
-                    <div class="form-group importGroup">
-                        <button class="btn btn-sm btn-warning" type="submit"><i class="fas fa-file-upload"></i> 导入
-                        </button>
-                    </div>
-
-                    <div class="form-group importGroup">
-                        <a href="{:url('import',['action'=>'download_example'])}" target="_blank" class="btn btn-sm btn-default" type="button">
-                        <i class="fas fa-download"></i> 下载模版文件
-                        </a>
-                    </div>
-                </form>
-                <script>
-                    $("#importForm").validate({
-                        rules: {
-                            file: {
-                                required: true,
-                            },
-                        },
-                        messages: {
-                            file: {
-                                required: "请选择要导入的文件",
-                            },
-                        },
-                    });
-                </script>
-            </div>
-        </div>
-    </div>
-</div>
+    
 
     <div class="row">
         <div class="col-md-12">
@@ -106,22 +49,15 @@
                         <button class="btn btn-danger btn-sm AjaxButton" data-toggle="tooltip" title="删除选中数据" data-confirm-title="删除确认" data-confirm-content="您确定要删除选中的数据吗？" data-id="checked" data-url="{:url('del')}">
     <i class="fa fa-trash"></i> 删除
 </button>
-                        <button class="btn btn-success btn-sm AjaxButton" data-toggle="tooltip" title="启用选中数据" data-confirm-title="启用确认" data-confirm-content="您确定要启用选中的数据吗？" data-id="checked" data-url="{:url('enable')}">
-    <i class="far fa-circle"></i> 启用
-</button>
-
-<button class="btn btn-warning btn-sm AjaxButton" data-toggle="tooltip" title="禁用选中数据" data-confirm-title="禁用确认" data-confirm-content="您确定要禁用选中的数据吗？" data-id="checked" data-url="{:url('disable')}">
-    <i class="fas fa-ban"></i> 禁用
-</button>
-
+                        
                         <button class="btn btn-success btn-sm ReloadButton" data-toggle="tooltip" title="刷新">
     <i class="fas fa-redo"></i> 刷新
 </button>
                     </div>
                 </div>
 
-                <div class="card-body table-responsive">
-                    <table class="table table-hover table-bordered dataTable">
+                <div class="card-body table-responsive p-0" >
+                    <table class="table table-hover table-bordered dataTable text-nowrap">
                         <thead>
                         <tr>
                             <th>
@@ -150,32 +86,20 @@
             <td>{$item.username}</td>
             <td>{$item.mobile}</td>
             <td>{$item.nickname}</td>
-<td><img class="dataListImg" src="{$item.avatar}"></td>
-<td>{$item.status_text}</td>
+<td class="imgViewer"><img class="dataListImg" src="{$item.avatar}"></td>
             <td>{$item.create_time}</td>
 
                             <td class="td-do">
                                 <a href="{:url('edit',['id'=>$item.id])}"
                                    class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
-                                    
+                                    <i class="fas fa-pen"></i>
                                     修改
                                 </a>
                                 <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
-    
+    <i class="fas fa-trash-alt"></i>
     删除
 </button>
-                                {if $item.status==1}
-<button class="btn btn-warning btn-xs AjaxButton" data-toggle="tooltip" title="禁用"  data-id="{$item.id}" data-confirm-title="禁用确认" data-confirm-content='您确定要禁用ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('disable')}">
-    
-    禁用
-</button>
-{else/}
-<button class="btn btn-success btn-xs AjaxButton" data-toggle="tooltip" title="启用"  data-id="{$item.id}" data-confirm-title="启用确认" data-confirm-content='您确定要启用ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('enable')}">
-    
-    启用
-</button>
-{/if}
-
+                                
                             </td>
                         </tr>
                         {/foreach}

@@ -7,24 +7,31 @@
 namespace app\admin\controller;
 
 use Exception;
-
-use think\facade\Log;
+use think\facade\Db;
 use think\Request;
+use think\facade\Log;
 use generate\Generate;
 use think\response\Json;
 
 class GenerateController extends AdminBaseController
 {
 
-    //首页
-    public function index()
+    /**
+     * 首页
+     * @return string
+     * @throws Exception
+     */
+    public function index(): string
     {
-        //$this->admin['title'] = 'AutoCode';
         return $this->fetch();
     }
 
-    //自动生成页面
-    public function add()
+    /**
+     * 自动生成页面
+     * @return string
+     * @throws Exception
+     */
+    public function add(): string
     {
         $this->admin['title'] = '代码自动生成';
 
@@ -36,8 +43,11 @@ class GenerateController extends AdminBaseController
         return $this->fetch();
     }
 
-    //获取表数据
-    public function getTable()
+    /**
+     * 获取表数据
+     * @return Json
+     */
+    public function getTable(): Json
     {
         $data = [
             'table_list' => (new Generate())->getTable(),
@@ -46,7 +56,11 @@ class GenerateController extends AdminBaseController
     }
 
 
-    public function getMenu()
+    /**
+     * 获取菜单
+     * @return Json
+     */
+    public function getMenu(): Json
     {
         return admin_success('success', (new Generate())->getMenu(10000));
     }
@@ -57,16 +71,16 @@ class GenerateController extends AdminBaseController
      * @param Request $request
      * @return Json
      */
-    public function create(Request $request)
+    public function create(Request $request): Json
     {
         $param = $request->param();
         $data  = [
             'table'            => $param['table_name'],
             'cn_name'          => $param['cn_name'],
             'menu'             => [
-                //创建菜单-1为不创建，0为顶级菜单
-                'create' => (int)$param['create_menu'],
-                'menu'   => $param['create_menu_list']
+                // 创建菜单：-1为不创建，0为顶级菜单
+                'create'    => (int)$param['create_menu'],
+                'menu_list' => $param['create_menu_list']
             ],
             'admin_controller' => [
                 'module' => 'admin',
@@ -114,8 +128,6 @@ class GenerateController extends AdminBaseController
          */
         $field_data = [];
         foreach ($param['field_name'] as $key => $value) {
-
-
             $field_data[] = [
                 // 字段名
                 'field_name'        => $param['field_name'][$key],
@@ -152,7 +164,7 @@ class GenerateController extends AdminBaseController
                 'relation_show'     => $param['relation_show'][$key] ?? 'name',
 
                 // 筛选字段
-                'index_search'      => (int)($param['index_search'][$key] ?? 0),
+                'index_search'      => $param['index_search'][$key] ?? 0,
                 // 筛选自定义select
                 'field_select_data' => $param['field_select_data'][$key] ?? '',
             ];
@@ -160,15 +172,20 @@ class GenerateController extends AdminBaseController
 
         $data['data'] = $field_data;
 
-        //已经组装好data,先生成表，再生成模型，验证器，控制器，视图
+        Log::write($data);
+        // 已经组装好data,先生成表，再生成模型，验证器，控制器，视图
         $generate = new Generate($data);
         $msg      = '生成成功';
         $result   = false;
+
         try {
             $generate->run();
             $result = true;
         } catch (Exception $e) {
-            Log::write(($e->getTrace()));
+            $n = "\n";
+            Log::write('生成报错：' . $n . '错误信息：' . $e->getMessage()
+                . $n . '行数：' . $e->getLine()
+                . $n . '文件：' . $e->getFile());
             $msg = $e->getMessage();
         }
 
@@ -176,24 +193,31 @@ class GenerateController extends AdminBaseController
     }
 
 
-    //自动生成form表单字段
-    public function form()
+    /**
+     * 自动生成form表单字段
+     * @return string
+     * @throws Exception
+     */
+    public function form(): string
     {
-        $this->admin['title'] = 'AutoCode';
+        $this->admin['title'] = '自动生成form表单字段';
         return $this->fetch();
     }
 
-    //生成表单字段html接口
-    public function formField(Request $request)
+    /**
+     * 生成表单字段html接口
+     * @param Request $request
+     * @return Json
+     */
+    public function formField(Request $request): Json
     {
         $param = $request->param();
         if (empty($param['form_name']) || empty($param['field_name']) || empty($param['form_type'])) {
             return admin_error('信息不完整');
         }
 
-
         $result = false;
-
+        $data   = [];
         try {
 
             if ($param['form_type'] === 'switch') {
@@ -208,10 +232,8 @@ class GenerateController extends AdminBaseController
             $data  = $class::create($param);
 
             $result = true;
-
-            $msg = '生成表单html成功';
+            $msg    = '生成表单html成功';
         } catch (Exception $exception) {
-
             $msg = $exception->getMessage();
         }
 
@@ -219,33 +241,30 @@ class GenerateController extends AdminBaseController
     }
 
 
-    //根据字段返回相关表单类型和验证
-    public function getField(Request $request)
+    /**
+     * 根据字段返回相关表单类型和验证
+     * @param Request $request
+     * @return Json
+     */
+    public function getField(Request $request): Json
     {
-
         $param = $request->param();
         $name  = $param['name'];
 
         $data = (new Generate())->getAll($name);
 
         return admin_success('success', $data);
-
     }
 
-
-    //获取验证select内容
 
     /**
      * @param Request $request
      * @return Json|void
      */
-    public function getValidateSelect(Request $request)
+    public function getValidateSelect(Request $request): Json
     {
-
-        $param = $request->param();
-
+        $param  = $request->param();
         $result = false;
-
         try {
 
             if ($param['form_type'] === 'switch') {
@@ -258,15 +277,41 @@ class GenerateController extends AdminBaseController
             $data  = $class::rule();
 
             $result = true;
-
-            $msg = '获取字段验证规则成功';
+            $msg    = '获取字段验证规则成功';
         } catch (Exception $exception) {
-
             $msg = $exception->getMessage();
         }
-
         return $result ? admin_success($msg, $data) : admin_error($msg);
     }
 
+    public function getRelationShowField(Request $request): Json
+    {
+        $param = $request->param();
+        $field = $param['field'];
+        $name  = '';
+        if (strrchr($field, '_id') === '_id') {
+            $table      = str_replace('_id', '', $field);
+            $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table . "'");
+            if ($table_info) {
+                $fields = Db::name($table)->getTableFields();
+                if (in_array('name', $fields, true)) {
+                    $name = 'name';
+                } elseif (in_array('title', $fields, true)) {
+                    $name = 'title';
+                }
+            }
+        }
+
+        return admin_success('', [
+            'name' => $name,
+        ]);
+    }
+
+    public function getRelationTable(Request $request): Json
+    {
+        $param = $request->param();
+        $field = $param['field'];
+        $name  = '';
+    }
 
 }

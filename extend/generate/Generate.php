@@ -9,11 +9,7 @@ namespace generate;
 use app\admin\model\AdminMenu;
 use Exception;
 use generate\exception\GenerateException;
-use generate\field\Editor;
 use generate\field\Field;
-use generate\field\File;
-use generate\field\MultiFile;
-use generate\field\Video;
 use generate\rule\Required;
 use think\facade\Db;
 use think\facade\Env;
@@ -70,32 +66,37 @@ class Generate
         $app_path  = app()->getBasePath();
 
         $admin_controller_path = $root_path . 'extend/generate/stub/admin_controller/';
-        $apa_controller_path   = $root_path . 'extend/generate/stub/api_controller/';
+        $api_controller_path   = $root_path . 'extend/generate/stub/api_controller/';
+        $model_path            = $root_path . 'extend/generate/stub/model/';
         $config_tmp            = [
             // 模版目录
             'template' => [
 
                 'admin' => [
-                    'controller'     => $admin_controller_path . 'AminController.stub',
-                    'action_index'   => $admin_controller_path . 'action_index.stub',
-                    'action_add'     => $admin_controller_path . 'action_add.stub',
-                    'action_info'    => $admin_controller_path . 'action_info.stub',
-                    'action_edit'    => $admin_controller_path . 'action_edit.stub',
-                    'action_del'     => $admin_controller_path . 'action_del.stub',
-                    'action_disable' => $admin_controller_path . 'action_disable.stub',
-                    'action_enable'  => $admin_controller_path . 'action_enable.stub',
-                    'relation'       => $admin_controller_path . 'relation_data_list.stub',
+                    'controller'         => $admin_controller_path . 'AdminController.stub',
+                    'action_index'       => $admin_controller_path . 'action_index.stub',
+                    'action_add'         => $admin_controller_path . 'action_add.stub',
+                    'action_info'        => $admin_controller_path . 'action_info.stub',
+                    'action_edit'        => $admin_controller_path . 'action_edit.stub',
+                    'action_del'         => $admin_controller_path . 'action_del.stub',
+                    'action_disable'     => $admin_controller_path . 'action_disable.stub',
+                    'action_enable'      => $admin_controller_path . 'action_enable.stub',
+                    'action_import'      => $admin_controller_path . 'action_import.stub',
+                    'action_export'      => $admin_controller_path . 'action_export.stub',
+                    'relation_data_list' => $admin_controller_path . 'relation_data_list.stub',
+                    'relation_assign_1'  => $admin_controller_path . 'relation_assign_1.stub',
+                    'relation_with'      => $admin_controller_path . 'relation_with.stub',
                 ],
 
                 'api' => [
-                    'controller'         => $apa_controller_path . 'ApiController.stub',
-                    'controller_index'   => $apa_controller_path . 'api_index.stub',
-                    'controller_add'     => $apa_controller_path . 'api_add.stub',
-                    'controller_info'    => $apa_controller_path . 'api_info.stub',
-                    'controller_edit'    => $apa_controller_path . 'api_edit.stub',
-                    'controller_del'     => $apa_controller_path . 'api_del.stub',
-                    'controller_disable' => $apa_controller_path . 'api_disable.stub',
-                    'controller_enable'  => $apa_controller_path . 'api_enable.stub',
+                    'controller'         => $api_controller_path . 'ApiController.stub',
+                    'controller_index'   => $api_controller_path . 'api_index.stub',
+                    'controller_add'     => $api_controller_path . 'api_add.stub',
+                    'controller_info'    => $api_controller_path . 'api_info.stub',
+                    'controller_edit'    => $api_controller_path . 'api_edit.stub',
+                    'controller_del'     => $api_controller_path . 'api_del.stub',
+                    'controller_disable' => $api_controller_path . 'api_disable.stub',
+                    'controller_enable'  => $api_controller_path . 'api_enable.stub',
 
                     'service'         => $root_path . 'extend/generate/stub/ApiService.stub',
                     'service_index'   => $root_path . 'extend/generate/stub/api_service/api_index.stub',
@@ -107,13 +108,18 @@ class Generate
                     'service_enable'  => $root_path . 'extend/generate/stub/api_service/api_enable.stub',
                 ],
 
+                'model' => [
+                    'model'                => $model_path . 'Model.stub',
+                    'relation'             => $model_path . 'relation.stub',
+                    'getter_setter_select' => $model_path . 'getter_setter_select.stub',
+                ],
 
                 'path'           => $root_path . 'extend/generate/stub/',
                 'controller'     => $root_path . 'extend/generate/stub/Controller.stub',
                 'api_controller' => $root_path . 'extend/generate/stub/ApiController.stub',
-                'model'          => $root_path . 'extend/generate/stub/Model.stub',
-                'validate'       => $root_path . 'extend/generate/stub/Validate.stub',
-                'view'           => [
+
+                'validate' => $root_path . 'extend/generate/stub/Validate.stub',
+                'view'     => [
                     'index'         => $root_path . 'extend/generate/stub/view/index.stub',
                     'index_path'    => $root_path . 'extend/generate/stub/view/index/',
                     'index_del1'    => $root_path . 'extend/generate/stub/view/index/del1.stub',
@@ -151,14 +157,21 @@ class Generate
     {
         $this->checkName($this->data);
         $this->checkDir();
+
+        $this->createModel();
+
+        $this->createAdminController();
+
         $this->createAddView();
         $this->createIndexView();
-        $this->createAdminController();
-        $this->createModel();
+
+
         $this->createValidate();
-        $this->createMenu();
+
         $this->createApiController();
         $this->createApiService();
+
+        $this->createMenu();
 
         return '生成成功';
 
@@ -170,7 +183,6 @@ class Generate
 
         //判断是否为
 
-        //$this->createTable($this->data);
     }
 
 
@@ -232,8 +244,12 @@ class Generate
      */
     protected function checkDir(): bool
     {
-        if (!is_dir($this->config['file_dir']['controller'])) {
-            $this->mkFolder($this->config['file_dir']['controller']);
+        if (!is_dir($this->config['file_dir']['admin_controller'])) {
+            $this->mkFolder($this->config['file_dir']['admin_controller']);
+        }
+
+        if (!is_dir($this->config['file_dir']['api_controller'])) {
+            $this->mkFolder($this->config['file_dir']['api_controller']);
         }
 
         if (!is_dir($this->config['file_dir']['model'])) {
@@ -248,8 +264,11 @@ class Generate
             $this->mkFolder($this->config['file_dir']['view']);
         }
 
-        if (!is_writable($this->config['file_dir']['controller'])) {
-            throw new GenerateException('控制器目录不可写');
+        if (!is_writable($this->config['file_dir']['admin_controller'])) {
+            throw new GenerateException('Admin控制器目录不可写');
+        }
+        if (!is_writable($this->config['file_dir']['api_controller'])) {
+            throw new GenerateException('Api控制器目录不可写');
         }
 
         if (!is_writable($this->config['file_dir']['model'])) {
@@ -275,7 +294,11 @@ class Generate
      */
     protected function checkName($data): bool
     {
-        if (in_array($data['controller'], $this->blacklistName, true)) {
+        if (in_array($data['admin_controller']['name'], $this->blacklistName, true)) {
+            throw new GenerateException('控制器名非法');
+        }
+
+        if (in_array($data['admin_controller']['name'], $this->blacklistName, true)) {
             throw new GenerateException('控制器名非法');
         }
 
@@ -296,71 +319,13 @@ class Generate
 
 
     /**
-     * 创建数据表
-     * @param array $data
+     * 创建菜单
      * @return bool
+     * @throws GenerateException
      */
-    protected function createTable($data = [])
+    protected function createMenu(): bool
     {
-        if (count($data) === 0) {
-            $data = $this->data;
-        }
-
-        //字段
-        $fields = [];
-        //索引
-        $indexes = [];
-
-        $fields[] = ' `id` int(11) unsigned NOT NULL AUTO_INCREMENT';
-        foreach ($data['data'] as $item) {
-            // 字段
-            $fields[] = " `{$item['field_name']}` {$item['field_type']}"
-                . ($item['not_null'] ? ' NOT NULL' : ' ')
-                . (strtolower($item['default']) === 'null' ? '' : " DEFAULT '{$item['default']}'")
-                . ($item['comment'] === '' ? '' : " COMMENT '{$item['comment']}'");
-
-            // 索引
-            if (isset($item['key']) && $item['key'] && $item['name'] !== 'id') {
-                $indexes[] = " KEY `{$item['name']}` (`{$item['name']}`)";
-            }
-        }
-
-        //自动生成时间戳
-        if (isset($data['auto_timestamp']) && $data['auto_timestamp']) {
-            $fields[] = " `create_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间'";
-            $fields[] = " `update_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '更新时间'";
-        }
-        //软删除
-        if (isset($data['soft_delete']) && $data['soft_delete']) {
-            $fields[] = " `delete_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '删除时间'";
-        }
-
-        // 默认主键为id
-        $fields[] = ' PRIMARY KEY (`id`) ';
-        //表名
-        $name = config('database.prefix') . $data['table'];
-        $sql  = "CREATE TABLE `{$name}` (\n"
-            . implode(",\n", array_merge($fields, $indexes))
-            . "\n)ENGINE=" . (isset($this->data['table_engine']) ? $this->data['table_engine'] : 'InnoDB')
-            . " DEFAULT CHARSET=utf8mb4 COMMENT '{$this->data['cn_name']}'";
-        //记录SQL日志
-        //Log::record("AUTO_CREATE_TABLE：\n{$sql};", 'sql');
-        $msg = 'error';
-        Db::startTrans();
-        try {
-            Db::query($sql);
-            Db::commit();
-            $result = true;
-        } catch (Exception $e) {
-            Db::rollback();
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-
-        if ($result) {
-            return true;
-        }
-        return $msg;
+        return (new AdminMenuBuild($this->data, $this->config))->run();
     }
 
     /**
@@ -709,96 +674,6 @@ class Generate
         }
 
         file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/add.html', $code);
-
-        return true;
-    }
-
-    //自动添加菜单
-    protected function createMenu()
-    {
-
-        if ($this->data['menu']['create'] < 0) {
-            return true;
-        }
-
-        //菜单前缀
-        $url_prefix = 'admin/' . $this->data['table'];
-        //显示名称
-        $name_show = $this->data['cn_name'];
-        Db::startTrans();
-        try {
-
-            if (AdminMenu::where('url', $url_prefix . '/index')->find()) {
-                throw new GenerateException('菜单已存在');
-            }
-
-            $parent = [
-                'parent_id'  => $this->data['menu']['create'],
-                'name'       => $name_show . $this->data['module']['name_suffix'],
-                'url'        => $url_prefix . '/index',
-                'icon'       => $this->data['module']['icon'],
-                'is_show'    => 1,
-                'log_method' => '不记录',
-            ];
-            $result = AdminMenu::create($parent);
-            if (in_array(2, $this->data['menu']['menu'])) {
-                AdminMenu::create([
-                    'parent_id'  => $result->id,
-                    'name'       => '添加' . $name_show,
-                    'url'        => $url_prefix . '/add',
-                    'icon'       => 'fa-plus',
-                    'is_show'    => 0,
-                    'log_method' => 'POST',
-                ]);
-            }
-
-            if (in_array(3, $this->data['menu']['menu'])) {
-                AdminMenu::create([
-                    'parent_id'  => $result->id,
-                    'name'       => '修改' . $name_show,
-                    'url'        => $url_prefix . '/edit',
-                    'icon'       => 'fa-pencil',
-                    'is_show'    => 0,
-                    'log_method' => 'POST',
-                ]);
-            }
-
-            if (in_array(4, $this->data['menu']['menu'])) {
-                AdminMenu::create([
-                    'parent_id'  => $result->id,
-                    'name'       => '删除' . $name_show,
-                    'url'        => $url_prefix . '/del',
-                    'icon'       => 'fa-trash',
-                    'is_show'    => 0,
-                    'log_method' => 'POST',
-                ]);
-            }
-
-            if (in_array(5, $this->data['menu']['menu'])) {
-                AdminMenu::create([
-                    'parent_id'  => $result->id,
-                    'name'       => '启用' . $name_show,
-                    'url'        => $url_prefix . '/enable',
-                    'icon'       => 'fa-circle',
-                    'is_show'    => 0,
-                    'log_method' => 'POST',
-                ]);
-
-                AdminMenu::create([
-                    'parent_id'  => $result->id,
-                    'name'       => '禁用' . $name_show,
-                    'url'        => $url_prefix . '/disable',
-                    'icon'       => 'fa-circle',
-                    'is_show'    => 0,
-                    'log_method' => 'POST',
-                ]);
-            }
-
-            Db::commit();
-        } catch (Exception $e) {
-            Db::rollback();
-            throw new GenerateException($e->getMessage());
-        }
 
         return true;
     }

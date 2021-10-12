@@ -9,28 +9,23 @@ use think\model\concern\SoftDelete;
 
 class MemberLevel extends CommonBaseModel
 {
+    use SoftDelete;
     // 自定义选择数据
     
-
-    use SoftDelete;
 
     protected $name = 'member_level';
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = [];
+    public array $searchField = ['id',];
 
     // 可作为条件的字段
-    public array $whereField = [];
+    public array $whereField = ['status',];
 
     // 可做为时间
-    public array $timeField = [];
+    public array $timeField = ['name','description',];
 
-    // 是否启用获取器
-public function getStatusTextAttr($value, $data): string
-{
-    return self::BOOLEAN_TEXT[$data['status']];
-}
+    
 
     
 

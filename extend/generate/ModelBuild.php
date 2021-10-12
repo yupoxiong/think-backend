@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 模型生成
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -36,26 +36,13 @@ class ModelBuild extends Build
             return true;
         }
 
-        $auto_time    = 'protected $autoWriteTimestamp = true;';
-        $soft_delete1 = 'use think\model\concern\SoftDelete;';
-        $soft_delete2 = 'use SoftDelete;';
+        $this->autoTimestamp();
+        $this->softDelete();
+
 
         $code = $this->code;
         $code = str_replace(array('[NAME]', '[TABLE_NAME]', '[MODEL_NAME]', '[MODEL_MODULE]'), array($this->data['cn_name'], $this->data['table'], $this->data['model']['name'], $this->data['model']['module']), $code);
 
-        // 软删除
-        if ($this->data['model']['soft_delete']) {
-            $code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]',), array($soft_delete1, $soft_delete2), $code);
-        } else {
-            $code = str_replace(array("\n" . '[SOFT_DELETE_USE1]' . "\n", "\n    " . '[SOFT_DELETE_USE2]'), array('', ''), $code);
-        }
-
-        // 自动时间戳
-        if ($this->data['model']['timestamp']) {
-            $code = str_replace('[AUTO_TIMESTAMP]', $auto_time, $code);
-        } else {
-            $code = str_replace('[AUTO_TIMESTAMP]' . "\n\n", '', $code);
-        }
 
         // 关联
         $relation_code = '';
@@ -66,9 +53,9 @@ class ModelBuild extends Build
 
         foreach ($this->data['data'] as $key => $value) {
 
-            if($value['relation_type']>0){
-                $tmp_code = file_get_contents($this->config['template']['path'] . 'model/relation.stub');
-                if($value['relation_type'] === 1 || $value['relation_type'] === 2){
+            if ($value['relation_type'] > 0) {
+                $tmp_code = file_get_contents($this->template['relation']);
+                if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     // 外键
                     $relation_type = 'belongsTo';
                     $table_name    = $this->getSelectFieldFormat($value['field_name'], 1);
@@ -82,9 +69,9 @@ class ModelBuild extends Build
                     $relation_class = parse_name($table_name, 1);
                     $tmp_code       = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
                     $relation_code  .= $tmp_code;
-                } else{
+                } else {
                     // 主键
-                    $relation_type = $value['relation_type'] === 3?$relation_type = 'hasOne':'hasMany';
+                    $relation_type = $value['relation_type'] === 3 ? $relation_type = 'hasOne' : 'hasMany';
 
                     $table_tmp = explode(',', $value['relation_table']);
                     foreach ($table_tmp as $item) {
@@ -103,7 +90,7 @@ class ModelBuild extends Build
                         $relation_code .= $tmp_code_item;
                     }
                 }
-            }else{
+            } else {
                 // 如果是select，同时非关联
                 if ($value['form_type'] === 'select') {
                     $field_select_data = $value['field_select_data'];
@@ -133,27 +120,26 @@ class ModelBuild extends Build
                     // 处理select自定义数据的获取器
                     $field5             = $this->getSelectFieldFormat($value['field_name'], 5);
                     $field4             = $this->getSelectFieldFormat($value['field_name'], 3);
-                    $tmp_code           = file_get_contents($this->config['template']['path'] . 'model/getter_setter_select.stub');
+                    $tmp_code           = file_get_contents($this->template['getter_setter_select']);
                     $tmp_code           = str_replace(array('[FIELD_NAME5]', '[FIELD_NAME4]', '[FIELD_NAME]'), array($field5, $field4, $value['field_name']), $tmp_code);
                     $getter_setter_code .= $tmp_code;
                 }
             }
 
-
             if ($value['getter_setter']) {
                 switch ($value['getter_setter']) {
                     case 'switch':
-                        $tmp_code           = file_get_contents($this->config['template']['path'] . 'model/getter_setter_switch.stub');
+                        $tmp_code           = file_get_contents($this->template . 'getter_setter_switch.stub');
                         $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME_LOWER]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['field_name'], $value['form_name']), $tmp_code);
                         $getter_setter_code .= $tmp_code;
                         break;
-                    case 'datetime':
-                        $tmp_code           = file_get_contents($this->config['template']['path'] . 'model/getter_setter_datetime.stub');
+                    case 'date':
+                        $tmp_code           = file_get_contents($this->template . 'getter_setter_date.stub');
                         $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $tmp_code);
                         $getter_setter_code .= $tmp_code;
                         break;
-                    case 'date':
-                        $tmp_code           = file_get_contents($this->config['template']['path'] . 'model/getter_setter_date.stub');
+                    case 'datetime':
+                        $tmp_code           = file_get_contents($this->template . 'getter_setter_datetime.stub');
                         $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $tmp_code);
                         $getter_setter_code .= $tmp_code;
                         break;
@@ -164,19 +150,6 @@ class ModelBuild extends Build
         }
 
         $code = str_replace(array('[RELATION]', '[GETTER_SETTER]', '[SELECT_DATA_LIST]'), array($relation_code, $getter_setter_code, $select_data_code), $code);
-
-
-        //暂时不用switch，因为基础模型已经有status的获取器
-        /*//switch字段
-        $switch_field = '';
-        foreach ($this->data['data'] as $value) {
-            if ($value['form_type'] == 'switch') {
-                $switch_field .= "'" . $value['field_name'] . "',";
-            }
-        }
-        // switch字段替换
-        $code = str_replace('[SWITCH_FIELD]', $switch_field, $code);*/
-
 
         // 搜索字段
         $search_field = '';
@@ -202,8 +175,7 @@ class ModelBuild extends Build
             }
 
         }
-        // 搜索字段替换
-        // 替换多图/多文件获取器，修改器
+        // 搜索筛选字段替换
         $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
 
         try {
@@ -212,6 +184,40 @@ class ModelBuild extends Build
             throw new GenerateException($e->getMessage());
         }
 
+        return true;
+    }
+
+    /**
+     * 软删除
+     */
+    protected function softDelete(): bool
+    {
+        $soft_delete1 = '';
+        $soft_delete2 = '';
+        // 软删除
+        if ($this->data['model']['soft_delete']) {
+            $soft_delete1 = 'use think\model\concern\SoftDelete;';
+            $soft_delete2 = 'use SoftDelete;';
+        }
+
+        $this->code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]',), array($soft_delete1, $soft_delete2), $this->code);
+
+        return true;
+    }
+
+    /**
+     * 自动时间戳
+     * @return bool
+     */
+    protected function autoTimestamp(): bool
+    {
+        $auto_time = '';
+        // 自动时间戳
+        if ($this->data['model']['timestamp']) {
+            $auto_time = 'protected $autoWriteTimestamp = true;';
+        }
+
+        $this->code = str_replace('[AUTO_TIMESTAMP]', $auto_time, $this->code);
         return true;
     }
 

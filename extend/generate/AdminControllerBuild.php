@@ -13,6 +13,7 @@ namespace generate;
 use Exception;
 use generate\exception\GenerateException;
 use generate\field\Editor;
+use think\facade\Log;
 
 class AdminControllerBuild extends Build
 {
@@ -32,7 +33,8 @@ class AdminControllerBuild extends Build
 
         $this->template = $this->config['template']['admin'];
 
-        $this->code = file_get_contents($this->template['admin_controller']);
+        $this->code = file_get_contents($this->template['controller']);
+
     }
 
     /**
@@ -50,23 +52,6 @@ class AdminControllerBuild extends Build
         // 生成action
         $this->createAction();
 
-        $replace_content = [
-            '[NAME]'              => $this->data['cn_name'],
-            '[TABLE_NAME]'        => $this->data['table'],
-            '[CONTROLLER_NAME]'   => $this->data['admin_controller']['name'],
-            '[CONTROLLER_MODULE]' => $this->data['admin_controller']['module'],
-            '[MODEL_NAME]'        => $this->data['model']['name'],
-            '[MODEL_MODULE]'      => $this->data['model']['module'],
-            '[VALIDATE_NAME]'     => $this->data['validate']['name'],
-            '[VALIDATE_MODULE]'   => $this->data['validate']['module'],
-            '[SERVICE_NAME]'      => $this->data['api_controller']['name'],
-            '[SERVICE_MODULE]'    => $this->data['api_controller']['module'],
-        ];
-
-        foreach ($replace_content as $key => $value) {
-            $this->code = str_replace($key, $value, $this->code);
-        }
-
         $add_field_code  = '';
         $edit_field_code = '';
 
@@ -78,17 +63,15 @@ class AdminControllerBuild extends Build
         //导出代码
         $export_header = '';
         $export_body   = '';
-        $export_name   = '';
-        $export_code   = '';
         //with代码
         $relation_with = '';
         //with列表
         $relation_with_list = '';
 
         // 导入代码
-        $import_field     = '';
-        $import_code      = '';
-        $import_name_list = '';
+        $import_field = '';
+        $import_code  = '';
+        $import_name  = '';
 
         // 列表页关联查询
         $index_select = '';
@@ -129,7 +112,7 @@ class AdminControllerBuild extends Build
                         $class_name = parse_name($table_name, 1);
                         $relation_1 .= 'use app\\common\\model\\' . $class_name . ";\n";
 
-                        $code_3     = file_get_contents($this->template['relation']);
+                        $code_3     = file_get_contents($this->template['relation_data_list']);
                         $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
                         $code_3     = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($list_name, $class_name), $code_3);
                         $relation_3 .= $code_3;
@@ -145,18 +128,17 @@ class AdminControllerBuild extends Build
 
                 // 这里处理导入，表单字段为导入字段
                 $import_field .= "'" . $value['field_name'] . "',";
-
-                $import_name_list .= "'" . $value['form_name'] . "',";
+                $import_name  .= "'" . $value['form_name'] . "',";
 
             }
 
             if ($value['index_search'] === 'select') {
 
-                if ($value['relation_type'] === 1 || $value['relation_type'] ===2) {
+                if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     $table_name        = $this->getSelectFieldFormat($value['field_name'], 1);
                     $select_class_name = parse_name($table_name, 1);
                     $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $code_select       = file_get_contents($this->config['template']['path'] . 'admin_controller/relation_data_list.stub');
+                    $code_select       = file_get_contents($this->template . 'relation_data_list.stub');
                     $code_select       = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($select_list_name, $select_class_name), $code_select);
 
                     $index_select .= $code_select;
@@ -166,7 +148,7 @@ class AdminControllerBuild extends Build
                     $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
                     $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
 
-                    $assign = "'$list_name'=>" . $this->data['table'] . '::' . $const_name . ',';
+                    $assign = "'$list_name'=>" . parse_name($this->data['table'],1) . '::' . $const_name . ',';
 
                     $index_select .= $assign;
                 }
@@ -177,18 +159,17 @@ class AdminControllerBuild extends Build
 
                 //列表关联显示
                 if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                    $relation_with_name = $this->getSelectFieldFormat($value['field_name'], 1);
+                    $relation_with_name = $this->getSelectFieldFormat($value['field_name']);
                     $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
 
                 }
 
                 //如果有列表导出
-                if ($this->data['view']['export'] === 1) {
+                if (in_array('export',$this->data['admin_controller']['action'],true)) {
                     $export_header .= "'" . $value['form_name'] . "',";
                     if ($value['getter_setter'] === 'switch') {
-                        $export_body .= '        $record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
+                        $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
                     } else if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-
                         $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
                         $export_body   .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $relation_name . '->' . $value['relation_show'] . '?? ' . "'" . "'" . ";\n";
                     } else {
@@ -200,82 +181,106 @@ class AdminControllerBuild extends Build
 
         }
 
-        //启用禁用
-        $enable_code = '';
-        if (in_array(5, $this->data['admin_controller']['action'])) {
-            $enable_tmp  = file_get_contents($this->template['action_enable']);
-            $enable_tmp  = str_replace('[MODEL_NAME]', $this->data['model']['name'], $enable_tmp);
-            $enable_code = $enable_tmp;
-        }
 
         // 导出
         if ($export_header !== '') {
-            $export_name = $this->data['table'];
-            $code_export = file_get_contents($this->config['template']['path'] . 'controller/export.stub');
-            $code_export = str_replace(array('[HEADER_LIST]', '[BODY_ITEM]', '[FILE_NAME]', '[MODEL_NAME]'), array($export_header, $export_body, $export_name, $this->data['model']['name']), $code_export);
-            $export_code = $code_export;
+            $export_name = $this->data['cn_name'] . '数据';
+            $this->code  = str_replace(array('[HEADER_LIST]', '[BODY_ITEM]', '[FILE_NAME]'), array($export_header, $export_body, $export_name,), $this->code);
         }
 
         // 导入
         if ($import_field !== '') {
-            $table_name  = $this->data['table'];
-            $code_import = file_get_contents($this->config['template']['path'] . 'controller/import.stub');
-            $code_import = str_replace(array('[TABLE_NAME]', '[FILED_LIST]', '[FILED_NAME_LIST]'), array($table_name, $import_field, $import_name_list), $code_import);
-            $import_code = $code_import;
+            $table_name = $this->data['table'];
+            $this->code = str_replace(array('[TABLE_NAME]', '[FILED_LIST]', '[FILED_NAME_LIST]'), array($table_name, $import_field, $import_name), $this->code);
         }
 
         if ($relation_3 !== '') {
-            $code_2     = file_get_contents($this->config['template']['path'] . 'controller/relation_assign_1.stub');
+            $code_2     = file_get_contents($this->template['relation_assign_1']);
             $code_2     = str_replace('[RELATION_LIST]', $relation_3, $code_2);
             $relation_2 = $code_2;
         }
 
         //如果有列表显示
         if ($relation_with_list !== '') {
-            $relation_with = file_get_contents($this->config['template']['path'] . 'controller/relation_with.stub');
+            $relation_with = file_get_contents($this->template['relation_with']);
             $relation_with = str_replace('[WITH_LIST]', $relation_with_list, $relation_with);
         }
 
         //控制器添加方法特殊字段处理
         //控制器修改方法特殊字段处理
         $this->code = str_replace(
-            array('[NAME]', '[CONTROLLER_NAME]', '[CONTROLLER_MODULE]', '[MODEL_NAME]', '[MODEL_MODULE]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]', '[ADD_FIELD_CODE]', '[EDIT_FIELD_CODE]', '[RELATION_1]', '[RELATION_2]', '[RELATION_3]', '[EXPORT_CODE]', '[IMPORT_CODE]', '[ENABLE_CODE]', '[RELATION_WITH]', '[SEARCH_DATA_LIST]'),
-            array($this->data['cn_name'], $this->data['controller']['name'], $this->data['controller']['module'], $this->data['model']['name'], $this->data['model']['module'], $this->data['validate']['name'], $this->data['validate']['module'], $add_field_code, $edit_field_code, $relation_1, $relation_2, $relation_3, $export_code, $import_code, $enable_code, $relation_with, $index_select),
+            array('[ADD_FIELD_CODE]', '[EDIT_FIELD_CODE]', '[RELATION_1]', '[RELATION_2]', '[RELATION_3]', '[IMPORT_CODE]', '[RELATION_WITH]', '[SEARCH_DATA_LIST]'),
+            array($add_field_code, $edit_field_code, $relation_1, $relation_2, $relation_3, $import_code, $relation_with, $index_select),
             $this->code
         );
 
-        try {
-            $out_file = $this->config['file_dir']['admin_controller']
+        $this->createFile();
+
+        return true;
+
+    }
+
+
+
+    /**
+     * 生成文件
+     * @param null $code
+     * @param null $path
+     * @return bool
+     * @throws GenerateException
+     */
+    public function createFile($code = null, $path = null): bool
+    {
+
+        $replace_content = [
+            '[NAME]'              => $this->data['cn_name'],
+            '[TABLE_NAME]'        => $this->data['table'],
+            '[CONTROLLER_NAME]'   => $this->data['admin_controller']['name'],
+            '[CONTROLLER_MODULE]' => $this->data['admin_controller']['module'],
+            '[MODEL_NAME]'        => $this->data['model']['name'],
+            '[MODEL_MODULE]'      => $this->data['model']['module'],
+            '[VALIDATE_NAME]'     => $this->data['validate']['name'],
+            '[VALIDATE_MODULE]'   => $this->data['validate']['module'],
+            '[SERVICE_NAME]'      => $this->data['api_controller']['name'],
+            '[SERVICE_MODULE]'    => $this->data['api_controller']['module'],
+        ];
+
+        foreach ($replace_content as $key => $value) {
+            $this->code = str_replace($key, $value, $this->code);
+        }
+
+        if (is_null($code)) {
+            $code = $this->code;
+        }
+
+        if (is_null($path)) {
+            $path = $this->config['file_dir']['admin_controller']
                 . $this->data['admin_controller']['name']
                 . 'Controller'
                 . '.php';
-            file_put_contents($out_file, $this->code);
-
+        }
+        try {
+            file_put_contents($path, $code);
         } catch (Exception $e) {
             throw new GenerateException($e->getMessage());
         }
         return true;
-
     }
+
 
     /**
      * 生成需要生成的action
      */
     protected function createAction(): void
     {
-        foreach ($this->actionList as $action) {
-            if (!in_array($action, $this->data['admin_controller']['action'], true)) {
-                $upper      = strtoupper($action);
-                $this->code = str_replace('[ACTION_' . $upper . ']', '', $this->code);
-            }
-        }
+        $code = '';
 
-        foreach ($this->data['admin_controller']['action'] as $action) {
+        foreach ($this->actionList as $action) {
             $upper = strtoupper($action);
-            if (false !== strpos($this->code, $upper)) {
-                $tmp_code   = file_get_contents($this->template['admin']['action_' . $action]);
-                $this->code = str_replace('[ACTION_' . $upper . ']', $tmp_code, $this->code);
+            if (in_array($action, $this->data['admin_controller']['action'], true)) {
+                $code = file_get_contents($this->template['action_' . $action]);
             }
+            $this->code = str_replace('[ACTION_' . $upper . ']', $code, $this->code);
         }
     }
 

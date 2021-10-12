@@ -17,7 +17,7 @@ class Build
 
     protected array $config;
 
-    protected string $template;
+    protected array $template;
 
     protected string $code;
 
@@ -30,6 +30,7 @@ class Build
      * 4为显示字段name,例如type_name，channel_name；
      * 这里要注意，如果原字段是_id结尾的，会干掉_id，例如channel_id_list不仅长，而且容易产生歧义，
      * 实际channel_list的话就非常明确，这是渠道列表,是一个二维数组。
+     * @return false|string
      */
     public function getSelectFieldFormat($field_name, $type = 1)
     {

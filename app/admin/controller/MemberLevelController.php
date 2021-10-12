@@ -7,7 +7,6 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
-use think\db\Query;
 use think\response\Json;
 use app\common\model\MemberLevel;
 
@@ -18,7 +17,6 @@ class MemberLevelController extends AdminBaseController
 
     /**
      * 列表
-     *
      * @param Request $request
      * @param MemberLevel $model
      * @return string
@@ -29,11 +27,10 @@ class MemberLevelController extends AdminBaseController
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
-                 'list_rows' => $this->admin['admin_list_rows'],
-                 'var_page'  => 'page',
-                 'query'     => $request->get()
-        ]);
-
+                'list_rows' => $this->admin['admin_list_rows'],
+                'var_page'  => 'page',
+                'query'     => $request->get(),
+            ]);
         // 关键词，排序等赋值
         $this->assign($request->get());
 
@@ -41,7 +38,7 @@ class MemberLevelController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+            'status_list'=>MemberLevel::STATUS_LIST,
         ]);
         return $this->fetch();
     }
@@ -70,12 +67,9 @@ class MemberLevelController extends AdminBaseController
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
                $url = URL_RELOAD;
             }
-
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
-
         
-
         return $this->fetch();
     }
 
@@ -127,14 +121,13 @@ class MemberLevelController extends AdminBaseController
         }
 
         $result = $model::destroy(static function ($query) use ($id) {
-            /** @var Query $query */
+            /** @var \think\db\Query $query */
             $query->whereIn('id', $id);
         });
 
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
-    
     /**
      * 启用
      * @param mixed $id
@@ -146,7 +139,6 @@ class MemberLevelController extends AdminBaseController
         $result = $model->whereIn('id', $id)->update(['status' => 1]);
         return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
-
 
     /**
      * 禁用
@@ -160,10 +152,27 @@ class MemberLevelController extends AdminBaseController
         return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
 
+    /**
+     * 导入
+     * @param Request $request
+     * @return Json
+     */
+    public function import(Request $request): Json
+    {
+        $param           = $request->param();
+        $field_name_list = ['名称','简介','图片','是否启用',];
+        if (isset($param['action']) && $param['action'] === 'download_example') {
+            $this->downloadExample($field_name_list);
+        }
 
-        /**
+        $field_list = ['name','description','img','status',];
+        $result = $this->importData('file','member_level',$field_list);
+
+        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
+    }
+
+    /**
      * 导出
-     *
      * @param Request $request
      * @param MemberLevel $model
      * @return mixed
@@ -182,31 +191,14 @@ class MemberLevelController extends AdminBaseController
 $record['name'] = $item->name;
 $record['description'] = $item->description;
 $record['img'] = $item->img;
-        $record['status'] = $item->status_text;
+$record['status'] = $item->status;
 $record['create_time'] = $item->create_time;
 
 
             $body[] = $record;
         }
-        return $this->exportData($header, $body, 'member_level-' . date('YmdHis'));
+        return $this->exportData($header, $body, '会员等级数据-' . date('YmdHis'));
 
     }
 
-        /**
-     * @param Request $request
-     * @return Json
-     */
-    public function import(Request $request): Json
-    {
-        $param           = $request->param();
-        $field_name_list = ['名称','简介','图片','是否启用',];
-        if (isset($param['action']) && $param['action'] === 'download_example') {
-            $this->downloadExample($field_name_list);
-        }
-
-        $field_list = ['name','description','img','status',];
-        $result = $this->importData('file','member_level',$field_list);
-
-        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
-    }
 }

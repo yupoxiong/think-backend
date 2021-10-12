@@ -1,6 +1,5 @@
     /**
      * 导出
-     *
      * @param Request $request
      * @param [MODEL_NAME] $model
      * @return mixed
@@ -9,14 +8,13 @@
     public function export(Request $request, [MODEL_NAME] $model)
     {
         $param = $request->param();
-        $data  = $model->scope('Where', $param)->select();
+        $data  = $model[RELATION_WITH]->scope('where', $param)->select();
 
         $header = [[HEADER_LIST]];
         $body   = [];
         foreach ($data as $item) {
             $record                = [];
             [BODY_ITEM]
-
             $body[] = $record;
         }
         return $this->exportData($header, $body, '[FILE_NAME]-' . date('YmdHis'));

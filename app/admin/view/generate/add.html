@@ -113,13 +113,14 @@
                                 <select name="create_menu_list[]"
                                         class="select2 form-control form-control-sm min-width-400"
                                         id="create_menu_list" multiple="multiple" data-placeholder="默认生成增删改菜单">
-                                    <option value="1" disabled selected>列表</option>
-                                    <option value="2" selected>添加</option>
-                                    <option value="3" selected>修改</option>
-                                    <option value="4" selected>删除</option>
-                                    <option value="5">启用/禁用</option>
-                                    <option value="6">导出</option>
-                                    <option value="7">导入</option>
+                                    <option value="index" disabled selected>列表</option>
+                                    <option value="add" selected>添加</option>
+                                    <option value="edit" selected>修改</option>
+                                    <option value="del" selected>删除</option>
+                                    <option value="enable">启用</option>
+                                    <option value="disable">禁用</option>
+                                    <option value="export">导出</option>
+                                    <option value="import">导入</option>
                                 </select>
                             </div>
 
@@ -153,13 +154,14 @@
                                         class="select2 form-control form-control-sm min-width-400"
                                         id="admin_controller_action_list" multiple="multiple"
                                         data-placeholder="默认生成增删改方法">
-                                    <option value="1" selected>列表</option>
-                                    <option value="2" selected>添加</option>
-                                    <option value="3" selected>修改</option>
-                                    <option value="4" selected>删除</option>
-                                    <option value="5">启用/禁用</option>
-                                    <option value="6">导出</option>
-                                    <option value="7">导入</option>
+                                    <option value="index" selected>列表</option>
+                                    <option value="add" selected>添加</option>
+                                    <option value="edit" selected>修改</option>
+                                    <option value="del" selected>删除</option>
+                                    <option value="enable">启用</option>
+                                    <option value="disable">禁用</option>
+                                    <option value="export">导出</option>
+                                    <option value="import">导入</option>
                                 </select>
                             </div>
                         </div>
@@ -393,7 +395,7 @@
                                         表单类型
                                     </span>
                                 </th>
-                                <th  class="min-width-255">
+                                <th class="min-width-255">
 
                                     <span data-toggle="tooltip" title="后台添加/修改时的表单验证">
                                         表单验证
@@ -405,7 +407,7 @@
                                     </span>
                                 </th>
 
-                                <th  class="min-width-255">
+                                <th class="min-width-255">
                                     <span data-toggle="tooltip" title="该字段是否使用修改器，可选择的有开关，日期，日期时间等">
                                         修改器
                                     </span>
@@ -415,14 +417,14 @@
                                     </span>
                                 </th>
 
-                                <th  class="min-width-155">
+                                <th class="min-width-155">
                                     <span data-toggle="tooltip"
                                           title="是否参与列表筛选，可选择的有关键词搜索，下拉列表选择，时间范围筛等">
                                         列表筛选
                                     </span>
                                 </th>
 
-                                <th  class="min-width-155">
+                                <th class="min-width-155">
                                     <span data-toggle="tooltip"
                                           title="自定义筛选/select数据，当前字段为 列表选择 的时候生效。格式为：value||name，多个选项换行即可。例如[性别]字段，表单是[select]形式的，数据内容为：0||保密  1||男  2||女。一定要注意value和name的分割竖线为英文竖线，非中文竖线，不同的选项一定要换行">
                                         自定义列表
@@ -606,7 +608,8 @@
                 //列表排序
                 let list_sort = "#data-template [name='list_sortFORM_INDEX']";
 
-                //
+                formIndex = 0;
+
                 let listHtml = '';
                 $.each(field, function (index, item) {
                     //字段名
@@ -647,7 +650,7 @@
                     }
 
                     //优化生成DOM慢的问题
-                    formIndex++;
+
                     listHtml += $("#data-template").html().replace(/FORM_INDEX/g, '[' + formIndex + ']').replace(/INDEX_ID/g, formIndex);
 
                     if (getter_setter !== false) {
@@ -657,7 +660,7 @@
                     $(field_name).attr('value', '');
                     $(field_type).attr('value', '');
                     $(form_validate).empty();
-
+                    formIndex++;
                 });
 
                 $dataBody.append(listHtml);
@@ -702,6 +705,7 @@
     //选择关联类型防呆设计
     function selectRelation(obj) {
         let $obj = $(obj);
+        let index = $obj.data('index');
         let relation_type = parseInt($obj.val());
         let relation_show = $obj.data('relationShow');
         let relation_table = $obj.data('relationTable');
@@ -709,14 +713,28 @@
         if (relation_type === 1 || relation_type === 2) {
             $('input[name="' + relation_table + '"]').hide();
             $('input[name="' + relation_show + '"]').show();
-        } else if (relation_type === 3 ||relation_type === 4) {
+            let filedName ='field_name['+index+']';
+            let field =  $('input[name="' + filedName + '"]').val();
+
+            $.post('{:url("admin/generate/getRelationShowField")}', {field: field}, function (result) {
+                $('input[name="' + relation_show + '"]').val(result.data.name);
+            });
+
+        } else if (relation_type === 3 || relation_type === 4) {
             $('input[name="' + relation_show + '"]').hide();
             $('input[name="' + relation_table + '"]').show();
+
+            $.post('{:url("admin/generate/getRelationTable")}', {field: field}, function (result) {
+                $('input[name="' + relation_table + '"]').val(result.data.name);
+            });
+
         } else {
             $('input[name="' + relation_table + '"]').hide();
             $('input[name="' + relation_show + '"]').hide();
         }
     }
+
+
 
     //列表刷新后的操作
     function dataBodyRefreshed() {
@@ -744,7 +762,6 @@
         //刷新 dataBody DOM后的操作
         dataBodyRefreshed();
     }
-
 
 
 </script>
