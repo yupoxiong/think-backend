@@ -132,7 +132,7 @@ class Generate
                     'add'           => $root_path . 'extend/generate/stub/view/add.stub',
                 ],
             ],
-            //生成文件目录
+            // 生成文件目录
             'file_dir' => [
                 'admin_controller' => $app_path . 'admin/controller/',
                 'api_controller'   => $app_path . 'api/controller/',
@@ -175,13 +175,13 @@ class Generate
 
         return '生成成功';
 
-        //先判断所有目录是否可写，控制器，模型，验证器，视图
-        //然后生成表，然后再生成各个代码
-        //检查目录
+        // 先判断所有目录是否可写，控制器，模型，验证器，视图
+        // 然后生成表，然后再生成各个代码
+        // 检查目录
 
-        //检查名称
+        // 检查名称
 
-        //判断是否为
+        // 判断是否为
 
     }
 
@@ -223,7 +223,7 @@ class Generate
     }
 
 
-    //获取所有模块
+    // 获取所有模块
     protected function getModule()
     {
         $module = [];
@@ -338,7 +338,7 @@ class Generate
         return (new AdminControllerBuild($this->data, $this->config))->run();
     }
 
-    //创建模型
+    // 创建模型
 
     /**
      * @return bool
@@ -788,40 +788,7 @@ class Generate
                 ]
             ],
             //字段
-            'field'      => [
-                [
-                    //字段名
-                    'name'              => 'name',
-                    //字段中文名
-                    'cn_name'           => '名称',
-                    //字段类型
-                    'field_type'        => 'varchar(30)',
-                    //是否列表显示
-                    'is_list'           => 1,
-                    //是否为表单字段
-                    'is_form'           => 1,
-                    //表单类型
-                    'form_type'         => 'text',
-                    //表单验证
-                    'validate'          => ['required'],
-                    //验证场景
-                    'validate_scene'    => ['admin_add'],
-                    //获取器
-                    'getter'            => 'date_time',
-                    //修改器
-                    'setter'            => 'date_time',
-                    //列表筛选
-                    'index_search'      => '',
-                    //列表筛选数据
-                    'field_select_data' => '',
-                    //关联显示
-                    'relation_display'  => 1,
-                    //关联显示字段
-                    'display_field'     => 'name',
-
-                ],
-            ],
-
+            'field'      => [],
         ];
 
         //所有字段信息
@@ -880,40 +847,69 @@ class Generate
         $form_hide_field = ['id', 'create_time', 'update_time', 'delete_time'];
         $form_hide_type  = ['double'];
 
-        $data['field'] = [];
+
         foreach ($field_list as $key => $value) {
 
+            // 处理关联展示
+            $relation_table = '';
+            $relation_type  = 0;
+            $relation_show  = 'name';
+
+            // 处理主键ID没备注的情况
+            $cn_name = $value['Comment'];
+            if ($value['Field'] === 'id') {
+
+                if (empty($cn_name)) {
+                    $cn_name = 'ID';
+                }
+                // 主键关联
+                $relation_table = $this->getRelationTable($table_name);
+                if (!empty($relation_table)) {
+                    $relation_type = 4;
+                }
+            } else if (strrchr($value['Field'], '_id') === '_id') {
+                // 这里判断是否为关联外键
+                $union_table = $this->getRelation($value['Field']);
+                if ($union_table) {
+                    $relation_type = 2;
+                    $relation_show = $union_table;
+
+                }
+            }
+
             $field_data = [
-                //字段名
+                // 字段名
                 'name'              => $value['Field'],
-                //字段中文名
-                'cn_name'           => $value['Field'] === 'id' ? 'ID' : $value['Comment'],
-                //字段类型
+                // 字段中文名
+                'cn_name'           => $cn_name,
+                // 字段类型
                 'field_type'        => $value['Type'],
-                //字段长度
+                // 字段长度
                 'field_length'      => 1,
-                //默认值
+                // 默认值
                 'default'           => $value['Default'],
-                //是否列表显示
+                // 是否列表显示
                 'is_list'           => 1,
-                //是否为表单字段
+                // 是否为表单字段
                 'is_form'           => 1,
-                //表单类型
+                // 表单类型
                 'form_type'         => 'text',
-                //表单验证
+                // 表单验证
                 'validate'          => ['required'],
                 'validate_html'     => '',
-                //验证场景
+                // 验证场景
                 'validate_scene'    => ['admin_add'],
-                //获取器/修改器
+                // 获取器/修改器
                 'getter_setter'     => false,
-                //首页筛选
+                // 首页筛选
                 'index_search'      => '',
                 'field_select_data' => '',
-                //关联显示
-                'relation_display'  => 1,
-                //关联显示字段
-                'display_field'     => 'name',
+                // 关联显示
+                'relation_type'     => $relation_type,
+                //  关联表
+                'relation_table'    => $relation_table,
+                // 关联显示字段
+                'relation_show'     => $relation_show,
             ];
 
 
@@ -921,28 +917,28 @@ class Generate
 
             $field_data['field_length'] = $field_info['length'];
 
-            //处理是否为列表显示
-            if (in_array($field_info['name'], $list_hide_field) || in_array($field_info['type'], $list_hide_type)) {
+            // 处理是否为列表显示
+            if (in_array($field_info['name'], $list_hide_field, true) || in_array($field_info['type'], $list_hide_type, true)) {
                 $field_data['is_list'] = 0;
             }
 
-            //处理是否为列表搜索
-            if (in_array($field_info['name'], $search_show_field) && in_array($field_info['type'], $search_show_type)) {
+            // 处理是否为列表搜索
+            if (in_array($field_info['name'], $search_show_field, true) && in_array($field_info['type'], $search_show_type, true)) {
                 $field_data['is_search'] = 1;
             }
 
-            //处理是否不为表单字段
-            if (in_array($field_info['name'], $form_hide_field) || in_array($field_info['type'], $form_hide_type)) {
+            // 处理是否不为表单字段
+            if (in_array($field_info['name'], $form_hide_field, true) || in_array($field_info['type'], $form_hide_type, true)) {
                 $field_data['is_form'] = 0;
             }
 
-            //处理字段表单类型
+            // 处理字段表单类型
             $form_info                   = $this->getFormInfo($field_info);
             $field_data['form_type']     = $form_info['form_type'];
             $field_data['getter_setter'] = $form_info['getter_setter'];
 
 
-            //验证
+            // 验证
             //$field_data['validate'] = [];
             $field_data['validate_html'] = $this->getValidateHtml($field_data);
 
@@ -955,8 +951,70 @@ class Generate
         return $data;
     }
 
+    /**
+     * 获取主键一对多的关联表
+     * @param $table_name
+     * @return string
+     */
+    public function getRelationTable($table_name): string
+    {
 
-    //根据表单类型和长度返回相应的验证
+        $relation_table = '';
+        $fk             = $table_name . '_id';
+        $table_list     = $this->getTable();
+        foreach ($table_list as $table) {
+            //所有字段信息
+            $field_list = Db::query('SHOW FULL COLUMNS FROM `' . $table . '`');
+            foreach ($field_list as $field) {
+                if ($field['Field'] === $fk) {
+                    $relation_table .= empty($relation_table) ? $table : ',' . $table;
+                    break;
+                }
+            }
+        }
+
+        return $relation_table;
+    }
+
+    public function getRelation($field): string
+    {
+        $result     = '';
+        $table_name = str_replace('_id', '', $field);
+
+        $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
+        if ($table_info) {
+
+            $fields     = [];
+            $field_list = Db::query('SHOW FULL COLUMNS FROM `' . $table_name . '`');
+
+            foreach ($field_list as $item) {
+                $fields[] = $item['Field'];
+            }
+
+            if (in_array('name', $fields, true)) {
+                $result = 'name';
+            } elseif (in_array('title', $fields, true)) {
+                $result = 'title';
+            } else {
+                foreach ($fields as $item) {
+                    if (strpos($item, 'name') !== false) {
+                        $result = $item;
+                        break;
+                    }
+                    if (strpos($item, 'title') !== false) {
+                        $result = $item;
+                        break;
+                    }
+                }
+            }
+
+
+        }
+        return $result;
+    }
+
+
+    // 根据表单类型和长度返回相应的验证
     public function getValidateHtml($field_data)
     {
         $html = '';
@@ -980,30 +1038,35 @@ class Generate
         return $html;
     }
 
-    public function getFormInfo($field_info)
+    /**
+     * 获取字段的表单信息
+     * @param $field_info
+     * @return array
+     */
+    public function getFormInfo($field_info): array
     {
 
-        //结尾：_id为select，_time为datetime，_date为date，
-        //结尾：_count为number，_lng/_longitude为map，img为image，slide为multiImage
-        //开头：is_为switch
-        //字段名：lng/longitude为map,password为password，money,price为number
-        //字段名：status大概率为switch或者其他
+        // 结尾：_id为select，_time为datetime，_date为date，
+        // 结尾：_count为number，_lng/_longitude为map，img为image，slide为multiImage
+        // 开头：is_为switch
+        // 字段名：lng/longitude为map,password为password，money,price为number
+        // 字段名：status大概率为switch或者其他
         $field_data = [
             'form_type'     => 'text',
             'getter_setter' => false,
         ];
 
-        //id
+        // id
         if ($field_info['name'] === 'id') {
             $field_data['form_type'] = 'number';
         }
 
-        //_id为下拉列表，大多数为关联
+        // _id为下拉列表，大多数为关联
         if (strrchr($field_info['name'], '_id') === '_id') {
             $field_data['form_type'] = 'select';
         }
 
-        //日期时间
+        // 日期时间
         if (strrchr($field_info['name'], '_time') === '_time') {
             $field_data['form_type'] = 'datetime';
 
@@ -1013,95 +1076,94 @@ class Generate
             }
         }
 
-        //日期
+        // 日期
         if ($field_info['type'] === 'datetime') {
             $field_data['form_type'] = 'date';
         }
 
-        //日期
+        // 日期
         if (strrchr($field_info['name'], '_date') === '_date') {
             $field_data['form_type'] = 'date';
             if ($field_info['type'] === 'int') {
                 $field_data['getter_setter'] = 'date';
             }
         }
-        //日期
+        // 日期
         if ($field_info['type'] === 'date') {
             $field_data['form_type'] = 'date';
         }
 
-        //数量
+        // 数量
         if (strrchr($field_info['name'], '_count') === '_count') {
             $field_data['form_type'] = 'number';
         }
 
-        //数量
+        // 数量
         if (strrchr($field_info['name'], '_number') === '_number') {
             $field_data['form_type'] = 'number';
         }
 
-        //经纬度
+        // 经纬度
         if (strrchr($field_info['name'], '_lng') === '_lng') {
             $field_data['form_type'] = 'map';
         }
 
-        //图片
+        // 图片
         if (strrchr($field_info['name'], 'img') === 'img') {
             $field_data['form_type'] = 'image';
         }
 
-        //视频
+        // 视频
         if (strrchr($field_info['name'], 'video') === 'video') {
             $field_data['form_type'] = 'video';
         }
 
-        //轮播
+        // 轮播
         if (strrchr($field_info['name'], 'slide') === 'slide') {
             $field_data['form_type'] = 'multi_image';
         }
 
-        //密码
+        // 密码
         if (strrchr($field_info['name'], 'password') === 'password') {
             $field_data['form_type'] = 'password';
         }
 
-        //颜色
+        // 颜色
         if (strrchr($field_info['name'], 'color') === 'color') {
             $field_data['form_type'] = 'color';
         }
-        //图标
+        // 图标
         if (strrchr($field_info['name'], 'icon') === 'icon') {
             $field_data['form_type'] = 'icon';
         }
 
-        //价格，暂时用number
+        // 价格，暂时用number
         if (strrchr($field_info['name'], 'price') === 'price') {
             $field_data['form_type'] = 'number';
         }
 
-        //金额，暂时用number
+        // 金额，暂时用number
         if (strrchr($field_info['name'], 'money') === 'money') {
             $field_data['form_type'] = 'number';
         }
 
-        //状态
+        // 状态
         if ($field_info['name'] === 'status') {
             $field_data['form_type']     = 'switch';
             $field_data['getter_setter'] = 'switch';
         }
 
-        //手机号
-        if ($field_info['name'] === 'mobile') {
+        // 手机号
+        if ($field_info['name'] === 'mobile' || $field_info['name'] === 'phone') {
             $field_data['form_type'] = 'mobile';
         }
 
-
-        //头像
+        // 头像
         if ($field_info['name'] === 'avatar') {
             $field_data['form_type'] = 'image';
         }
 
-        //富文本
+        // 富文本
         if ($field_info['type'] === 'text' || $field_info['type'] === 'longtext') {
             $field_data['form_type'] = 'editor';
         }

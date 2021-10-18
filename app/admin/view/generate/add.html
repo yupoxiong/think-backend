@@ -607,6 +607,9 @@
                 let getter_setter = "#data-template [name='getter_setterFORM_INDEX']";
                 //列表排序
                 let list_sort = "#data-template [name='list_sortFORM_INDEX']";
+                let relation_type = "#data-template [name='relation_typeFORM_INDEX']";
+                let relation_show = "#data-template [name='relation_showFORM_INDEX']";
+                let relation_table = "#data-template [name='relation_tableFORM_INDEX']";
 
                 formIndex = 0;
 
@@ -649,6 +652,17 @@
                         $(getter_setter).find("option[value='" + item.getter_setter + "']").attr("selected", true);
                     }
 
+                    $(relation_type).find("option[value='" + item.relation_type + "']").attr("selected", true);
+                    if(item.relation_type===2){
+                        // 这里处理显示
+                        $(relation_show).attr('value', item.relation_show);
+                        $(relation_show).show();
+
+                    }else if(item.relation_type===4){
+                        $(relation_table).show();
+                        $(relation_table).attr('value', item.relation_table);
+                    }
+
                     //优化生成DOM慢的问题
 
                     listHtml += $("#data-template").html().replace(/FORM_INDEX/g, '[' + formIndex + ']').replace(/INDEX_ID/g, formIndex);
@@ -657,9 +671,14 @@
                         $(getter_setter).find("option[value='" + item.getter_setter + "']").attr("selected", false);
                     }
                     $(form_type).find("option[value='" + item.form_type + "']").attr("selected", false);
+                    $(relation_type).find("option[value='" + item.relation_type + "']").attr("selected", false);
                     $(field_name).attr('value', '');
                     $(field_type).attr('value', '');
                     $(form_validate).empty();
+                    $(relation_show).attr('value', '');
+                    $(relation_table).attr('value', '');
+                    $(relation_show).hide();
+                    $(relation_table).hide();
                     formIndex++;
                 });
 

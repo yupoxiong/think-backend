@@ -11,6 +11,7 @@ namespace generate;
 use Exception;
 use generate\exception\GenerateException;
 use think\facade\Db;
+use think\Log;
 
 class ModelBuild extends Build
 {
@@ -39,10 +40,8 @@ class ModelBuild extends Build
         $this->autoTimestamp();
         $this->softDelete();
 
-
         $code = $this->code;
         $code = str_replace(array('[NAME]', '[TABLE_NAME]', '[MODEL_NAME]', '[MODEL_MODULE]'), array($this->data['cn_name'], $this->data['table'], $this->data['model']['name'], $this->data['model']['module']), $code);
-
 
         // 关联
         $relation_code = '';
@@ -54,98 +53,15 @@ class ModelBuild extends Build
         foreach ($this->data['data'] as $key => $value) {
 
             if ($value['relation_type'] > 0) {
-                $tmp_code = file_get_contents($this->template['relation']);
-                if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                    // 外键
-                    $relation_type = 'belongsTo';
-                    $table_name    = $this->getSelectFieldFormat($value['field_name'], 1);
-                    // 表中文名
-                    $cn_name    = '';
-                    $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
-                    if ($table_info) {
-                        $cn_name = $table_info[0]['Comment'] ?? '';
-                    }
-                    $relation_name  = parse_name($table_name, 1, false);
-                    $relation_class = parse_name($table_name, 1);
-                    $tmp_code       = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
-                    $relation_code  .= $tmp_code;
-                } else {
-                    // 主键
-                    $relation_type = $value['relation_type'] === 3 ? $relation_type = 'hasOne' : 'hasMany';
-
-                    $table_tmp = explode(',', $value['relation_table']);
-                    foreach ($table_tmp as $item) {
-                        $table_name     = parse_name($item, 0, false);
-                        $relation_name  = parse_name($table_name, 1, false);
-                        $relation_class = parse_name($item, 1);
-
-                        //表中文名
-                        $cn_name    = '';
-                        $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
-                        if ($table_info) {
-                            $cn_name = $table_info[0]['Comment'] ?? '';
-                        }
-
-                        $tmp_code_item = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
-                        $relation_code .= $tmp_code_item;
-                    }
-                }
-            } else {
-                // 如果是select，同时非关联
-                if ($value['form_type'] === 'select') {
-                    $field_select_data = $value['field_select_data'];
-
-                    if (empty($field_select_data)) {
-                        throw new GenerateException('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
-                    }
-
-                    $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
-
-                    $options     = explode("\r\n", $field_select_data);
-                    $option_code = '// ' . $value['form_name'] . "列表\n" . 'const ' . $const_name . "= [\n";
-                    foreach ($options as $item) {
-                        $option_key_value = explode('||', $item);
-                        if (is_numeric($option_key_value[0])) {
-                            $option_item_key = $option_key_value[0];
-                        } else {
-                            $option_item_key = "'$option_key_value[0]'";
-                        }
-
-                        $option_code .= ($option_item_key . "=>'$option_key_value[1]',\n");
-                    }
-                    $option_code .= "];\n";
-
-                    $select_data_code .= $option_code;
-
-                    // 处理select自定义数据的获取器
-                    $field5             = $this->getSelectFieldFormat($value['field_name'], 5);
-                    $field4             = $this->getSelectFieldFormat($value['field_name'], 3);
-                    $tmp_code           = file_get_contents($this->template['getter_setter_select']);
-                    $tmp_code           = str_replace(array('[FIELD_NAME5]', '[FIELD_NAME4]', '[FIELD_NAME]'), array($field5, $field4, $value['field_name']), $tmp_code);
-                    $getter_setter_code .= $tmp_code;
-                }
+                $relation_code .= $this->getRelationCode($value);
+            } else if ($value['form_type'] === 'select') {
+                $code_result        = $this->getSelectCode($value);
+                $select_data_code   .= $code_result[0];
+                $getter_setter_code .= $code_result[1];
             }
 
             if ($value['getter_setter']) {
-                switch ($value['getter_setter']) {
-                    case 'switch':
-                        $tmp_code           = file_get_contents($this->template . 'getter_setter_switch.stub');
-                        $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME_LOWER]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['field_name'], $value['form_name']), $tmp_code);
-                        $getter_setter_code .= $tmp_code;
-                        break;
-                    case 'date':
-                        $tmp_code           = file_get_contents($this->template . 'getter_setter_date.stub');
-                        $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $tmp_code);
-                        $getter_setter_code .= $tmp_code;
-                        break;
-                    case 'datetime':
-                        $tmp_code           = file_get_contents($this->template . 'getter_setter_datetime.stub');
-                        $tmp_code           = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $tmp_code);
-                        $getter_setter_code .= $tmp_code;
-                        break;
-                    default:
-                        break;
-                }
+                $this->getGetterSetterCode($value);
             }
         }
 
@@ -186,6 +102,126 @@ class ModelBuild extends Build
 
         return true;
     }
+
+
+    /**
+     * 获取关联代码
+     * @param $value
+     * @return false|string|string[]
+     */
+    public function getRelationCode($value)
+    {
+        $tmp_code = file_get_contents($this->template['relation']);
+        if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
+            // 外键
+            $relation_type = 'belongsTo';
+            $table_name    = $this->getSelectFieldFormat($value['field_name'], 1);
+            // 表中文名
+            $cn_name    = '';
+            $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
+            if ($table_info) {
+                $cn_name = $table_info[0]['Comment'] ?? '';
+            }
+            $relation_name  = parse_name($table_name, 1, false);
+            $relation_class = parse_name($table_name, 1);
+            return str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
+        }
+
+        $result = '';
+        // 主键
+        $relation_type = $value['relation_type'] === 3 ? $relation_type = 'hasOne' : 'hasMany';
+
+        $table_tmp = explode(',', $value['relation_table']);
+        foreach ($table_tmp as $item) {
+            $table_name     = parse_name($item, 0, false);
+            $relation_name  = parse_name($table_name, 1, false);
+            $relation_class = parse_name($item, 1);
+
+            //表中文名
+            $cn_name    = '';
+            $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
+            if ($table_info) {
+                $cn_name = $table_info[0]['Comment'] ?? '';
+            }
+
+            $tmp_code_item = str_replace(array('[RELATION_NAME]', '[RELATION_TYPE]', '[CLASS_NAME]', '[CN_NAME]'), array($relation_name, $relation_type, $relation_class, $cn_name), $tmp_code);
+            $result        .= $tmp_code_item;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取自定义筛选代码
+     * @param $value
+     * @return array
+     * @throws GenerateException
+     */
+    public function getSelectCode($value): array
+    {
+        // 如果是select，同时非关联
+        $field_select_data = $value['field_select_data'];
+
+        if (empty($field_select_data)) {
+            throw new GenerateException('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
+        }
+
+        $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
+
+        $options     = explode("\r\n", $field_select_data);
+        $option_code = '// ' . $value['form_name'] . "列表\n" . 'const ' . $const_name . "= [\n";
+        foreach ($options as $item) {
+            $option_key_value = explode('||', $item);
+            if (is_numeric($option_key_value[0])) {
+                $option_item_key = $option_key_value[0];
+            } else {
+                $option_item_key = "'$option_key_value[0]'";
+            }
+
+            $option_code .= ($option_item_key . "=>'$option_key_value[1]',\n");
+        }
+        $option_code .= "];\n";
+
+
+        // 处理select自定义数据的获取器
+        $field5             = $this->getSelectFieldFormat($value['field_name'], 5);
+        $field4             = $this->getSelectFieldFormat($value['field_name'], 3);
+        $getter_setter_code = file_get_contents($this->template['getter_setter_select']);
+        $getter_setter_code = str_replace(array('[FIELD_NAME5]', '[FIELD_NAME4]', '[FIELD_NAME]'), array($field5, $field4, $value['field_name']), $getter_setter_code);
+
+        return [$option_code, $getter_setter_code];
+
+    }
+
+    /**
+     * 获取器相关代码生成
+     * @param $value
+     * @return false|string|string[]
+     */
+    public function getGetterSetterCode($value)
+    {
+
+        switch ($value['getter_setter']) {
+            case 'switch':
+                $code = file_get_contents($this->template . 'getter_setter_switch.stub');
+                $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME_LOWER]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['field_name'], $value['form_name']), $code);
+                break;
+            case 'date':
+                $code = file_get_contents($this->template . 'getter_setter_date.stub');
+                $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $code);
+                break;
+            case 'datetime':
+                $code = file_get_contents($this->template . 'getter_setter_datetime.stub');
+                $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $code);
+                break;
+            default:
+                $code = '';
+                break;
+        }
+
+        return $code;
+    }
+
 
     /**
      * 软删除

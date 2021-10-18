@@ -155,16 +155,15 @@ class GenerateController extends AdminBaseController
                 'field_scene'       => $param['field_scene'][$key] ?? [],
 
                 // 获取器/修改器
-                'getter_setter'     => (int)($param['getter_setter'][$key] ?? 0),
+                'getter_setter'     => (string)$param['getter_setter'][$key] === '0' ? 0 : $param['getter_setter'][$key],
                 // 关联类型
                 'relation_type'     => (int)($param['relation_type'][$key] ?? 0),
                 // 关联表
                 'relation_table'    => $param['relation_table'][$key] ?? '',
                 // 关联显示字段
                 'relation_show'     => $param['relation_show'][$key] ?? 'name',
-
                 // 筛选字段
-                'index_search'      => $param['index_search'][$key] ?? 0,
+                'index_search'      => (string)$param['index_search'][$key] === '0' ? 0 : $param['index_search'][$key],
                 // 筛选自定义select
                 'field_select_data' => $param['field_select_data'][$key] ?? '',
             ];
