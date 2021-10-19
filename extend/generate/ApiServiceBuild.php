@@ -11,8 +11,9 @@ namespace generate;
 
 
 use Exception;
+use generate\exception\GenerateException;
 
-class ApiService
+class ApiServiceBuild
 {
 
     /**
@@ -44,11 +45,11 @@ class ApiService
 
     /**
      * 创建API模块Service相关代码
-     * @return bool|string
+     * @return bool
+     * @throws GenerateException
      */
-    public function create()
+    public function create(): bool
     {
-
         $out_file = $this->config['file_dir']['api_service'] . $this->data['api_controller']['name'] . 'Service' . '.php';
 
         $replace_content = [
@@ -67,17 +68,12 @@ class ApiService
             $this->code = str_replace($key, $value, $this->code);
         }
 
-
-        $msg = '';
         try {
             file_put_contents($out_file, $this->code);
-            $result = true;
         } catch (Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
+            throw new GenerateException($e->getMessage());
         }
-        return $result ?? $msg;
-
+        return true;
     }
 
     protected function getShowFieldList(): string
@@ -90,6 +86,5 @@ class ApiService
         }
         return $field_list;
     }
-
 
 }

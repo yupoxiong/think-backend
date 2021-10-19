@@ -13,43 +13,9 @@
 
                     <div class="input-group input-group-sm searchGroup">
                         <input value="{$_keywords ? $_keywords : '' ;}"
-                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="ID">
+                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
                     </div>
-                    <div class="input-group input-group-sm searchGroup">
-    <input value="{$name|default=''}" readonly name="name" id="name" class="form-control input-sm indexSearchDateRange" placeholder="名称">
-</div>
-<script>
-    laydate.render({
-        elem: '#name',
-        range: true,
-    });
-</script>
-<div class="input-group input-group-sm searchGroup">
-    <input value="{$description|default=''}" readonly name="description" id="description" class="form-control input-sm indexSearchDatetimeRange" placeholder="简介">
-</div>
-<script>
-    laydate.render({
-        elem: '#description',
-        type: 'datetime',
-        range: true,
-    });
-</script>
-<div class="input-group input-group-sm searchGroup">
-                        <select name="status" id="status" class="form-control input-sm index-search">
-                            <option value="">是否启用</option>
-                            {foreach $status_list as $key=>$value}
-                            <option value="{$key}" {if isset($status) && ''!==$status && $status==$key}selected{/if}>{$value}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                    <script>
-                        $(function () {
-                            $('#status').select2({
-                            width:'100%'
-                            });
-                        });
-                    </script>
-
+                    
                     
 
                     <div class="form-group searchGroup">
@@ -117,6 +83,7 @@
             <td>{$item.name}</td>
             <td>{$item.description}</td>
 <td class="imgViewer"><img class="dataListImg" src="{$item.img}"></td>
+<td>{$item.status_text}</td>
             <td>{$item.create_time}</td>
 
                             <td class="td-do">

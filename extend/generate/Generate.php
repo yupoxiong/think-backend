@@ -109,16 +109,21 @@ class Generate
                 ],
 
                 'model' => [
-                    'model'                => $model_path . 'Model.stub',
-                    'relation'             => $model_path . 'relation.stub',
-                    'getter_setter_select' => $model_path . 'getter_setter_select.stub',
+                    'model'                  => $model_path . 'Model.stub',
+                    'relation'               => $model_path . 'relation.stub',
+                    'getter_setter_select'   => $model_path . 'getter_setter_select.stub',
+                    'getter_setter_switch'   => $model_path . 'getter_setter_switch.stub',
+                    'getter_setter_date'     => $model_path . 'getter_setter_date.stub',
+                    'getter_setter_datetime' => $model_path . 'getter_setter_datetime.stub',
                 ],
 
                 'path'           => $root_path . 'extend/generate/stub/',
                 'controller'     => $root_path . 'extend/generate/stub/Controller.stub',
                 'api_controller' => $root_path . 'extend/generate/stub/ApiController.stub',
 
-                'validate' => $root_path . 'extend/generate/stub/Validate.stub',
+                'validate' => [
+                    'validate' => $root_path . 'extend/generate/stub/Validate.stub',
+                ],
                 'view'     => [
                     'index'         => $root_path . 'extend/generate/stub/view/index.stub',
                     'index_path'    => $root_path . 'extend/generate/stub/view/index/',
@@ -688,7 +693,7 @@ class Generate
             return true;
         }
 
-        $api = new ApiController($this->data, $this->config);
+        $api = new ApiControllerBuild($this->data, $this->config);
         return $api->create();
 
     }
@@ -701,7 +706,7 @@ class Generate
             return true;
         }
 
-        $api = new ApiService($this->data, $this->config);
+        $api = new ApiServiceBuild($this->data, $this->config);
         return $api->create();
     }
 
@@ -877,6 +882,12 @@ class Generate
                 }
             }
 
+            // 筛选搜索
+            $index_search = '0';
+            if ($value['Field'] === 'name' || $value['Field'] === 'title' || $value['Field'] === 'description') {
+                $index_search = 'search';
+            }
+
             $field_data = [
                 // 字段名
                 'name'              => $value['Field'],
@@ -902,7 +913,7 @@ class Generate
                 // 获取器/修改器
                 'getter_setter'     => false,
                 // 首页筛选
-                'index_search'      => '',
+                'index_search'      => $index_search,
                 'field_select_data' => '',
                 // 关联显示
                 'relation_type'     => $relation_type,

@@ -91,6 +91,7 @@ class ModelBuild extends Build
             }
 
         }
+
         // 搜索筛选字段替换
         $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
 
@@ -200,18 +201,17 @@ class ModelBuild extends Build
      */
     public function getGetterSetterCode($value)
     {
-
         switch ($value['getter_setter']) {
             case 'switch':
-                $code = file_get_contents($this->template . 'getter_setter_switch.stub');
+                $code = file_get_contents($this->template['getter_setter_switch']);
                 $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME_LOWER]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['field_name'], $value['form_name']), $code);
                 break;
             case 'date':
-                $code = file_get_contents($this->template . 'getter_setter_date.stub');
+                $code = file_get_contents($this->template['getter_setter_date']);
                 $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $code);
                 break;
             case 'datetime':
-                $code = file_get_contents($this->template . 'getter_setter_datetime.stub');
+                $code = file_get_contents($this->template['getter_setter_datetime']);
                 $code = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array(parse_name($value['field_name'], 1), $value['form_name']), $code);
                 break;
             default:

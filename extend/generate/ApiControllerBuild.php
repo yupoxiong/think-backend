@@ -10,6 +10,9 @@ declare (strict_types=1);
 namespace generate;
 
 
+use Exception;
+use generate\exception\GenerateException;
+
 class ApiControllerBuild
 {
 
@@ -42,11 +45,11 @@ class ApiControllerBuild
 
     /**
      * 创建API模块控制器相关代码
-     * @return bool|string
+     * @return bool
+     * @throws GenerateException
      */
-    public function create()
+    public function create(): bool
     {
-
         $this->createAction();
 
         $out_file = $this->config['file_dir']['api_controller'] . $this->data['api_controller']['name'] . 'Controller' . '.php';
@@ -68,22 +71,20 @@ class ApiControllerBuild
             $this->code = str_replace($key, $value, $this->code);
         }
 
-
-        $msg = '';
         try {
             file_put_contents($out_file, $this->code);
-            $result = true;
-        } catch (\Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
+        } catch (Exception $e) {
+            throw new GenerateException($e->getMessage());
         }
-        return $result ?? $msg;
+        return true;
 
     }
 
+    /**
+     * 生成方法
+     */
     protected function createAction(): void
     {
-
         foreach ($this->actionList as $action) {
             if (!in_array($action, $this->data['api_controller']['action'], true)) {
                 $upper      = strtoupper($action);
@@ -92,15 +93,12 @@ class ApiControllerBuild
         }
 
         foreach ($this->data['api_controller']['action'] as $action) {
-
             $upper = strtoupper($action);
             if (false !== strpos($this->code, $upper)) {
                 $tmp_code   = file_get_contents($this->template['controller_' . $action]);
                 $this->code = str_replace('[ACTION_' . $upper . ']', $tmp_code, $this->code);
             }
         }
-
     }
-
 
 }

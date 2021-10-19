@@ -163,7 +163,7 @@ class GenerateController extends AdminBaseController
                 // 关联显示字段
                 'relation_show'     => $param['relation_show'][$key] ?? 'name',
                 // 筛选字段
-                'index_search'      => (string)$param['index_search'][$key] === '0' ? 0 : $param['index_search'][$key],
+                'index_search'      => $param['index_search'][$key],
                 // 筛选自定义select
                 'field_select_data' => $param['field_select_data'][$key] ?? '',
             ];

@@ -85,6 +85,15 @@ class CommonBaseModel extends Model
         $query->order($order ?: 'id', $by ?: 'desc');
     }
 
+    /**
+     * api模块相关scope
+     * @param Query $query
+     * @param array $param
+     */
+    public function scopeApiWhere(Query $query, array $param): void
+    {
+        $this->scopeWhere($query,$param);
+    }
 
 
     /**

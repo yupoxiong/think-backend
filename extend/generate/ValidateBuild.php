@@ -27,7 +27,7 @@ class ValidateBuild extends Build
 
         $this->template = $this->config['template']['validate'];
 
-        $this->code = file_get_contents($this->template);
+        $this->code = file_get_contents($this->template['validate']);
     }
 
     /**
@@ -42,9 +42,7 @@ class ValidateBuild extends Build
             return true;
         }
 
-        $file = $this->config['template']['validate'];
-        $code = file_get_contents($file);
-        $code = str_replace(array('[NAME]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]'), array($this->data['cn_name'], $this->data['validate']['name'], $this->data['validate']['module']), $code);
+        $code = str_replace(array('[NAME]', '[VALIDATE_NAME]', '[VALIDATE_MODULE]'), array($this->data['cn_name'], $this->data['validate']['name'], $this->data['validate']['module']), $this->code);
 
         $rule_code      = '';
         $msg_code       = '';

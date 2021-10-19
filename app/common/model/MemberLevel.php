@@ -17,16 +17,20 @@ class MemberLevel extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = ['id',];
+    public array $searchField = [];
 
     // 可作为条件的字段
-    public array $whereField = ['status',];
+    public array $whereField = [];
 
     // 可做为时间
-    public array $timeField = ['name','description',];
+    public array $timeField = [];
 
     
 
-    
+    // 关联会员
+    public function member()
+    {
+        return $this->hasMany(Member::class);
+    }
 
 }
