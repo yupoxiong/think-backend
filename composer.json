@@ -35,7 +35,8 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "topthink/think-captcha": "^3.0",
-        "yupoxiong/region": "^1.1"
+        "yupoxiong/region": "^1.1",
+        "ext-zlib": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

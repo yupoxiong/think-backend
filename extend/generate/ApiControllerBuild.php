@@ -50,6 +50,11 @@ class ApiControllerBuild
      */
     public function create(): bool
     {
+        // 不生成控制器
+        if (!$this->data['api_controller']['create']) {
+            return true;
+        }
+
         $this->createAction();
 
         $out_file = $this->config['file_dir']['api_controller'] . $this->data['api_controller']['name'] . 'Controller' . '.php';
@@ -83,21 +88,15 @@ class ApiControllerBuild
     /**
      * 生成方法
      */
-    protected function createAction(): void
+    public function createAction(): void
     {
         foreach ($this->actionList as $action) {
-            if (!in_array($action, $this->data['api_controller']['action'], true)) {
-                $upper      = strtoupper($action);
-                $this->code = str_replace('[ACTION_' . $upper . ']', '', $this->code);
-            }
-        }
-
-        foreach ($this->data['api_controller']['action'] as $action) {
+            $code  = '';
             $upper = strtoupper($action);
-            if (false !== strpos($this->code, $upper)) {
-                $tmp_code   = file_get_contents($this->template['controller_' . $action]);
-                $this->code = str_replace('[ACTION_' . $upper . ']', $tmp_code, $this->code);
+            if (in_array($action, $this->data['api_controller']['action'], true)) {
+                $code = file_get_contents($this->template['action_' . $action]);
             }
+            $this->code = str_replace('[ACTION_' . $upper . ']', $code, $this->code);
         }
     }
 

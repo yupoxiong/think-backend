@@ -33,6 +33,20 @@
 
                         <ul class="list-group ">
 
+
+                            <li class="list-group-item">
+
+                                <div class="input-group">
+                                    <label >
+                                        Websocket地址
+                                        <input class="form-control form-inline" placeholder="输入websocket地址" type="text" id="url"
+                                                   maxlength="200"/>
+                                    </label>
+
+
+                                </div>
+                            </li>
+
                             <li class="list-group-item">
 
                                 <div class="row">
@@ -264,7 +278,7 @@
     }
 
     function wsConnect() {
-
+        wsServerUrl = $('#url').val();
         lastConnectTime = parseInt(new Date().getTime() / 1000);
         console.log('当前连接时间' + lastConnectTime);
 

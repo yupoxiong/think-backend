@@ -250,7 +250,7 @@ class GenerateController extends AdminBaseController
         $param = $request->param();
         $name  = $param['name'];
 
-        $data = (new Generate())->getAll($name);
+        $data = (new Generate())->getAllField($name);
 
         return admin_success('success', $data);
     }

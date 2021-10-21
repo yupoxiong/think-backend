@@ -1,20 +1,20 @@
     /**
      * 启用
-     * @param UserLevelService $service
-     * @param UserLevelValidate $validate
-     * @return Json
+     * @param mixed $id
+     * @return bool
+     * @throws ApiServiceException
      */
-    public function enable([SERVICE_NAME]Service $service, [VALIDATE_NAME]Validate $validate): Json
+    public function enableData($id): bool
     {
-        $check = $validate->scene('api_enable')->check($this->param);
-        if (!$check) {
-            return api_error($validate->getError());
+
+        $result = $this->model
+            ->whereIn('id', $id)
+            ->save(['status' => 1]);
+
+        if (!$result) {
+            throw new ApiServiceException('启用失败');
         }
 
-        try {
-            $service->enableData($this->id);
-            return api_success();
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
-        }
+        return true;
     }
+}

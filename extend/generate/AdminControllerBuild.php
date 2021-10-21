@@ -13,7 +13,6 @@ namespace generate;
 use Exception;
 use generate\exception\GenerateException;
 use generate\field\Editor;
-use think\facade\Log;
 
 class AdminControllerBuild extends Build
 {
@@ -135,7 +134,7 @@ class AdminControllerBuild extends Build
             if ($value['index_search'] === 'select') {
 
                 if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                    $table_name        = $this->getSelectFieldFormat($value['field_name'], 1);
+                    $table_name        = $this->getSelectFieldFormat($value['field_name']);
                     $select_class_name = parse_name($table_name, 1);
                     $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
                     $code_select       = file_get_contents($this->template . 'relation_data_list.stub');
@@ -170,7 +169,7 @@ class AdminControllerBuild extends Build
                     if ($value['getter_setter'] === 'switch') {
                         $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
                     } else if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                        $relation_name = $this->getSelectFieldFormat($value['field_name'], 1);
+                        $relation_name = $this->getSelectFieldFormat($value['field_name']);
                         $export_body   .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $relation_name . '->' . $value['relation_show'] . '?? ' . "'" . "'" . ";\n";
                     } else {
                         $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . ";\n";
@@ -273,9 +272,8 @@ class AdminControllerBuild extends Build
      */
     protected function createAction(): void
     {
-        $code = '';
-
         foreach ($this->actionList as $action) {
+            $code = '';
             $upper = strtoupper($action);
             if (in_array($action, $this->data['admin_controller']['action'], true)) {
                 $code = file_get_contents($this->template['action_' . $action]);
@@ -283,5 +281,4 @@ class AdminControllerBuild extends Build
             $this->code = str_replace('[ACTION_' . $upper . ']', $code, $this->code);
         }
     }
-
 }

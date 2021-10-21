@@ -1,18 +1,10 @@
     /**
      * 添加
-     *
-     * @param [VALIDATE_NAME]Validate $validate
-     * @param [SERVICE_NAME]Service $service
-     * @return Json
+     * @param $param
+     * @return bool
      */
-    public function add([VALIDATE_NAME]Validate $validate, [SERVICE_NAME]Service $service): Json
+    public function createData($param): bool
     {
-        $check = $validate->scene('api_add')->check($this->param);
-        if (!$check) {
-            return api_error($validate->getError());
-        }
-
-        $result = $service->createData($this->param);
-
-        return $result ? api_success() : api_error();
+        $result = $this->model::create($param);
+        return $result ? true : false;
     }

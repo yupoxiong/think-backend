@@ -1,20 +1,18 @@
     /**
      * 删除
-     * @param [SERVICE_NAME]Service $service
-     * @param [VALIDATE_NAME]Validate $validate
-     * @return Json
+     * @param mixed $id
+     * @return bool
+     * @throws ApiServiceException
      */
-    public function del([SERVICE_NAME]Service $service, [VALIDATE_NAME]Validate $validate): Json
+    public function deleteData($id): bool
     {
-        $check = $validate->scene('api_del')->check($this->param);
-        if (!$check) {
-            return api_error($validate->getError());
+        $result = $this->model::destroy(function ($query) use ($id) {
+            $query->whereIn('id', $id);
+        });
+
+        if (!$result) {
+            throw new ApiServiceException('更新失败');
         }
 
-        try {
-            $service->deleteData($this->id);
-            return api_success();
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
-        }
+        return  true;
     }

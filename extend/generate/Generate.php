@@ -6,28 +6,23 @@
 
 namespace generate;
 
-use app\admin\model\AdminMenu;
 use Exception;
-use generate\exception\GenerateException;
-use generate\field\Field;
-use generate\rule\Required;
 use think\facade\Db;
 use think\facade\Env;
-use generate\traits\Tools;
 use generate\traits\Tree;
+use generate\traits\Tools;
+use app\admin\model\AdminMenu;
+use generate\exception\GenerateException;
 
 class Generate
 {
-
-    use Tree;
-    use Tools;
+    use Tree, Tools;
 
     // 配置
     protected $config = [];
 
     // 主数据
     protected $data = [];
-
 
     /**
      * 控制器和模型名、验证器名黑名单
@@ -65,9 +60,14 @@ class Generate
         $root_path = app()->getRootPath();
         $app_path  = app()->getBasePath();
 
-        $admin_controller_path = $root_path . 'extend/generate/stub/admin_controller/';
-        $api_controller_path   = $root_path . 'extend/generate/stub/api_controller/';
-        $model_path            = $root_path . 'extend/generate/stub/model/';
+        $stub_path = $root_path . 'extend/generate/stub/';
+
+        $admin_controller_path = $stub_path . 'admin_controller/';
+        $api_controller_path   = $stub_path . 'api_controller/';
+        $api_service_path      = $stub_path . 'api_service/';
+        $validate_path         = $stub_path . 'validate/';
+        $model_path            = $stub_path . 'model/';
+        $admin_view_path       = $stub_path . 'admin_view/';
         $config_tmp            = [
             // 模版目录
             'template' => [
@@ -90,25 +90,25 @@ class Generate
 
                 'api' => [
                     'controller'         => $api_controller_path . 'ApiController.stub',
-                    'controller_index'   => $api_controller_path . 'api_index.stub',
-                    'controller_add'     => $api_controller_path . 'api_add.stub',
-                    'controller_info'    => $api_controller_path . 'api_info.stub',
-                    'controller_edit'    => $api_controller_path . 'api_edit.stub',
-                    'controller_del'     => $api_controller_path . 'api_del.stub',
-                    'controller_disable' => $api_controller_path . 'api_disable.stub',
-                    'controller_enable'  => $api_controller_path . 'api_enable.stub',
+                    'action_index'   => $api_controller_path . 'api_index.stub',
+                    'action_add'     => $api_controller_path . 'api_add.stub',
+                    'action_info'    => $api_controller_path . 'api_info.stub',
+                    'action_edit'    => $api_controller_path . 'api_edit.stub',
+                    'action_del'     => $api_controller_path . 'api_del.stub',
+                    'action_disable' => $api_controller_path . 'api_disable.stub',
+                    'action_enable'  => $api_controller_path . 'api_enable.stub',
 
-                    'service'         => $root_path . 'extend/generate/stub/ApiService.stub',
-                    'service_index'   => $root_path . 'extend/generate/stub/api_service/api_index.stub',
-                    'service_add'     => $root_path . 'extend/generate/stub/api_service/api_add.stub',
-                    'service_info'    => $root_path . 'extend/generate/stub/api_service/api_info.stub',
-                    'service_edit'    => $root_path . 'extend/generate/stub/api_service/api_edit.stub',
-                    'service_del'     => $root_path . 'extend/generate/stub/api_service/api_del.stub',
-                    'service_disable' => $root_path . 'extend/generate/stub/api_service/api_disable.stub',
-                    'service_enable'  => $root_path . 'extend/generate/stub/api_service/api_enable.stub',
+                    'service'         => $api_service_path . 'ApiService.stub',
+                    'service_index'   => $api_service_path . 'api_index.stub',
+                    'service_add'     => $api_service_path . 'api_add.stub',
+                    'service_info'    => $api_service_path . 'api_info.stub',
+                    'service_edit'    => $api_service_path . 'api_edit.stub',
+                    'service_del'     => $api_service_path . 'api_del.stub',
+                    'service_disable' => $api_service_path . 'api_disable.stub',
+                    'service_enable'  => $api_service_path . 'api_enable.stub',
                 ],
 
-                'model' => [
+                'model'      => [
                     'model'                  => $model_path . 'Model.stub',
                     'relation'               => $model_path . 'relation.stub',
                     'getter_setter_select'   => $model_path . 'getter_setter_select.stub',
@@ -116,25 +116,28 @@ class Generate
                     'getter_setter_date'     => $model_path . 'getter_setter_date.stub',
                     'getter_setter_datetime' => $model_path . 'getter_setter_datetime.stub',
                 ],
-
-                'path'           => $root_path . 'extend/generate/stub/',
-                'controller'     => $root_path . 'extend/generate/stub/Controller.stub',
-                'api_controller' => $root_path . 'extend/generate/stub/ApiController.stub',
-
-                'validate' => [
-                    'validate' => $root_path . 'extend/generate/stub/Validate.stub',
+                'validate'   => [
+                    'validate' => $validate_path . 'Validate.stub',
                 ],
-                'view'     => [
-                    'index'         => $root_path . 'extend/generate/stub/view/index.stub',
-                    'index_path'    => $root_path . 'extend/generate/stub/view/index/',
-                    'index_del1'    => $root_path . 'extend/generate/stub/view/index/del1.stub',
-                    'index_del2'    => $root_path . 'extend/generate/stub/view/index/del2.stub',
-                    'index_filter'  => $root_path . 'extend/generate/stub/view/index/filter.stub',
-                    'index_export'  => $root_path . 'extend/generate/stub/view/index/export.stub',
-                    'index_import'  => $root_path . 'extend/generate/stub/view/index/import.stub',
-                    'index_select1' => $root_path . 'extend/generate/stub/view/index/select1.stub',
-                    'index_select2' => $root_path . 'extend/generate/stub/view/index/select2.stub',
-                    'add'           => $root_path . 'extend/generate/stub/view/add.stub',
+                'admin_view' => [
+                    'index'                    => $admin_view_path . 'index/index.stub',
+                    'index_create'             => $admin_view_path . 'index/create.stub',
+                    'index_refresh'            => $admin_view_path . 'index/refresh.stub',
+                    'index_del1'               => $admin_view_path . 'index/del1.stub',
+                    'index_del2'               => $admin_view_path . 'index/del2.stub',
+                    'index_filter'             => $admin_view_path . 'index/filter.stub',
+                    'index_export'             => $admin_view_path . 'index/export.stub',
+                    'index_import'             => $admin_view_path . 'index/import.stub',
+                    'index_select1'            => $admin_view_path . 'index/select1.stub',
+                    'index_select2'            => $admin_view_path . 'index/select2.stub',
+                    'index_sort1'              => $admin_view_path . 'index/sort1.stub',
+                    'index_sort2'              => $admin_view_path . 'index/sort2.stub',
+                    'index_sort_option'        => $admin_view_path . 'index/sort_option.stub',
+                    'index_enable1'            => $admin_view_path . 'index/enable1.stub',
+                    'index_enable2'            => $admin_view_path . 'index/enable2.stub',
+                    'add'                      => $admin_view_path . 'add/add.stub',
+                    'add_relation_select_data' => $admin_view_path . 'add/relation_select_data.stub',
+                    'add_customer_select_data' => $admin_view_path . 'add/customer_select_data.stub',
                 ],
             ],
             // 生成文件目录
@@ -158,7 +161,7 @@ class Generate
      * @return string
      * @throws GenerateException
      */
-    public function run()
+    public function run(): string
     {
         $this->checkName($this->data);
         $this->checkDir();
@@ -195,7 +198,7 @@ class Generate
      * 获取所有表(除黑名单之外)
      * @return array
      */
-    public function getTable()
+    public function getTable(): array
     {
         $table_data = Db::query('SHOW TABLES');
         $table      = [];
@@ -216,9 +219,13 @@ class Generate
      * @param int $current_id
      * @return string
      */
-    public function getMenu($selected = 1, $current_id = 0)
+    public function getMenu($selected = 1, $current_id = 0): string
     {
-        $result = AdminMenu::where('id', '<>', $current_id)->order('sort_number', 'asc')->order('id', 'asc')->column('id,parent_id,name,sort_number', 'id');
+
+        $result = AdminMenu::where('id', '<>', $current_id)
+            ->order('sort_number', 'asc')
+            ->order('id', 'asc')
+            ->column('id,parent_id,name,sort_number', 'id');
         foreach ($result as $r) {
             $r['selected'] = (int)$r['id'] === $selected ? 'selected' : '';
         }
@@ -269,6 +276,11 @@ class Generate
             $this->mkFolder($this->config['file_dir']['view']);
         }
 
+        if (!is_dir($this->config['file_dir']['view'] . $this->data['table'])) {
+            $this->mkFolder($this->config['file_dir']['view'] . $this->data['table']);
+        }
+
+
         if (!is_writable($this->config['file_dir']['admin_controller'])) {
             throw new GenerateException('Admin控制器目录不可写');
         }
@@ -286,6 +298,10 @@ class Generate
 
         if (!is_writable($this->config['file_dir']['view'])) {
             throw new GenerateException('视图目录不可写');
+        }
+
+        if (!is_writable($this->config['file_dir']['view'] . $this->data['table'])) {
+            throw new GenerateException($this->data['cn_name'] . '视图目录不可写');
         }
 
         return true;
@@ -363,351 +379,43 @@ class Generate
         return (new ValidateBuild($this->data, $this->config))->run();
     }
 
-    // 列表视图
-    protected function createIndexView()
+    /**
+     * 列表视图
+     * @return bool
+     * @throws GenerateException
+     */
+    protected function createIndexView(): bool
     {
-        // 如果不需要列表视图，直接返回
-        if (!$this->data['view']['create_index']) {
-            return true;
-        }
-
-        // 列表数据名称
-        $name_list = '';
-        // 列表数据字段
-        $field_list = '';
-        // 搜索框显示
-        $search_name = '';
-        // 其他搜索html
-        $search_html = '';
-        $file_fields = ['file', 'image', 'video'];
-        $sort_code   = '';
-
-        // OPERATION_ICON
-        // OPERATION_TEXT
-        $operation_del_icon = '<i class="fas fa-trash-alt"></i>';
-        $operation_del_text = '删除';
-
-        $operation_edit_icon = '<i class="fas fa-pen"></i>';
-        $operation_edit_text = '修改';
-
-        $operation_disable_icon = '<i class="fas fa-ban"></i>';
-        $operation_disable_text = '禁用';
-
-        $operation_enable_icon = '<i class="far fa-circle"></i>';
-        $operation_enable_text = '启用';
-
-
-        foreach ($this->data['data'] as $key => $value) {
-
-            // 排序处理
-            if ($value['list_sort']) {
-                if ($sort_code === '') {
-
-                    $sort_code .= file_get_contents($this->config['template']['view']['index_path'] . 'sort1.stub');
-                }
-                $option_code = file_get_contents($this->config['template']['view']['index_path'] . 'sort_option.stub');
-                $option_code = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], $value['field_name']), $option_code);
-                $sort_code   .= $option_code;
-            }
-
-            // 列表处理
-            if ($value['is_list']) {
-                // 名称显示
-                $name_list .= str_replace('[FORM_NAME]', $value['form_name'], Field::$listNameHtml);
-                // 字段内容显示
-                if (in_array($value['form_type'], $file_fields)) {
-                    // 图片显示
-                    $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listImgHtml);
-                } else if ($value['form_type'] === 'multi_image') {
-                    // 多图显示
-                    $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listMultiImgHtml);
-                } else if ($value['form_type'] === 'multi_file') {
-                    // 多文件展示
-                    $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listMultiFileHtml);
-                } else if ($value['form_type'] === 'switch') {
-                    // status switch显示
-                    if ($value['getter_setter'] === 'switch') {
-                        $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listSwitchHtml);
-                    }
-                } else if ($value['form_type'] === 'select') {
-
-                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                        // 关联字段显示
-                        $field_name = $this->getSelectFieldFormat($value['field_name'], 1) . '.' . $value['relation_show'] . '|default=' . "''";
-                        $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
-                    } else if ($value['relation_type'] === 0) {
-                        $field_name = $this->getSelectFieldFormat($value['field_name'], 4);
-                        $field_list .= str_replace('[FIELD_NAME]', $field_name, Field::$listFieldHtml);
-                    }
-                } else {
-                    // 普通字段显示
-                    $field_list .= str_replace('[FIELD_NAME]', $value['field_name'], Field::$listFieldHtml);
-                }
-
-            }
-
-            // 首页列表页搜索
-            switch ($value['index_search']) {
-                case 'search':
-                    if (!empty($search_name)) {
-                        $search_name .= '/' . $value['form_name'];
-                    } else {
-                        $search_name .= $value['form_name'];
-                    }
-                    break;
-
-                case 'select':
-                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                        //关联字段筛选
-                        $field_name  = str_replace('_id', '', $value['field_name']);
-                        $search_html .= str_replace(array('[FIELD_NAME]', '[FIELD_NAME1]', '[FORM_NAME]', '[RELATION_SHOW]'), array($value['field_name'], $field_name, $value['form_name'], $value['relation_show']), Field::$listSearchRelationHtml);
-
-                    } else if ($value['relation_type'] === 0) {
-                        //自定义select
-                        $field_select_data = $value['field_select_data'];
-                        if (empty($field_select_data)) {
-                            throw new GenerateException('请完善字段[' . $value['form_name'] . ']的自定义筛选/select数据');
-                        }
-
-                        $field_name_list = $this->getSelectFieldFormat($value['field_name'], 2);
-
-                        $search_html .= str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_LIST]'), array($value['form_name'], $value['field_name'], $field_name_list), Field::$listSearchSelectHtml);
-                    }
-                    break;
-
-                case 'date':
-                    $search_html .= str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), Field::$listSearchDate);
-                    break;
-
-                case 'datetime':
-                    $search_html .= str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), Field::$listSearchDatatime);
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
-        if ($sort_code !== '') {
-            $sort_code .= file_get_contents($this->config['template']['view']['index_path'] . 'sort2.stub');;
-        }
-
-
-        $file = $this->config['template']['view']['index'];
-        $code = file_get_contents($file);
-
-
-        // 列表删除判断
-        $del1 = '';
-        $del2 = '';
-        // 列表选择
-        $select1 = '';
-        $select2 = '';
-
-        // 列表添加
-        $create = '';
-
-        // 列表刷新
-        $refresh = '';
-
-        // 如果有删除或者启用/禁用，开启选择
-        if ($this->data['view']['delete'] || $this->data['view']['enable']) {
-            $select1 = file_get_contents($this->config['template']['view']['index_select1']);
-            $select2 = file_get_contents($this->config['template']['view']['index_select2']);
-        }
-
-        // 删除按钮处理
-        if ($this->data['view']['delete']) {
-            $del1 = file_get_contents($this->config['template']['view']['index_del1']);
-            $del2 = file_get_contents($this->config['template']['view']['index_del2']);
-            // 操作形式处理
-            if ($this->data['view']['index_button'] == 1) {
-                $operation_del_text = '';
-            } else if ($this->data['view']['index_button'] == 2) {
-                $operation_del_icon = '';
-            }
-            $del2 = str_replace(array('[OPERATION_DEL_ICON]', '[OPERATION_DEL_TEXT]'), array($operation_del_icon, $operation_del_text), $del2);
-        }
-
-        // 添加按钮处理
-        if ($this->data['view']['create']) {
-            $create = file_get_contents($this->config['template']['view']['index_path'] . 'create.stub');
-        }
-
-        // 刷新按钮处理
-        if ($this->data['view']['refresh']) {
-            $refresh = file_get_contents($this->config['template']['view']['index_path'] . 'refresh.stub');
-        }
-
-        $code = str_replace(array('[INDEX_DEL1]', '[INDEX_DEL2]', '[INDEX_SELECT1]', '[INDEX_SELECT2]', '[INDEX_CREATE]', '[INDEX_REFRESH]'), array($del1, $del2, $select1, $select2, $create, $refresh), $code);
-
-
-        // 顶部筛选（filter）和导出。筛选功能暂时为必生成
-
-        $filter = file_get_contents($this->config['template']['view']['index_filter']);
-        $code   = str_replace('[INDEX_FILTER]', $filter, $code);
-
-        // 导出
-        $export = '';
-        if ($this->data['view']['export']) {
-            $export = file_get_contents($this->config['template']['view']['index_export']);
-        }
-
-        // 导入
-        $import = '';
-        if ($this->data['view']['import']) {
-            $import = file_get_contents($this->config['template']['view']['index_import']);
-        }
-
-        // 启用/禁用
-        $enable1 = '';
-        $enable2 = '';
-        if ($this->data['view']['enable']) {
-            $enable1 = file_get_contents($this->config['template']['path'] . 'view/index/enable1.stub');
-            $enable2 = file_get_contents($this->config['template']['path'] . 'view/index/enable2.stub');
-            // 操作形式处理
-            if ($this->data['view']['index_button'] === 1) {
-                $operation_disable_text = '';
-                $operation_enable_text  = '';
-            } else if ($this->data['view']['index_button'] === 2) {
-                $operation_disable_icon = '';
-                $operation_enable_icon  = '';
-            }
-            $enable2 = str_replace(array('[OPERATION_DISABLE_ICON]', '[OPERATION_DISABLE_TEXT]', '[OPERATION_ENABLE_ICON]', '[OPERATION_ENABLE_TEXT]'), array($operation_disable_icon, $operation_disable_text, $operation_enable_icon, $operation_enable_text), $enable2);
-        }
-
-        if ($this->data['view']['index_button'] === 1) {
-            $operation_edit_text = '';
-        } else if ($this->data['view']['index_button'] === 2) {
-            $operation_edit_icon = '';
-        }
-
-        $code = str_replace(
-            array('[OPERATION_EDIT_ICON]', '[OPERATION_EDIT_TEXT]', '[INDEX_ENABLE1]', '[INDEX_ENABLE2]', '[INDEX_EXPORT]', '[INDEX_IMPORT]', '[NAME_LIST]', '[FIELD_LIST]', '[SEARCH_FIELD]', '[SORT_CODE]', '[SEARCH_HTML]'),
-            array($operation_edit_icon, $operation_edit_text, $enable1, $enable2, $export, $import, $name_list, $field_list, $search_name, $sort_code, $search_html),
-            $code);
-
-        $msg = '';
-        try {
-            file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/index.html', $code);
-            $result = true;
-        } catch (Exception $e) {
-            $msg    = $e->getMessage();
-            $result = false;
-        }
-        return $result ?? $msg;
+        return (new AdminViewBuild($this->data, $this->config))->createIndexView();
     }
 
-    // add视图页面
-    protected function createAddView()
+    /**
+     * @return bool
+     */
+    protected function createAddView(): bool
     {
-        // 如果不需要列表视图，直接返回
-        if (!$this->data['view']['create_add']) {
-            return true;
-        }
-
-        $form_body     = '';
-        $form_rules    = '';
-        $form_messages = '';
-
-        //日期控件类的字段名
-        $date_field = ['date', 'datetime'];
-
-        foreach ($this->data['data'] as $key => $value) {
-
-            if ($value['is_form']) {
-                if ($value['form_type'] === 'switch') {
-                    $value['form_type'] = 'switch_field';
-                } else if ($value['form_type'] === 'select') {
-                    $value['relation_data'] = '';
-                    // 这里是关联的
-                    if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
-                        $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/relation_select_data.stub');
-                        $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
-                        $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
-                        $value['relation_data'] = $list_code;
-
-                    } else if ($value['relation_type'] === 0) {
-                        // 这里是非关联的
-                        $list_code              = file_get_contents($this->config['template']['path'] . 'view/add/customer_select_data.stub');
-                        $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
-                        $list_code              = str_replace(array('[FIELD_LIST]', '[FIELD_NAME]'), array($list_name, $value['field_name']), $list_code);
-                        $value['relation_data'] = $list_code;
-                    }
-
-
-                } else if (in_array($value['form_type'], $date_field, true)) {
-                    //如果是日期控件类字段，默认值各式不符的一律修改成''
-                    if (is_numeric($value['field_default'])) {
-                        $value['field_default'] = '';
-                    }
-                }
-
-                $class_name = parse_name($value['form_type'], 1);
-                $class      = '\\generate\\field\\' . $class_name;
-                $form_body  .= $class::create($value);
-
-                if (in_array('required', $value['form_validate'], true)) {
-                    $Required  = new Required;
-                    $rule_html = $Required->formRule;
-
-                    //如果是多选select，验证字段使用[]后缀
-                    $multi_field = ['multi_select', 'multi_image', 'multi_file'];
-                    if (in_array($value['form_type'], $multi_field)) {
-                        $value['field_name'] .= '[]';
-                    }
-
-                    $form_rules .= str_replace('[FIELD_NAME]', $value['field_name'], $rule_html);
-
-                    $msg_html      = $Required->formMsg;
-                    $msg_html      = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), $msg_html);
-                    $form_messages .= $msg_html;
-                }
-            }
-        }
-
-
-        $file = $this->config['template']['view']['add'];
-        $code = file_get_contents($file);
-        $code = str_replace(
-            array('[FORM_BODY]', '[FORM_RULES]', '[FORM_MESSAGES]'),
-            array($form_body, $form_rules, $form_messages),
-            $code);
-
-        if (!is_dir($this->config['file_dir']['view'] . $this->data['table'])) {
-            $this->mkFolder($this->config['file_dir']['view'] . $this->data['table']);
-        }
-
-        file_put_contents($this->config['file_dir']['view'] . $this->data['table'] . '/add.html', $code);
-
-        return true;
+        return (new AdminViewBuild($this->data, $this->config))->createAddView();
     }
 
 
-    // 创建API模块控制器
-    protected function createApiController()
+    /**
+     * 创建API模块控制器
+     * @return bool
+     * @throws GenerateException
+     */
+    public function createApiController(): bool
     {
-
-        //不生成控制器
-        if (!$this->data['api_controller']['create']) {
-            return true;
-        }
-
-        $api = new ApiControllerBuild($this->data, $this->config);
-        return $api->create();
-
+        return (new ApiControllerBuild($this->data, $this->config))->create();
     }
 
-    // 创建API模块控制器
-    protected function createApiService()
+    /**
+     * 创建API模块控制器
+     * @return bool
+     * @throws GenerateException
+     */
+    public function createApiService(): bool
     {
-        //不生成控制器
-        if (!$this->data['api_controller']['create']) {
-            return true;
-        }
-
-        $api = new ApiServiceBuild($this->data, $this->config);
-        return $api->create();
+        return (new ApiServiceBuild($this->data, $this->config))->create();
     }
 
 
@@ -742,8 +450,12 @@ class Generate
     }
 
 
-    //获取字段列表
-    public function getAll($table_name)
+    /**
+     * 获取表内字段列表
+     * @param $table_name
+     * @return array
+     */
+    public function getAllField($table_name): array
     {
         $parse_name = parse_name($table_name, 1);
 
@@ -789,7 +501,6 @@ class Generate
                     'api_edit'   => 1,
                     'index_add'  => 1,
                     'index_edit' => 1,
-
                 ]
             ],
             //字段
@@ -1025,11 +736,14 @@ class Generate
     }
 
 
-    // 根据表单类型和长度返回相应的验证
-    public function getValidateHtml($field_data)
+    /**
+     * 根据表单类型和长度返回相应的验证
+     * @param $field_data
+     * @return string
+     */
+    public function getValidateHtml($field_data): string
     {
         $html = '';
-
 
         try {
 
@@ -1196,6 +910,7 @@ class Generate
      * 4为显示字段name,例如type_name，channel_name；
      * 这里要注意，如果原字段是_id结尾的，会干掉_id，例如channel_id_list不仅长，而且容易产生歧义，
      * 实际channel_list的话就非常明确，这是渠道列表,是一个二维数组。
+     * @return false|string
      */
     protected function getSelectFieldFormat($field_name, $type = 1)
     {

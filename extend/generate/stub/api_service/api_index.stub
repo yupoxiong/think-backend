@@ -1,18 +1,26 @@
     /**
      * 列表
-     * @param [SERVICE_NAME]Service $service
-     * @return Json
+     * @param $param
+     * @param $page
+     * @param $limit
+     * @return array
+     * @throws ApiServiceException
      */
-    public function index([SERVICE_NAME]Service $service): Json
+    public function getList($param, $page, $limit): array
     {
         try {
-            $data   = $service->getList($this->param, $this->page, $this->limit);
-            $result = [
-                '[TABLE_NAME]' => $data,
-            ];
-
-            return api_success($result);
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
+            $field = '[FIELD_LIST]';
+            $data  = $this->model
+                ->scope('ApiWhere', $param)
+                ->page($page, $limit)
+                ->field($field)
+                ->select()
+                ->toArray();
+        } catch (DataNotFoundException | ModelNotFoundException $e) {
+            $data = [];
+        } catch (DbException $e) {
+            throw new ApiServiceException('查询列表失败，信息' . $e->getMessage());
         }
+
+        return $data;
     }

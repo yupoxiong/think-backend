@@ -14,6 +14,7 @@ use app\api\service\TokenService;
 use app\api\exception\ApiServiceException;
 use app\common\model\User;
 use think\exception\HttpResponseException;
+use think\Log;
 use think\response\Json;
 
 class ApiBaseController
@@ -43,8 +44,8 @@ class ApiBaseController
     /** @var array 当前请求参数 */
     protected array $param;
 
-    /** @var int 当前请求数据ID */
-    protected int $id;
+    /** @var mixed 当前请求数据ID，支持单个数字id，数组形式的多个id，或者英文逗号分割的多个id */
+    protected $id;
     /** @var int 当前页数 */
     protected int $page;
     /** @var int 当前每页数量 */
@@ -125,7 +126,14 @@ class ApiBaseController
         // 初始化基本数据
         $this->page  = (int)($this->param['page'] ?? 1);
         $this->limit = (int)($this->param['limit'] ?? 10);
-        $this->id    = (int)($this->param['id'] ?? 0);
+
+        if (is_numeric($this->param['id'])) {
+            $this->id = (int)$this->param['id'];
+        } else if (is_string($this->param['id']) && strpos($this->param['id'], ',') > 0) {
+            $this->id = explode(',', $this->param['id']);
+        } else {
+            $this->id = $this->param['id'];
+        }
     }
 
 

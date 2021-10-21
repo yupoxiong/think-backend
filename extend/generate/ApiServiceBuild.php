@@ -50,6 +50,13 @@ class ApiServiceBuild
      */
     public function create(): bool
     {
+        // 不生成api控制器的时候也不生成api模块的service
+        if (!$this->data['api_controller']['create']) {
+            return true;
+        }
+
+        $this->createFunc();
+
         $out_file = $this->config['file_dir']['api_service'] . $this->data['api_controller']['name'] . 'Service' . '.php';
 
         $replace_content = [
@@ -76,7 +83,22 @@ class ApiServiceBuild
         return true;
     }
 
-    protected function getShowFieldList(): string
+    /**
+     * 生成方法
+     */
+    public function createFunc(): void
+    {
+        foreach ($this->actionList as $action) {
+            $code  = '';
+            $upper = strtoupper($action);
+            if (in_array($action, $this->data['api_controller']['action'], true)) {
+                $code = file_get_contents($this->template['service_' . $action]);
+            }
+            $this->code = str_replace('[SERVICE_' . $upper . ']', $code, $this->code);
+        }
+    }
+
+    public function getShowFieldList(): string
     {
         $field_list = '';
         foreach ($this->data['data'] as $key => $value) {

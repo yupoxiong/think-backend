@@ -10,7 +10,7 @@ use app\api\service\TestService;
 use app\common\validate\TestValidate;
 use app\api\exception\ApiServiceException;
 
-class TestController extends ApiBaseController
+class TestController
 {
     /**
      * 列表
@@ -118,7 +118,12 @@ class TestController extends ApiBaseController
         }
     }
 
-    
+    public function test()
+    {
+        $str='H4sIAAAAAAACE6tWKqksSFWyUsotTlfSUUpJLEkEcmJKzVJMkmJKLZJSTGNKTVINgGxTQ3NzIDvN1BjItjQCss1TE81iSi3NDQyAKi0tDEHiholAMtkQxE4yNaeiOQaGKVhJDPORZS2S0kwG1uVKtQByL4HQYgEAAA==';
+        $result = gzdecode(base64_decode($str));
+        var_dump(json_decode($result,true));
+    }
 
     
 }

@@ -1,20 +1,18 @@
     /**
      * 禁用
-     * @param UserLevelService $service
-     * @param UserLevelValidate $validate
-     * @return Json
+     * @param mixed $id
+     * @return bool
+     * @throws ApiServiceException
      */
-    public function disable([SERVICE_NAME]Service $service, [VALIDATE_NAME]Validate $validate): Json
+    public function disableData($id): bool
     {
-        $check = $validate->scene('api_disable')->check($this->param);
-        if (!$check) {
-            return api_error($validate->getError());
+        $result = $this->model
+            ->whereIn('id', $id)
+            ->save(['status' => 0]);
+
+        if (!$result) {
+            throw new ApiServiceException('禁用失败');
         }
 
-        try {
-            $service->disableData($this->id);
-            return api_success();
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
-        }
+        return true;
     }

@@ -17,6 +17,7 @@ use app\api\service\TokenService;
 use Exception;
 use GatewayWorker\BusinessWorker;
 use \GatewayWorker\Lib\Gateway;
+use think\facade\Log;
 use Workerman\Lib\Timer;
 
 /**
@@ -85,6 +86,30 @@ class WebSocketEvents
                         Gateway::sendToClient($client_id, json_encode($send_msg, JSON_THROW_ON_ERROR));
                         Timer::del($_SESSION['auth_timer_id']);
                     }
+
+                    break;
+
+                case 'msg':
+
+                    $send_msg = [
+                        'type' => 'msg',
+                        'data' => $msg['data'],
+                    ];
+
+                    $json = json_encode($send_msg, JSON_THROW_ON_ERROR);
+                    Gateway::sendToClient($client_id,$json);
+                    Log::write($json);
+
+                    $encode = gzencode($json,9);
+                    $base64 = base64_encode($encode);
+                    Log::write($base64);
+
+                    Gateway::sendToClient($client_id, $base64);
+                    break;
+
+                default:
+
+
 
                     break;
             }
