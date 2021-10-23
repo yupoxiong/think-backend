@@ -77,7 +77,7 @@ class AdminControllerBuild extends Build
 
         foreach ($this->data['data'] as $key => $value) {
 
-            if ($value['is_form'] === 1) {
+            if ($value['form_type'] !== 'none') {
                 $add_field_code_tmp  = '';
                 $edit_field_code_tmp = '';
                 if ($value['form_type'] === 'editor') {

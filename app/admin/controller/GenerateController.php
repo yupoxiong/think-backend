@@ -143,9 +143,6 @@ class GenerateController extends AdminBaseController
                 'is_list'           => (int)($param['is_list'][$key] ?? 0),
                 // 是否参与列表排序
                 'list_sort'         => (int)($param['list_sort'][$key] ?? 0),
-
-                // 是否为表单字段
-                'is_form'           => (int)($param['is_form'][$key] ?? 0),
                 // 表单类型
                 'form_type'         => $param['form_type'][$key] ?? 'text',
 

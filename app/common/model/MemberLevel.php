@@ -17,7 +17,7 @@ class MemberLevel extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = [];
+    public array $searchField = ['name',];
 
     // 可作为条件的字段
     public array $whereField = [];

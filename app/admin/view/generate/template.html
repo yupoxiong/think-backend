@@ -29,7 +29,7 @@
 
         <td>
             <label class="bodyFormCheckbox">
-                <input type="checkbox" value="1" id="is_listFORM_INDEX" name="is_listFORM_INDEX">列表
+                <input type="checkbox" value="1" id="is_listFORM_INDEX" name="is_listFORM_INDEX">列表展示
             </label>
             <br/>
             <label class="bodyFormCheckbox">
@@ -38,13 +38,10 @@
         </td>
 
         <td>
-            <label class="bodyFormCheckbox">
-                <input type="checkbox" value="1" id="is_formFORM_INDEX" name="is_formFORM_INDEX">表单
-            </label>
-            <br/>
             <label class="form-type-label">
                 <select class="form-control form-control-sm select2 form-type-select" name="form_typeFORM_INDEX"
                         onchange="selectField(this)">
+                    <option value="none">非表单字段</option>
                     <option value="text">文本[text]</option>
                     <option value="number">数字[number]</option>
                     <option value="password">密码[password]</option>
@@ -78,22 +75,17 @@
                     <option value="editor">富文本编辑器[editor]</option>
                 </select>
             </label>
-        </td>
-
-        <td>
+            <br/>
             <label class="form-validate-label">
                 <select class="form-control form-control-sm form-validate-select select2" multiple="multiple"
                         name="form_validateFORM_INDEX[]">
                     <option value="required">非空</option>
                     <!--当前采用微信号的规则6至20位，以字母开头，字母，数字，减号，下划线 /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/-->
-                    <option value="account">账号</option>
-                    <!--验证简单中文名字2-4个汉字， /[\u4E00-\u9FA5]{2,4}/如有特殊名字请手动更改规则长度-->
-                    <option value="cn_name">中文姓名</option>
-                    <!--/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/-->
-                    <option value="car_number">车牌号</option>
                 </select>
             </label>
-            <br/>
+        </td>
+
+        <td>
 
             <label>
                 <select style="min-width: 250px" name="field_sceneFORM_INDEX[]"
@@ -176,8 +168,8 @@
             <label>
                 <textarea class="form-control form-control-sm" id="field_select_dataFORM_INDEX"
                           name="field_select_dataFORM_INDEX"
-                          placeholder="自定义筛选/select数据，当前字段为 列表选择 的时候生效。格式为：value||name，多个选项换行即可"
-                          title="例如[性别]字段，表单是[select]形式的，数据内容为：0||保密  1||男  2||女。一定要注意value和name的分割竖线为英文竖线，非中文竖线，不同的选项一定要换行"
+                          placeholder="自定义筛选/select数据，字段为[列表选择]生效。格式：value||name，多个选项换行"
+                          title="例如[性别]字段，表单[select]形式，数据内容为：0||保密  1||男  2||女。注意value和name的分割竖线为英文竖线，不同的选项要换行"
                           data-toggle="tooltip"></textarea>
             </label>
         </td>

@@ -89,7 +89,7 @@ class Generate
                 ],
 
                 'api' => [
-                    'controller'         => $api_controller_path . 'ApiController.stub',
+                    'controller'     => $api_controller_path . 'ApiController.stub',
                     'action_index'   => $api_controller_path . 'api_index.stub',
                     'action_add'     => $api_controller_path . 'api_add.stub',
                     'action_info'    => $api_controller_path . 'api_info.stub',
@@ -612,10 +612,8 @@ class Generate
                 'default'           => $value['Default'],
                 // 是否列表显示
                 'is_list'           => 1,
-                // 是否为表单字段
-                'is_form'           => 1,
                 // 表单类型
-                'form_type'         => 'text',
+                'form_type'         => 'none',
                 // 表单验证
                 'validate'          => ['required'],
                 'validate_html'     => '',
@@ -649,16 +647,15 @@ class Generate
                 $field_data['is_search'] = 1;
             }
 
-            // 处理是否不为表单字段
-            if (in_array($field_info['name'], $form_hide_field, true) || in_array($field_info['type'], $form_hide_type, true)) {
-                $field_data['is_form'] = 0;
-            }
-
             // 处理字段表单类型
             $form_info                   = $this->getFormInfo($field_info);
             $field_data['form_type']     = $form_info['form_type'];
             $field_data['getter_setter'] = $form_info['getter_setter'];
 
+            // 处理是否不为表单字段
+            if (in_array($field_info['name'], $form_hide_field, true) || in_array($field_info['type'], $form_hide_type, true)) {
+                $field_data['form_type'] = 'none';
+            }
 
             // 验证
             //$field_data['validate'] = [];
@@ -743,18 +740,20 @@ class Generate
      */
     public function getValidateHtml($field_data): string
     {
-        $html = '';
 
+        $html = '';
         try {
 
-            if ($field_data['form_type'] === 'switch') {
-                $field_data['form_type'] = 'switch_field';
+            if ($field_data['form_type'] !== 'none') {
+                if ($field_data['form_type'] === 'switch') {
+                    $field_data['form_type'] = 'switch_field';
+                }
+
+                $class_name = parse_name($field_data['form_type'], 1);
+
+                $class = '\\generate\\field\\' . $class_name;
+                $html  = $class::rule($field_data['field_length']);
             }
-
-            $class_name = parse_name($field_data['form_type'], 1);
-
-            $class = '\\generate\\field\\' . $class_name;
-            $html  = $class::rule($field_data['field_length']);
 
         } catch (Exception $exception) {
             return $exception->getMessage();
@@ -893,7 +892,7 @@ class Generate
             $field_data['form_type'] = 'editor';
         }
 
-        if (strpos($field_info['name'], 'is_') === 0 && $field_info['type'] === 'tinyint') {
+        if ($field_info['type'] === 'tinyint' && strpos($field_info['name'], 'is_') === 0) {
 
             $field_data['form_type']     = 'switch';
             $field_data['getter_setter'] = 'switch';

@@ -50,7 +50,7 @@ class ValidateBuild extends Build
         $scene_code_tmp = '';
         foreach ($this->data['data'] as $key => $value) {
             $temp_rule_code = '';
-            if ($value['is_form']) {
+            if ($value['form_type'] !== 'none') {
                 foreach ($value['form_validate'] as $rule_key => $value_name) {
                     $class = '\\generate\\rule\\' . parse_name($value_name, 1);
                     if (class_exists($class)) {

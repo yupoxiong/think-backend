@@ -387,20 +387,16 @@
                                     </span>
                                 </th>
                                 <th class="min-width-255">
-                                    <span data-toggle="tooltip" title="是否为后台添加/修改页表单字段">
-                                        表单
-                                    </span>
-                                    |
+
                                     <span data-toggle="tooltip" title="勾选表单后有效，台添加/修改页表单字段的输入类型">
                                         表单类型
                                     </span>
+                                    |
+                                    <span data-toggle="tooltip" title="后台(api)添加/修改时的表单验证规则">
+                                        验证规则
+                                    </span>
                                 </th>
                                 <th class="min-width-255">
-
-                                    <span data-toggle="tooltip" title="后台添加/修改时的表单验证">
-                                        表单验证
-                                    </span>
-                                    |
                                     <span data-toggle="tooltip"
                                           title="参与验证的场景，包括[admin_add,admin_edit,api_add,api_edit]">
                                         验证场景
@@ -593,8 +589,6 @@
                 let field_type = "#data-template input[name='field_typeFORM_INDEX']";
                 //是否为列表字段
                 let field_list = "#data-template [name='is_listFORM_INDEX']";
-                //是否为表单字段
-                let field_form = "#data-template [name='is_formFORM_INDEX']";
                 //中文名称
                 let form_name = "#data-template [name='form_nameFORM_INDEX']";
                 //表单类型
@@ -631,13 +625,6 @@
                         $(field_list).attr('checked', true);
                     } else {
                         $(field_list).attr('checked', false);
-                    }
-
-                    //是否为表单字段
-                    if (item.is_form === 1) {
-                        $(field_form).attr('checked', true);
-                    } else {
-                        $(field_form).attr('checked', false);
                     }
 
                     //表单类型

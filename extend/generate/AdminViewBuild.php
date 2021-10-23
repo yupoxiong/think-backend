@@ -60,7 +60,7 @@ class AdminViewBuild extends Build
 
         foreach ($this->data['data'] as $key => $value) {
 
-            if ($value['is_form']) {
+            if ($value['form_type'] !== 'none') {
                 if ($value['form_type'] === 'switch') {
                     $value['form_type'] = 'switch_field';
                 } else if ($value['form_type'] === 'select') {
