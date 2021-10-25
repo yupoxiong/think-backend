@@ -29,7 +29,7 @@ class AdminUser extends Migrator
     /**
      *
      */
-    protected function insertData()
+    protected function insertData(): void
     {
         $data = [
             [

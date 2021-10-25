@@ -21,7 +21,7 @@ class AdminRole extends Migrator
         $this->insertData();
     }
 
-    protected function insertData()
+    protected function insertData(): void
     {
         $data = [
             [

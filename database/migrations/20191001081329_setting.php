@@ -34,7 +34,7 @@ class Setting extends Migrator
 
         $msg = '配置导入成功.' . "\n";
         Db::startTrans();
-        $data = json_decode($data, true);
+        $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
         try {
             foreach ($data as $item) {
                 \app\common\model\Setting::create($item);
