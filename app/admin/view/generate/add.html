@@ -403,17 +403,12 @@
                                     </span>
                                 </th>
 
-                                <th class="min-width-255">
-                                    <span data-toggle="tooltip" title="该字段是否使用修改器，可选择的有开关，日期，日期时间等">
-                                        修改器
-                                    </span>
-                                    |
-                                    <span data-toggle="tooltip" title="选择字段是否为关联字段以及关联的类型">
-                                        关联
-                                    </span>
-                                </th>
 
                                 <th class="min-width-155">
+                                    <span data-toggle="tooltip" title="填写自定义验证规则内容，形式跟TP一样即可">
+                                        自定义验证规则
+                                    </span>
+                                    |
                                     <span data-toggle="tooltip"
                                           title="是否参与列表筛选，可选择的有关键词搜索，下拉列表选择，时间范围筛等">
                                         列表筛选
@@ -424,6 +419,16 @@
                                     <span data-toggle="tooltip"
                                           title="自定义筛选/select数据，当前字段为 列表选择 的时候生效。格式为：value||name，多个选项换行即可。例如[性别]字段，表单是[select]形式的，数据内容为：0||保密  1||男  2||女。一定要注意value和name的分割竖线为英文竖线，非中文竖线，不同的选项一定要换行">
                                         自定义列表
+                                    </span>
+                                </th>
+
+                                <th class="min-width-255">
+                                    <span data-toggle="tooltip" title="该字段是否使用修改器，可选择的有开关，日期，日期时间等">
+                                        修改器
+                                    </span>
+                                    |
+                                    <span data-toggle="tooltip" title="选择字段是否为关联字段以及关联的类型">
+                                        关联
                                     </span>
                                 </th>
                             </tr>
@@ -685,13 +690,16 @@
     function selectField(field) {
         let $field = $(field);
         let form_type = $field.val();
-        console.log(form_type);
-        let $validate_select = $field.parent().parent().next().find('.form-validate-select');
+        let validateId = $field.data('validate');
 
+        let $validate = $('#'+validateId);
+        console.log($validate);
         $.post('getValidateSelect', {form_type: form_type}, function (result) {
             if (200 === result.code) {
-                $validate_select.html(result.data);
-                $validate_select.select2();
+
+                $validate.html(result.data);
+                console.log($validate.attr('name'));
+                $validate.select2();
             } else {
                 layer.msg(result.msg);
             }

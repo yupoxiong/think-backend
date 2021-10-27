@@ -39,7 +39,7 @@
 
         <td>
             <label class="form-type-label">
-                <select class="form-control form-control-sm select2 form-type-select" name="form_typeFORM_INDEX"
+                <select class="form-control form-control-sm select2 form-type-select" data-validate="form_validateINDEX_ID" name="form_typeFORM_INDEX"
                         onchange="selectField(this)">
                     <option value="none">非表单字段</option>
                     <option value="text">文本[text]</option>
@@ -78,9 +78,8 @@
             <br/>
             <label class="form-validate-label">
                 <select class="form-control form-control-sm form-validate-select select2" multiple="multiple"
-                        name="form_validateFORM_INDEX[]">
+                        name="form_validateFORM_INDEX[]" id="form_validateINDEX_ID">
                     <option value="required">非空</option>
-                    <!--当前采用微信号的规则6至20位，以字母开头，字母，数字，减号，下划线 /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/-->
                 </select>
             </label>
         </td>
@@ -98,60 +97,18 @@
                     <option value="api_edit">api_edit</option>
                 </select>
             </label>
-
-
         </td>
+
         <td>
             <label>
-                <select name="getter_setterFORM_INDEX"
-                        class="select2 form-control form-control-sm"
-                        id="getter_setterFORM_INDEX" data-placeholder="获取/修改器"
-                        style="width: 150px;">
-                    <option value="0">无需获取/修改器</option>
-                    <option value="switch">开关</option>
-                    <option value="date">日期</option>
-                    <option value="datetime">日期时间</option>
-                </select>
+                <input style="min-width: 250px" name="custom_validateFORM_INDEX"
+                       class="form-control form-control-sm relation-input"
+                       id="custom_validateINDEX_ID"
+                       title="自定义验证规则"
+                       data-toggle="tooltip" placeholder="自定义验证规则">
             </label>
+
             <br/>
-
-            <div class="form-inline relation-div">
-                <div class="form-group">
-                    <label>
-                    <select data-index="FORM_INDEX" style="min-width: 125px" name="relation_typeFORM_INDEX"
-                            class="select2 form-control form-control-sm"
-                            id="relation_typeFORM_INDEX" data-placeholder="是否关联字段"
-                            onchange="selectRelation(this)"
-                            data-relation-table="relation_tableFORM_INDEX"
-                            data-relation-show="relation_showFORM_INDEX"
-                    >
-                        <option value="0">非关联字段</option>
-                        <option value="1">外键一对一</option>
-                        <option value="2">外键一对多</option>
-                        <option value="3">主键一对一</option>
-                        <option value="4">主键一对多</option>
-                    </select>
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <input name="relation_showFORM_INDEX"
-                           class="form-control form-control-sm relation-input"
-                           id="relation_showINDEX_ID"
-                           title="belongsTo填写，例如文章发布人user_id要显示成User模型的nickname，填写nickname即可"
-                           data-toggle="tooltip" placeholder="关联显示字段">
-
-                    <input name="relation_tableFORM_INDEX"
-                           class="form-control form-control-sm relation-input"
-                           id="relation_tableINDEX_ID"
-                           title="一般此字段为表名，belongsTo的无须填写，hasOne/hasMany填写此字段，关联多个模型务必使用英文逗号隔开，例如用户关联多篇文章，多个积分记录，可以写成article,integral_log"
-                           data-toggle="tooltip" placeholder="关联表/模型">
-                </div>
-            </div>
-        </td>
-
-        <td>
-
             <label>
                 <select name="index_searchFORM_INDEX"
                         class="select2 form-control form-control-sm"
@@ -172,6 +129,55 @@
                           title="例如[性别]字段，表单[select]形式，数据内容为：0||保密  1||男  2||女。注意value和name的分割竖线为英文竖线，不同的选项要换行"
                           data-toggle="tooltip"></textarea>
             </label>
+        </td>
+
+        <td>
+            <label>
+                <select name="getter_setterFORM_INDEX"
+                        class="select2 form-control form-control-sm"
+                        id="getter_setterFORM_INDEX" data-placeholder="获取/修改器"
+                        style="width: 150px;">
+                    <option value="0">无需获取/修改器</option>
+                    <option value="switch">开关</option>
+                    <option value="date">日期</option>
+                    <option value="datetime">日期时间</option>
+                </select>
+            </label>
+            <br/>
+
+            <div class="form-inline relation-div">
+                <div class="form-group">
+                    <label>
+                        <select data-index="FORM_INDEX" style="min-width: 125px" name="relation_typeFORM_INDEX"
+                                class="select2 form-control form-control-sm"
+                                id="relation_typeFORM_INDEX" data-placeholder="是否关联字段"
+                                onchange="selectRelation(this)"
+                                data-relation-table="relation_tableFORM_INDEX"
+                                data-relation-show="relation_showFORM_INDEX"
+                        >
+                            <option value="0">非关联字段</option>
+                            <option value="1">外键一对一</option>
+                            <option value="2">外键一对多</option>
+                            <option value="3">主键一对一</option>
+                            <option value="4">主键一对多</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input name="relation_showFORM_INDEX"
+                           class="form-control form-control-sm relation-input"
+                           id="relation_showINDEX_ID"
+                           title="belongsTo填写，例如文章发布人user_id要显示成User模型的nickname，填写nickname即可"
+                           data-toggle="tooltip" placeholder="关联显示字段">
+
+                    <input name="relation_tableFORM_INDEX"
+                           class="form-control form-control-sm relation-input"
+                           id="relation_tableINDEX_ID"
+                           title="一般此字段为表名，belongsTo的无须填写，hasOne/hasMany填写此字段，关联多个模型务必使用英文逗号隔开，例如用户关联多篇文章，多个积分记录，可以写成article,integral_log"
+                           data-toggle="tooltip" placeholder="关联表/模型">
+                </div>
+            </div>
         </td>
     </tr>
     </tbody>

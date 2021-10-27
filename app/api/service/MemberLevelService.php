@@ -115,42 +115,6 @@ class MemberLevelService extends ApiBaseService
         return  true;
     }
     
-        /**
-     * 禁用
-     * @param mixed $id
-     * @return bool
-     * @throws ApiServiceException
-     */
-    public function disableData($id): bool
-    {
-        $result = $this->model
-            ->whereIn('id', $id)
-            ->save(['status' => 0]);
-
-        if (!$result) {
-            throw new ApiServiceException('禁用失败');
-        }
-
-        return true;
-    }
     
-        /**
-     * 启用
-     * @param mixed $id
-     * @return bool
-     * @throws ApiServiceException
-     */
-    public function enableData($id): bool
-    {
-
-        $result = $this->model
-            ->whereIn('id', $id)
-            ->save(['status' => 1]);
-
-        if (!$result) {
-            throw new ApiServiceException('启用失败');
-        }
-
-        return true;
-    }
-}
+    
+    
