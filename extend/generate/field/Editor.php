@@ -12,20 +12,22 @@ class Editor extends Field
 <div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
         <div class="col-sm-10">
-            <script id="[FIELD_NAME]" name="[FIELD_NAME]" type="text/plain">{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</script>
+            <div id="[FIELD_NAME]Editor"><p>{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</p></div>
+            <textarea id="[FIELD_NAME]" name="[FIELD_NAME]" style="display: none">{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</textarea>
         </div>
     </div>
 <script>
-    UE.delEditor('[FIELD_NAME]');
-    var UE_[FIELD_NAME] = UE.getEditor('[FIELD_NAME]',{
-        serverUrl :UEServer
-    });
+    var E = E||window.wangEditor;
+    if(editor!==undefined){
+        editor.destroy();
+    }
+    var editor = new E('#[FIELD_NAME]Editor');
+    editor.create();
+    editor.config.onchange = function (newHtml) {
+        $('#[FIELD_NAME]').val(newHtml);
+    };
 </script>\n
 EOF;
-
-    public static array $rules = [
-        'required' => '非空',
-    ];
 
     /**
      * @var string 富文本字段添加处理

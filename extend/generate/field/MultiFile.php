@@ -36,15 +36,6 @@ class MultiFile extends Field
 </script>\n
 EOF;
 
-    public static array $rules = [
-        'required'  => '非空',
-        'file_size' => '文件大小限制',
-        'file_ext'  => '文件后缀限制',
-        'regular'   => '自定义正则'
-    ];
-
-
-
     //控制器添加上传多图
     public static string $controllerAddCode = <<<EOF
 //处理[FORM_NAME]上传

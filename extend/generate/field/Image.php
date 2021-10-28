@@ -23,28 +23,6 @@ class Image extends Field
     </div>
 EOF;
 
-    public static array $rules = [
-        'required'   => '非空',
-        'file_size'  => '文件大小限制',
-        'file_image' => '图片类型',
-        'regular'    => '自定义正则'
-    ];
-
-
-    //控制器添加上传
-    public static string $controllerAddCode =
-        <<<EOF
-         
-EOF;
-
-
-    //控制器修改上传
-    public static string $controllerEditCode =
-        <<<EOF
-           
-EOF;
-
-
     public static function create($data)
     {
         $html = self::$html;

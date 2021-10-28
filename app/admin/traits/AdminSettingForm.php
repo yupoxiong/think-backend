@@ -353,15 +353,6 @@ EOF;
 </div>\n
 EOF;
 
-    public string $radioHtml = <<<EOF
-<div class="radio">
-    <label>
-        <input type="radio" name="[FIELD_NAME]" value="" checked="">
-        [FORM_NAME]
-    </label>
-</div>\n
-EOF;
-
 
     public string $selectHtml = <<<EOF
 <div class="form-group row">

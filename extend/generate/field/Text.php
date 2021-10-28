@@ -17,24 +17,12 @@ class Text extends Field
 </div>\n
 EOF;
 
-    public static array $rules = [
-        'required'   => '非空',
-        'account'    => '账号',
-        'cn_name'    => '中文姓名',
-        'wechat'     => '微信',
-        'qq'         => 'QQ',
-        'car_number' => '车牌号',
-        'regular'    => '自定义正则'
-    ];
-
     public static function create($data)
     {
-
-       return  str_replace(
+        return  str_replace(
             array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'),
             array($data['form_name'], $data['field_name'], $data['field_default']),
             self::$html);
-
     }
 
 }

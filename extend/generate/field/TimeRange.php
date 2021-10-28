@@ -27,9 +27,7 @@ EOF;
     public static array $rules = [
         'required'   => '非空',
         'time_range' => '时间范围',
-        'regular'    => '自定义正则'
     ];
-
 
     public static function create($data)
     {

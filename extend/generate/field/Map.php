@@ -6,6 +6,8 @@
 
 namespace generate\field;
 
+use generate\exception\GenerateException;
+
 class Map extends Field
 {
     public static string $html = <<<EOF
@@ -30,11 +32,11 @@ class Map extends Field
         let defaultLng = "{\$data.[FIELD_NAME_LNG]|default='117'}";
         let defaultLat = "{\$data.[FIELD_NAME_LAT]|default='36'}";
         
-        var map_[FIELD_NAME_LNG] = new AMap.Map('map_container_[FIELD_NAME_LNG]', {
+        let map_[FIELD_NAME_LNG] = new AMap.Map('map_container_[FIELD_NAME_LNG]', {
             zoom: 16,
             scrollWheel: false,
         })
-         positionPicker = new PositionPicker({
+        let positionPicker = new PositionPicker({
             mode: 'dragMap',
             map: map_[FIELD_NAME_LNG]
         });
@@ -58,14 +60,15 @@ class Map extends Field
         map_[FIELD_NAME_LNG].addControl(new AMap.ToolBar({
             liteStyle: true
         }));
-          //输入提示
+        // 输入提示
         let autoOptions = {
             input: "map_key_[FIELD_NAME_LNG]"
         };
         let auto = new AMap.Autocomplete(autoOptions);
         let placeSearch = new AMap.PlaceSearch({
             map: map_[FIELD_NAME_LNG]
-        });  //构造地点查询类
+        });  
+        // 构造地点查询类
         auto.on('select',function (e){
             placeSearch.setCity(e.poi.adcode);
             positionPicker.start(new AMap.LngLat(e.poi.location.lng,e.poi.location.lat ));
@@ -78,9 +81,13 @@ EOF;
     public static array $rules = [
         'required' => '非空',
         'lng_lat'  => '经纬度',
-        'regular'  => '自定义正则'
     ];
 
+    /**
+     * @param $data
+     * @return string|string[]
+     * @throws GenerateException
+     */
     public static function create($data)
     {
         if ($data['field_name'] === 'lng') {
@@ -90,7 +97,7 @@ EOF;
             $data['field_name_lng'] = $data['field_name'];
             $data['field_name_lat'] = 'latitude';
         } else {
-            throw new \Exception('地图字段必须为lng,lat或longitude,latitude');
+            throw new GenerateException('地图字段必须为lng,lat或longitude,latitude');
         }
 
         $html = self::$html;

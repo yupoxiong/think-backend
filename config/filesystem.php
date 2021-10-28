@@ -33,12 +33,16 @@ return [
             'visibility' => 'public',
             'validate'   => [
                 'image' => [
-                    'fileSize:2048000',
+                    'fileSize:10485760',// 10MB
                     'fileExt:' . IMAGE_EXT,
                     'fileMime:' . IMAGE_MIME,
                 ],
+                'video' => [
+                    'fileSize:209715200',// 200MB
+                    'fileExt:' . VIDEO_EXT,
+                ],
                 'file'  => [
-                    'fileSize:2048000',
+                    'fileSize:419430400',// 50MB
                     'fileExt:' . IMAGE_EXT . ',' . VIDEO_EXT . ',' . AUDIO_EXT . ',' . ARCHIVE_EXT . ',' . TEXT_EXT
                 ]
             ],

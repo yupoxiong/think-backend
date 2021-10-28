@@ -19,8 +19,9 @@ EOF;
 
     public static array $rules = [
         'required' => '非空',
+        'ipv4'     => 'IPV4',
+        'ipv6'     => 'IPV6',
         'ip'     => 'IP',
-        'regular'  => '自定义正则'
     ];
 
 

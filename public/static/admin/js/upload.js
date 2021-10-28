@@ -4,57 +4,18 @@
  * @param fileId
  */
 function initUploadImg(field, fileId = '') {
-    fileId = fileId || field + '_file';
-    let $fileDom = $("#" + fileId);
-
-    $fileDom.fileinput({
-        theme: 'fas',
-        language: 'zh',
-        showDrag: false,
-        showClose: false,
-        showBrowse: true,
-        showUpload: false,
-        showRemove: false,
-        uploadAsync: true,
-        showCaption: false,
-        showCancel: false,
-        showDownload: false,
-        browseOnZoneClick: true,
-        overwriteInitial: true,
-        initialPreviewAsData: true,
-        uploadUrl: uploadUrl,
-        minFileCount: 1,
-        maxFileCount: 1,
-        autoReplace: true,
-        initialPreviewShowDelete: false,
-        dropZoneTitle: '点此上传图片或将图片拖到这里…',
-        dropZoneClickTitle: '(或点击下方选择按钮)',
-        fileActionSettings: {
-            showDrag: false,
-            showDownload: false,
-        },
-        uploadExtraData: {
-            file_field: fileId,
-        },
-    }).on("filebatchselected", function (event, files) {
-        if (adminDebug) {
-            console.log('选择文件');
-            console.log(event, files);
-        }
-        $fileDom.fileinput("upload");
-    }).on('fileuploaded', function (event, data, previewId, index) {
-        if (adminDebug) {
-            console.log('上传文件');
-            console.log(event, data, previewId, index);
-        }
-
-        let response = data.response;
-        if (response.code === 200 && response.initialPreview !== undefined) {
-            $('#' + field).val(response.initialPreview[0]);
-        }
-    });
+    initUploadFile(field, fileId, 'image');
 }
 
+
+/**
+ * 初始化上传单视频
+ * @param field
+ * @param fileId
+ */
+function initUploadVideo(field, fileId = '') {
+    initUploadFile(field, fileId, 'video');
+}
 
 /**
  * 初始化上传多图
@@ -63,11 +24,34 @@ function initUploadImg(field, fileId = '') {
  */
 
 function initUploadMultiImg(field, fileId = '') {
+    initUploadMultiFile(field, fileId, 'image')
+}
+
+
+/**
+ * 初始化上传多文件
+ * @param field
+ * @param fileId
+ */
+
+function initUploadMultiFile(field, fileId = '') {
     let $field = $('#' + field);
     fileId = fileId || field + '_file';
     let $fileDom = $("#" + fileId);
     let initialPreview;
     let initialPreviewConfig = [];
+
+    let typeCn = '文件';
+    switch (fileType) {
+        default:
+            break;
+        case "image":
+            typeCn = '图片';
+            break;
+        case "video":
+            typeCn = '视频';
+            break;
+    }
 
     if ($field.val().length > 0) {
         initialPreview = $field.val().split(',');
@@ -99,13 +83,13 @@ function initUploadMultiImg(field, fileId = '') {
         minFileCount: 1,
         maxFileCount: 10,
         initialPreviewShowDelete: true,
-        dropZoneTitle: '点此上传图片或将图片拖到这里(支持多图上传)<br/>',
+        dropZoneTitle: '点此上传' + typeCn + '或将' + typeCn + '拖到这里(支持多' + typeCn + '上传)<br/>',
         dropZoneClickTitle: '(或点击下方选择按钮)',
         fileActionSettings: {
             showDownload: false,
             showDrag: true,
         },
-        initialPreviewFileType: 'image',
+        initialPreviewFileType: fileType,
         uploadExtraData: {
             file_field: fileId,
         },
@@ -143,10 +127,25 @@ function initUploadMultiImg(field, fileId = '') {
  * 初始化上传单文件
  * @param field
  * @param fileId
+ * @param fileType
  */
-function initUploadFile(field, fileId = '') {
+function initUploadFile(field, fileId = '', fileType = 'image') {
+    if (adminDebug) {
+        console.log('初始化上传文件');
+    }
     fileId = fileId || field + '_file';
     let $fileDom = $("#" + fileId);
+    let typeCn = '文件';
+    switch (fileType) {
+        default:
+            break;
+        case "image":
+            typeCn = '图片';
+            break;
+        case "video":
+            typeCn = '视频';
+            break;
+    }
 
     $fileDom.fileinput({
         theme: 'fas',
@@ -164,16 +163,21 @@ function initUploadFile(field, fileId = '') {
         overwriteInitial: true,
         initialPreviewAsData: true,
         uploadUrl: uploadUrl,
-        maxTotalFileCount: 2,
+        minFileCount: 1,
+        maxFileCount: 1,
         autoReplace: true,
         initialPreviewShowDelete: false,
+        dropZoneTitle: '点此上传' + typeCn + '或将' + typeCn + '拖到这里…',
+        dropZoneClickTitle: '(或点击下方选择按钮)',
         fileActionSettings: {
             showDrag: false,
             showDownload: false,
         },
-        initialPreviewFileType: 'image',
+        allowedFileTypes: [fileType],
+        initialPreviewFileType: fileType,
         uploadExtraData: {
             file_field: fileId,
+            file_type: fileType,
         },
     }).on("filebatchselected", function (event, files) {
         if (adminDebug) {

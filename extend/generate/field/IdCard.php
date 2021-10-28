@@ -19,8 +19,7 @@ EOF;
 
     public static array $rules = [
         'required' => '非空',
-        'id_card'  => '身份证',
-        'regular'  => '自定义正则'
+        'idCard'  => '身份证',
     ];
 
 

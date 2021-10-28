@@ -31,7 +31,6 @@ EOF;
 
     public static array $rules = [
         'required'   => '非空',
-        'regular'    => '自定义正则'
     ];
 
 

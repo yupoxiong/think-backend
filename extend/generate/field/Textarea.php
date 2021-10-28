@@ -17,12 +17,6 @@ class Textarea extends Field
 </div>\n
 EOF;
 
-    public static array $rules = [
-        'required' => '非空',
-        'regular'  => '自定义正则'
-    ];
-
-
     public static function create($data)
     {
         return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]', '[ROWS]'), array($data['form_name'], $data['field_name'], $data['field_default'], $data['rows'] ?? 3), self::$html);

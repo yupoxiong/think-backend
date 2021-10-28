@@ -8,7 +8,6 @@ namespace generate\field;
 
 class City extends Field
 {
-
     public static string $html = <<<EOF
 <div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
@@ -33,7 +32,6 @@ EOF;
         'required'   => '非空',
         'regular'    => '自定义正则'
     ];
-
 
     public static function create($data)
     {

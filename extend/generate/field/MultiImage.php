@@ -24,20 +24,6 @@ class MultiImage extends Field
 </div>
 EOF;
 
-
-    //多图上传模型内修改器与获取器
-    public static string $modelAttrCode = <<<EOF
-EOF;
-
-
-    public static array $rules = [
-        'required'   => '非空',
-        'file_size'  => '文件大小限制',
-        'file_image' => '图片类型',
-        'regular'    => '自定义正则'
-    ];
-
-
     public static function create($data)
     {
         $html = self::$html;

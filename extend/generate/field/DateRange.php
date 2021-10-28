@@ -24,11 +24,6 @@ class DateRange extends Field
 </script>\n
 EOF;
 
-    public static array $rules = [
-        'required'   => '非空',
-    ];
-
-
     public static function create($data)
     {
         return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'), array($data['form_name'], $data['field_name'], $data['field_default']), self::$html);

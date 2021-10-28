@@ -21,7 +21,7 @@
                         <div class="form-group row">
     <label for="name" class="col-sm-2 control-label">名称</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="email" class="form-control fieldEmail">
+        <input id="name" name="name" value="{$data.name|default=''}" placeholder="请输入名称" type="text" class="form-control fieldText">
     </div>
 </div>
 <div class="form-group row">
@@ -30,18 +30,25 @@
         <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control fieldText">
     </div>
 </div>
-    <div class="form-group row">
-        <label for="img" class="col-sm-2 control-label">图片</label>
-        <div class="col-sm-10 col-md-4 formInputDiv"> 
-            <div class="input-group">
-                <input id="img_file" name="img_file" type="file" class="file-loading " data-initial-preview="{if isset($data)}{$data.img}{/if}">
-                <input name="img" id="img" value="{$data.img|default=''}" hidden placeholder="请上传图片" class="fieldImage">
-                <script>
-                     initUploadImg('img');
-                </script>            
-            </div>
+<div class="form-group row">
+    <label for="img" class="col-sm-2 control-label">图片</label>
+        <div class="col-sm-10">
+            <div id="imgEditor"><p>{$data.img|raw|default='/static/index/images/user_level_default.png'}</p></div>
+            <textarea id="img" name="img" style="display: none">{$data.img|raw|default='/static/index/images/user_level_default.png'}</textarea>
         </div>
-    </div><div class="form-group row">
+    </div>
+<script>
+    var E = E||window.wangEditor;
+    if(editor!==undefined){
+        editor.destroy();
+    }
+    var editor = new E('#imgEditor');
+    editor.create();
+    editor.config.onchange = function (newHtml) {
+        $('#img').val(newHtml);
+    };
+</script>
+<div class="form-group row">
     <label for="status" class="col-sm-2 control-label">是否启用</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
@@ -101,7 +108,6 @@
         rules: {
                 'name': {
                 required: true,
-        email: true,
 
     },
     'description': {
@@ -121,7 +127,6 @@
         messages: {
                 'name': {
                required: "名称不能为空",
-        email: "名称格式不正确",
 
     },
     'description': {

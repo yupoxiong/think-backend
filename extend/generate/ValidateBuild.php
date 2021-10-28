@@ -80,12 +80,12 @@ class ValidateBuild extends Build
                     }
                 }
 
-
+                if($temp_rule_code!==''){
+                    $rule_code      .= $rule_class->getValidateRule($value, $temp_rule_code);
+                }
 
                 $scene_code_tmp .= "'" . $value['field_name'] . "', ";
-                $rule_code      .= $rule_class->getValidateRule($value, $temp_rule_code);
 
-                Log::write($rule_code);
             }
         }
 

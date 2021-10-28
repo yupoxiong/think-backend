@@ -30,15 +30,6 @@ class File extends Field
 </script>\n
 EOF;
 
-
-
-    public static array $rules = [
-        'required'  => '非空',
-        'file_size' => '文件大小限制',
-        'file_ext'  => '文件后缀限制',
-        'regular'   => '自定义正则'
-    ];
-
     public static function create($data)
     {
         $html = self::$html;

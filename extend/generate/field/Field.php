@@ -12,17 +12,10 @@ class Field
     use Tools;
 
 
-    //当前字段可用规则
+    // 当前字段可用规则
     public static array $rules = [
-        //非空
+        // 非空
         'required'   => '非空',
-        'wechat'     => '微信号',
-        'qq'         => 'QQ号',
-        'account'    => '账号',
-        'cn_name'    => '中文姓名',
-        'car_number' => '车牌号',
-        //自定义正则
-        'regular'    => '自定义正则'
     ];
 
 
