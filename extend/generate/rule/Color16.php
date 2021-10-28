@@ -1,17 +1,17 @@
 <?php
 /**
- * 手机号规则相关
+ * 16进制颜色规则
  */
 
 namespace generate\rule;
 
-class Mobile extends Rule
+class Color16 extends Rule
 {
 
-    public string  $validateRule = 'mobile';
+    public string  $validateRule = 'color16';
 
     public string $validateMsg = <<<EOF
-    '[FIELD_NAME].mobile' => '[FORM_NAME]格式不正确',\n
+    '[FIELD_NAME].color16' => '[FORM_NAME]格式不正确',\n
 EOF;
 
     public string $ruleForm = <<<EOF

@@ -78,8 +78,8 @@ $(function () {
         return true;
     }, "IP格式不正确");
 
-    // 验证颜色
-    $.validator.addMethod("color", function (value, element, params) {
+    // 验证16进制颜色
+    $.validator.addMethod("color16", function (value, element, params) {
         if (adminDebug) {
             console.log('验证颜色', value, element, params);
         }

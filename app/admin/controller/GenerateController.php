@@ -168,7 +168,6 @@ class GenerateController extends AdminBaseController
 
         $data['data'] = $field_data;
 
-        Log::write($data);
         // 已经组装好data,先生成表，再生成模型，验证器，控制器，视图
         $generate = new Generate($data);
         $msg      = '生成成功';

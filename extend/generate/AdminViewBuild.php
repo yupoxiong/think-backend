@@ -13,7 +13,7 @@ namespace generate;
 use Exception;
 use generate\exception\GenerateException;
 use generate\field\Field;
-use generate\rule\Required;
+use generate\validate\Rule;
 
 class AdminViewBuild extends Build
 {
@@ -71,7 +71,6 @@ class AdminViewBuild extends Build
                         $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
                         $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
                         $value['relation_data'] = $list_code;
-
                     } else if ($value['relation_type'] === 0) {
                         // 这里是非关联的
                         $list_code              = file_get_contents($this->template['add_customer_select_data']);
@@ -79,8 +78,6 @@ class AdminViewBuild extends Build
                         $list_code              = str_replace(array('[FIELD_LIST]', '[FIELD_NAME]'), array($list_name, $value['field_name']), $list_code);
                         $value['relation_data'] = $list_code;
                     }
-
-
                 } else if (in_array($value['form_type'], $date_field, true)) {
                     //如果是日期控件类字段，默认值各式不符的一律修改成''
                     if (is_numeric($value['field_default'])) {
@@ -92,21 +89,33 @@ class AdminViewBuild extends Build
                 $class      = '\\generate\\field\\' . $class_name;
                 $form_body  .= $class::create($value);
 
-                if (in_array('required', $value['form_validate'], true)) {
-                    $Required  = new Required;
-                    $rule_html = $Required->formRule;
+                $formRule = new Rule();
 
+                $rule_html = '';
+                $msg_html  = '';
+
+                foreach ($value['form_validate'] as $validate_rule) {
+                    $validate_class_name = parse_name($validate_rule, 1);
+                    $validate_class      = '\\generate\\validate\\' . $validate_class_name;
+                    if (class_exists($validate_class)) {
+                        /** @var Rule $class */
+                        $class     = new $validate_class;
+                        $rule_html .= $class->getFormRule($value);
+                        $msg_html  .= $class->getFormMsg($value);
+                    }
+                }
+
+                if ($rule_html !== '') {
                     //如果是多选select，验证字段使用[]后缀
-                    $multi_field = ['multi_select', 'multi_image', 'multi_file'];
+                    $validate_field = $value['field_name'];
+                    $multi_field    = ['multi_select', 'multi_image', 'multi_file'];
                     if (in_array($value['form_type'], $multi_field)) {
-                        $value['field_name'] .= '[]';
+                        $validate_field .= '[]';
                     }
 
-                    $form_rules .= str_replace('[FIELD_NAME]', $value['field_name'], $rule_html);
+                    $form_rules    .= str_replace(array('[FIELD_NAME]', '[RULE_LIST]'), array($validate_field, $rule_html), $formRule::$ruleList);
+                    $form_messages .= str_replace(array('[FIELD_NAME]', '[MSG_LIST]'), array($validate_field, $msg_html), $formRule::$msgList);
 
-                    $msg_html      = $Required->formMsg;
-                    $msg_html      = str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), $msg_html);
-                    $form_messages .= $msg_html;
                 }
             }
         }

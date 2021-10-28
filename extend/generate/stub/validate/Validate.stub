@@ -19,6 +19,4 @@ class [VALIDATE_NAME]Validate extends CommonBaseValidate
         [VALIDATE_SCENE]
     ];
 
-    [VALIDATE_SCENE_FUNC]
-
 }

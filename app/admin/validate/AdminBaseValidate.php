@@ -10,9 +10,9 @@ declare (strict_types=1);
 namespace app\admin\validate;
 
 
-use think\Validate;
+use app\common\validate\CommonBaseValidate;
 
-class AdminBaseValidate extends Validate
+class AdminBaseValidate extends CommonBaseValidate
 {
 
 }

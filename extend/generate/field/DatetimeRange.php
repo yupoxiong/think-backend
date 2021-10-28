@@ -27,8 +27,6 @@ EOF;
 
     public static array $rules = [
         'required'       => '非空',
-        'datetime_range' => '日期时间范围',
-        'regular'        => '自定义正则'
     ];
 
 
