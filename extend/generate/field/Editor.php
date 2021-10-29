@@ -12,18 +12,18 @@ class Editor extends Field
 <div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
         <div class="col-sm-10">
-            <div id="[FIELD_NAME]Editor"><p>{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</p></div>
+            <div id="[FIELD_NAME]Editor">{\$data.[FIELD_NAME]|raw|default='<p>[FIELD_DEFAULT]</p>'}</div>
             <textarea id="[FIELD_NAME]" name="[FIELD_NAME]" style="display: none">{\$data.[FIELD_NAME]|raw|default='[FIELD_DEFAULT]'}</textarea>
         </div>
     </div>
 <script>
     var E = E||window.wangEditor;
-    if(editor!==undefined){
-        editor.destroy();
+    if(editor_[FIELD_NAME]!==undefined){
+        editor_[FIELD_NAME].destroy();
     }
-    var editor = new E('#[FIELD_NAME]Editor');
-    editor.create();
-    editor.config.onchange = function (newHtml) {
+    var editor_[FIELD_NAME] = new E('#[FIELD_NAME]Editor');
+    editor_[FIELD_NAME].create();
+    editor_[FIELD_NAME].config.onchange = function (newHtml) {
         $('#[FIELD_NAME]').val(newHtml);
     };
 </script>\n

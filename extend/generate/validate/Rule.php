@@ -10,8 +10,6 @@ declare (strict_types=1);
 namespace generate\validate;
 
 
-use think\facade\Log;
-
 class Rule
 {
 
@@ -151,6 +149,38 @@ EOF;
 
         return str_replace($search, $replace, $this->formMsg);
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getMsg(): string
+    {
+        return $this->msg;
+    }
+
+    /**
+     * @param string $msg
+     */
+    public function setMsg(string $msg): void
+    {
+        $this->msg = $msg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
 

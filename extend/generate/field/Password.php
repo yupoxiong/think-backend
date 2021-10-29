@@ -19,10 +19,10 @@ EOF;
 
     public static array $rules = [
         'required'         => '非空',
-        'simple_password'  => '简单密码',
-        'middle_password'  => '中等密码',
-        'complex_password' => '复杂密码',
         'number6'          => '6位纯数字',
+        'simplePassword'  => '简单密码',
+        'middlePassword'  => '中等密码',
+        'complexPassword' => '复杂密码',
     ];
 
     public static function create($data)

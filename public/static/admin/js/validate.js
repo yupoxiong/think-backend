@@ -87,4 +87,52 @@ $(function () {
 
     }, "颜色格式不正确");
 
+    // 验证6位数字密码
+    $.validator.addMethod("number6", function (value, element, params) {
+        if (adminDebug) {
+            console.log('验证6位数字密码', value, element, params);
+        }
+        return params === true ? (/^\d{6}$/.test(value)) : true;
+
+    }, "必须为6位数字");
+
+    // 验证简单密码
+    $.validator.addMethod("simplePassword", function (value, element, params) {
+        if (adminDebug) {
+            console.log('验证简单密码', value, element, params);
+        }
+        return params === true ? (/^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/.test(value)) : true;
+
+    }, "至少1个字母和1个数字，6-16位");
+
+    // 验证中等密码
+    $.validator.addMethod("middlePassword", function (value, element, params) {
+        if (adminDebug) {
+            console.log('验证中等密码', value, element, params);
+        }
+        return params === true ? (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$/.test(value)) : true;
+
+    }, "至少1个大写字母和1个小写字母和1个数字，8-16位");
+
+    // 验证复杂密码
+    $.validator.addMethod("complexPassword", function (value, element, params) {
+        if (adminDebug) {
+            console.log('验证复杂密码', value, element, params);
+        }
+        return params === true ? (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.[$@!%#?&]).{8,16}$/.test(value)) : true;
+
+    }, "至少1个大写字母和1个小写字母和1个数字和1个特殊字符，8-16位");
+
+    // 验证URL
+    $.validator.addMethod("url", function (value, element, params) {
+        if (adminDebug) {
+            console.log('验证URL', value, element, params);
+        }
+        return params === true ? (/^\w+[^\s]+(\.[^\s]+)+$/.test(value)) : true;
+
+    }, "格式不正确");
+
+
+
+
 });

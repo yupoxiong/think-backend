@@ -19,7 +19,7 @@ class Map extends Field
             <input class="form-control mapKeywords" id="map_key_[FIELD_NAME_LNG]"  placeholder="输入关键字搜索地点" />
         </div>
 
-        <div id="map_container_[FIELD_NAME_LNG]" style="width: 100%; height: 350px;position: relative;">
+        <div id="map_container_[FIELD_NAME_LNG]" class="mapContainer">
         </div>
         <input name="[FIELD_NAME_LNG]" hidden id="[FIELD_NAME_LNG]" value="{\$data.[FIELD_NAME_LNG]|default='36'}">
         <input name="[FIELD_NAME_LAT]" hidden id="[FIELD_NAME_LAT]" value="{\$data.[FIELD_NAME_LAT]|default='117'}" >
@@ -79,8 +79,6 @@ class Map extends Field
 EOF;
 
     public static array $rules = [
-        'required' => '非空',
-        'lng_lat'  => '经纬度',
     ];
 
     /**
@@ -90,14 +88,14 @@ EOF;
      */
     public static function create($data)
     {
-        if ($data['field_name'] === 'lng') {
+        if(strpos($data['field_name'],'lng')!==false){
             $data['field_name_lng'] = $data['field_name'];
-            $data['field_name_lat'] = 'lat';
-        } else if ($data['field_name'] === 'longitude') {
+            $data['field_name_lat'] = str_replace('lng','lat',$data['field_name']);
+        }else if(strpos($data['field_name'],'longitude')!==false){
             $data['field_name_lng'] = $data['field_name'];
-            $data['field_name_lat'] = 'latitude';
-        } else {
-            throw new GenerateException('地图字段必须为lng,lat或longitude,latitude');
+            $data['field_name_lat'] = str_replace('longitude','latitude',$data['field_name']);
+        }else {
+            throw new GenerateException('地图字段必须包含lng,lat或longitude,latitude');
         }
 
         $html = self::$html;

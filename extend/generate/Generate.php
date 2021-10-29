@@ -13,6 +13,7 @@ use generate\traits\Tree;
 use generate\traits\Tools;
 use app\admin\model\AdminMenu;
 use generate\exception\GenerateException;
+use think\facade\Log;
 
 class Generate
 {
@@ -167,30 +168,15 @@ class Generate
         $this->checkDir();
 
         $this->createModel();
-
         $this->createAdminController();
-
         $this->createAddView();
         $this->createIndexView();
-
-
         $this->createValidate();
-
         $this->createApiController();
         $this->createApiService();
-
         $this->createMenu();
 
         return '生成成功';
-
-        // 先判断所有目录是否可写，控制器，模型，验证器，视图
-        // 然后生成表，然后再生成各个代码
-        // 检查目录
-
-        // 检查名称
-
-        // 判断是否为
-
     }
 
 
@@ -488,7 +474,6 @@ class Generate
                 'name'           => $parse_name,
                 'auto_timestamp' => 1,
                 'soft_delete'    => 1,
-
             ],
             //验证器
             'validate'   => [
@@ -517,7 +502,6 @@ class Generate
         //表中文名
         $data['table']['cn_name'] = $table_info['Comment'];
 
-
         //定义好以下情况，
         //90%概率为列表的字段，
         //90%概率不为列表的字段，
@@ -527,13 +511,11 @@ class Generate
         //90不为表单的字段
         //导出字段暂时和显示字段一样
 
-
         //显示为列表的字段名，暂时不用
         //$list_show_field = ['id','name','mobile','description','address','money','price', 'keywords','title','img','create_time','sort_number','user_id','status'];
         //列表隐藏字段，如果为text字段，大概率隐藏
         $list_hide_field = ['password', 'update_time', 'delete_time'];
         $list_hide_type  = ['tinytext', 'tinyblob', 'text', 'blob', 'longtext', 'longblob'];
-
 
         /**
          * @param $field
@@ -589,7 +571,6 @@ class Generate
                 if ($union_table) {
                     $relation_type = 2;
                     $relation_show = $union_table;
-
                 }
             }
 
@@ -632,7 +613,6 @@ class Generate
                 'relation_show'     => $relation_show,
             ];
 
-
             $field_info = $this->getFieldInfo($field_data['name'], $field_data['field_type']);
 
             $field_data['field_length'] = $field_info['length'];
@@ -661,11 +641,21 @@ class Generate
             //$field_data['validate'] = [];
             $field_data['validate_html'] = $this->getValidateHtml($field_data);
 
-
             $data['field'][] = $field_data;
-
         }
 
+        foreach ($data['field'] as $key => $value) {
+            if ($value['form_type'] === 'map') {
+                // 列表不展示
+                $data['field'][$key]['is_list'] = 0;
+                // 查找纬度字段
+                $search_field = str_replace(['lng', 'longitude'], ['lat', 'latitude'], $data['field'][$key]['name']);
+                $found_key    = array_search($search_field, array_column($data['field'], 'name'), true);
+                // 纬度字段不显示及不用表单
+                $data['field'][$found_key]['is_list']   = 0;
+                $data['field'][$found_key]['form_type'] = 'none';
+            }
+        }
 
         return $data;
     }
@@ -828,7 +818,12 @@ class Generate
         }
 
         // 经纬度
-        if (strrchr($field_info['name'], '_lng') === '_lng') {
+        if (strrchr($field_info['name'], '_lng') === '_lng' || strrchr($field_info['name'], '_longitude') === '_longitude') {
+            $field_data['form_type'] = 'map';
+        }
+
+        // 经纬度
+        if ($field_info['name'] === 'lng' || $field_info['name'] === 'longitude') {
             $field_data['form_type'] = 'map';
         }
 

@@ -13,7 +13,7 @@
 
                     <div class="input-group input-group-sm searchGroup">
                         <input value="{$_keywords ? $_keywords : '' ;}"
-                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="ID/头像/用户名/昵称/手机号/用户等级/密码/是否启用/经度/纬度/相册/创建时间/更新时间/删除时间">
+                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
                     </div>
                     
                     
@@ -70,8 +70,6 @@
             <th>手机号</th>
             <th>用户等级</th>
             <th>是否启用</th>
-            <th>经度</th>
-            <th>纬度</th>
             <th>创建时间</th>
 
                             <th>操作</th>
@@ -89,19 +87,18 @@
             <td>{$item.nickname}</td>
             <td>{$item.mobile}</td>
             <td>{$item.user_level.name|default=''}</td>
-            <td>{$item.lng}</td>
-            <td>{$item.lat}</td>
+<td>{$item.status_text}</td>
             <td>{$item.create_time}</td>
 
                             <td class="td-do">
                                 <a href="{:url('edit',['id'=>$item.id])}"
                                    class="btn btn-primary btn-xs" title="修改" data-toggle="tooltip">
                                     <i class="fas fa-pen"></i>
-                                    
+                                    修改
                                 </a>
                                 <button class="btn btn-danger btn-xs AjaxButton" data-toggle="tooltip" title="删除"  data-id="{$item.id}" data-confirm-title="删除确认" data-confirm-content='您确定要删除ID为 <span class="text-red">{$item.id}</span> 的数据吗' data-url="{:url('del')}">
     <i class="fas fa-trash-alt"></i>
-    
+    删除
 </button>
                                 
                             </td>

@@ -60,9 +60,7 @@ class MemberLevelController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            $param['img'] = $request->param(false)['img'];
-
-
+            
             $result = $model::create($param);
 
             $url = URL_BACK;
@@ -94,9 +92,7 @@ class MemberLevelController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-            $param['img'] = $request->param(false)['img'];
-
-
+            
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');

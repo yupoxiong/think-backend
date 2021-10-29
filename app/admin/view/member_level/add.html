@@ -27,46 +27,34 @@
 <div class="form-group row">
     <label for="description" class="col-sm-2 control-label">简介</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control fieldText">
+        <input id="description" name="description" value="{$data.description|default=''}" placeholder="请输入简介" type="text" class="form-control fieldUrl">
     </div>
 </div>
 <div class="form-group row">
     <label for="img" class="col-sm-2 control-label">图片</label>
         <div class="col-sm-10">
-            <div id="imgEditor"><p>{$data.img|raw|default='/static/index/images/user_level_default.png'}</p></div>
+            <div id="imgEditor">{$data.img|raw|default='<p>/static/index/images/user_level_default.png</p>'}</div>
             <textarea id="img" name="img" style="display: none">{$data.img|raw|default='/static/index/images/user_level_default.png'}</textarea>
         </div>
     </div>
 <script>
     var E = E||window.wangEditor;
-    if(editor!==undefined){
-        editor.destroy();
+    if(editor_img!==undefined){
+        editor_img.destroy();
     }
-    var editor = new E('#imgEditor');
-    editor.create();
-    editor.config.onchange = function (newHtml) {
+    var editor_img = new E('#imgEditor');
+    editor_img.create();
+    editor_img.config.onchange = function (newHtml) {
         $('#img').val(newHtml);
     };
 </script>
 <div class="form-group row">
     <label for="status" class="col-sm-2 control-label">是否启用</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-    <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
-    <input class="switch fieldSwitch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
+        <input id="status" name="status" value="{$data.status|default='1'}" placeholder="请输入是否启用" type="text" class="form-control fieldUrl">
     </div>
 </div>
 
-<script>
-    $('#status').bootstrapSwitch({
-        onText: "是",
-        offText: "否",
-        onColor: "success",
-        offColor: "danger",
-        onSwitchChange: function (event, state) {
-            $(event.target).closest('.bootstrap-switch').next().val(state ? '1' : '0').change();
-        }
-    });
-</script>
                     </div>
                     <!-- 表单底部 -->
                     <div class="card-footer">
@@ -112,6 +100,7 @@
     },
     'description': {
                 required: true,
+        url: true,
 
     },
     'img': {
@@ -119,7 +108,7 @@
 
     },
     'status': {
-                required: true,
+                url: true,
 
     },
 
@@ -131,6 +120,7 @@
     },
     'description': {
                required: "简介不能为空",
+        url: "简介必须为正确的网址",
 
     },
     'img': {
@@ -138,7 +128,7 @@
 
     },
     'status': {
-               required: "是否启用不能为空",
+               url: "是否启用必须为正确的网址",
 
     },
 

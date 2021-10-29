@@ -32,19 +32,19 @@
     </div><div class="form-group row">
     <label for="username" class="col-sm-2 control-label">用户名</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="username" name="username" value="{$data.username|default='0'}" placeholder="请输入用户名" type="text" class="form-control fieldText">
+        <input id="username" name="username" value="{$data.username|default=''}" placeholder="请输入用户名" type="text" class="form-control fieldText">
     </div>
 </div>
 <div class="form-group row">
     <label for="nickname" class="col-sm-2 control-label">昵称</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="nickname" name="nickname" value="{$data.nickname|default='0'}" placeholder="请输入昵称" type="text" class="form-control fieldText">
+        <input id="nickname" name="nickname" value="{$data.nickname|default=''}" placeholder="请输入昵称" type="text" class="form-control fieldText">
     </div>
 </div>
 <div class="form-group row">
     <label for="mobile" class="col-sm-2 control-label">手机号</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="mobile" name="mobile" value="{$data.mobile|default='0'}" placeholder="请输入手机号" type="tel" maxlength="11" class="form-control fieldMobile">
+        <input id="mobile" name="mobile" value="{$data.mobile|default=''}" placeholder="请输入手机号" type="tel" maxlength="11" class="form-control fieldMobile">
     </div>
 </div>
 <div class="form-group row">
@@ -68,7 +68,7 @@
 <div class="form-group row">
     <label for="password" class="col-sm-2 control-label">密码</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="password" name="password" value="{$data.password|default='0'}" placeholder="请输入密码" type="password" class="form-control fieldPassword">
+        <input id="password" name="password" value="{$data.password|default='JDJ5JDEwJEdPNWhJRlN3aWJScjBHeVZsWjlGRGVnbEY1dS5ZSHFPcHA1dWxHalAxQ3ZrbS5PdFVobWJL'}" placeholder="请输入密码" type="password" class="form-control fieldPassword">
     </div>
 </div>
 <div class="form-group row">
@@ -89,31 +89,90 @@
             $(event.target).closest('.bootstrap-switch').next().val(state ? '1' : '0').change();
         }
     });
-</script><div class="form-group row">
-    <label for="lng" class="col-sm-2 control-label">经度</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="lng" name="lng" value="{$data.lng|default='116'}" placeholder="请输入经度" type="text" class="form-control fieldText">
-    </div>
-</div>
+</script>    
 <div class="form-group row">
-    <label for="lat" class="col-sm-2 control-label">纬度</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="lat" name="lat" value="{$data.lat|default='37'}" placeholder="请输入纬度" type="text" class="form-control fieldText">
+    <label class="col-sm-2 control-label">经度</label>
+    <div class="col-sm-8 ">
+        <div class="input-group mb-3 mapInputContainer">
+            <input class="form-control mapKeywords" id="map_key_lng"  placeholder="输入关键字搜索地点" />
+        </div>
+
+        <div id="map_container_lng" class="mapContainer">
+        </div>
+        <input name="lng" hidden id="lng" value="{$data.lng|default='36'}">
+        <input name="lat" hidden id="lat" value="{$data.lat|default='117'}" >
     </div>
 </div>
+    
+<script>
+    AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
+        		
+        let defaultLng = "{$data.lng|default='117'}";
+        let defaultLat = "{$data.lat|default='36'}";
+        
+        let map_lng = new AMap.Map('map_container_lng', {
+            zoom: 16,
+            scrollWheel: false,
+        })
+        let positionPicker = new PositionPicker({
+            mode: 'dragMap',
+            map: map_lng
+        });
 
+        positionPicker.on('success', function(positionResult) {
+            console.log(positionResult);
+            console.log('success');
+            $('#lng').val(positionResult.position.lng);
+            $('#lat').val(positionResult.position.lat);
+        });      
+        positionPicker.on('fail', function(positionResult) {
+            console.log(positionResult);
+        });
+        if(defaultLng!=='0'){
+          positionPicker.start(new AMap.LngLat(defaultLng, defaultLat));  
+        }else {
+            positionPicker.start();
+        }
+         
+        map_lng.panBy(0, 1);
+        map_lng.addControl(new AMap.ToolBar({
+            liteStyle: true
+        }));
+        // 输入提示
+        let autoOptions = {
+            input: "map_key_lng"
+        };
+        let auto = new AMap.Autocomplete(autoOptions);
+        let placeSearch = new AMap.PlaceSearch({
+            map: map_lng
+        });  
+        // 构造地点查询类
+        auto.on('select',function (e){
+            placeSearch.setCity(e.poi.adcode);
+            positionPicker.start(new AMap.LngLat(e.poi.location.lng,e.poi.location.lat ));
+        });
+        
+    });
+</script>
 <div class="form-group row">
     <label for="slide" class="col-sm-2 control-label">相册</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
-        <div class="input-group">
-            <input id="slide_file" name="slide_file" type="file" class="file-loading " multiple>
-            <input name="slide" id="slide" value="{$data.slide|default=''}" hidden placeholder="请上传图片" class="fieldMultiImage">
-            <script>
-                initUploadMultiImg('slide');
-            </script>            
+        <div class="col-sm-10">
+            <div id="slideEditor">{$data.slide|raw|default='<p></p>'}</div>
+            <textarea id="slide" name="slide" style="display: none">{$data.slide|raw|default=''}</textarea>
         </div>
     </div>
-</div>
+<script>
+    var E = E||window.wangEditor;
+    if(editor_slide!==undefined){
+        editor_slide.destroy();
+    }
+    var editor_slide = new E('#slideEditor');
+    editor_slide.create();
+    editor_slide.config.onchange = function (newHtml) {
+        $('#slide').val(newHtml);
+    };
+</script>
+
                     </div>
                     <!-- 表单底部 -->
                     <div class="card-footer">
@@ -154,67 +213,79 @@
     $('#dataForm').validate({
         rules: {
                 'avatar': {
-        required: true,
+                required: true,
+
     },
     'username': {
-        required: true,
+                required: true,
+
     },
     'nickname': {
-        required: true,
+                required: true,
+
     },
     'mobile': {
-        required: true,
+                required: true,
+
     },
     'user_level_id': {
-        required: true,
+                required: true,
+
     },
     'password': {
-        required: true,
+                required: true,
+
     },
     'status': {
-        required: true,
+                required: true,
+
     },
     'lng': {
-        required: true,
+                required: true,
+
     },
-    'lat': {
-        required: true,
-    },
-    'slide[]': {
-        required: true,
+    'slide': {
+                required: true,
+
     },
 
         },
         messages: {
                 'avatar': {
-        required: "头像不能为空",
+               required: "头像不能为空",
+
     },
     'username': {
-        required: "用户名不能为空",
+               required: "用户名不能为空",
+
     },
     'nickname': {
-        required: "昵称不能为空",
+               required: "昵称不能为空",
+
     },
     'mobile': {
-        required: "手机号不能为空",
+               required: "手机号不能为空",
+
     },
     'user_level_id': {
-        required: "用户等级不能为空",
+               required: "用户等级不能为空",
+
     },
     'password': {
-        required: "密码不能为空",
+               required: "密码不能为空",
+
     },
     'status': {
-        required: "是否启用不能为空",
+               required: "是否启用不能为空",
+
     },
     'lng': {
-        required: "经度不能为空",
+               required: "经度不能为空",
+
     },
-    'lat': {
-        required: "纬度不能为空",
-    },
-    'slide[]': {
-        required: "相册不能为空",
+    'slide': {
+               required: "相册不能为空",
+
     },
 
         }

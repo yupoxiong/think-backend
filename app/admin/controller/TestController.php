@@ -7,7 +7,6 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
-use think\db\Query;
 use think\response\Json;
 use app\common\model\Test;
 use app\common\model\UserLevel;
@@ -19,7 +18,6 @@ class TestController extends AdminBaseController
 
     /**
      * 列表
-     *
      * @param Request $request
      * @param Test $model
      * @return string
@@ -30,11 +28,10 @@ class TestController extends AdminBaseController
         $param = $request->param();
         $data  = $model->with('user_level')->scope('where', $param)
             ->paginate([
-                 'list_rows' => $this->admin['admin_list_rows'],
-                 'var_page'  => 'page',
-                 'query'     => $request->get()
-        ]);
-
+                'list_rows' => $this->admin['admin_list_rows'],
+                'var_page'  => 'page',
+                'query'     => $request->get(),
+            ]);
         // 关键词，排序等赋值
         $this->assign($request->get());
 
@@ -64,22 +61,21 @@ class TestController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            
+            $param['slide'] = $request->param(false)['slide'];
+
+
             $result = $model::create($param);
 
             $url = URL_BACK;
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
                $url = URL_RELOAD;
             }
-
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
-
         $this->assign([
     'user_level_list' => UserLevel::select(),
 
 ]);
-
 
 
         return $this->fetch();
@@ -104,7 +100,9 @@ class TestController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-            
+            $param['slide'] = $request->param(false)['slide'];
+
+
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -134,32 +132,19 @@ class TestController extends AdminBaseController
         }
 
         $result = $model::destroy(static function ($query) use ($id) {
-            /** @var Query $query */
+            /** @var \think\db\Query $query */
             $query->whereIn('id', $id);
         });
 
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
-    
 
-    
 
-        /**
-     * @param Request $request
-     * @return Json
-     */
-    public function import(Request $request): Json
-    {
-        $param           = $request->param();
-        $field_name_list = ['头像','用户名','昵称','手机号','用户等级','密码','是否启用','经度','纬度','相册',];
-        if (isset($param['action']) && $param['action'] === 'download_example') {
-            $this->downloadExample($field_name_list);
-        }
 
-        $field_list = ['avatar','username','nickname','mobile','user_level_id','password','status','lng','lat','slide',];
-        $result = $this->importData('file','test',$field_list);
 
-        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
-    }
+
+
+
+
 }

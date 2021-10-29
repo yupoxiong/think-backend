@@ -9,16 +9,15 @@ use think\model\concern\SoftDelete;
 
 class Test extends CommonBaseModel
 {
+    use SoftDelete;
     // 自定义选择数据
     
-
-    use SoftDelete;
 
     protected $name = 'test';
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = ['id','avatar','username','nickname','mobile','user_level_id','password','status','lng','lat','slide','create_time','update_time','delete_time',];
+    public array $searchField = [];
 
     // 可作为条件的字段
     public array $whereField = [];
@@ -28,10 +27,10 @@ class Test extends CommonBaseModel
 
     
 
-    //关联用户等级
-public function userLevel()
-{
-    return $this->belongsTo(UserLevel::class);
-}
+    // 关联用户等级
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class);
+    }
 
 }
