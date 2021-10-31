@@ -302,11 +302,4 @@ class GenerateController extends AdminBaseController
         ]);
     }
 
-    public function getRelationTable(Request $request): Json
-    {
-        $param = $request->param();
-        $field = $param['field'];
-        $name  = '';
-    }
-
 }

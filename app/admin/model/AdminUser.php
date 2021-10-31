@@ -28,7 +28,6 @@ class AdminUser extends AdminBaseModel
     use SoftDelete;
 
 
-
     public array $noDeletionIds = [1];
 
     /**
@@ -88,36 +87,106 @@ class AdminUser extends AdminBaseModel
 
     /**
      * 获取当前用户已授权的显示菜单
+     * @param bool $top_nav 是否显示顶部菜单
      * @return array
      */
-    public function getShowMenu(): array
+    public function getShowMenu($top_nav =0): array
     {
+        $model = new AdminMenu;
+
+        $top  = [];
+        $left = [];
 
         if ($this->id === 1) {
-            return (new AdminMenu)->where('is_show', '=', 1)
-                ->order('sort_number', 'asc')
-                ->order('id', 'asc')
-                ->column('id,parent_id,name,url,icon,sort_number', 'id');
+
+            if ($top_nav===1) {
+                $top = $model->where('is_show', '=', 1)
+                    ->where('parent_id', '=', 0)
+                    ->order('sort_number', 'asc')
+                    ->order('id', 'asc')
+                    ->column('id,parent_id,name,url,icon,sort_number', 'id');
+
+                foreach ($top as $item) {
+                    $ids               = $this->getAllShowMenuId($item['id']);
+                    $left[$item['id']] = $model->where('is_show', '=', 1)
+                        ->where(function ($query) use ($ids, $item) {
+                            $query->whereIn('id', $ids)
+                                ->whereOr('id', '=', $item['id']);
+                        })
+                        ->order('sort_number', 'asc')
+                        ->order('id', 'asc')
+                        ->column('id,parent_id,name,url,icon,sort_number', 'id');
+                }
+
+            } else {
+                $left[] = $model->where('is_show', '=', 1)
+                    ->order('sort_number', 'asc')
+                    ->order('id', 'asc')
+                    ->column('id,parent_id,name,url,icon,sort_number', 'id');
+            }
+
+
+        } else {
+            $role_urls = (new AdminRole)->whereIn('id', $this->role)
+                ->where('status', '=', 1)
+                ->column('url');
+
+            $menu_id_str = '';
+            foreach ($role_urls as $key => $val) {
+                $menu_id_str .= $key === 0 ? $val : ',' . $val;
+            }
+
+            $menu_ids = array_unique(explode(',', $menu_id_str));
+
+            if ($top_nav===1) {
+                $top = $model->whereIn('id', $menu_ids)
+                    ->where('parent_id', '=', 0)
+                    ->where('is_show', '=', 1)
+                    ->order('sort_number', 'asc')
+                    ->order('id', 'asc')
+                    ->column('id,parent_id,name,url,icon,sort_number', 'id');
+                foreach ($top as $item) {
+                    $ids               = $this->getAllShowMenuId($item['id']);
+                    $left[$item['id']] = $model->where('is_show', '=', 1)
+                        ->where(function ($query) use ($ids, $item) {
+                            $query->whereIn('id', $ids)
+                                ->whereOr('id', '=', $item['id']);
+                        })
+                        ->order('sort_number', 'asc')
+                        ->order('id', 'asc')
+                        ->column('id,parent_id,name,url,icon,sort_number', 'id');
+                }
+            } else {
+                $left[] = $model->whereIn('id', $menu_ids)
+                    ->where('is_show', '=', 1)
+                    ->order('sort_number', 'asc')
+                    ->order('id', 'asc')
+                    ->column('id,parent_id,name,url,icon,sort_number', 'id');
+            }
         }
 
-        $role_urls = (new AdminRole)->whereIn('id', $this->role)
-            ->where('status', '=', 1)
-            ->column('url');
+        return [
+            'top'  => $top,
+            'left' => $left,
+        ];
+    }
 
-        $url_id_str = '';
-        foreach ($role_urls as $key => $val) {
-            $url_id_str .= $key === 0 ? $val : ',' . $val;
-        }
 
-        $url_id = array_unique(explode(',', $url_id_str));
-
-        return (new AdminMenu)->whereIn('id', $url_id)
+    protected function getAllShowMenuId($parent_id = 0, $data = []): array
+    {
+        $ids = (new AdminMenu)->where('parent_id', '=', $parent_id)
             ->where('is_show', '=', 1)
             ->order('sort_number', 'asc')
             ->order('id', 'asc')
-            ->column('id,parent_id,name,url,icon,sort_number', 'id');
+            ->column('id');
+        if (count($ids) > 0) {
+            $data = array_merge($data, $ids);
+            foreach ($ids as $id) {
+                $data = $this->getAllShowMenuId($id, $data);
+            }
+        }
+        return $data;
     }
-
 
     /**
      * 设置加密密码

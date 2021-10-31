@@ -50,7 +50,7 @@ return [
             // 是否需要断线重连
             'break_reconnect'   => false,
             // 监听SQL
-            'trigger_sql'       => env('app_debug', true),
+            'trigger_sql'       => env('database.debug', true),
             // 开启字段缓存
             'fields_cache'      => false,
             // 字段缓存路径

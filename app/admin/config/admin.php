@@ -2,7 +2,7 @@
 
 /**
 * 后台设置:后台管理方面的设置
-* 此配置文件为自动生成，生成时间2021-08-26 11:45:41
+* 此配置文件为自动生成，生成时间2021-11-01 00:44:43
 */
 
 return [
@@ -11,7 +11,7 @@ return [
     //后台名称
     'name'=>'XX后台系统',
     //后台简称
-    'short_name'=>'后台1',
+    'short_name'=>'后台',
     //后台作者
     'author'=>'xx科技',
     //后台版本
@@ -22,19 +22,9 @@ return [
     //登录token验证
     'token'=>'0',
     //验证码
-    'captcha'=>'0',
+    'captcha'=>'1',
     //登录背景
     'background'=>'/static/admin/images/login-default-bg.jpg',
-    //极验ID
-    'geetest_id'=>'66cfc0f309e368364b753dad7d2f67f2',
-    //极验KEY
-    'geetest_key'=>'99750f86ec232c997efaff56c7b30cd3',
-    //登录重试限制
-    'login_limit'=>'0',
-    //限制最大次数
-    'login_max_count'=>'5',
-    //禁止登录时长(小时)
-    'login_limit_hour'=>'2',
 ],
     //首页设置:后台首页参数设置
     'index'=>[
@@ -45,19 +35,9 @@ return [
     //提示信息内容
     'notice_content'=>'欢迎来到使用本系统，左侧为菜单区域，右侧为功能区。',
 ],
-    //安全设置:安全相关配置
-    'safe'=>[
-    //加密key
-    'admin_key'=>'89ce3272dc949fc3698fe7108d1dbe37',
-    //SessionKeyUid
-    'store_uid_key'=>'admin_user_id',
-    //SessionKeySign
-    'store_sign_key'=>'admin_user_sign',
-    //后台用户密码强度检测
-    'password_check'=>'0',
-    //密码安全强度等级
-    'password_level'=>'2',
-    //单设备登录
-    'one_device_login'=>'1',
+    //显示设置:后台显示设置
+    'display'=>[
+    //是否开启顶部菜单
+    'top_nav'=>'0',
 ],
 ];

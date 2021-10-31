@@ -5,17 +5,13 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
 
-    <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">顶部菜单的标题</a>
-    </li>
-    <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">顶部菜单的标题</a>
-    </li>
-    {if $admin.top_nav}
 
-    <!-- 放置顶部nav -->
+    {if $admin.top_nav===1 && isset($admin.top_menu)}
+    {foreach $admin.top_menu as $key=>$nav}
+
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">顶部菜单的标题</a>
+        <a href="{:url($nav.url)}" class="nav-link">{$nav.name}</a>
     </li>
+    {/foreach}
     {/if}
 </ul>

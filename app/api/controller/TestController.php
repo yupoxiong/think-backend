@@ -4,31 +4,26 @@
  */
 
 namespace app\api\controller;
-
+use app\admin\model\AdminMenu;
 use think\response\Json;
 use app\api\service\TestService;
 use app\common\validate\TestValidate;
 use app\api\exception\ApiServiceException;
 
-class TestController extends ApiBaseController
+class TestController
 {
+
+
+
     /**
      * 列表
      * @param TestService $service
      * @return Json
      */
-    public function index(TestService $service): Json
+    public function index(TestService $service)
     {
-        try {
-            $data   = $service->getList($this->param, $this->page, $this->limit);
-            $result = [
-                'test' => $data,
-            ];
-
-            return api_success($result);
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
-        }
+        $json = (new \app\admin\model\AdminMenu)->field('id,parent_id,name,url,icon,is_show,is_top,sort_number,log_method')->select();
+        dump(json_encode($json)) ;
     }
 
     /**

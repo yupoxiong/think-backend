@@ -130,7 +130,7 @@ $(function () {
         }
         return params === true ? (/^\w+[^\s]+(\.[^\s]+)+$/.test(value)) : true;
 
-    }, "格式不正确");
+    }, "必须为正确的网址");
 
 
 

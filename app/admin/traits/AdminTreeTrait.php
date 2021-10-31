@@ -236,22 +236,22 @@ trait AdminTreeTrait
 
         $text_base_one = "<li class='nav-item";
 
-        $text_base_two   = "'><a href='#' class='nav-link ' >
+        $text_base_two = "'><a href='#' class='nav-link ' >
 <i class='nav-icon \$icon'></i>
 <p> \$name <i class='right fas fa-angle-left'></i></p>
 
                              </a>
                              <ul class='nav nav-treeview";
 
-        $text_base_two_open   = "'><a href='#' class='nav-link active' >
+        $text_base_two_open = "'><a href='#' class='nav-link active' >
 <i class='nav-icon \$icon'></i>
 <p> \$name 
 <i class='right fas fa-angle-left'></i>
 </p>
 </a>
 <ul class='nav nav-treeview";
-        $text_open       = ' menu-open';
-        $text_base_three = "'>";
+        $text_open          = ' menu-open';
+        $text_base_three    = "'>";
 
         $text_base_four = "<li class='nav-item'>
                             <a class='nav-link ";
@@ -310,6 +310,23 @@ trait AdminTreeTrait
         return $parent_ids;
     }
 
+    protected function getTopParentIdById($data, $current_id): int
+    {
+        foreach ($data as $key => $item) {
+            if ($item['id'] === $current_id ) {
+
+                if($item['parent_id'] === 0){
+                    return  $item['id'];
+                }
+                return $this->getTopParentIdById($data, $item['parent_id']);
+            }
+
+            continue;
+        }
+
+        return  0;
+    }
+
     /**
      * 获取当前面包屑
      * @param $data
@@ -322,7 +339,7 @@ trait AdminTreeTrait
         $breadcrumb = '';
         foreach ($data as $key => $value) {
             if ($value['id'] === $current_id && $value['id'] !== 1) {
-                $html       = '<li class="breadcrumb-item active">'. $value['name'] . '</li>';
+                $html       = '<li class="breadcrumb-item active">' . $value['name'] . '</li>';
                 $breadcrumb = $html . $current_nav;
                 if ($value['parent_id'] === 0) {
                     return $breadcrumb;

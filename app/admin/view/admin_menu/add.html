@@ -133,6 +133,29 @@
                             })
                         </script>
 
+                        {if isset($data) && $data.parent_id===0}
+                        <div class="form-group row">
+                            <label for="is_top" class="col-sm-2 col-form-label ">是否为顶部菜单</label>
+                            <div class="col-sm-10 col-md-4 formInputDiv">
+                                <input class="switch fieldSwitch" id="is_top" name="is_top"
+                                       value="{$data.is_top|default='0'}" hidden/>
+                                <input type="checkbox" class="input-switch" id="is_topSwitch" value="1"
+                                       {if $data.is_top==1}checked{/if}/>
+                            </div>
+                        </div>
+                        <script>
+                            $('#is_topSwitch').bootstrapSwitch({
+                                onColor: 'success',
+                                offColor: 'danger',
+                                onText: '是',
+                                offText: '否',
+                                onSwitchChange: function (event, state) {
+                                    $('#is_top').val(state ? '1' : '0');
+                                }
+                            });
+                        </script>
+                        {/if}
+
                     </div>
                     <div class="card-footer">
                         {:token_field()}

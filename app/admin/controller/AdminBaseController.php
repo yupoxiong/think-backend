@@ -9,6 +9,7 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
+use think\facade\Log;
 use think\View;
 use think\facade\Env;
 use app\admin\model\{AdminMenu, AdminUser};
@@ -106,6 +107,11 @@ class AdminBaseController
      */
     protected function fetch(string $template = '', array $vars = []): string
     {
+        // 顶部导航
+        $this->admin['top_nav'] =  (int)setting('admin.display.top_nav');
+
+        $current_top_id = 0;
+
         /** @var AdminMenu $menu */
         $menu = (new AdminMenu)->where(['url' => $this->url])->find();
         if ($menu) {
@@ -113,20 +119,29 @@ class AdminBaseController
 
             $this->admin['title']      = $menu->name;
             $this->admin['breadcrumb'] = $this->getBreadCrumb($menu_all, $menu->id);
+            if($this->admin['top_nav']===1){
+                $current_top_id = $this->getTopParentIdById($menu_all,$menu->id);
+            }
         }
+
 
         $this->admin['name']       = '后台';
         $this->admin['is_pjax']    = request()->isPjax();
         $this->admin['upload_url'] = url('admin/file/upload')->build();
         $this->admin['logout_url'] = url('admin/auth/logout')->build();
 
+        $show_menu = $this->user->getShowMenu($this->admin['top_nav']);
+
+        $this->admin['top_menu'] = $show_menu['top'];
+
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
-            $this->admin['menu'] = $this->getLeftMenu($this->user->getShowMenu(), $menu->id ?? 0);
+            $this->admin['left_menu'] = $this->getLeftMenu($show_menu['left'][$current_top_id], $menu->id ?? 0);
         }
+
 
         $this->admin['debug'] = Env::get('app_debug') ? 1 : 0;
         // 顶部导航
-        $this->admin['top_nav'] = 0;
+        $this->admin['top_nav'] = 1;
         // 顶部搜索
         $this->admin['top_search'] = 0;
         // 顶部消息
