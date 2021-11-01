@@ -19,17 +19,23 @@ class Field
     ];
 
 
-    //列表名字
+    // 列表名字
     public static string $listNameHtml = <<<EOF
             <th>[FORM_NAME]</th>\n
 EOF;
 
-    //列表字段
+    // 列表字段
     public static string $listFieldHtml = <<<EOF
             <td>{\$item.[FIELD_NAME]}</td>\n
 EOF;
 
-    //列表关联筛选
+    // 排序字段option
+    public static string $listSortOptionHtml = <<<EOF
+<option value="[FIELD_NAME]" {if isset(\$_order) && \$_order=='[FIELD_NAME]'}selected{/if}>[FORM_NAME]</option>
+EOF;
+
+
+    // 列表关联筛选
     public static string $listSearchRelationHtml = <<<EOF
 <div class="input-group input-group-sm searchGroup">
     <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">

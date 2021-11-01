@@ -174,11 +174,8 @@ class AdminViewBuild extends Build
 
             // 排序处理
             if ($value['list_sort']) {
-                if ($sort_code === '') {
+                $option_code = Field::$listSortOptionHtml;
 
-                    $sort_code .= file_get_contents($this->template['sort1']);
-                }
-                $option_code = file_get_contents($this->template['index_sort_option']);
                 $option_code = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($value['form_name'], $value['field_name']), $option_code);
                 $sort_code   .= $option_code;
             }
@@ -258,11 +255,10 @@ class AdminViewBuild extends Build
                 default:
                     break;
             }
-
         }
 
         if ($sort_code !== '') {
-            $sort_code .= file_get_contents($this->template['index_sort2']);
+            $sort_code = str_replace('[SORT_FIELD_LIST]',$sort_code,file_get_contents($this->template['index_sort']));
         }
 
         $code = $this->indexCode;

@@ -131,9 +131,7 @@ class Generate
                     'index_import'             => $admin_view_path . 'index/import.stub',
                     'index_select1'            => $admin_view_path . 'index/select1.stub',
                     'index_select2'            => $admin_view_path . 'index/select2.stub',
-                    'index_sort1'              => $admin_view_path . 'index/sort1.stub',
-                    'index_sort2'              => $admin_view_path . 'index/sort2.stub',
-                    'index_sort_option'        => $admin_view_path . 'index/sort_option.stub',
+                    'index_sort'               => $admin_view_path . 'index/sort.stub',
                     'index_enable1'            => $admin_view_path . 'index/enable1.stub',
                     'index_enable2'            => $admin_view_path . 'index/enable2.stub',
                     'add'                      => $admin_view_path . 'add/add.stub',
@@ -530,11 +528,7 @@ class Generate
         //搜索字段，如果为varchar，char字段，大概率需要搜索
         $search_show_field = ['id', 'mobile', 'keywords', 'id_card', 'name', 'title', 'username', 'nickname', 'true_name', 'description'];
         $search_show_type  = ['char', 'varchar'];
-        //搜索隐藏字段
-        //$search_hide_field = ['id','name','description'];
 
-        //导出显示字段
-        //$export_show_field = ['id','create_time'];
         //导出隐藏字段，和列表隐藏字段差不多
         $export_hide_field = ['update_time', 'delete_time'];
         $export_hide_type  = ['tinytext', 'tinyblob', 'text', 'blob', 'longtext', 'longblob'];
@@ -544,6 +538,10 @@ class Generate
         //表单隐藏字段
         $form_hide_field = ['id', 'create_time', 'update_time', 'delete_time'];
         $form_hide_type  = ['double'];
+
+        // 列表排序字段
+        $list_sort_field = ['id', 'create_time', 'money', 'integral',];
+        $list_sort_type  = ['tinyint', 'int', 'smallint', 'mediumint', 'bigint', 'decimal', 'float', 'double', 'date', 'datetime', 'timestamp',];
 
 
         foreach ($field_list as $key => $value) {
@@ -593,6 +591,7 @@ class Generate
                 'default'           => $value['Default'],
                 // 是否列表显示
                 'is_list'           => 1,
+                'list_sort'         => 0,
                 // 表单类型
                 'form_type'         => 'none',
                 // 表单验证
@@ -624,7 +623,7 @@ class Generate
 
             // 处理是否为列表搜索
             if (in_array($field_info['name'], $search_show_field, true) && in_array($field_info['type'], $search_show_type, true)) {
-                $field_data['is_search'] = 1;
+                $field_data['index_search'] = 'search';
             }
 
             // 处理字段表单类型
@@ -637,13 +636,18 @@ class Generate
                 $field_data['form_type'] = 'none';
             }
 
+            // 是否为排序字段
+            if ($field_data['is_list'] === 1 && in_array($field_info['name'], $list_sort_field, true) && in_array($field_info['type'], $list_sort_type, true)) {
+                $field_data['list_sort'] = 1;
+            }
+
             // 验证
-            //$field_data['validate'] = [];
             $field_data['validate_html'] = $this->getValidateHtml($field_data);
 
             $data['field'][] = $field_data;
         }
 
+        // 处理地图另一个字段的显示和表单配置
         foreach ($data['field'] as $key => $value) {
             if ($value['form_type'] === 'map') {
                 // 列表不展示
@@ -656,7 +660,6 @@ class Generate
                 $data['field'][$found_key]['form_type'] = 'none';
             }
         }
-
         return $data;
     }
 
@@ -667,7 +670,6 @@ class Generate
      */
     public function getRelationTable($table_name): string
     {
-
         $relation_table = '';
         $fk             = $table_name . '_id';
         $table_list     = $this->getTable();

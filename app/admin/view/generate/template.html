@@ -10,7 +10,6 @@
             <br>
             <label>
                 <input class="form-control form-control-sm field-type" value="" name="field_typeFORM_INDEX"
-
                        title="默认为数据库字段类型，如非必要，请勿修改；修改格式：varchar(255),int(10),decimal(12,2)" data-toggle="tooltip"
                        placeholder="字段类型">
             </label>
@@ -83,10 +82,9 @@
         </td>
 
         <td>
-
             <label>
-                <select style="min-width: 250px" name="field_sceneFORM_INDEX[]"
-                        class="select2 form-control form-control-sm validateScene"
+                <select name="field_sceneFORM_INDEX[]"
+                        class="select2 form-control form-control-sm validateScene min-width-250"
                         id="field_sceneINDEX_ID" multiple="multiple"
                         data-placeholder="验证场景选择">
                     <option value="admin_add">admin_add</option>
@@ -99,8 +97,8 @@
 
         <td>
             <label>
-                <input style="min-width: 250px" name="custom_validateFORM_INDEX"
-                       class="form-control form-control-sm relation-input"
+                <input  name="custom_validateFORM_INDEX"
+                       class="form-control form-control-sm relation-input min-width-250"
                        id="custom_validateINDEX_ID"
                        title="自定义验证规则"
                        data-toggle="tooltip" placeholder="自定义验证规则">
@@ -109,8 +107,8 @@
             <br/>
             <label>
                 <select name="index_searchFORM_INDEX"
-                        class="select2 form-control form-control-sm"
-                        id="index_searchFORM_INDEX" data-placeholder="列表页筛选" style="width: 160px;">
+                        class="select2 form-control form-control-sm width-160"
+                        id="index_searchFORM_INDEX" data-placeholder="列表页筛选">
                     <option value="0">不参与列表页筛选</option>
                     <option value="search">关键词搜索</option>
                     <option value="select">下拉列表筛选</option>
@@ -132,9 +130,8 @@
         <td>
             <label>
                 <select name="getter_setterFORM_INDEX"
-                        class="select2 form-control form-control-sm"
-                        id="getter_setterFORM_INDEX" data-placeholder="获取/修改器"
-                        style="width: 150px;">
+                        class="select2 form-control form-control-sm width-150"
+                        id="getter_setterFORM_INDEX" data-placeholder="获取/修改器">
                     <option value="0">无需获取/修改器</option>
                     <option value="switch">开关</option>
                     <option value="date">日期</option>
@@ -146,8 +143,8 @@
             <div class="form-inline relation-div">
                 <div class="form-group">
                     <label>
-                        <select data-index="FORM_INDEX" style="min-width: 125px" name="relation_typeFORM_INDEX"
-                                class="select2 form-control form-control-sm"
+                        <select data-index="FORM_INDEX"  name="relation_typeFORM_INDEX"
+                                class="select2 form-control form-control-sm min-width-125"
                                 id="relation_typeFORM_INDEX" data-placeholder="是否关联字段"
                                 onchange="selectRelation(this)"
                                 data-relation-table="relation_tableFORM_INDEX"

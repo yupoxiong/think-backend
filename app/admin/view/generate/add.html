@@ -1,6 +1,9 @@
 {extend name="public/base" /}
 {block name='content'}
 {include file='public/content_header' /}
+
+{include file='generate/css' /}
+
 <script>
     //收起左侧菜单，留出更大空间
     $(function () {
@@ -12,8 +15,6 @@
 
 </script>
 <section class="content">
-    {include file='generate/css' /}
-
     <form id="dataForm" class="dataForm" action="{:url('generate/create')}" enctype="multipart/form-data" method="post">
         <div class="row">
             <div class="col-md-12">
@@ -28,7 +29,7 @@
                             <div class="form-group">
                                 <label for="table_name">选择表</label>
                                 <select data-id="table_name" name="table_name"
-                                        class="select2 form-control form-control-sm" style="min-width: 150px"
+                                        class="select2 form-control form-control-sm selectTable"
                                         id="table_name" data-placeholder="请选择表">
                                     <option value=""></option>
                                     {foreach name='table' id='item'}
@@ -275,7 +276,7 @@
                             <div class="form-group">
                                 <label for="index_operation_button">操作按钮形式</label>
                                 <select data-id="index_operation_button" name="index_operation_button"
-                                        class="select2 form-control form-control-sm" style="min-width: 120px"
+                                        class="select2 form-control form-control-sm iconOption"
                                         id="index_operation_button" data-placeholder="默认纯图标">
                                     <option value="1">图标</option>
                                     <option value="2">文字</option>
@@ -450,8 +451,7 @@
 
 </section>
 <script>
-
-    //刷新数据库表
+    // 刷新数据库表
     function refreshTable() {
         $.post('{:url("admin/generate/getTable")}', function (result) {
             let html = '<option value=""></option>';
@@ -462,17 +462,17 @@
         });
     }
 
-    //表单索引
+    // 表单索引
     var formIndex = 0;
 
     $(function () {
 
-        //获取表信息和字段等，进行页面填充
+        // 获取表信息和字段等，进行页面填充
         $("#table_name").on('change', function () {
             getField($(this).val());
         });
 
-        //列表启用/禁止关联菜单和控制器
+        // 列表启用/禁止关联菜单和控制器
         $('#list_enable').change(function () {
             console.log('启用/禁止选项');
             let checked = $(this).is(':checked');
@@ -484,11 +484,11 @@
             $action_list.select2();
         });
 
-        //默认添加一行空的字段
+        // 默认添加一行空的字段
         addNewField(null, 1);
     });
 
-    //提交验证
+    // 提交验证
     $("#dataForm").validate({
         rules: {
             table_name: {
@@ -508,42 +508,42 @@
         },
     });
 
-    //选择表
+    // 选择表
     $('#table_name').select2();
-    //生成菜单列表
+    // 生成菜单列表
     $('#create_menu_list').select2();
-    //是否生成控制器
+    // 是否生成控制器
     $('#create_admin_controller').select2();
-    //是否生成api控制器
+    // 是否生成api控制器
     $('#create_api_controller').select2();
 
-    //是否生成模型
+    // 是否生成模型
     $('#create_model').select2();
-    //是否生成验证器
+    // 是否生成验证器
     $('#create_validate').select2();
 
-    //是否生成列表视图
+    // 是否生成列表视图
     $('#create_view_index').select2();
 
-    //是否生成表单视图
+    // 是否生成表单视图
     $('#create_view_add').select2();
 
-    //控制器方法表
+    // 控制器方法表
     $('#admin_controller_action_list').select2();
 
-    //api控制器方法表
+    // api控制器方法表
     $('#api_controller_action_list').select2();
-    //选择父级菜单
+    // 选择父级菜单
     $('#create_menu').select2();
 
-    //列表视图操作按钮形式
+    // 列表视图操作按钮形式
     initIndexOperationButton();
 
-    //初始化列表操作按钮形式
+    // 初始化列表操作按钮形式
     function initIndexOperationButton() {
         let $button = $('#index_operation_button');
 
-        //列表操作形式
+        // 列表操作形式
         let selected = 1;
         let cookie_button = Cookies.get(cookiePrefix + 'index_operation_button');
         if (cookie_button) {
@@ -560,7 +560,7 @@
         });
     });
 
-    //获取表信息
+    // 获取表信息
     function getField(name) {
         $.post('getField', {name: name}, function (result) {
             if (result.code === 200) {
@@ -578,9 +578,9 @@
                     console.log('字段数量：' + field.length);
                 }
                 let table = result.data.table;
-                //中文名
+                // 中文名
                 $('#cn_name').val(table.cn_name);
-                //如果是自动生成类名
+                // 如果是自动生成类名
                 if ($('#auto_class_name').is(':checked')) {
                     $("#admin_controller_name").val(controller.name);
                     $("#api_controller_name").val(controller.name);
@@ -588,82 +588,90 @@
                     $("#validate_name").val(validate.name);
                 }
                 $dataBody.html('');
-                //字段名
+                // 字段名
                 let field_name = "#data-template input[name='field_nameFORM_INDEX']";
-                //字段类型
+                // 字段类型
                 let field_type = "#data-template input[name='field_typeFORM_INDEX']";
-                //是否为列表字段
+                // 是否为列表字段
                 let field_list = "#data-template [name='is_listFORM_INDEX']";
-                //中文名称
+                // 中文名称
                 let form_name = "#data-template [name='form_nameFORM_INDEX']";
-                //表单类型
+                // 表单类型
                 let form_type = "#data-template [name='form_typeFORM_INDEX']";
-                //表单验证
+                // 表单验证
                 let form_validate = "#data-template [name='form_validateFORM_INDEX[]']";
-                //字段默认值
+                // 字段默认值
                 let field_form_default = "#data-template [name='field_defaultFORM_INDEX']";
-                //获取器/修改器
+                // 获取器/修改器
                 let getter_setter = "#data-template [name='getter_setterFORM_INDEX']";
-                //列表排序
+                // 列表排序
                 let list_sort = "#data-template [name='list_sortFORM_INDEX']";
                 let relation_type = "#data-template [name='relation_typeFORM_INDEX']";
                 let relation_show = "#data-template [name='relation_showFORM_INDEX']";
                 let relation_table = "#data-template [name='relation_tableFORM_INDEX']";
-
+                // 列表筛选
+                let index_search = "#data-template [name='index_searchFORM_INDEX']";
                 formIndex = 0;
 
                 let listHtml = '';
                 $.each(field, function (index, item) {
-                    //字段名
+                    // 字段名
                     $(field_name).attr('value', item.name);
-                    //字段类型
+                    // 字段类型
                     $(field_type).attr('value', item.field_type);
-                    //中文名称
+                    // 中文名称
                     $(form_name).attr('value', item.cn_name);
-                    //默认值
+                    // 默认值
                     $(field_form_default).attr('value', item.default);
-                    //表单类型
+                    // 表单类型
                     $(form_type).val(item.form_type);
 
-                    //是否为列表字段
+                    // 是否为列表字段
                     if (item.is_list === 1) {
                         $(field_list).attr('checked', true);
                     } else {
                         $(field_list).attr('checked', false);
                     }
 
-                    //表单类型
+                    // 表单类型
                     $(form_type).find("option[value='" + item.form_type + "']").attr("selected", true);
-                    //表单验证内容
+                    // 表单验证内容
                     $(form_validate).html(item.validate_html);
-                    //表单选项
+                    // 表单选项
                     $(form_validate).find("option[value='required']").attr("selected", true);
-
-                    //获取器/修改器
+                    // 获取器/修改器
                     if (item.getter_setter !== false) {
                         $(getter_setter).find("option[value='" + item.getter_setter + "']").attr("selected", true);
                     }
 
+                    if (item.list_sort !== 0) {
+                        $(list_sort).attr('checked', true);
+                    }
+
                     $(relation_type).find("option[value='" + item.relation_type + "']").attr("selected", true);
-                    if(item.relation_type===2){
+                    if (item.relation_type === 2) {
                         // 这里处理显示
                         $(relation_show).attr('value', item.relation_show);
                         $(relation_show).show();
 
-                    }else if(item.relation_type===4){
+                    } else if (item.relation_type === 4) {
                         $(relation_table).show();
                         $(relation_table).attr('value', item.relation_table);
                     }
 
-                    //优化生成DOM慢的问题
+                    $(index_search).find("option[value='" + item.index_search + "']").attr("selected", true);
 
+                    // 优化生成DOM慢的问题
                     listHtml += $("#data-template").html().replace(/FORM_INDEX/g, '[' + formIndex + ']').replace(/INDEX_ID/g, formIndex);
 
                     if (getter_setter !== false) {
                         $(getter_setter).find("option[value='" + item.getter_setter + "']").attr("selected", false);
                     }
+
+                    $(list_sort).attr('checked', false);
                     $(form_type).find("option[value='" + item.form_type + "']").attr("selected", false);
                     $(relation_type).find("option[value='" + item.relation_type + "']").attr("selected", false);
+                    $(index_search).find("option[value='" + item.index_search + "']").attr("selected", false);
                     $(field_name).attr('value', '');
                     $(field_type).attr('value', '');
                     $(form_validate).empty();
@@ -681,24 +689,19 @@
                     console.timeEnd('表信息与相关DOM操作耗时');
                 }
             }
-
         });
     }
 
-
-    //表单元素类型改变
+    // 表单元素类型改变
     function selectField(field) {
         let $field = $(field);
         let form_type = $field.val();
         let validateId = $field.data('validate');
-
-        let $validate = $('#'+validateId);
+        let $validate = $('#' + validateId);
         console.log($validate);
         $.post('getValidateSelect', {form_type: form_type}, function (result) {
             if (200 === result.code) {
-
                 $validate.html(result.data);
-                console.log($validate.attr('name'));
                 $validate.select2();
             } else {
                 layer.msg(result.msg);
@@ -706,8 +709,7 @@
         });
     }
 
-
-    //刷新菜单
+    // 刷新菜单
     function refreshMenu() {
         $.post('{:url("admin/generate/getMenu")}', function (result) {
             let html = '<option value="-1">不生成</option><option value="0">顶级菜单</option>';
@@ -716,7 +718,7 @@
         });
     }
 
-    //选择关联类型防呆设计
+    // 选择关联类型
     function selectRelation(obj) {
         let $obj = $(obj);
         let index = $obj.data('index');
@@ -727,13 +729,12 @@
         if (relation_type === 1 || relation_type === 2) {
             $('input[name="' + relation_table + '"]').hide();
             $('input[name="' + relation_show + '"]').show();
-            let filedName ='field_name['+index+']';
-            let field =  $('input[name="' + filedName + '"]').val();
+            let filedName = 'field_name[' + index + ']';
+            let field = $('input[name="' + filedName + '"]').val();
 
             $.post('{:url("admin/generate/getRelationShowField")}', {field: field}, function (result) {
                 $('input[name="' + relation_show + '"]').val(result.data.name);
             });
-
         } else if (relation_type === 3 || relation_type === 4) {
             $('input[name="' + relation_show + '"]').hide();
             $('input[name="' + relation_table + '"]').show();
@@ -741,23 +742,20 @@
             $.post('{:url("admin/generate/getRelationTable")}', {field: field}, function (result) {
                 $('input[name="' + relation_table + '"]').val(result.data.name);
             });
-
         } else {
             $('input[name="' + relation_table + '"]').hide();
             $('input[name="' + relation_show + '"]').hide();
         }
     }
 
-
-
-    //列表刷新后的操作
+    // 列表刷新后的操作
     function dataBodyRefreshed() {
         $('[data-toggle="tooltip"]').tooltip();
         $('#dataBody .select2').select2();
     }
 
 
-    //添加新的字段
+    // 添加新的字段
     function addNewField(obj, type) {
 
         formIndex++;
@@ -776,7 +774,6 @@
         //刷新 dataBody DOM后的操作
         dataBodyRefreshed();
     }
-
 
 </script>
 

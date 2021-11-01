@@ -248,6 +248,8 @@ class GenerateController extends AdminBaseController
 
         $data = (new Generate())->getAllField($name);
 
+        //Log::write($data);
+
         return admin_success('success', $data);
     }
 

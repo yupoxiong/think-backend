@@ -1,3 +1,7 @@
+<div class="form-group">
+    <select name="_order" id="_order" class="form-control input-sm index-order">
+        <option value="">排序字段</option>
+        [SORT_FIELD_LIST]
     </select>
 </div>
 

@@ -16,33 +16,33 @@ use think\facade\Db;
 class AdminMenuBuild extends Build
 {
     protected array $actionDataList = [
-        'add'=>[
-            'icon'=>'fa fa-plus',
-            'name'=>'添加',
+        'add'     => [
+            'icon' => 'fa fa-plus',
+            'name' => '添加',
         ],
-        'edit'=>[
-            'icon'=>'fa fa-plus',
-            'name'=>'修改',
+        'edit'    => [
+            'icon' => 'fa fa-plus',
+            'name' => '修改',
         ],
-        'del'=>[
-            'icon'=>'fa fa-trash',
-            'name'=>'删除',
+        'del'     => [
+            'icon' => 'fa fa-trash',
+            'name' => '删除',
         ],
-        'enable'=>[
-            'icon'=>'far fa-circle',
-            'name'=>'启用',
+        'enable'  => [
+            'icon' => 'far fa-circle',
+            'name' => '启用',
         ],
-        'disable'=>[
-            'icon'=>'fas fa-ban',
-            'name'=>'禁用',
+        'disable' => [
+            'icon' => 'fas fa-ban',
+            'name' => '禁用',
         ],
-        'import'=>[
-            'icon'=>'fas fa-file-upload',
-            'name'=>'导入',
+        'import'  => [
+            'icon' => 'fas fa-file-upload',
+            'name' => '导入',
         ],
-        'export'=>[
-            'icon'=>'fas fa-file-export',
-            'name'=>'导出',
+        'export'  => [
+            'icon' => 'fas fa-file-export',
+            'name' => '导出',
         ],
     ];
 
@@ -74,30 +74,30 @@ class AdminMenuBuild extends Build
         Db::startTrans();
         try {
 
-            if (AdminMenu::where('url', $url_prefix . '/index')->find()) {
-                throw new GenerateException('菜单已存在');
+            $parent = AdminMenu::where('url', $url_prefix . '/index')->find();
+            if (!$parent) {
+                $parent_data = [
+                    'parent_id'  => $this->data['menu']['create'],
+                    'name'       => $name_show . $this->data['module']['name_suffix'],
+                    'url'        => $url_prefix . '/index',
+                    'icon'       => $this->data['module']['icon'],
+                    'is_show'    => 1,
+                    'log_method' => '不记录',
+                ];
+                $parent      = AdminMenu::create($parent_data);
             }
 
-            $parent_data = [
-                'parent_id'  => $this->data['menu']['create'],
-                'name'       => $name_show . $this->data['module']['name_suffix'],
-                'url'        => $url_prefix . '/index',
-                'icon'       => $this->data['module']['icon'],
-                'is_show'    => 1,
-                'log_method' => '不记录',
-            ];
-            $parent = AdminMenu::create($parent_data);
             $menu_list = $this->data['menu']['menu_list'];
 
-            foreach ($menu_list as $item){
-                if($item!=='index'){
-                    $have = AdminMenu::where('url', $url_prefix . '/'.$item)->find();
-                    if(!$have){
+            foreach ($menu_list as $item) {
+                if ($item !== 'index') {
+                    $have = AdminMenu::where('url', $url_prefix . '/' . $item)->find();
+                    if (!$have) {
                         AdminMenu::create([
                             'parent_id'  => $parent->id,
                             'name'       => $this->actionDataList[$item]['name'] . $name_show,
-                            'url'        => $url_prefix . '/'.$item,
-                            'icon'       =>$this->actionDataList[$item]['icon'],
+                            'url'        => $url_prefix . '/' . $item,
+                            'icon'       => $this->actionDataList[$item]['icon'],
                             'is_show'    => 0,
                             'log_method' => 'POST',
                         ]);
