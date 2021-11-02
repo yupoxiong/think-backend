@@ -5,7 +5,5 @@
 return [
     // 指令定义
     'commands' => [
-        'timer' => 'app\command\Timer',
-        'websocket' => 'app\command\WebSocket',
     ],
 ];

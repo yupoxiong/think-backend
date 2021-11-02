@@ -66,5 +66,4 @@ return [
     ],
     // 表单内是否真实删除文件
     'form_true_delete' => false,
-
 ];

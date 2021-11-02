@@ -7,7 +7,7 @@ use think\facade\Config;
 if (!function_exists('setting')) {
     /**
      * 设置相关助手函数
-     * @param string $name
+     * @param string|array $name
      * @param null $value
      * @return array|bool|mixed|null
      */
@@ -38,14 +38,14 @@ if (!function_exists('setting')) {
                         return get_database_setting(substr($name, 0, -1));
                     }
 
-                    $name    = explode('.', $name);
-                    $name[0] = strtolower($name[0]);
+                    $name_arr    = explode('.', $name);
+                    $name_arr[0] = strtolower($name_arr[0]);
 
-                    $result = get_database_setting($name[0]);
+                    $result = get_database_setting($name_arr[0]);
                     if ($result) {
                         $config = $result;
                         // 按.拆分成多维数组进行判断
-                        foreach ($name as $val) {
+                        foreach ($name_arr as $val) {
                             if (isset($config[$val])) {
                                 $config = $config[$val];
                             } else {
@@ -59,7 +59,7 @@ if (!function_exists('setting')) {
                     return $result;
                 }
 
-                return $result;
+                return true;
             }
 
             $result = Config::get($name);
@@ -74,11 +74,16 @@ if (!function_exists('setting')) {
 }
 
 if (!function_exists('get_database_setting')) {
+    /**
+     * 获取数据库配置
+     * @param $name
+     * @return array
+     */
     function get_database_setting($name): array
     {
         $result = [];
-        $group  = \app\common\model\SettingGroup::where('code', $name)->find();
-        if ($group) {
+        $group  = (new app\common\model\SettingGroup)->where('code', $name)->findOrEmpty();
+        if (!$group->isEmpty()) {
             $result = [];
             foreach ($group->setting as $key => $setting) {
                 $key_setting = [];

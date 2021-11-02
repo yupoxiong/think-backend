@@ -495,8 +495,11 @@
             if(adminDebug){
                 console.log('列表导出'+checked);
             }
+            let $menu_list = $('#create_menu_list');
             let $action_list = $('#admin_controller_action_list');
+            $menu_list.find("option[value='export']").attr("selected", checked);
             $action_list.find("option[value='export']").attr("selected", checked);
+            $menu_list.select2();
             $action_list.select2();
         });
 
@@ -506,8 +509,11 @@
             if(adminDebug){
                 console.log('列表导入'+checked);
             }
+            let $menu_list = $('#create_menu_list');
             let $action_list = $('#admin_controller_action_list');
+            $menu_list.find("option[value='import']").attr("selected", checked);
             $action_list.find("option[value='import']").attr("selected", checked);
+            $menu_list.select2();
             $action_list.select2();
         });
 

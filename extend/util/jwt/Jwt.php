@@ -17,7 +17,6 @@ class Jwt
         'HS256' => 'sha256',
         'HS384' => 'sha384',
         'HS512' => 'sha521',
-        // 先不支持下面的加密方式
         'RS256' => OPENSSL_ALGO_SHA256,
         'RS384' => OPENSSL_ALGO_SHA384,
         'RS512' => OPENSSL_ALGO_SHA512,
@@ -25,29 +24,25 @@ class Jwt
 
     // 头部
     protected array $header = [
-        'alg' => 'HS256', //生成signature的算法
-        'typ' => 'JWT'    //类型
+        'alg' => 'HS256',// 生成signature的算法
+        'typ' => 'JWT',// 类型
     ];
 
     /**
      * @var string 签名方式
      */
     protected string $alg = 'HS256';
-
     // 负载
     protected array $payload = [];
-
     // 加密key
     protected string $key = '';
 
     // 错误消息
     protected string $message = '';
-
     // 私钥
     protected string $privateKey = '';
     // 公钥
     protected string $publicKey = '';
-
     // token是否已过期
     protected bool $expired;
 

@@ -226,13 +226,9 @@ class GeeTest
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
             curl_setopt($ch, CURLOPT_TIMEOUT, self::$socketTimeout);
 
-            //不可能执行到的代码
-            if (!$post_data) {
-                curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-            } else {
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            }
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
             $data = curl_exec($ch);
 
             if (curl_errno($ch)) {
@@ -242,18 +238,16 @@ class GeeTest
 
             curl_close($ch);
         } else {
-            if ($post_data) {
-                $opts    = array(
-                    'http' => array(
-                        'method'  => 'POST',
-                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . 'Content-Length: ' . strlen($data) . "\r\n",
-                        'content' => $data,
-                        'timeout' => self::$connectTimeout + self::$socketTimeout
-                    )
-                );
-                $context = stream_context_create($opts);
-                $data    = file_get_contents($url, false, $context);
-            }
+            $opts    = array(
+                'http' => array(
+                    'method'  => 'POST',
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . 'Content-Length: ' . strlen($data) . "\r\n",
+                    'content' => $data,
+                    'timeout' => self::$connectTimeout + self::$socketTimeout
+                )
+            );
+            $context = stream_context_create($opts);
+            $data    = file_get_contents($url, false, $context);
         }
 
         return $data;

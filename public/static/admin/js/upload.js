@@ -203,7 +203,6 @@ function initUploadFile(field, fileId = '', fileType = 'image') {
     });
 }
 
-
 /**
  * 设置新的图片
  * @param $fileDom

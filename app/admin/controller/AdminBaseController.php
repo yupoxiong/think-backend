@@ -9,7 +9,7 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
-use think\facade\Log;
+use think\response\Json;
 use think\View;
 use think\facade\Env;
 use app\admin\model\{AdminMenu, AdminUser};
@@ -164,6 +164,7 @@ class AdminBaseController
     /**
      * @param $name
      * @param $arguments
+     * @return string|Json
      * @throws Exception
      */
     public function __call($name, $arguments)

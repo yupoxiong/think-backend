@@ -11,6 +11,7 @@ namespace app\api\service;
 
 
 use app\api\exception\ApiServiceException;
+use app\common\exception\CommonServiceException;
 use app\common\service\DateService;
 use app\common\service\StringService;
 use think\facade\Env;
@@ -71,7 +72,11 @@ class TokenService extends ApiBaseService
     {
         $time = time();
 
-        $jti = md5(StringService::getRandString(20) . DateService::microTimestamp());
+        try {
+            $jti = md5(StringService::getRandString(20) . DateService::microTimestamp());
+        } catch (CommonServiceException $e) {
+            throw new ApiServiceException($e->getMessage());
+        }
 
         $token = $this->jwt->setKey($this->key)
             //->setClaim('iss', $iss)// 签发者

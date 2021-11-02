@@ -1,14 +1,13 @@
 <?php
-
-use app\admin\listener\AdminUserLogin;
-use app\admin\listener\AdminUserLogout;
-
 /**
  *
  * @author yupoxiong<i@yupoxiong.com>
  */
 
-// AdminUserLogin
+
+use app\admin\listener\AdminUserLogin;
+use app\admin\listener\AdminUserLogout;
+
 
 return [
     'bind' => [
@@ -16,6 +15,7 @@ return [
     ],
 
     'listen' => [
+        // AdminUserLogin
         'AdminUserLogin'  => [
             AdminUserLogin::class,
         ],

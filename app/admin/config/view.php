@@ -7,6 +7,7 @@
 return [
     // 模版替换参数
     'tpl_replace_string' => [
+        '__STATIC__'        => '/static',
         '__ADMIN_STATIC__'  => '/static/admin',
         '__ADMIN_JS__'      => '/static/admin/js',
         '__ADMIN_CSS__'     => '/static/admin/css',

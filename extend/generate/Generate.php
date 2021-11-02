@@ -13,7 +13,6 @@ use generate\traits\Tree;
 use generate\traits\Tools;
 use app\admin\model\AdminMenu;
 use generate\exception\GenerateException;
-use think\facade\Log;
 
 class Generate
 {

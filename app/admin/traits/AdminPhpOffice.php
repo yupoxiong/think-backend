@@ -6,7 +6,6 @@
 
 namespace app\admin\traits;
 
-use app\admin\exception\AdminServiceException;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -82,7 +81,6 @@ trait AdminPhpOffice
      * @param int $limit 批量插入数据库每次的条数，默认100
      * @param bool $del 导入成功后是否删除文件
      * @return bool|string
-     * @throws AdminServiceException
      */
     protected function importData(string $name, string $table, array $field_list, $limit = 100, $del = true)
     {
@@ -193,7 +191,6 @@ trait AdminPhpOffice
 
     /**
      * 简单导出，占用内存低，导出1-10万条数据使用
-     *
      * @param $header
      * @param $body
      * @param string $name
