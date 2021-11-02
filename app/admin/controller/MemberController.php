@@ -136,91 +136,77 @@ class MemberController extends AdminBaseController
     }
 
     /**
-     * 删除
-     *
+     * 启用
      * @param mixed $id
      * @param Member $model
      * @return Json
      */
-    public function del($id, Member $model): Json
+    public function enable($id, Member $model): Json
     {
-        $check = $model->inNoDeletionIds($id);
-        if (false !== $check) {
-            return admin_error('ID为' . $check . '的数据不能被删除');
-        }
-
-        $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
-            $query->whereIn('id', $id);
-        });
-
-        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
 
     /**
-     * 删除
-     *
+     * 禁用
      * @param mixed $id
      * @param Member $model
      * @return Json
      */
-    public function del($id, Member $model): Json
+    public function disable($id, Member $model): Json
     {
-        $check = $model->inNoDeletionIds($id);
-        if (false !== $check) {
-            return admin_error('ID为' . $check . '的数据不能被删除');
-        }
-
-        $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
-            $query->whereIn('id', $id);
-        });
-
-        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
     }
 
     /**
-     * 删除
-     *
-     * @param mixed $id
-     * @param Member $model
+     * 导入
+     * @param Request $request
      * @return Json
      */
-    public function del($id, Member $model): Json
+    public function import(Request $request): Json
     {
-        $check = $model->inNoDeletionIds($id);
-        if (false !== $check) {
-            return admin_error('ID为' . $check . '的数据不能被删除');
+        $param           = $request->param();
+        $field_name_list = ['会员等级','账号','密码','手机号','昵称','图片','是否启用',];
+        if (isset($param['action']) && $param['action'] === 'download_example') {
+            $this->downloadExample($field_name_list);
         }
 
-        $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
-            $query->whereIn('id', $id);
-        });
+        $field_list = ['member_level_id','username','password','mobile','nickname','avatar','status',];
+        $result = $this->importData('file','member',$field_list);
 
-        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
+        return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }
 
     /**
-     * 删除
-     *
-     * @param mixed $id
+     * 导出
+     * @param Request $request
      * @param Member $model
-     * @return Json
+     * @return mixed
+     * @throws Exception
      */
-    public function del($id, Member $model): Json
+    public function export(Request $request, Member $model)
     {
-        $check = $model->inNoDeletionIds($id);
-        if (false !== $check) {
-            return admin_error('ID为' . $check . '的数据不能被删除');
+        $param = $request->param();
+        $data  = $model->with('member_level')->scope('where', $param)->select();
+
+        $header = ['ID','会员等级','账号','手机号','昵称','图片','是否启用','创建时间',];
+        $body   = [];
+        foreach ($data as $item) {
+            $record                = [];
+            $record['id'] = $item->id;
+$record['member_level_id'] = $item->member_level->name?? '';
+$record['username'] = $item->username;
+$record['mobile'] = $item->mobile;
+$record['nickname'] = $item->nickname;
+$record['avatar'] = $item->avatar;
+$record['status'] = $item->status_text;
+$record['create_time'] = $item->create_time;
+
+            $body[] = $record;
         }
+        return $this->exportData($header, $body, '会员数据-' . date('YmdHis'));
 
-        $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
-            $query->whereIn('id', $id);
-        });
-
-        return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
 }

@@ -17,7 +17,7 @@ class Member extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = [];
+    public array $searchField = ['username','mobile','nickname',];
 
     // 可作为条件的字段
     public array $whereField = [];

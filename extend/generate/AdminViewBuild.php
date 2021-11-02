@@ -329,8 +329,8 @@ class AdminViewBuild extends Build
         $enable1 = '';
         $enable2 = '';
         if ($this->data['view']['enable']) {
-            $enable1 = file_get_contents($this->template['enable1']);
-            $enable2 = file_get_contents($this->config['enable2']);
+            $enable1 = file_get_contents($this->template['index_enable1']);
+            $enable2 = file_get_contents($this->template['index_enable2']);
             // 操作形式处理
             if ($this->data['view']['index_button'] === 1) {
                 $operation_disable_text = '';

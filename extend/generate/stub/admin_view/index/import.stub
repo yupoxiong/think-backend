@@ -6,8 +6,16 @@
                 <form class="form-inline importForm" id="importForm" action="{:url('import')}" method="POST"  enctype="multipart/form-data">
 
                     <div class="input-group input-group-sm importGroup">
-                        <input type="file" name="file" id="file" class="form-control input-sm inputFile" accept=".xlsx">
+                        <div class="custom-file importContainer">
+                            <input type="file" class="custom-file-input importFileInput" name="file" id="file" accept=".xlsx">
+                            <label class="custom-file-label importFileLabel" for="file">选择文件</label>
+                        </div>
                     </div>
+                    <script>
+                    $(function () {
+                        bsCustomFileInput.init();
+                    });
+                    </script>
 
                     <div class="form-group importGroup">
                         <button class="btn btn-sm btn-warning" type="submit"><i class="fas fa-file-upload"></i> 导入

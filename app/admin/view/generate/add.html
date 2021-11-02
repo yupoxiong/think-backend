@@ -152,7 +152,7 @@
                             <div class="form-group">
                                 <label for="admin_controller_action_list">控制器方法</label>
                                 <select name="admin_controller_action_list[]"
-                                        class="select2 form-control form-control-sm min-width-400"
+                                        class="select2 form-control form-control-sm min-width-560"
                                         id="admin_controller_action_list" multiple="multiple"
                                         data-placeholder="默认生成增删改方法">
                                     <option value="index" selected>列表</option>
@@ -191,7 +191,7 @@
                             <div class="form-group">
                                 <label for="api_controller_action_list">控制器方法</label>
                                 <select name="api_controller_action_list[]"
-                                        class="select2 form-control form-control-sm min-width-400"
+                                        class="select2 form-control form-control-sm min-width-560"
                                         id="api_controller_action_list" multiple="multiple"
                                         data-placeholder="默认生成增删改方法">
                                     <option value="index" selected>列表</option>
@@ -474,13 +474,40 @@
 
         // 列表启用/禁止关联菜单和控制器
         $('#list_enable').change(function () {
-            console.log('启用/禁止选项');
             let checked = $(this).is(':checked');
+            if(adminDebug){
+                console.log('列表启用/禁用'+checked);
+            }
+
             let $menu_list = $('#create_menu_list');
             let $action_list = $('#admin_controller_action_list');
-            $menu_list.find("option[value='5']").attr("selected", checked);
-            $action_list.find("option[value='5']").attr("selected", checked);
+            $menu_list.find("option[value='enable']").attr("selected", checked);
+            $menu_list.find("option[value='disable']").attr("selected", checked);
+            $action_list.find("option[value='enable']").attr("selected", checked);
+            $action_list.find("option[value='disable']").attr("selected", checked);
             $menu_list.select2();
+            $action_list.select2();
+        });
+
+        // 列表导出关联控制器
+        $('#list_export').change(function () {
+            let checked = $(this).is(':checked');
+            if(adminDebug){
+                console.log('列表导出'+checked);
+            }
+            let $action_list = $('#admin_controller_action_list');
+            $action_list.find("option[value='export']").attr("selected", checked);
+            $action_list.select2();
+        });
+
+        // 列表导入关联控制器
+        $('#list_import').change(function () {
+            let checked = $(this).is(':checked');
+            if(adminDebug){
+                console.log('列表导入'+checked);
+            }
+            let $action_list = $('#admin_controller_action_list');
+            $action_list.find("option[value='import']").attr("selected", checked);
             $action_list.select2();
         });
 

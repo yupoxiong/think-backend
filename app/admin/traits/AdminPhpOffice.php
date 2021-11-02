@@ -6,9 +6,11 @@
 
 namespace app\admin\traits;
 
+use app\admin\exception\AdminServiceException;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use RuntimeException;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\facade\Filesystem;
@@ -80,6 +82,7 @@ trait AdminPhpOffice
      * @param int $limit 批量插入数据库每次的条数，默认100
      * @param bool $del 导入成功后是否删除文件
      * @return bool|string
+     * @throws AdminServiceException
      */
     protected function importData(string $name, string $table, array $field_list, $limit = 100, $del = true)
     {
@@ -95,7 +98,7 @@ trait AdminPhpOffice
                 return '上传文文件失败';
             }
         } catch (ValidateException $e) {
-            return $e->getMessage();
+            return '文件验证失败，信息：'.$e->getMessage();
         }
 
         $path = $config['root'] . '/' . $file_name;
@@ -103,6 +106,9 @@ trait AdminPhpOffice
         $spreadsheet = IOFactory::load($path);
         $excel_array = $spreadsheet->getActiveSheet()->toArray();
         array_shift($excel_array);
+        if(empty($excel_array)){
+            return '导入文件数据为空';
+        }
 
         Db::startTrans();
         try {
@@ -114,7 +120,7 @@ trait AdminPhpOffice
                 $data = [];
                 foreach ($field_list as $field_key => $field_value) {
                     if (!isset($value[$field_key])) {
-                        throw new Exception('第 ' . ($key + 2) . ' 行第 ' . $field_key . ' 列缺少数据');
+                        throw new RuntimeException('第 ' . ($key + 2) . ' 行第 ' . $field_key . ' 列缺少数据');
                     }
                     $data[$field_value] = $value[$field_key];
                 }
@@ -124,7 +130,6 @@ trait AdminPhpOffice
 
                 $all_data[] = $data;
             }
-
 
             Db::name($table)
                 ->limit($limit)

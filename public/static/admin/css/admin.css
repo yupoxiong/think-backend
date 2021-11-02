@@ -130,3 +130,23 @@
     height: 350px;
     position: relative;
 }
+
+.importContainer{
+    height: 100%;
+    padding: .05rem;
+}
+
+.importFileInput{
+    height: 100%;
+}
+
+
+.importFileLabel{
+    height: 100%;
+}
+
+.importFileLabel::after {
+    padding: 4px 10px 2px 10px;
+    content: "浏览";
+
+}
