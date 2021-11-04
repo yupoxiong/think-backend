@@ -24,4 +24,12 @@ class IndexController extends AdminBaseController
 
         return  $this->fetch();
     }
+
+    /**
+     * 统计示例
+     */
+    public function statistics()
+    {
+
+    }
 }

@@ -2,22 +2,22 @@
 {extend name='public/base' /}
 {block name='content'}
 {include file='public/content_header' /}
+
+{js href="__ADMIN_PLUGINS__/echarts/echarts.simple.min.js" /}
+
 <section class="content">
     <!-- 这里写内容即可 -->
+    <!--数据概览参考1-->
+    {include file='index/top_widget1' /}
+    <!--数据概览参考2-->
+    {include file='index/top_widget2' /}
+    <!--图标统计参考1-->
+    {include file='index/chart1' /}
+    <!--图标统计参考2-->
+    {include file='index/chart2' /}
+    <!--图标统计参考3-->
+    {include file='index/chart3' /}
 
-    <button class="btn btn-success" onclick="toast()">test</button>
 </section>
-<script>
-    var i=1;
-    function toast() {
-        $(document).Toasts('create', {
-            title: i+'Toast Title'+i,
-            body: i+'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'+i,
-            autohide:true,
-            delay:2000,
-        })
-        i++;
-    }
-</script>
 
 {/block}
