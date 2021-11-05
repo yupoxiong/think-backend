@@ -528,6 +528,9 @@ class Generate
         $search_show_field = ['id', 'mobile', 'keywords', 'id_card', 'name', 'title', 'username', 'nickname', 'true_name', 'description'];
         $search_show_type  = ['char', 'varchar'];
 
+        $multi_image_field = ['slide','img_list','image_list',];
+        $multi_image_type = ['varchar','text'];
+
         //导出隐藏字段，和列表隐藏字段差不多
         $export_hide_field = ['update_time', 'delete_time'];
         $export_hide_type  = ['tinytext', 'tinyblob', 'text', 'blob', 'longtext', 'longblob'];
@@ -638,6 +641,10 @@ class Generate
             // 是否为排序字段
             if ($field_data['is_list'] === 1 && in_array($field_info['name'], $list_sort_field, true) && in_array($field_info['type'], $list_sort_type, true)) {
                 $field_data['list_sort'] = 1;
+            }
+
+            if(in_array($field_info['name'],$multi_image_field,true) && in_array($field_info['type'],$multi_image_type,true)){
+                $field_data['form_type'] = 'multi_image';
             }
 
             // 验证

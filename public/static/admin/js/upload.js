@@ -34,7 +34,7 @@ function initUploadMultiImg(field, fileId = '') {
  * @param fileId
  */
 
-function initUploadMultiFile(field, fileId = '') {
+function initUploadMultiFile(field, fileId = '', fileType) {
     let $field = $('#' + field);
     fileId = fileId || field + '_file';
     let $fileDom = $("#" + fileId);

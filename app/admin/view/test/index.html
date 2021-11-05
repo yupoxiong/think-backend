@@ -13,10 +13,27 @@
 
                     <div class="input-group input-group-sm searchGroup">
                         <input value="{$_keywords ? $_keywords : '' ;}"
-                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="">
+                               name="_keywords" id="_keywords" class="form-control input-sm" placeholder="用户名/昵称/手机号">
                     </div>
                     
-                    
+                    <div class="form-group smallSelect">
+    <select name="_order" id="_order" class="form-control input-sm index-order">
+        <option value="">排序字段</option>
+        <option value="id" {if isset($_order) && $_order=='id'}selected{/if}>ID</option><option value="create_time" {if isset($_order) && $_order=='create_time'}selected{/if}>创建时间</option>
+    </select>
+</div>
+
+<div class="form-group smallSelect">
+    <select name="_by" id="_by" class="form-control input-sm index-order">
+        <option value="">排序方式</option>
+        <option value="desc" {if isset($_by) && $_by=='desc'}selected{/if}>倒序</option>
+        <option value="asc" {if isset($_by) && $_by=='asc'}selected{/if}>正序</option>
+    </select>
+</div>
+<script>
+    $('#_order').select2();
+    $('#_by').select2();
+</script>
 
                     <div class="form-group searchGroup">
                         <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-search"></i> 查询
@@ -50,7 +67,7 @@
     <i class="fa fa-trash"></i> 删除
 </button>
                         
-                        <button class="btn btn-success btn-sm ReloadButton" data-toggle="tooltip" title="刷新">
+                        <button class="btn btn-default btn-sm ReloadButton" data-toggle="tooltip" title="刷新">
     <i class="fas fa-redo"></i> 刷新
 </button>
                     </div>

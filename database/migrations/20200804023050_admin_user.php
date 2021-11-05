@@ -37,6 +37,7 @@ class AdminUser extends Migrator
             $develop_password = StringService::getRandString();
             $admin_password   = StringService::getRandString();
         } catch (CommonServiceException $e) {
+
             $develop_password = 'develop_admin';
             $admin_password   = 'super_admin';
         }

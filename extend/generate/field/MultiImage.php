@@ -12,7 +12,7 @@ class MultiImage extends Field
 
 <div class="form-group row">
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
-    <div class="col-sm-10 col-md-4 formInputDiv">
+    <div class="col-sm-10 col-md-8 formInputDiv">
         <div class="input-group">
             <input id="[FIELD_NAME]_file" name="[FIELD_NAME]_file" type="file" class="file-loading " multiple>
             <input name="[FIELD_NAME]" id="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default=''}" hidden placeholder="请上传图片" class="fieldMultiImage">

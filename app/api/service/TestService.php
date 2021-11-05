@@ -20,7 +20,7 @@ class TestService extends ApiBaseService
         $this->model = new Test();
     }
 
-    /**
+        /**
      * 列表
      * @param $param
      * @param $page
@@ -46,8 +46,8 @@ class TestService extends ApiBaseService
 
         return $data;
     }
-
-    /**
+    
+        /**
      * 添加
      * @param $param
      * @return bool
@@ -57,8 +57,8 @@ class TestService extends ApiBaseService
         $result = $this->model::create($param);
         return $result ? true : false;
     }
-
-    /**
+    
+        /**
      * 数据详情
      * @param $id
      * @return array
@@ -73,8 +73,8 @@ class TestService extends ApiBaseService
         }
         return $data->toArray();
     }
-
-    /**
+    
+        /**
      * 修改
      * @param $id
      * @param $param
@@ -95,8 +95,8 @@ class TestService extends ApiBaseService
 
         return true;
     }
-
-    /**
+    
+        /**
      * 删除
      * @param mixed $id
      * @return bool
@@ -112,8 +112,9 @@ class TestService extends ApiBaseService
             throw new ApiServiceException('更新失败');
         }
 
-        return true;
+        return  true;
     }
-
-
-}
+    
+    
+    
+    

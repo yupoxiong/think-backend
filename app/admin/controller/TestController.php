@@ -61,7 +61,7 @@ class TestController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            $param['slide'] = $request->param(false)['slide'];
+            $param['content'] = $request->param(false)['content'];
 
 
             $result = $model::create($param);
@@ -100,7 +100,7 @@ class TestController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-            $param['slide'] = $request->param(false)['slide'];
+            $param['content'] = $request->param(false)['content'];
 
 
             $result = $data->save($param);

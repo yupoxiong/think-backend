@@ -68,7 +68,7 @@
 <div class="form-group row">
     <label for="password" class="col-sm-2 control-label">密码</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
-        <input id="password" name="password" value="{$data.password|default='JDJ5JDEwJEdPNWhJRlN3aWJScjBHeVZsWjlGRGVnbEY1dS5ZSHFPcHA1dWxHalAxQ3ZrbS5PdFVobWJL'}" placeholder="请输入密码" type="password" class="form-control fieldPassword">
+        <input id="password" name="password" value="{$data.password|default='JDJ5JDEwJG9hVDJBY2c0T0lmUXZ1cHhSSHROck84aHRWUGdpRXguQXF2Q0gvVjNEQWF5eTJPZ3BVZXIy'}" placeholder="请输入密码" type="password" class="form-control fieldPassword">
     </div>
 </div>
 <div class="form-group row">
@@ -154,22 +154,34 @@
         
     });
 </script>
+
 <div class="form-group row">
     <label for="slide" class="col-sm-2 control-label">相册</label>
+    <div class="col-sm-10 col-md-8 formInputDiv">
+        <div class="input-group">
+            <input id="slide_file" name="slide_file" type="file" class="file-loading " multiple>
+            <input name="slide" id="slide" value="{$data.slide|default=''}" hidden placeholder="请上传图片" class="fieldMultiImage">
+            <script>
+                initUploadMultiImg('slide');
+            </script>            
+        </div>
+    </div>
+</div><div class="form-group row">
+    <label for="content" class="col-sm-2 control-label">内容</label>
         <div class="col-sm-10">
-            <div id="slideEditor">{$data.slide|raw|default='<p></p>'}</div>
-            <textarea id="slide" name="slide" style="display: none">{$data.slide|raw|default=''}</textarea>
+            <div id="contentEditor">{$data.content|raw|default='<p></p>'}</div>
+            <textarea id="content" name="content" style="display: none">{$data.content|raw|default=''}</textarea>
         </div>
     </div>
 <script>
     var E = E||window.wangEditor;
-    if(editor_slide!==undefined){
-        editor_slide.destroy();
+    if(editor_content!==undefined){
+        editor_content.destroy();
     }
-    var editor_slide = new E('#slideEditor');
-    editor_slide.create();
-    editor_slide.config.onchange = function (newHtml) {
-        $('#slide').val(newHtml);
+    var editor_content = new E('#contentEditor');
+    editor_content.create();
+    editor_content.config.onchange = function (newHtml) {
+        $('#content').val(newHtml);
     };
 </script>
 
@@ -240,11 +252,11 @@
                 required: true,
 
     },
-    'lng': {
+    'slide[]': {
                 required: true,
 
     },
-    'slide': {
+    'content': {
                 required: true,
 
     },
@@ -279,12 +291,12 @@
                required: "是否启用不能为空",
 
     },
-    'lng': {
-               required: "经度不能为空",
+    'slide[]': {
+               required: "相册不能为空",
 
     },
-    'slide': {
-               required: "相册不能为空",
+    'content': {
+               required: "内容不能为空",
 
     },
 

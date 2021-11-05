@@ -17,7 +17,7 @@ class Test extends CommonBaseModel
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = [];
+    public array $searchField = ['username','nickname','mobile',];
 
     // 可作为条件的字段
     public array $whereField = [];
