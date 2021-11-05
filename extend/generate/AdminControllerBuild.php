@@ -137,7 +137,7 @@ class AdminControllerBuild extends Build
                     $table_name        = $this->getSelectFieldFormat($value['field_name']);
                     $select_class_name = parse_name($table_name, 1);
                     $select_list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
-                    $code_select       = file_get_contents($this->template . 'relation_data_list.stub');
+                    $code_select       = file_get_contents($this->template['relation_data_list']);
                     $code_select       = str_replace(array('[LIST_NAME]', '[CLASS_NAME]'), array($select_list_name, $select_class_name), $code_select);
 
                     $index_select .= $code_select;
@@ -147,7 +147,7 @@ class AdminControllerBuild extends Build
                     $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
                     $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
 
-                    $assign = "'$list_name'=>" . parse_name($this->data['table'],1) . '::' . $const_name . ',';
+                    $assign = "'$list_name'=>" . parse_name($this->data['table'], 1) . '::' . $const_name . ',';
 
                     $index_select .= $assign;
                 }
@@ -164,7 +164,7 @@ class AdminControllerBuild extends Build
                 }
 
                 //如果有列表导出
-                if (in_array('export',$this->data['admin_controller']['action'],true)) {
+                if (in_array('export', $this->data['admin_controller']['action'], true)) {
                     $export_header .= "'" . $value['form_name'] . "',";
                     if ($value['getter_setter'] === 'switch') {
                         $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . '_text' . ";\n";
@@ -220,7 +220,6 @@ class AdminControllerBuild extends Build
     }
 
 
-
     /**
      * 生成文件
      * @param null $code
@@ -273,7 +272,7 @@ class AdminControllerBuild extends Build
     protected function createAction(): void
     {
         foreach ($this->actionList as $action) {
-            $code = '';
+            $code  = '';
             $upper = strtoupper($action);
             if (in_array($action, $this->data['admin_controller']['action'], true)) {
                 $code = file_get_contents($this->template['action_' . $action]);

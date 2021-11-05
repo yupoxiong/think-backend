@@ -50,14 +50,16 @@ class ModelBuild extends Build
         // 自定义选择数据
         $select_data_code = '';
 
-        foreach ($this->data['data'] as $key => $value) {
+        foreach ($this->data['data'] as $value) {
 
             if ($value['relation_type'] > 0) {
                 $relation_code .= $this->getRelationCode($value);
-            } else if ($value['form_type'] === 'select') {
-                $code_result        = $this->getSelectCode($value);
-                $select_data_code   .= $code_result[0];
-                $getter_setter_code .= $code_result[1];
+            } else {
+                if ($value['form_type'] === 'select' || $value['index_search']==='select') {
+                    $code_result        = $this->getSelectCode($value);
+                    $select_data_code   .= $code_result[0];
+                    $getter_setter_code .= $code_result[1];
+                }
             }
 
             if ($value['getter_setter']) {

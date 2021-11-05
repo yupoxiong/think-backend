@@ -4,38 +4,43 @@
 */
 
 namespace app\common\model;
-/**
- * Class User
- * @package app\common\model
- * @property int $status
- */
+
+use think\model\concern\SoftDelete;
+
 class User extends CommonBaseModel
 {
+    use SoftDelete;
     // 自定义选择数据
-    
+    // 是否启用列表
+const STATUS_LIST= [
+1=>'是',
+0=>'否',
+];
 
 
     protected $name = 'user';
-        // 可搜索字段
-    public array $searchField = [];
+    protected $autoWriteTimestamp = true;
+
+    // 可搜索字段
+    public array $searchField = ['username','mobile','nickname',];
 
     // 可作为条件的字段
-    public array $whereField = [];
+    public array $whereField = ['user_level_id','status',];
 
     // 可做为时间
-    public array $timeField = ['create_time',];
+    public array $timeField = [];
 
-    //是否启用获取器
-public function getStatusTextAttr($value, $data): string
-{
-    return self::BOOLEAN_TEXT[$data['status']];
-}
+    // [FORM_NAME]获取器
+    public function getStatusNameAttr($value ,$data)
+    {
+        return self::STATUS_LIST[$data['status']];
+    }
 
-    //关联用户等级
-public function userLevel()
-{
-    return $this->belongsTo(UserLevel::class);
-}
 
-    
+    // 关联用户等级
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class);
+    }
+
 }

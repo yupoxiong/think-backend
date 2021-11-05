@@ -20,6 +20,7 @@ class Test extends Migrator
             ->addColumn('lng', 'decimal', ['precision' => 14, 'scale' => 8, 'default' => 116, 'comment' => '经度'])// 测试地图
             ->addColumn('lat', 'decimal', ['precision' => 14, 'scale' => 8, 'default' => 37, 'comment' => '纬度'])
             ->addColumn('slide', 'text', [ 'comment' => '相册'])// 测试多图上传
+            ->addColumn('content', 'text', [ 'comment' => '内容'])// 测试编辑器
             ->addColumn('create_time', 'integer', ['limit' => 10, 'default' => 0, 'comment' => '创建时间'])
             ->addColumn('update_time', 'integer', ['limit' => 10, 'default' => 0, 'comment' => '更新时间'])
             ->addColumn('delete_time', 'integer', ['limit' => 10, 'default' => 0, 'comment' => '删除时间'])

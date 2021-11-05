@@ -11,7 +11,10 @@ use think\migration\db\Column;
 class SettingGroup extends Migrator
 {
 
-    public function change()
+    /**
+     * @throws JsonException
+     */
+    public function change(): void
     {
         $table = $this->table('setting_group', ['comment' => '设置分组', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);
         $table
@@ -31,6 +34,9 @@ class SettingGroup extends Migrator
         $this->insertData();
     }
 
+    /**
+     * @throws JsonException
+     */
     protected function insertData(): void
     {
         $data = '[{"id":1,"module":"admin","name":"\u540e\u53f0\u8bbe\u7f6e","description":"\u540e\u53f0\u7ba1\u7406\u65b9\u9762\u7684\u8bbe\u7f6e","code":"admin","sort_number":1000,"icon":"fa-adjust","auto_create_menu":1,"auto_create_file":1}]';
@@ -43,7 +49,7 @@ class SettingGroup extends Migrator
                 \app\common\model\SettingGroup::create($item);
             }
             Db::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             $msg = $e->getMessage();
         }

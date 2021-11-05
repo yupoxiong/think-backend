@@ -118,7 +118,46 @@ class UserController extends ApiBaseController
         }
     }
 
-    
+    /**
+     * 禁用
+     * @param UserService $service
+     * @param UserValidate $validate
+     * @return Json
+     */
+    public function disable(UserService $service, UserValidate $validate): Json
+    {
+        $check = $validate->scene('api_disable')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
 
-    
+        try {
+            $service->disableData($this->id);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
+
+
+    /**
+     * 启用
+     * @param UserService $service
+     * @param UserValidate $validate
+     * @return Json
+     */
+    public function enable(UserService $service, UserValidate $validate): Json
+    {
+        $check = $validate->scene('api_enable')->check($this->param);
+        if (!$check) {
+            return api_error($validate->getError());
+        }
+
+        try {
+            $service->enableData($this->id);
+            return api_success();
+        } catch (ApiServiceException $e) {
+            return api_error($e->getMessage());
+        }
+    }
 }

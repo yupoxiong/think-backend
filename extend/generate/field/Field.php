@@ -37,7 +37,7 @@ EOF;
 
     // 列表关联筛选
     public static string $listSearchRelationHtml = <<<EOF
-<div class="input-group input-group-sm searchGroup">
+<div class="input-group input-group-sm searchGroup smallSelect">
     <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
         <option value="">[FORM_NAME]</option>
         {foreach name='[FIELD_NAME1]_list' id='item'}
@@ -56,7 +56,7 @@ EOF;
 
     //列表自定义筛选数据
     public static string $listSearchSelectHtml = <<<EOF
-<div class="input-group input-group-sm searchGroup">
+<div class="input-group input-group-sm searchGroup smallSelect">
                         <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm index-search">
                             <option value="">[FORM_NAME]</option>
                             {foreach \$[FIELD_LIST] as \$key=>\$value}

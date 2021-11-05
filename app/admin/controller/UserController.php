@@ -7,7 +7,6 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
-use think\db\Query;
 use think\response\Json;
 use app\common\model\User;
 use app\common\model\UserLevel;
@@ -19,7 +18,6 @@ class UserController extends AdminBaseController
 
     /**
      * 列表
-     *
      * @param Request $request
      * @param User $model
      * @return string
@@ -30,11 +28,10 @@ class UserController extends AdminBaseController
         $param = $request->param();
         $data  = $model->with('user_level')->scope('where', $param)
             ->paginate([
-                 'list_rows' => $this->admin['admin_list_rows'],
-                 'var_page'  => 'page',
-                 'query'     => $request->get()
-        ]);
-
+                'list_rows' => $this->admin['admin_list_rows'],
+                'var_page'  => 'page',
+                'query'     => $request->get(),
+            ]);
         // 关键词，排序等赋值
         $this->assign($request->get());
 
@@ -42,7 +39,8 @@ class UserController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+            'user_level_list' => UserLevel::select(),
+'status_list'=>User::STATUS_LIST,
         ]);
         return $this->fetch();
     }
@@ -64,22 +62,19 @@ class UserController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-                     
+            
             $result = $model::create($param);
 
             $url = URL_BACK;
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
                $url = URL_RELOAD;
             }
-
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
-
         $this->assign([
     'user_level_list' => UserLevel::select(),
 
 ]);
-
 
 
         return $this->fetch();
@@ -104,7 +99,7 @@ class UserController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-                       
+            
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
@@ -134,18 +129,39 @@ class UserController extends AdminBaseController
         }
 
         $result = $model::destroy(static function ($query) use ($id) {
-            /** @var Query $query */
+            /** @var \think\db\Query $query */
             $query->whereIn('id', $id);
         });
 
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
 
-    
+    /**
+     * 启用
+     * @param mixed $id
+     * @param User $model
+     * @return Json
+     */
+    public function enable($id, User $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 1]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
 
-    
+    /**
+     * 禁用
+     * @param mixed $id
+     * @param User $model
+     * @return Json
+     */
+    public function disable($id, User $model): Json
+    {
+        $result = $model->whereIn('id', $id)->update(['status' => 0]);
+        return $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error();
+    }
 
-        /**
+    /**
+     * 导入
      * @param Request $request
      * @return Json
      */
@@ -162,4 +178,36 @@ class UserController extends AdminBaseController
 
         return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }
+
+    /**
+     * 导出
+     * @param Request $request
+     * @param User $model
+     * @return mixed
+     * @throws Exception
+     */
+    public function export(Request $request, User $model)
+    {
+        $param = $request->param();
+        $data  = $model->with('user_level')->scope('where', $param)->select();
+
+        $header = ['ID','用户等级','账号','手机号','昵称','头像','是否启用','创建时间',];
+        $body   = [];
+        foreach ($data as $item) {
+            $record                = [];
+            $record['id'] = $item->id;
+$record['user_level_id'] = $item->user_level->name?? '';
+$record['username'] = $item->username;
+$record['mobile'] = $item->mobile;
+$record['nickname'] = $item->nickname;
+$record['avatar'] = $item->avatar;
+$record['status'] = $item->status_text;
+$record['create_time'] = $item->create_time;
+
+            $body[] = $record;
+        }
+        return $this->exportData($header, $body, '用户数据-' . date('YmdHis'));
+
+    }
+
 }

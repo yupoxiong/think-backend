@@ -1,5 +1,7 @@
 <?php
 
+use app\common\exception\CommonServiceException;
+use app\common\service\StringService;
 use think\facade\Db;
 use think\migration\Migrator;
 use think\migration\db\Column;
@@ -7,7 +9,7 @@ use think\migration\db\Column;
 class AdminUser extends Migrator
 {
 
-    public function change()
+    public function change(): void
     {
         $table = $this->table('admin_user', ['comment' => '后台用户', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);
         $table
@@ -31,24 +33,39 @@ class AdminUser extends Migrator
      */
     protected function insertData(): void
     {
+        try {
+            $develop_password = StringService::getRandString();
+            $admin_password   = StringService::getRandString();
+        } catch (CommonServiceException $e) {
+            $develop_password = 'develop_admin';
+            $admin_password   = 'super_admin';
+        }
         $data = [
             [
                 'id'       => 1,
+                'username' => 'develop_admin',
+                'nickname' => '开发管理员',
+                'password' => $develop_password,
+                'role'     => [1]
+            ],
+            [
+                'id'       => 2,
                 'username' => 'super_admin',
                 'nickname' => '超级管理员',
-                'password' => 'super_admin',
+                'password' => $admin_password,
                 'role'     => [1]
             ]
         ];
 
-        $msg = '超级管理员创建成功.' . "\n" . '用户名:super_admin' . "\n" . '密码:super_admin' . "\n";
+        $msg = '开发管理员创建成功.' . "\n" . '用户名:develop_admin' . "\n" . '密码:'.$develop_password . "\n";
+        $msg .= '超级管理员创建成功.' . "\n" . '用户名:super_admin' . "\n" . '密码:'.$admin_password . "\n";
         Db::startTrans();
         try {
             foreach ($data as $item) {
                 \app\admin\model\AdminUser::create($item);
             }
             Db::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             $msg = $e->getMessage();
         }

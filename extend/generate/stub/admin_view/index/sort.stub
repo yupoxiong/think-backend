@@ -1,11 +1,11 @@
-<div class="form-group">
+<div class="form-group smallSelect">
     <select name="_order" id="_order" class="form-control input-sm index-order">
         <option value="">排序字段</option>
         [SORT_FIELD_LIST]
     </select>
 </div>
 
-<div class="form-group">
+<div class="form-group smallSelect">
     <select name="_by" id="_by" class="form-control input-sm index-order">
         <option value="">排序方式</option>
         <option value="desc" {if isset($_by) && $_by=='desc'}selected{/if}>倒序</option>
