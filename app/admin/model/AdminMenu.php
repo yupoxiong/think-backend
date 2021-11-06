@@ -19,6 +19,7 @@ use think\model\concern\SoftDelete;
  * @property int $id
  * @property string $icon
  * @property string $url
+ * @property string $log_method
  */
 class AdminMenu extends AdminBaseModel
 {

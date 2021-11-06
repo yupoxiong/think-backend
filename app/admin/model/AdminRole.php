@@ -28,7 +28,7 @@ class AdminRole extends AdminBaseModel
      */
     public static function onBeforeInsert($data)
     {
-        $data->url = [1, 2, 18];
+        $data->url = empty($data->url) ? [1, 2, 18] : $data->url;
     }
 
     protected function getUrlAttr($value)
@@ -38,6 +38,6 @@ class AdminRole extends AdminBaseModel
 
     protected function setUrlAttr($value)
     {
-        return $value !== '' ? implode(',', $value) : [];
+        return $value !== '' ? implode(',', $value) : '';
     }
 }

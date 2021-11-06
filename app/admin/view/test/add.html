@@ -179,10 +179,14 @@
         editor_content.destroy();
     }
     var editor_content = new E('#contentEditor');
+    editor_content.config.uploadImgServer = '{:url("admin/file/editor")}';
+     editor_content.config.uploadFileName = 'file';
     editor_content.create();
     editor_content.config.onchange = function (newHtml) {
         $('#content').val(newHtml);
     };
+    
+
 </script>
 
                     </div>

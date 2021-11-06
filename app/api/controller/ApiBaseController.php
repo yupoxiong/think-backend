@@ -127,12 +127,14 @@ class ApiBaseController
         $this->page  = (int)($this->param['page'] ?? 1);
         $this->limit = (int)($this->param['limit'] ?? 10);
 
-        if (is_numeric($this->param['id'])) {
-            $this->id = (int)$this->param['id'];
-        } else if (is_string($this->param['id']) && strpos($this->param['id'], ',') > 0) {
-            $this->id = explode(',', $this->param['id']);
-        } else {
-            $this->id = $this->param['id'];
+        if(isset($this->param['id'])){
+            if (is_numeric($this->param['id'])) {
+                $this->id = (int)$this->param['id'];
+            } else if (is_string($this->param['id']) && strpos($this->param['id'], ',') > 0) {
+                $this->id = explode(',', $this->param['id']);
+            } else {
+                $this->id = $this->param['id'];
+            }
         }
     }
 

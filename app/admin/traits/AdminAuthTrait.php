@@ -5,10 +5,9 @@
 
 namespace app\admin\traits;
 
+use app\admin\service\AdminLogService;
 use think\facade\Cache;
 use think\facade\Log;
-use think\response\Json;
-use think\response\Redirect;
 use app\admin\model\AdminUser;
 use app\admin\service\AuthService;
 use think\exception\HttpResponseException;
@@ -176,8 +175,17 @@ trait AdminAuthTrait
         $cache_key = $this->loginDeviceKey . $user->id;
 
         return Cache::delete($cache_key);
-
-
     }
+
+    public function createLog($user,$name)
+    {
+        try {
+            (new AdminLogService())->create($user, $name);
+            return  true;
+        } catch (AdminServiceException $e) {
+            return false;
+        }
+    }
+
 
 }

@@ -44,6 +44,9 @@ class AdminBaseController
      */
     protected string $url;
 
+
+    protected $menu;
+
     /**
      * 无需验证登录的url
      * @var array
@@ -83,6 +86,15 @@ class AdminBaseController
         $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
         // 限制每页数量最多不超过100
         $this->admin['admin_list_rows'] = $this->admin['admin_list_rows'] < 100 ? $this->admin['admin_list_rows'] : 100;
+
+        /** @var AdminMenu $menu */
+        $this->menu = (new AdminMenu)->where(['url' => $this->url])->findOrEmpty();
+
+        if ($this->user && !$this->menu->isEmpty() && request()->method()===$this->menu->log_method) {
+            $this->createLog($this->user, $this->menu->name);
+        }
+
+
     }
 
 
@@ -108,19 +120,18 @@ class AdminBaseController
     protected function fetch(string $template = '', array $vars = []): string
     {
         // 顶部导航
-        $this->admin['top_nav'] =  (int)setting('admin.display.top_nav');
+        $this->admin['top_nav'] = (int)setting('admin.display.top_nav');
 
         $current_top_id = 0;
 
-        /** @var AdminMenu $menu */
-        $menu = (new AdminMenu)->where(['url' => $this->url])->find();
-        if ($menu) {
+        if (!$this->menu->isEmpty()) {
+            $menu = $this->menu;
             $menu_all = (new AdminMenu)->field('id,parent_id,name,icon')->select()->toArray();
 
             $this->admin['title']      = $menu->name;
             $this->admin['breadcrumb'] = $this->getBreadCrumb($menu_all, $menu->id);
-            if($this->admin['top_nav']===1){
-                $current_top_id = $this->getTopParentIdById($menu_all,$menu->id);
+            if ($this->admin['top_nav'] === 1) {
+                $current_top_id = $this->getTopParentIdById($menu_all, $menu->id);
             }
         }
 
@@ -130,11 +141,12 @@ class AdminBaseController
         $this->admin['upload_url'] = url('admin/file/upload')->build();
         $this->admin['logout_url'] = url('admin/auth/logout')->build();
 
-        $show_menu = $this->user->getShowMenu($this->admin['top_nav']);
-
-        $this->admin['top_menu'] = $show_menu['top'];
 
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
+
+            $show_menu = $this->user->getShowMenu($this->admin['top_nav']);
+
+            $this->admin['top_menu']  = $show_menu['top'];
             $this->admin['left_menu'] = $this->getLeftMenu($show_menu['left'][$current_top_id], $menu->id ?? 0);
         }
 
@@ -150,7 +162,7 @@ class AdminBaseController
         $this->admin['top_notification'] = 0;
         // 文件删除url
         $this->admin['file_del_url'] = url('admin/file/del');
-        $this->admin['map'] = config('map');
+        $this->admin['map']          = config('map');
 
         // 赋值后台变量
         $this->assign([
@@ -169,8 +181,8 @@ class AdminBaseController
      */
     public function __call($name, $arguments)
     {
-        if(request()->isPost()){
-            return  admin_error('页面未找到');
+        if (request()->isPost()) {
+            return admin_error('页面未找到');
         }
         return $this->fetch('error/404');
     }

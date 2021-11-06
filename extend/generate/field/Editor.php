@@ -22,24 +22,28 @@ class Editor extends Field
         editor_[FIELD_NAME].destroy();
     }
     var editor_[FIELD_NAME] = new E('#[FIELD_NAME]Editor');
+    editor_[FIELD_NAME].config.uploadImgServer = '{:url("admin/file/editor")}';
+     editor_[FIELD_NAME].config.uploadFileName = 'file';
     editor_[FIELD_NAME].create();
     editor_[FIELD_NAME].config.onchange = function (newHtml) {
         $('#[FIELD_NAME]').val(newHtml);
     };
+    
+
 </script>\n
 EOF;
 
     /**
      * @var string 富文本字段添加处理
      */
-    public static string $controllerAddCode =<<<EOF
+    public static string $controllerAddCode = <<<EOF
 \$param['[FIELD_NAME]'] = \$request->param(false)['[FIELD_NAME]'];
 \n
 EOF;
     /**
      * @var string 富文本字段修改处理
      */
-    public static string $controllerEditCode =<<<EOF
+    public static string $controllerEditCode = <<<EOF
 \$param['[FIELD_NAME]'] = \$request->param(false)['[FIELD_NAME]'];
 \n
 EOF;

@@ -68,7 +68,7 @@ class TokenService extends ApiBaseService
      * @return string
      * @throws ApiServiceException
      */
-    public function getToken(int $uid, $claim = []): string
+    public function getToken(int $uid, array $claim = []): string
     {
         $time = time();
 
