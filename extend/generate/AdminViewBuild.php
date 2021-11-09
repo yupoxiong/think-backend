@@ -64,19 +64,19 @@ class AdminViewBuild extends Build
                 if ($value['form_type'] === 'switch') {
                     $value['form_type'] = 'switch_field';
                 } else if ($value['form_type'] === 'select') {
-                    $value['relation_data'] = '';
+                    $value['option_data'] = '';
                     // 这里是关联的
                     if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                         $list_code              = file_get_contents($this->template['add_relation_select_data']);
                         $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
                         $list_code              = str_replace(array('[DATA_LIST]', '[FIELD_NAME]', '[RELATION_SHOW]'), array($list_name, $value['field_name'], $value['relation_show']), $list_code);
-                        $value['relation_data'] = $list_code;
+                        $value['option_data'] = $list_code;
                     } else if ($value['relation_type'] === 0) {
                         // 这里是非关联的
                         $list_code              = file_get_contents($this->template['add_customer_select_data']);
                         $list_name              = $this->getSelectFieldFormat($value['field_name'], 2);
                         $list_code              = str_replace(array('[FIELD_LIST]', '[FIELD_NAME]'), array($list_name, $value['field_name']), $list_code);
-                        $value['relation_data'] = $list_code;
+                        $value['option_data'] = $list_code;
                     }
                 } else if (in_array($value['form_type'], $date_field, true)) {
                     //如果是日期控件类字段，默认值各式不符的一律修改成''

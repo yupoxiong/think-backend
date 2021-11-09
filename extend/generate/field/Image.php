@@ -14,7 +14,7 @@ class Image extends Field
         <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
                 <input id="[FIELD_NAME]_file" name="[FIELD_NAME]_file" type="file" class="file-loading " data-initial-preview="{if isset(\$data)}{\$data.[FIELD_NAME]}{/if}">
-                <input name="[FIELD_NAME]" id="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default=''}" hidden placeholder="请上传图片" class="fieldImage">
+                <input name="[FIELD_NAME]" id="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" hidden placeholder="请上传图片" class="fieldImage">
                 <script>
                      initUploadImg('[FIELD_NAME]');
                 </script>            

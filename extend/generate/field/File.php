@@ -16,24 +16,13 @@ class File extends Field
     </div>
 </div>
 <script>
-    $('#[FIELD_NAME]').fileinput({
-        language: 'zh',
-        browseLabel: '浏览',
-        initialPreviewAsData: true,
-        dropZoneEnabled: false,
-        showUpload:false,
-        showRemove: false,
-        allowedFileExtensions: ['jpg', 'png', 'gif','bmp','svg','jpeg','mp4','doc','docx','pdf','xls','xlsx','ppt','pptx','txt'],
-        //默认限制10M
-        maxFileSize:10240
-    });
-</script>\n
+    initUploadFile('[FIELD_NAME]');
+</script>   
 EOF;
 
     public static function create($data)
     {
         $html = self::$html;
-        $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($data['form_name'], $data['field_name']), $html);
-        return $html;
+        return str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($data['form_name'], $data['field_name']), $html);
     }
 }

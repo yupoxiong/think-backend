@@ -15,7 +15,7 @@ class Select extends Field
     <div class="col-sm-10 col-md-4 formInputDiv">
         <select name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control select2bs4 fieldSelect" data-placeholder="请选择[FORM_NAME]">
             <option value=""></option>
-            [RELATION_DATA]
+            [OPTION_DATA]
         </select>
     </div>
 </div>
@@ -29,8 +29,7 @@ EOF;
     public static function create($data)
     {
         $html = self::$html;
-        $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[RELATION_DATA]'), array($data['form_name'], $data['field_name'] ?? '', $data['relation_data'] ?? ''), $html);
-        return $html;
+        return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[OPTION_DATA]'), array($data['form_name'], $data['field_name'] ?? '', $data['option_data'] ?? ''), $html);
     }
 
 }
