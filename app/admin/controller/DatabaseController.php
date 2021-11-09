@@ -50,7 +50,7 @@ class DatabaseController extends AdminBaseController
         $field_list = Db::query('SHOW FULL COLUMNS FROM `' . $name . '`');
 
         $data = [];
-        foreach ($field_list as $key => $value) {
+        foreach ($field_list as $value) {
             $data[] = [
                 'name'       => $value['Field'],
                 'type'       => $value['Type'],
@@ -82,11 +82,11 @@ class DatabaseController extends AdminBaseController
             return admin_error('请指定要优化的表');
         }
         $name   = is_array($name) ? implode('`,`', $name) : $name;
-        $result = Db::query("OPTIMIZE TABLE `{$name}`");
+        $result = Db::query("OPTIMIZE TABLE `$name`");
         if ($result) {
-            return admin_success("数据表`{$name}`优化成功");
+            return admin_success("数据表`$name`优化成功");
         }
-        return admin_error("数据表`{$name}`优化失败");
+        return admin_error("数据表`$name`优化失败");
     }
 
     /**
@@ -100,11 +100,11 @@ class DatabaseController extends AdminBaseController
             return admin_error('请指定要修复的表');
         }
         $name   = is_array($name) ? implode('`,`', $name) : $name;
-        $result = Db::query("REPAIR TABLE `{$name}`");
+        $result = Db::query("REPAIR TABLE `$name`");
         if ($result) {
-            return admin_success("数据表`{$name}`修复成功");
+            return admin_success("数据表`$name`修复成功");
         }
-        return admin_error("数据表`{$name}`修复失败");
+        return admin_error("数据表`$name`修复失败");
     }
 
 }

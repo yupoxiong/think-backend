@@ -22,19 +22,19 @@ trait AdminTreeTrait
      * 生成树型结构所需修饰符号，可以换成图片
      * @var array
      */
-    public $icon = ['│', '├', '└'];
+    public array $icon = ['│', '├', '└'];
 
     /** @var string 空格 */
-    public $space = '&nbsp;&nbsp;';
+    public string $space = '&nbsp;&nbsp;';
 
     /** @var string 结果 */
-    public $result = '';
+    public string $result = '';
 
     /**
      * 构造函数，初始化类
      * @param array $arr
      */
-    public function initTree($arr = []): void
+    public function initTree(array $arr = []): void
     {
         $this->array  = $arr;
         $this->result = '';
@@ -61,7 +61,7 @@ trait AdminTreeTrait
             $total = count($child);
             foreach ($child as $id => $value) {
                 $j = $k = '';
-                if ($number == $total) {
+                if ($number === $total) {
                     $j .= $this->icon[2];
                 } else {
                     $j .= $this->icon[1];
@@ -89,9 +89,9 @@ trait AdminTreeTrait
      * @param $my_id
      * @param $current_id
      * @param $parent_ids
-     * @return mixed
+     * @return string
      */
-    public function getLeftMenuTree($my_id, $current_id, $parent_ids)
+    public function getLeftMenuTree($my_id, $current_id, $parent_ids): string
     {
 
         $n_str = '';
@@ -110,12 +110,11 @@ trait AdminTreeTrait
                     if (in_array($k, $parent_ids, true)) {
                         //如果下级菜单是当前页面
                         eval("\$n_str = \"$text[1]\";");
-                        $this->html .= $n_str;
                     } else {
                         //如果下级菜单不是当前页面
                         eval("\$n_str = \"$text[0]\";");
-                        $this->html .= $n_str;
                     }
+                    $this->html .= $n_str;
 
                     self::getLeftMenuTree($k, $current_id, $parent_ids);
                     eval("\$n_str = \"$text[2]\";");
@@ -138,8 +137,8 @@ trait AdminTreeTrait
 
     /**
      * 得到子级数组
-     * @param int $pid
-     * @return bool|array
+     * @param  $pid
+     * @return array
      */
     public function getChild($pid)
     {
@@ -205,15 +204,15 @@ trait AdminTreeTrait
      * 获取左侧菜单
      * @param $menu
      * @param int $current_id
-     * @return mixed
+     * @return string
      */
-    protected function getLeftMenu($menu, $current_id = 1)
+    protected function getLeftMenu($menu, $current_id = 1): string
     {
         $max_level  = 0;
         $parent_ids = array(0 => 0);
 
 
-        foreach ($menu as $k => $v) {
+        foreach ($menu as $v) {
             if ($v['id'] === $current_id) {
                 $parent_ids = $this->getParentIdsById($menu, $v['id']);
                 $current_id = $v['id'];
@@ -299,9 +298,9 @@ trait AdminTreeTrait
      * @param array $parent_ids
      * @return array
      */
-    protected function getParentIdsById(array $data, $my_id, $parent_ids = array()): array
+    protected function getParentIdsById(array $data, $my_id, array $parent_ids = array()): array
     {
-        foreach ($data as $key => $item) {
+        foreach ($data as $item) {
             if (($item['id'] === $my_id) && $item['parent_id'] !== 0) {
                 $parent_ids[] = $item['parent_id'];
                 $parent_ids   = $this->getParentIdsById($data, $item['parent_id'], $parent_ids);
@@ -312,7 +311,7 @@ trait AdminTreeTrait
 
     protected function getTopParentIdById($data, $current_id): int
     {
-        foreach ($data as $key => $item) {
+        foreach ($data as $item) {
             if ($item['id'] === $current_id ) {
 
                 if($item['parent_id'] === 0){
@@ -337,7 +336,7 @@ trait AdminTreeTrait
     protected function getBreadCrumb($data, $current_id, $current_nav = ''): string
     {
         $breadcrumb = '';
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
             if ($value['id'] === $current_id && $value['id'] !== 1) {
                 $html       = '<li class="breadcrumb-item active">' . $value['name'] . '</li>';
                 $breadcrumb = $html . $current_nav;
@@ -353,7 +352,7 @@ trait AdminTreeTrait
 
     /**
      * 获取树形数据列表
-     * @param Model $model
+     * @param  $model
      * @return string
      */
     protected function getTreeList($model): string
@@ -402,8 +401,8 @@ trait AdminTreeTrait
 
     /**
      * 获取树形选择列表
-     * @param Model $model
-     * @param int $selected
+     * @param  $model
+     * @param  $selected
      * @return string
      */
     protected function getSelectList($model, $selected = 0): string
@@ -422,7 +421,7 @@ trait AdminTreeTrait
      * @param array $auth_menus
      * @return string
      */
-    protected function authorizeHtml($menu, $auth_menus = []): string
+    protected function authorizeHtml($menu, array $auth_menus = []): string
     {
         foreach ($menu as $n => $t) {
             $menu[$n]['checked'] = in_array($t['id'], $auth_menus, false) ? ' checked' : '';
@@ -433,7 +432,7 @@ trait AdminTreeTrait
         $this->initTree($menu);
         $this->text = [
             'other' => "<label class='checkbox'  >
-                        <input \$checked  name='url[]' value='\$id' level='\$level'
+                        <input \$checked  name='url[]' value='\$id' data-level='\$level'
                         onclick='checkNode(this);' type='checkbox' data-url='\$url'>
                        \$name
                    </label>",
@@ -441,7 +440,7 @@ trait AdminTreeTrait
                 '0' => "<dl class='checkMod'>
                     <dt class='hd'>
                         <label class='checkbox'>
-                            <input \$checked name='url[]' value='\$id' level='\$level'
+                            <input \$checked name='url[]' value='\$id' data-level='\$level'
                              onclick='checkNode(this);'
                              type='checkbox'>
                             \$name
@@ -454,7 +453,7 @@ trait AdminTreeTrait
                 '0' => "
                         <div class='menu_parent'>
                             <label class='checkbox'>
-                                <input \$checked  name='url[]' value='\$id' level='\$level'
+                                <input \$checked  name='url[]' value='\$id' data-level='\$level'
                                 onclick='checkNode(this);' type='checkbox'>
                                \$name
                             </label>

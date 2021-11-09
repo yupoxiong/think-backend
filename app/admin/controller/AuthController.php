@@ -125,7 +125,7 @@ class AuthController extends AdminBaseController
     }
 
     //极验初始化
-    public function geetest(Request $request)
+    public function geetest(Request $request): Json
     {
 
         $config  = setting('admin.login');
@@ -146,7 +146,7 @@ class AuthController extends AdminBaseController
         session('gt_server', $status);
         session('gt_uid', $data['gt_uid']);
 
-        return admin_success($status, $geeTest->getResponse());
+        return admin_success((string)$status, $geeTest->getResponse());
     }
 
     /**

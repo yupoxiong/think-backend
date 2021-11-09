@@ -163,11 +163,11 @@ class SettingController extends AdminBaseController
     {
         $data = (new Setting)->where('setting_group_id', $id)->select();
 
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
 
             $content_new = [];
 
-            foreach ($value->content as $kk => $content) {
+            foreach ($value->content as $content) {
 
                 $content['form'] = $this->getFieldForm($content['type'], $content['name'], $content['field'], $content['content'], $content['option']);
 
@@ -235,7 +235,7 @@ class SettingController extends AdminBaseController
         $config = $model->findOrEmpty($id);
 
         $content_data = [];
-        foreach ($config->content as $key => $value) {
+        foreach ($config->content as $value) {
 
             $value['content'] = $param[$value['field']];
 

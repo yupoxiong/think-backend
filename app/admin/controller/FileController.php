@@ -76,7 +76,7 @@ class FileController extends AdminBaseController
         if ($request->isPost()) {
             $param = $request->param();
             $field = $param['file_field'] ?? 'file';
-            $dir   = $param['file_dir'] ?? 'eitor';
+            $dir   = $param['file_dir'] ?? 'editor';
             // 文件类型，默认图片
             $file_type = $param['file_type'] ?? 'image';
             // 上传到本地，可自行修改为oss之类的
@@ -131,7 +131,7 @@ class FileController extends AdminBaseController
 
         $path        = app()->getRootPath() . 'public' . $file;
         $true_delete = config('filesystem.form_true_delete');
-        $result      = $true_delete ? @unlink($path) : true;
+        $result      = !$true_delete || @unlink($path);
         return $result ? json(['message' => '成功',]) : json(['message' => '失败']);
     }
 

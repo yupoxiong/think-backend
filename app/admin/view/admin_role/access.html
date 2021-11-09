@@ -75,10 +75,10 @@
                 var chk = $("input[type='checkbox']");
                 var count = chk.length;
                 var num = chk.index(obj);
-                var level_top = level_bottom = chk.eq(num).attr('level');
+                var level_top = level_bottom = chk.eq(num).data('level');
 
                 for (var i = num; i >= 0; i--) {
-                    var le = chk.eq(i).attr('level');
+                    var le = chk.eq(i).data('level');
                     if (eval(le) < eval(level_top)) {
                         chk.eq(i).prop("checked", true);
                         level_top = level_top - 1;
@@ -86,7 +86,7 @@
                 }
 
                 for (var j = num + 1; j < count; j++) {
-                    le = chk.eq(j).attr('level');
+                    le = chk.eq(j).data('level');
                     if (chk.eq(num).prop("checked")) {
                         if (eval(le) > eval(level_bottom)) {
 

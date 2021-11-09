@@ -1,7 +1,7 @@
 <?php
 /**
  * 用户模型
-*/
+ */
 
 namespace app\common\model;
 
@@ -10,28 +10,29 @@ use think\model\concern\SoftDelete;
 class User extends CommonBaseModel
 {
     use SoftDelete;
+
     // 自定义选择数据
     // 是否启用列表
-const STATUS_LIST= [
-1=>'是',
-0=>'否',
-];
+    const STATUS_LIST = [
+        1 => '是',
+        0 => '否',
+    ];
 
 
     protected $name = 'user';
     protected $autoWriteTimestamp = true;
 
     // 可搜索字段
-    public array $searchField = ['username','mobile','nickname',];
+    public array $searchField = ['username', 'mobile', 'nickname',];
 
     // 可作为条件的字段
-    public array $whereField = ['user_level_id','status',];
+    public array $whereField = ['user_level_id', 'status',];
 
     // 可做为时间
     public array $timeField = [];
 
     // [FORM_NAME]获取器
-    public function getStatusNameAttr($value ,$data)
+    public function getStatusNameAttr($value, $data)
     {
         return self::STATUS_LIST[$data['status']];
     }

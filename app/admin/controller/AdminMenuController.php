@@ -71,7 +71,7 @@ class AdminMenuController extends AdminBaseController
     /**
      * 修改
      *
-     * @param int $id
+     * @param $id
      * @param Request $request
      * @param AdminMenu $model
      * @param AdminMenuValidate $validate
@@ -132,7 +132,7 @@ class AdminMenuController extends AdminBaseController
      * @param AdminMenu $model
      * @return string
      */
-    protected function getMenuTree($model): string
+    protected function getMenuTree(AdminMenu $model): string
     {
         // 查询所有菜单并以树的形式显示
         $result = $model->order('sort_number', 'asc')

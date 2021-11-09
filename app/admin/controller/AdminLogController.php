@@ -10,6 +10,7 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminUser;
 use Exception;
+use JsonException;
 use think\Request;
 use app\admin\model\AdminLog;
 use think\response\Json;
@@ -68,7 +69,7 @@ class AdminLogController extends AdminBaseController
      * @param $id
      * @param AdminLog $model
      * @return Json
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function position($id, AdminLog $model): Json
     {

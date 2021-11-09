@@ -16,7 +16,7 @@ use think\facade\Log;
 
 class AdminUserLogout
 {
-    public function handle($user)
+    public function handle($user): void
     {
         try {
             (new AdminLogService)->create($user, '退出');

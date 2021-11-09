@@ -9,7 +9,8 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
-use think\Model;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\model\concern\SoftDelete;
 
 /**
@@ -32,18 +33,18 @@ class AdminUser extends AdminBaseModel
 
     /**
      * @param AdminUser $data
-     * @return mixed|void
+     * @return void
      */
-    public static function onBeforeInsert($data)
+    public static function onBeforeInsert($data):void
     {
         $data->password = (new self)->setEncryptPassword($data->password);
     }
 
     /**
      * @param AdminUser $data
-     * @return mixed|void
+     * @return void
      */
-    public static function onBeforeUpdate($data)
+    public static function onBeforeUpdate($data):void
     {
         $old = (new self())->where('id', '=', $data->id)->findOrEmpty();
         /**@var AdminUser $old */
@@ -77,11 +78,17 @@ class AdminUser extends AdminBaseModel
      * 获取用户的角色列表
      * @param $value
      * @param $data
-     * @return array|Model
+     * @return array
      */
-    public function getRoleListAttr($value, $data)
+    public function getRoleListAttr($value, $data): array
     {
-        return (new AdminRole)->whereIn('id', $data['role'])->selectOrFail();
+        try {
+            return (new AdminRole)->whereIn('id', $data['role'])
+                ->selectOrFail()
+                ->toArray();
+        } catch (DataNotFoundException | ModelNotFoundException $e) {
+            return [];
+        }
     }
 
 

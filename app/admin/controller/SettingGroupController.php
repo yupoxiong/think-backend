@@ -138,7 +138,7 @@ class SettingGroupController extends AdminBaseController
      * @return Json
      * @throws Exception
      */
-    public function del($id, SettingGroup $model)
+    public function del($id, SettingGroup $model): Json
     {
         $check = $model->inNoDeletionIds($id);
 
@@ -182,7 +182,7 @@ class SettingGroupController extends AdminBaseController
      * @return Json
      * @throws Exception
      */
-    public function file($id, SettingGroup $model)
+    public function file($id, SettingGroup $model): Json
     {
         /** @var SettingGroup $data */
         $data = $model->find($id);
@@ -206,16 +206,22 @@ class SettingGroupController extends AdminBaseController
 
     }
 
-    public function menu($id, SettingGroup $model)
+    /**
+     * @param $id
+     * @param SettingGroup $model
+     * @return Json
+     */
+    public function menu($id, SettingGroup $model): Json
     {
         /** @var SettingGroup $data */
-        $data = $model->find($id);
+        $data = $model->findOrEmpty($id);
+        if($data->isEmpty()){
+            return  admin_error('数据不存在');
+        }
 
-        $have    = AdminMenu::find(function ($query) use ($data) {
-            $query->where('url', get_setting_menu_url($data));
-        });
+        $have    = (new AdminMenu)->where('url', get_setting_menu_url($data))->findOrEmpty();
         $warning = cache('create_setting_menu_' . $data->code);
-        if (!$warning && $have) {
+        if (!$warning && !$have->isEmpty()) {
 
             cache('create_setting_menu_' . $data->code, '1', 5);
             return admin_error('当前配置菜单已存在，如果确认要替换请在5秒内再次点击生成按钮');
@@ -229,7 +235,7 @@ class SettingGroupController extends AdminBaseController
      * 获取所有项目模块
      * @return array
      */
-    protected function getModuleList()
+    protected function getModuleList(): array
     {
 
         $app_path    = app()->getAppPath();

@@ -81,7 +81,7 @@ class AdminRoleController extends AdminBaseController
     /**
      * 修改
      *
-     * @param int $id
+     * @param $id
      * @param Request $request
      * @param AdminRole $model
      * @param AdminRoleValidate $validate
@@ -115,9 +115,10 @@ class AdminRoleController extends AdminBaseController
      * @param $id
      * @param Request $request
      * @param AdminRole $model
-     * @param AdminRoleValidate $validate
+     * @return string|Json
+     * @throws Exception
      */
-    public function access($id, Request $request, AdminRole $model, AdminRoleValidate $validate)
+    public function access($id, Request $request, AdminRole $model)
     {
         $data = $model->findOrEmpty($id);
         if ($request->isPost()) {
@@ -125,8 +126,9 @@ class AdminRoleController extends AdminBaseController
             if (!isset($param['url'])) {
                 return admin_error('请至少选择一项权限');
             }
-            if (!in_array(1, $param['url'])) {
-                return admin_error('首页权限必选');
+            $param['url'] = array_map('intval', $param['url']);
+            if (!in_array(1, $param['url'], true) || !in_array(2, $param['url'], true) || !in_array(18, $param['url'], true)) {
+                return admin_error('首页和个人资料权限必选');
             }
 
             asort( $param['url']);
@@ -137,7 +139,7 @@ class AdminRoleController extends AdminBaseController
             return admin_error();
         }
 
-        $menu = AdminMenu::order('sort_number', 'asc')
+        $menu = (new AdminMenu)->order('sort_number', 'asc')
             ->order('id', 'asc')
             ->column('*', 'id');
         $html = $this->authorizeHtml($menu, $data->url);

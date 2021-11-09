@@ -25,9 +25,12 @@ class AdminLogData extends AdminBaseModel
         return $this->belongsTo(AdminLog::class);
     }
 
-    public function getDataFormatAttr($value,$data)
+    /**
+     * @throws \JsonException
+     */
+    public function getDataFormatAttr($value, $data)
     {
-        return json_encode(json_decode($data['data'], true), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return json_encode(json_decode($data['data'], true, 512, JSON_THROW_ON_ERROR), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
 }

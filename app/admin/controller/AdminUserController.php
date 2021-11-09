@@ -89,11 +89,13 @@ class AdminUserController extends AdminBaseController
     /**
      * 修改
      *
-     * @param int $id
+     * @param $id
      * @param Request $request
      * @param AdminUser $model
+     * @param AdminUserService $service
      * @param AdminUserValidate $validate
      * @return string|Json
+     * @throws Exception
      */
     public function edit($id, Request $request, AdminUser $model, AdminUserService $service, AdminUserValidate $validate)
     {
@@ -167,7 +169,16 @@ class AdminUserController extends AdminBaseController
      */
     public function disable($id, AdminUser $model): Json
     {
-        if ((is_array($id) && in_array(1, $id)) || $id == 1) {
+        $has_admin = false;
+        if (is_array($id)) {
+            $id = array_map('intval', $id);
+            if (in_array(1, $id, true)) {
+                $has_admin = true;
+            }
+        } else if ((int)$id === 1) {
+            $has_admin = true;
+        }
+        if($has_admin){
             return admin_error('超级管理员不能禁用');
         }
 
@@ -179,7 +190,7 @@ class AdminUserController extends AdminBaseController
      * 个人资料
      * @param Request $request
      * @param AdminUserValidate $validate
-     * @return mixed
+     * @return string|Json
      * @throws Exception
      */
     public function profile(Request $request, AdminUserValidate $validate)

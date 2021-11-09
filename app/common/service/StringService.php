@@ -30,7 +30,7 @@ class StringService extends CommonBaseService
      * @return string
      * @throws CommonServiceException
      */
-    public static function getRandString($length = 10, $number = true, $lower_case = true, $capital = true, $punctuation = true): string
+    public static function getRandString(int $length = 10, bool $number = true, bool $lower_case = true, bool $capital = true, bool $punctuation = true): string
     {
         $str = '';
 

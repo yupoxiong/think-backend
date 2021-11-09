@@ -24,14 +24,14 @@ if (!function_exists('admin_success')) {
     /**
      * 后台返回成功
      * @param string $msg
-     * @param array $data
+     * @param mixed $data,
      * @param int $code
      * @param string $url
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_success($msg = '操作成功', $data = [], $url = URL_CURRENT, $code = 200, array $header = [], $options = []): Json
+    function admin_success(string $msg = '操作成功',  $data = [], string $url = URL_CURRENT, int $code = 200, array $header = [], array $options = []): Json
     {
         return admin_result($msg, $data, $url, $code, $header, $options);
     }
@@ -42,14 +42,14 @@ if (!function_exists('admin_error')) {
     /**
      * 后台返回错误
      * @param string $msg
-     * @param array $data
+     * @param mixed $data,
      * @param string $url
      * @param int $code
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_error($msg = '操作失败', $data = [], $url = URL_CURRENT, $code = 500, array $header = [], $options = []): Json
+    function admin_error(string $msg = '操作失败',  $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
     {
         return admin_result($msg, $data, $url, $code, $header, $options);
     }
@@ -60,7 +60,7 @@ if (!function_exists('admin_result')) {
 
     /**
      * 后台返回结果
-     * @param array $data
+     * @param mixed $data,
      * @param string $msg
      * @param string $url
      * @param int $code
@@ -68,7 +68,7 @@ if (!function_exists('admin_result')) {
      * @param array $options
      * @return Json
      */
-    function admin_result($msg = '', $data = [], $url = URL_CURRENT, $code = 500, $header = [], $options = []): Json
+    function admin_result(string $msg = '',  $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
     {
 
         $data = [
@@ -91,7 +91,7 @@ if (!function_exists('create_setting_file')) {
      * @param SettingGroup $data
      * @return bool
      */
-    function create_setting_file($data): bool
+    function create_setting_file(SettingGroup $data): bool
     {
         $result = true;
         if ($data->auto_create_file === 1) {
@@ -108,7 +108,7 @@ if (!function_exists('create_setting_file')) {
                 $data->name . ':' . $data->description .
                 "\r\n* 此配置文件为自动生成，生成时间" . date('Y-m-d H:i:s') .
                 "\r\n*/\r\n\r\nreturn [";
-            foreach ($setting as $key => $value) {
+            foreach ($setting as $value) {
                 $file_code .= "\r\n    // " . $value['name'] . ':' . $value['description'] . "\r\n    '" . $value['code'] . "'=>[";
                 foreach ($value->content as $content) {
                     $file_code .= "\r\n    // " . $content['name'] . "\r\n    '" .
@@ -142,7 +142,7 @@ if (!function_exists('create_setting_menu')) {
 EOF;
 
         $result = true;
-        if ((int)$data->auto_create_menu === 1) {
+        if ($data->auto_create_menu === 1) {
             $url  = get_setting_menu_url($data);
             /** @var AdminMenu $menu */
             $menu = (new app\admin\model\AdminMenu)->findOrEmpty(function ($query) use ($url) {
@@ -175,7 +175,7 @@ EOF;
             }
         }
 
-        return $result ? true : false;
+        return (bool)$result;
     }
 }
 

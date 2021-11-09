@@ -14,7 +14,6 @@ use app\api\service\TokenService;
 use app\api\exception\ApiServiceException;
 use app\common\model\User;
 use think\exception\HttpResponseException;
-use think\Log;
 use think\response\Json;
 
 class ApiBaseController

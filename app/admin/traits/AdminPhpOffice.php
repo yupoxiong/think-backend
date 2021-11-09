@@ -24,9 +24,9 @@ trait AdminPhpOffice
      * @param array $body
      * @param string $name
      * @param string $title
-     * @return mixed
+     * @return void
      */
-    protected function exportData(array $head, array $body, $name = '', $title = 'Sheet1')
+    protected function exportData(array $head, array $body, string $name = '', string $title = 'Sheet1')
     {
         try {
 
@@ -53,7 +53,7 @@ trait AdminPhpOffice
             foreach ($body as $key => $val) {
                 $row = $key + 2;
                 $col = 0;
-                foreach ($val as $k => $v) {
+                foreach ($val as $v) {
                     $sheet->setCellValue($char_index[$col] . $row, $v);
                     $col++;
                 }
@@ -82,7 +82,7 @@ trait AdminPhpOffice
      * @param bool $del 导入成功后是否删除文件
      * @return bool|string
      */
-    protected function importData(string $name, string $table, array $field_list, $limit = 100, $del = true)
+    protected function importData(string $name, string $table, array $field_list, int $limit = 100, bool $del = true)
     {
         $config = config('filesystem.disks.admin_import');
 
@@ -195,7 +195,7 @@ trait AdminPhpOffice
      * @param $body
      * @param string $name
      */
-    public function exportXlsx($header, $body, $name = ''): void
+    public function exportXlsx($header, $body, string $name = ''): void
     {
         if (empty($name)) {
             $name = date('Y-m-d-H-i-s');

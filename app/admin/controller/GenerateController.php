@@ -7,6 +7,7 @@
 namespace app\admin\controller;
 
 use Exception;
+use generate\field\Field;
 use think\facade\Db;
 use think\Request;
 use think\facade\Log;
@@ -262,6 +263,7 @@ class GenerateController extends AdminBaseController
     {
         $param  = $request->param();
         $result = false;
+        $data = '';
         try {
 
             if ($param['form_type'] === 'switch') {
@@ -269,7 +271,7 @@ class GenerateController extends AdminBaseController
             }
 
             $class_name = parse_name($param['form_type'], 1);
-
+            /** @var Field $class */
             $class = '\\generate\\field\\' . $class_name;
             $data  = $class::rule();
 

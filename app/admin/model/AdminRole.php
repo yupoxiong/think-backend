@@ -24,7 +24,7 @@ class AdminRole extends AdminBaseModel
     /**
      * 角色初始权限
      * @param AdminRole $data
-     * @return mixed|void
+     * @return void
      */
     public static function onBeforeInsert($data)
     {
@@ -36,7 +36,7 @@ class AdminRole extends AdminBaseModel
         return $value !== '' ? explode(',', $value) : [];
     }
 
-    protected function setUrlAttr($value)
+    protected function setUrlAttr($value): string
     {
         return $value !== '' ? implode(',', $value) : '';
     }

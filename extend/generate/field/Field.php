@@ -11,6 +11,7 @@ class Field
 {
     use Tools;
 
+    public static string $html='';
 
     // 当前字段可用规则
     public static array $rules = [

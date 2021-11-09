@@ -12,6 +12,7 @@ namespace app\admin\service;
 
 use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminUser;
+use think\Model;
 
 class AdminUserService
 {
@@ -47,7 +48,7 @@ class AdminUserService
     /**
      * 创建后台用户
      * @param $param
-     * @return AdminUser|\think\Model
+     * @return AdminUser|Model
      * @throws AdminServiceException
      */
     public function create($param)
@@ -88,7 +89,7 @@ class AdminUserService
      * @param int $level
      * @return bool|string
      */
-    public function checkPasswordLevel($password, $level = 0)
+    public function checkPasswordLevel($password, int $level = 0)
     {
         $level = $level === 0 ? (int)setting('admin.safe.password_level') : $level;
 
@@ -103,7 +104,7 @@ class AdminUserService
      * @param string $content 可以为all，name,rule,desc
      * @return false|string|string[]
      */
-    public function getCurrentPasswordLevel($content = 'all')
+    public function getCurrentPasswordLevel(string $content = 'all')
     {
         $check = (int)setting('admin.safe.password_check');
         if (!$check) {

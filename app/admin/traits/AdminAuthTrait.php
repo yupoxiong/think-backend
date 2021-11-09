@@ -60,7 +60,7 @@ trait AdminAuthTrait
     /**
      * 检查权限
      */
-    public function checkAuth()
+    public function checkAuth(): bool
     {
         $url = $this->url;
 

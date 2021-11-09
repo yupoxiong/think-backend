@@ -36,11 +36,11 @@ class UserController extends AdminBaseController
         $this->assign($request->get());
 
         $this->assign([
-            'data'  => $data,
-            'page'  => $data->render(),
-            'total' => $data->total(),
+            'data'            => $data,
+            'page'            => $data->render(),
+            'total'           => $data->total(),
             'user_level_list' => UserLevel::select(),
-'status_list'=>User::STATUS_LIST,
+            'status_list'     => User::STATUS_LIST,
         ]);
         return $this->fetch();
     }
@@ -62,19 +62,19 @@ class UserController extends AdminBaseController
             if (!$validate_result) {
                 return admin_error($validate->getError());
             }
-            
+
             $result = $model::create($param);
 
             $url = URL_BACK;
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
-               $url = URL_RELOAD;
+                $url = URL_RELOAD;
             }
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
         $this->assign([
-    'user_level_list' => UserLevel::select(),
+            'user_level_list' => UserLevel::select(),
 
-]);
+        ]);
 
 
         return $this->fetch();
@@ -99,14 +99,14 @@ class UserController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-            
+
             $result = $data->save($param);
 
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
-            'data' => $data,
+            'data'            => $data,
             'user_level_list' => UserLevel::select(),
 
         ]);
@@ -168,13 +168,13 @@ class UserController extends AdminBaseController
     public function import(Request $request): Json
     {
         $param           = $request->param();
-        $field_name_list = ['用户等级','账号','密码','手机号','昵称','头像','是否启用',];
+        $field_name_list = ['用户等级', '账号', '密码', '手机号', '昵称', '头像', '是否启用',];
         if (isset($param['action']) && $param['action'] === 'download_example') {
             $this->downloadExample($field_name_list);
         }
 
-        $field_list = ['user_level_id','username','password','mobile','nickname','avatar','status',];
-        $result = $this->importData('file','user',$field_list);
+        $field_list = ['user_level_id', 'username', 'password', 'mobile', 'nickname', 'avatar', 'status',];
+        $result     = $this->importData('file', 'user', $field_list);
 
         return true === $result ? admin_success('操作成功', [], URL_RELOAD) : admin_error($result);
     }
@@ -191,18 +191,18 @@ class UserController extends AdminBaseController
         $param = $request->param();
         $data  = $model->with('user_level')->scope('where', $param)->select();
 
-        $header = ['ID','用户等级','账号','手机号','昵称','头像','是否启用','创建时间',];
+        $header = ['ID', '用户等级', '账号', '手机号', '昵称', '头像', '是否启用', '创建时间',];
         $body   = [];
         foreach ($data as $item) {
-            $record                = [];
-            $record['id'] = $item->id;
-$record['user_level_id'] = $item->user_level->name?? '';
-$record['username'] = $item->username;
-$record['mobile'] = $item->mobile;
-$record['nickname'] = $item->nickname;
-$record['avatar'] = $item->avatar;
-$record['status'] = $item->status_text;
-$record['create_time'] = $item->create_time;
+            $record                  = [];
+            $record['id']            = $item->id;
+            $record['user_level_id'] = $item->user_level->name ?? '';
+            $record['username']      = $item->username;
+            $record['mobile']        = $item->mobile;
+            $record['nickname']      = $item->nickname;
+            $record['avatar']        = $item->avatar;
+            $record['status']        = $item->status_text;
+            $record['create_time']   = $item->create_time;
 
             $body[] = $record;
         }
