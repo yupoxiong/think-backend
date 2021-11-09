@@ -20,7 +20,7 @@ class AuthController
     {
         try {
             return api_success([
-                'token' => (new TokenService())->getToken(1),
+                'token' => (new TokenService())->getToken(2001),
             ]);
         } catch (ApiServiceException $e) {
             return  api_error('登录错误');

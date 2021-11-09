@@ -5,7 +5,6 @@
 
 namespace app\api\controller;
 
-use app\admin\model\AdminMenu;
 use think\response\Json;
 use app\api\service\TestService;
 use app\common\validate\TestValidate;
@@ -13,9 +12,6 @@ use app\api\exception\ApiServiceException;
 
 class TestController extends ApiBaseController
 {
-
-    protected array $authExcept=['index'];
-
     /**
      * 列表
      * @param TestService $service
@@ -23,10 +19,6 @@ class TestController extends ApiBaseController
      */
     public function index(TestService $service): Json
     {
-
-        $menu = (new AdminMenu)->select()->hidden(['create_time','update_time','delete_time']);
-        dump(json_encode($menu));exit();
-
         try {
             $data   = $service->getList($this->param, $this->page, $this->limit);
             $result = [

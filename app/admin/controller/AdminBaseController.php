@@ -90,7 +90,7 @@ class AdminBaseController
         /** @var AdminMenu $menu */
         $this->menu = (new AdminMenu)->where(['url' => $this->url])->findOrEmpty();
 
-        if ($this->user && !$this->menu->isEmpty() && request()->method()===$this->menu->log_method) {
+        if (isset($this->user) && !$this->menu->isEmpty() && request()->method() === $this->menu->log_method) {
             $this->createLog($this->user, $this->menu->name);
         }
 
@@ -122,10 +122,12 @@ class AdminBaseController
         // 顶部导航
         $this->admin['top_nav'] = (int)setting('admin.display.top_nav');
 
+        $this->admin['base'] = setting('admin.base');
+
         $current_top_id = 0;
 
         if (!$this->menu->isEmpty()) {
-            $menu = $this->menu;
+            $menu     = $this->menu;
             $menu_all = (new AdminMenu)->field('id,parent_id,name,icon')->select()->toArray();
 
             $this->admin['title']      = $menu->name;
@@ -135,8 +137,6 @@ class AdminBaseController
             }
         }
 
-
-        $this->admin['name']       = '后台';
         $this->admin['is_pjax']    = request()->isPjax();
         $this->admin['upload_url'] = url('admin/file/upload')->build();
         $this->admin['logout_url'] = url('admin/auth/logout')->build();
@@ -149,7 +149,6 @@ class AdminBaseController
             $this->admin['top_menu']  = $show_menu['top'];
             $this->admin['left_menu'] = $this->getLeftMenu($show_menu['left'][$current_top_id], $menu->id ?? 0);
         }
-
 
         $this->admin['debug'] = Env::get('app_debug') ? 1 : 0;
         // 顶部导航
@@ -164,10 +163,11 @@ class AdminBaseController
         $this->admin['file_del_url'] = url('admin/file/del');
         $this->admin['map']          = config('map');
 
+        $this->admin['user']  = $this->user ?? new AdminUser();
+
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
-            'user'  => $this->user ?? new AdminUser(),
         ]);
 
         return $this->view->fetch($template, $vars);

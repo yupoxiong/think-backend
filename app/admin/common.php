@@ -94,7 +94,7 @@ if (!function_exists('create_setting_file')) {
     function create_setting_file($data): bool
     {
         $result = true;
-        if ((int)$data->auto_create_file === 1) {
+        if ($data->auto_create_file === 1) {
             $file = 'config/'.$data->code . '.php';
             if ($data->module !== 'app') {
                 $file = 'app/'.$data->module .'/'. $file;
@@ -104,14 +104,14 @@ if (!function_exists('create_setting_file')) {
 
             $setting   = $data->setting;
             $path      = app()->getRootPath() . $file;
-            $file_code = "<?php\r\n\r\n/**\r\n* " .
+            $file_code = "<?php\r\n/**\r\n* " .
                 $data->name . ':' . $data->description .
                 "\r\n* 此配置文件为自动生成，生成时间" . date('Y-m-d H:i:s') .
                 "\r\n*/\r\n\r\nreturn [";
             foreach ($setting as $key => $value) {
-                $file_code .= "\r\n    //" . $value['name'] . ':' . $value['description'] . "\r\n    '" . $value['code'] . "'=>[";
+                $file_code .= "\r\n    // " . $value['name'] . ':' . $value['description'] . "\r\n    '" . $value['code'] . "'=>[";
                 foreach ($value->content as $content) {
-                    $file_code .= "\r\n    //" . $content['name'] . "\r\n    '" .
+                    $file_code .= "\r\n    // " . $content['name'] . "\r\n    '" .
                         $content['field'] . "'=>'" . $content['content'] . "',";
                 }
                 $file_code .= "\r\n],";
@@ -119,7 +119,7 @@ if (!function_exists('create_setting_file')) {
             $file_code .= "\r\n];";
             $result    = file_put_contents($path, $file_code);
         }
-        return $result ? true : false;
+        return (bool)$result;
     }
 }
 

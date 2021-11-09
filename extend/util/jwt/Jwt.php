@@ -12,7 +12,6 @@ use JsonException;
 
 class Jwt
 {
-
     public const ALG = [
         'HS256' => 'sha256',
         'HS384' => 'sha384',
@@ -59,21 +58,30 @@ class Jwt
 
     /**
      * 获取header
+     * @param string $name 不传为获取header整体内容
      * @return array
      */
-    public function getHeader(): array
+    public function getHeader(string $name = ''): array
     {
-        return $this->header;
+        if ($name === '') {
+            return $this->header;
+        }
+        return $this->header[$name];
     }
 
     /**
      * 设置header
-     * @param $name
-     * @param $value
+     * @param mixed $name 传入array为替换整体header
+     * @param string $value
      * @return $this
      */
-    public function setHeader($name, $value): Jwt
+    public function setHeader($name, string $value = ''): Jwt
     {
+        if (is_array($name)) {
+            $this->header = $name;
+            return $this;
+        }
+
         $this->header[$name] = $value;
         return $this;
     }
@@ -108,6 +116,43 @@ class Jwt
         return $this;
     }
 
+    /**
+     * 获取过期时间
+     * @return mixed
+     */
+    public function getExp()
+    {
+        return $this->getClaim('exp');
+    }
+
+    /**
+     * 获取可使用时间
+     * @return mixed
+     */
+    public function getNbf()
+    {
+        return $this->getClaim('nbf');
+    }
+
+
+    /**
+     * 获取签发者
+     * @return mixed
+     */
+    public function getIss()
+    {
+        return $this->getClaim('iss');
+    }
+
+
+    /**
+     * 获取使用者
+     * @return mixed
+     */
+    public function getAud()
+    {
+        return $this->getClaim('aud');
+    }
 
     /**
      * @return array
@@ -126,9 +171,9 @@ class Jwt
     {
         $this->checkSignKey();
 
-        $header_str = $this->base64UrlEncode($this->jsonEncode($this->header));
+        $header_str = $this->base64UrlEncode($this->jsonEncode($this->getHeader()));
 
-        $payload_str = $this->base64UrlEncode($this->jsonEncode($this->payload));
+        $payload_str = $this->base64UrlEncode($this->jsonEncode($this->getPayload()));
 
         return $header_str . '.' . $payload_str . '.' . $this->signature($header_str . '.' . $payload_str);
     }
@@ -139,19 +184,19 @@ class Jwt
      */
     protected function checkSignKey(): bool
     {
-        switch ($this->alg) {
+        switch ($this->getAlg()) {
             case 'HS256':
             case 'HS384':
             case 'HS512':
             default:
-                if (empty($this->key)) {
+                if (empty($this->getKey())) {
                     throw new JwtException('请设置加密key');
                 }
                 break;
             case 'RS256':
             case 'RS384':
             case 'RS512':
-                if (empty($this->privateKey)) {
+                if (empty($this->getPrivateKey())) {
                     throw new JwtException('请设置私钥');
                 }
                 break;
@@ -159,43 +204,6 @@ class Jwt
 
         return true;
     }
-
-    /**
-     * token是否已过期
-     * @return bool
-     */
-    public function isExpired(): bool
-    {
-        return $this->expired;
-    }
-
-    /**
-     * 检查验证key
-     * @throws JwtException
-     */
-    protected function checkVerifyKey(): bool
-    {
-        switch ($this->alg) {
-            case 'HS256':
-            case 'HS384':
-            case 'HS512':
-            default:
-                if (empty($this->key)) {
-                    throw new JwtException('请设置加密key');
-                }
-                break;
-            case 'RS256':
-            case 'RS384':
-            case 'RS512':
-                if (empty($this->publicKey)) {
-                    throw new JwtException('请设置公钥');
-                }
-                break;
-        }
-
-        return true;
-    }
-
 
     /**
      * 验证token
@@ -243,6 +251,8 @@ class Jwt
             return false;
         }
 
+        $this->setExpired(false);
+
         // 未到使用时间验证
         if (isset($this->payload['nbf']) && $this->payload['nbf'] > $time) {
             $this->setMessage('未到使用时间');
@@ -276,11 +286,11 @@ class Jwt
             case 'RS256':
             case 'RS384':
             case 'RS512':
-                if (empty($this->publicKey)) {
+                if (empty($this->getPublicKey())) {
                     throw new JwtException('请设置公钥');
                 }
 
-                if(!$this->verifyRsSign($header . '.' . $payload,$sign)){
+                if (!$this->verifyRsSign($header . '.' . $payload, $sign)) {
                     throw new JwtException('签名验证失败');
                 }
 
@@ -297,14 +307,14 @@ class Jwt
      * @param $sign
      * @return bool
      */
-    public function verifyRsSign($data,$sign): bool
+    public function verifyRsSign($data, $sign): bool
     {
-        $signature  = $this->base64UrlDecode($sign);
-        $publicKey  = openssl_get_publickey($this->getPublicKey());
-        $res        = openssl_verify($data, $signature, $publicKey,self::ALG[$this->getAlg()]);
+        $signature = $this->base64UrlDecode($sign);
+        $publicKey = openssl_get_publickey($this->getPublicKey());
+        $res       = openssl_verify($data, $signature, $publicKey, self::ALG[$this->getAlg()]);
         openssl_free_key($publicKey);
 
-        return $res===1;
+        return $res === 1;
     }
 
 
@@ -342,61 +352,6 @@ class Jwt
         $this->message = $message;
     }
 
-    /**
-     * base64url解码
-     * @param string $input
-     * @return false|string
-     */
-    protected function base64UrlDecode(string $input)
-    {
-        $remainder = strlen($input) % 4;
-        if ($remainder) {
-            $append_length = 4 - $remainder;
-            $input         .= str_repeat('=', $append_length);
-        }
-        return base64_decode(strtr($input, '-_', '+/'));
-    }
-
-    /**
-     * base64url编码
-     * @param string $data
-     * @return string
-     */
-    protected function base64UrlEncode(string $data): string
-    {
-        return str_replace('=', '', strtr(base64_encode($data), '+/', '-_'));
-    }
-
-
-    /**
-     * 转换成json
-     * @param mixed $data
-     * @return string
-     * @throws JwtException
-     */
-    protected function jsonEncode($data): string
-    {
-        try {
-            return json_encode($data, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new JwtException($e->getMessage());
-        }
-    }
-
-    /**
-     * json转换为数组
-     * @param string $data
-     * @return mixed
-     * @throws JwtException
-     */
-    protected function jsonDecode(string $data)
-    {
-        try {
-            return json_decode($data, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new JwtException($e->getMessage());
-        }
-    }
 
     /**
      * 签名
@@ -483,11 +438,77 @@ class Jwt
     }
 
     /**
+     * token是否已过期
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        return $this->expired;
+    }
+
+    /**
      * 设置当前token的过期状态
      * @param bool $expired
      */
-    public function setExpired(bool $expired): void
+    protected function setExpired(bool $expired): void
     {
         $this->expired = $expired;
+    }
+
+
+    /**
+     * base64url解码
+     * @param string $input
+     * @return false|string
+     */
+    protected function base64UrlDecode(string $input)
+    {
+        $remainder = strlen($input) % 4;
+        if ($remainder) {
+            $append_length = 4 - $remainder;
+            $input         .= str_repeat('=', $append_length);
+        }
+        return base64_decode(strtr($input, '-_', '+/'));
+    }
+
+    /**
+     * base64url编码
+     * @param string $data
+     * @return string
+     */
+    protected function base64UrlEncode(string $data): string
+    {
+        return str_replace('=', '', strtr(base64_encode($data), '+/', '-_'));
+    }
+
+
+    /**
+     * 转换成json
+     * @param mixed $data
+     * @return string
+     * @throws JwtException
+     */
+    protected function jsonEncode($data): string
+    {
+        try {
+            return json_encode($data, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new JwtException($e->getMessage());
+        }
+    }
+
+    /**
+     * json转换为数组
+     * @param string $data
+     * @return mixed
+     * @throws JwtException
+     */
+    protected function jsonDecode(string $data)
+    {
+        try {
+            return json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new JwtException($e->getMessage());
+        }
     }
 }

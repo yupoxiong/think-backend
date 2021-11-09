@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
     <meta name="csrf-token" content="{:token()}">
+    <link rel="icon" href="{$admin.base.logo|default='__ADMIN_IMAGES__/logo.png'}">
+    <link rel="apple-touch-icon" href="{$admin.base.logo|default='__ADMIN_IMAGES__/logo.png'}">
     {/if}
 
     {block name='title'}
-    <title>{$admin.title|default='Admin'} | {$admin.name|default='Admin'}</title>
+    <title>{$admin.title|default='Admin'} | {$admin.base.name|default='Admin'}</title>
     {/block}
 
     {if !$admin.is_pjax}

@@ -4,10 +4,8 @@
  * @author yupoxiong<i@yupoxiong.com>
  */
 
-
 use app\admin\listener\AdminUserLogin;
 use app\admin\listener\AdminUserLogout;
-
 
 return [
     'bind' => [
@@ -32,4 +30,3 @@ return [
     'subscribe' => [
     ],
 ];
-

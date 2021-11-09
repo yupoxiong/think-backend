@@ -11,7 +11,6 @@ class UserLevel extends CommonBaseModel
 {
     use SoftDelete;
     // 自定义选择数据
-    
 
     protected $name = 'user_level';
     protected $autoWriteTimestamp = true;

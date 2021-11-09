@@ -41,7 +41,7 @@ class AdminLogService extends AdminBaseService
                 'admin_user_id' => $user->id,
                 'name'          => $name,
                 'log_method'    => request()->method(),
-                'url'           => request()->pathinfo(),
+                'url'           => request()->url(),
                 'log_ip'        => request()->ip()
             ];
             $log  = $this->model::create($data);

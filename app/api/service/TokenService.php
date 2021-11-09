@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Token Service
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -8,7 +8,6 @@ declare (strict_types=1);
 
 
 namespace app\api\service;
-
 
 use app\api\exception\ApiServiceException;
 use app\common\exception\CommonServiceException;
@@ -38,11 +37,14 @@ class TokenService extends ApiBaseService
     /** @var Jwt */
     protected Jwt $jwt;
 
+    /**
+     * @throws ApiServiceException
+     */
     public function __construct($config = null)
     {
         $this->jwt = new Jwt();
 
-        if ($config !== null && is_array($config)) {
+        if (is_array($config)) {
             $this->key = $config['key'] ?: $this->key;
             $this->iss = $config['iss'] ?: $this->iss;
             $this->aud = $config['aud'] ?: $this->aud;

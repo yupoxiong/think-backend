@@ -2,11 +2,11 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{:url('admin/index/index')}" class="brand-link">
-        <img src="{$admin.user.avatar|default='__ADMIN_IMAGES__/logo.png'}"
-             alt="Admin Logo"
+        <img src="{$admin.base.logo|default='__ADMIN_IMAGES__/logo.png'}"
+             alt="Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">{$admin.name|default='Admin'}</span>
+        <span class="brand-text font-weight-light">{$admin.base.name|default='Admin'}</span>
     </a>
 
     <!-- Sidebar -->
@@ -14,10 +14,10 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{$user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
+                <img src="{$admin.user.avatar|default='__ADMIN_IMAGES__/avatar.png'}" class="img-circle elevation-2" alt="头像">
             </div>
             <div class="info">
-                <a href="{:url('admin/admin_user/profile')}" class="d-block">{$user.nickname|default='Admin User'}</a>
+                <a href="{:url('admin/admin_user/profile')}" class="d-block">{$admin.user.nickname|default='Admin User'}</a>
             </div>
         </div>
 

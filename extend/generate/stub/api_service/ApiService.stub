@@ -33,3 +33,4 @@ class [SERVICE_NAME]Service extends ApiBaseService
     [SERVICE_DISABLE]
     
     [SERVICE_ENABLE]
+}
