@@ -13,8 +13,12 @@ class Icon extends Field
     <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="input-group iconpicker-container">
-            <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-            <input maxlength="30" id="[FIELD_NAME]" name="[FIELD_NAME]"
+            <div class="input-group-prepend">
+                <span class="input-group-text iconpicker-component">
+                    <i class="far fa-calendar-alt"></i>
+                </span>
+            </div>
+            <input maxlength="64" id="[FIELD_NAME]" name="[FIELD_NAME]"
                    value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" class="form-control fieldIcon"
                    placeholder="请选择[FORM_NAME]">
         </div>

@@ -32,9 +32,10 @@ function initUploadMultiImg(field, fileId = '') {
  * 初始化上传多文件
  * @param field
  * @param fileId
+ * @param fileType
  */
 
-function initUploadMultiFile(field, fileId = '', fileType) {
+function initUploadMultiFile(field, fileId = '', fileType='') {
     let $field = $('#' + field);
     fileId = fileId || field + '_file';
     let $fileDom = $("#" + fileId);

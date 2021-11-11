@@ -9,6 +9,7 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
+use think\exception\HttpResponseException;
 use think\response\Json;
 use think\View;
 use think\facade\Env;
@@ -81,12 +82,12 @@ class AdminBaseController
         $this->checkLogin();
         $this->checkAuth();
         $this->checkOneDeviceLogin();
+        $this->checkToken();
 
         // 分页每页数量
         $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
         // 限制每页数量最多不超过100
         $this->admin['admin_list_rows'] = $this->admin['admin_list_rows'] < 100 ? $this->admin['admin_list_rows'] : 100;
-
         /** @var AdminMenu $menu */
         $this->menu = (new AdminMenu)->where(['url' => $this->url])->findOrEmpty();
 
@@ -94,9 +95,27 @@ class AdminBaseController
             $this->createLog($this->user, $this->menu->name);
         }
 
-
     }
 
+    /**
+     * 验证csrf token
+     */
+    protected function checkToken(): void
+    {
+        $default_list = 'add,edit,del,import,update,profile';
+        $action_list  = setting('admin.safe.check_token_action_list') ?? $default_list;
+        $action_list  = explode(',', $action_list);
+        $is_check     = (bool)setting('admin.safe.check_token');
+
+        if ($is_check && request()->isPost() && in_array(request()->action(true), $action_list, true)) {
+
+            $check = request()->checkToken();
+
+            if (false === $check) {
+                throw new HttpResponseException(admin_error('token验证失败', [], URL_CURRENT, 403));
+            }
+        }
+    }
 
     /**
      * 模板赋值
@@ -163,7 +182,7 @@ class AdminBaseController
         $this->admin['file_del_url'] = url('admin/file/del');
         $this->admin['map']          = config('map');
 
-        $this->admin['user']  = $this->user ?? new AdminUser();
+        $this->admin['user'] = $this->user ?? new AdminUser();
 
         // 赋值后台变量
         $this->assign([

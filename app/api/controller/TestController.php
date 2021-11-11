@@ -5,6 +5,7 @@
 
 namespace app\api\controller;
 
+use app\common\model\Setting;
 use think\response\Json;
 use app\api\service\TestService;
 use app\common\validate\TestValidate;
@@ -12,6 +13,7 @@ use app\api\exception\ApiServiceException;
 
 class TestController extends ApiBaseController
 {
+    protected array $authExcept =['index'];
     /**
      * 列表
      * @param TestService $service
@@ -19,6 +21,9 @@ class TestController extends ApiBaseController
      */
     public function index(TestService $service): Json
     {
+        $data = Setting::select()->hidden(['create_time','update_time','delete_time']);
+        dump(json_encode($data));
+exit();
         try {
             $data   = $service->getList($this->param, $this->page, $this->limit);
             $result = [

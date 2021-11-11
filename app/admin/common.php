@@ -8,6 +8,7 @@ use app\admin\controller\SettingController;
 use think\response\Json;
 use app\common\model\SettingGroup;
 use app\admin\model\AdminMenu;
+
 /** 不做任何操作 */
 const URL_CURRENT = 'url://current';
 /** 刷新页面 */
@@ -24,14 +25,14 @@ if (!function_exists('admin_success')) {
     /**
      * 后台返回成功
      * @param string $msg
-     * @param mixed $data,
+     * @param mixed $data ,
      * @param int $code
      * @param string $url
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_success(string $msg = '操作成功',  $data = [], string $url = URL_CURRENT, int $code = 200, array $header = [], array $options = []): Json
+    function admin_success(string $msg = '操作成功', $data = [], string $url = URL_CURRENT, int $code = 200, array $header = [], array $options = []): Json
     {
         return admin_result($msg, $data, $url, $code, $header, $options);
     }
@@ -42,14 +43,14 @@ if (!function_exists('admin_error')) {
     /**
      * 后台返回错误
      * @param string $msg
-     * @param mixed $data,
+     * @param mixed $data ,
      * @param string $url
      * @param int $code
      * @param array $header
      * @param array $options
      * @return Json
      */
-    function admin_error(string $msg = '操作失败',  $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
+    function admin_error(string $msg = '操作失败', $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
     {
         return admin_result($msg, $data, $url, $code, $header, $options);
     }
@@ -60,7 +61,7 @@ if (!function_exists('admin_result')) {
 
     /**
      * 后台返回结果
-     * @param mixed $data,
+     * @param mixed $data ,
      * @param string $msg
      * @param string $url
      * @param int $code
@@ -68,21 +69,20 @@ if (!function_exists('admin_result')) {
      * @param array $options
      * @return Json
      */
-    function admin_result(string $msg = '',  $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
+    function admin_result(string $msg = '', $data = [], string $url = URL_CURRENT, int $code = 500, array $header = [], array $options = []): Json
     {
 
         $data = [
-            'msg'    => $msg,
-            'code'   => $code,
+            'msg'  => $msg,
+            'code' => $code,
             'data' => empty($data) ? (object)$data : $data,
-            'url'    => $url,
+            'url'  => $url,
         ];
 
         return json($data, 200, $header, $options);
 
     }
 }
-
 
 
 if (!function_exists('create_setting_file')) {
@@ -95,12 +95,10 @@ if (!function_exists('create_setting_file')) {
     {
         $result = true;
         if ($data->auto_create_file === 1) {
-            $file = 'config/'.$data->code . '.php';
+            $file = 'config/' . $data->code . '.php';
             if ($data->module !== 'app') {
-                $file = 'app/'.$data->module .'/'. $file;
+                $file = 'app/' . $data->module . '/' . $file;
             }
-
-
 
             $setting   = $data->setting;
             $path      = app()->getRootPath() . $file;
@@ -111,8 +109,13 @@ if (!function_exists('create_setting_file')) {
             foreach ($setting as $value) {
                 $file_code .= "\r\n    // " . $value['name'] . ':' . $value['description'] . "\r\n    '" . $value['code'] . "'=>[";
                 foreach ($value->content as $content) {
+                    if (is_array($content['content'])) {
+                        $content['content'] = implode(',', $content['content']);
+
+                    }
                     $file_code .= "\r\n    // " . $content['name'] . "\r\n    '" .
                         $content['field'] . "'=>'" . $content['content'] . "',";
+
                 }
                 $file_code .= "\r\n],";
             }
@@ -143,7 +146,7 @@ EOF;
 
         $result = true;
         if ($data->auto_create_menu === 1) {
-            $url  = get_setting_menu_url($data);
+            $url = get_setting_menu_url($data);
             /** @var AdminMenu $menu */
             $menu = (new app\admin\model\AdminMenu)->findOrEmpty(function ($query) use ($url) {
                 $query->where('url', $url);
@@ -187,6 +190,6 @@ if (!function_exists('create_setting_menu')) {
      */
     function get_setting_menu_url($data): string
     {
-        return 'admin/setting/'.$data->code;
+        return 'admin/setting/' . $data->code;
     }
 }

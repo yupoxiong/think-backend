@@ -10,16 +10,23 @@ try {
         fragment: '#pjaxContainer'
     });
     $(document).ajaxStart(function () {
+        console.log(this);
         // ajax请求的时候显示顶部进度条
-        console.log('ajax请求开始');
+        if (adminDebug) {
+            console.log('ajax请求开始');
+        }
         NProgress.start();
     }).ajaxStop(function () {
         // ajax停止的时候结束进度条
-        console.log('ajax请求停止');
+        if (adminDebug) {
+            console.log('ajax请求停止');
+        }
         NProgress.done();
     });
 } catch (e) {
-    console.log('初始化pjax报错，信息：'+e.message);
+    if (adminDebug) {
+        console.log('初始化pjax报错，信息：' + e.message);
+    }
 }
 
 $(document).on('pjax:timeout', function (event) {
@@ -227,11 +234,15 @@ function checkAll(obj) {
  * @returns {boolean}
  */
 function submitForm(form, successCallback, failCallback, errorCallback, showMsg = true) {
+    refreshCsrfToken();
     let loadT = layer.msg('正在提交，请稍候…', {icon: 16, time: 0, shade: [0.3, "#000"], scrollbar: false,});
     let action = $(form).attr('action');
     let method = $(form).attr('method');
     let data = new FormData($(form)[0]);
-
+    // 操作token
+    if(!data.has('__token__')){
+        data.append('__token__',csrfToken);
+    }
     if (adminDebug) {
         console.log('%c开始提交表单!', ';color:#333333');
         console.log('action:', action);
@@ -250,7 +261,6 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
                 if (adminDebug) {
                     console.log('表单ajax执行完毕');
                 }
-                refreshCsrfToken();
             },
             success: function (result) {
                 layer.close(loadT);
@@ -287,22 +297,16 @@ function submitForm(form, successCallback, failCallback, errorCallback, showMsg 
 
             error: function (xhr, type, errorThrown) {
                 layer.close(loadT);
-                let errorTitle = '';
-
                 // 调试信息
                 if (adminDebug) {
                     console.log('%csubmit fail!', ';color:#dd4b39');
                     console.log("type:" + type + ",readyState:" + xhr.readyState + ",status:" + xhr.status);
                     console.log("errorThrown:" + errorThrown);
+                    console.log("data:",data);
                 }
 
                 if (showMsg) {
-                    if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
-                        errorTitle = xhr.responseJSON.msg;
-                    } else {
-                        errorTitle = '系统繁忙,状态码' + xhr.status;
-                    }
-                    layer.msg(errorTitle, {icon: 2, scrollbar: false,});
+                    showAjaxError(xhr, type, errorThrown);
                 }
 
                 if (errorCallback) {
@@ -372,7 +376,7 @@ function goUrl(url = 1) {
 $(function () {
     $('body').on('click', '.AjaxButton', function (event) {
         event.preventDefault();
-
+        refreshCsrfToken();
         if (adminDebug) {
             console.log('点击Ajax请求按钮');
         }
@@ -485,7 +489,7 @@ function ajaxRequest(url, method, data, go) {
             type: method,
             data: data,
             complete: function () {
-                refreshCsrfToken();
+
             },
             success: function (result) {
                 layer.close(loadT);
@@ -509,29 +513,38 @@ function ajaxRequest(url, method, data, go) {
             error: function (xhr, type, errorThrown) {
 
                 layer.close(loadT);
-                let errorTitle = '';
-
-                // 调试信息
-                if (adminDebug) {
+                if(adminDebug){
                     console.log('%crequest fail!', ';color:#dd4b39');
-                    console.log();
-                    console.log("type:" + type + ",readyState:" + xhr.readyState + ",status:" + xhr.status);
                     console.log("url:" + url);
-                    console.log("data:");
-                    console.log(data);
+                    console.log("data:",data);
                 }
 
-                if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
-                    errorTitle = xhr.responseJSON.msg;
-                } else {
-                    errorTitle = '系统繁忙,状态码' + xhr.status;
-                }
+                showAjaxError(xhr, type, errorThrown);
 
-                layer.msg(errorTitle, {icon: 2, scrollbar: false,});
             }
         }
     );
 }
+
+
+function showAjaxError(xhr, type, errorThrown){
+    let errorTitle = '';
+    // 调试信息
+    if (adminDebug) {
+        console.log('xhr',xhr);
+        console.log('errorThrown',errorThrown);
+        console.log("type:" + type + ",readyState:" + xhr.readyState + ",status:" + xhr.status);
+    }
+
+    if (xhr.responseJSON.code !== undefined && xhr.responseJSON.code === 500) {
+        errorTitle = xhr.responseJSON.msg;
+    } else {
+        errorTitle = '系统繁忙,状态码：' + xhr.status + ',参考信息：' + (xhr.responseJSON.message || xhr.responseJSON.msg || '');
+    }
+
+    layer.msg(errorTitle, {icon: 2, scrollbar: false,});
+}
+
 
 //改变每页数量
 function changePerPage(obj) {
@@ -644,6 +657,8 @@ function refreshCsrfToken() {
             dataType: 'json',
             type: 'POST',
             data: {},
+            async: false,
+            global: false,
             success: function (result) {
                 if (adminDebug) {
                     console.log('获取新token', result);

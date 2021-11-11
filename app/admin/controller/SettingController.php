@@ -9,6 +9,7 @@ namespace app\admin\controller;
 use Exception;
 use RuntimeException;
 use think\db\Query;
+use think\facade\Log;
 use think\Request;
 use app\common\model\Setting;
 use app\common\model\SettingGroup;
@@ -161,7 +162,7 @@ class SettingController extends AdminBaseController
      */
     protected function show($id): string
     {
-        $data = (new Setting)->where('setting_group_id', $id)->select();
+        $data = (new Setting)->where('setting_group_id', '=', $id)->select();
 
         foreach ($data as $value) {
 
@@ -236,9 +237,11 @@ class SettingController extends AdminBaseController
 
         $content_data = [];
         foreach ($config->content as $value) {
+            if ($value['type'] === 'map' || $value['type']==='multi_select') {
+                $param[$value['field']] = implode(',', $param[$value['field']]);
+            }
 
             $value['content'] = $param[$value['field']];
-
             $content_data[] = $value;
         }
 

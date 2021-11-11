@@ -1,7 +1,7 @@
 <?php
 /**
  * 后台设置:后台管理方面的设置
- * 此配置文件为自动生成，生成时间2021-11-11 23:46:23
+ * 此配置文件为自动生成，生成时间2021-11-12 00:40:29
  */
 
 return [
@@ -39,28 +39,23 @@ return [
         // 禁止登录时长(小时)
         'login_limit_hour' => '2',
     ],
-    // 首页设置:后台首页参数设置
-    'index' => [
-        // 默认密码警告
-        'password_warning' => '1',
-        // 是否显示提示信息
-        'show_notice'      => '1',
-        // 提示信息内容
-        'notice_content'   => '欢迎来到使用本系统，左侧为菜单区域，右侧为功能区。',
-    ],
     // 安全设置:安全相关配置
     'safe'  => [
         // 加密key
-        'admin_key'        => '89ce3272dc949fc3698fe7108d1dbe37',
+        'admin_key'               => '89ce3272dc949fc3698fe7108d1dbe37',
         // SessionKeyUid
-        'store_uid_key'    => 'admin_user_id',
+        'store_uid_key'           => 'admin_user_id',
         // SessionKeySign
-        'store_sign_key'   => 'admin_user_sign',
+        'store_sign_key'          => 'admin_user_sign',
         // 后台用户密码强度检测
-        'password_check'   => '0',
+        'password_check'          => '0',
         // 密码安全强度等级
-        'password_level'   => '2',
+        'password_level'          => '2',
         // 单设备登录
-        'one_device_login' => '0',
+        'one_device_login'        => '0',
+        // CSRFToken检测
+        'check_token'             => '1',
+        // CSRFToken验证方法
+        'check_token_action_list' => 'add,edit,del,import,profile,update',
     ],
 ];

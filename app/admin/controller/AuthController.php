@@ -153,11 +153,11 @@ class AuthController extends AdminBaseController
      * 获取token
      * @return Json
      */
-    public function token(): Json
+    public function token(Request $request): Json
     {
-        return admin_success('', [
+        return $request->isPost() ? admin_success('', [
             'token' => token()
-        ]);
+        ]) : admin_error('非法请求');
     }
 
 }
