@@ -6,16 +6,13 @@
 
 declare (strict_types=1);
 
-
 namespace generate;
-
 
 use Exception;
 use generate\exception\GenerateException;
 
 class ApiServiceBuild
 {
-
     /**
      * @var array 数据
      */
@@ -39,7 +36,6 @@ class ApiServiceBuild
         $this->config = $config;
 
         $this->template = $this->config['template']['api'];
-
         $this->code = file_get_contents($this->template['service']);
     }
 
@@ -54,7 +50,6 @@ class ApiServiceBuild
         if (!$this->data['api_controller']['create']) {
             return true;
         }
-
         $this->createFunc();
 
         $out_file = $this->config['file_dir']['api_service'] . $this->data['api_controller']['name'] . 'Service' . '.php';
@@ -108,5 +103,4 @@ class ApiServiceBuild
         }
         return $field_list;
     }
-
 }

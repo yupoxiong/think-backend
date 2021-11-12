@@ -1,21 +1,24 @@
 <?php
-
-namespace util\geetest;
 /**
  * 对官方提供的代码进行了修改
  */
+namespace util\geetest;
+
+use Exception;
+use JsonException;
+
 class GeeTest
 {
     public const GT_SDK_VERSION = 'php_3.0.0';
 
-    public static $connectTimeout = 1;
-    public static $socketTimeout = 1;
+    public static int $connectTimeout = 1;
+    public static int $socketTimeout = 1;
 
     private $response;
 
-    protected $captcha_id;
-    protected $private_key;
-    protected $domain;
+    protected string $captcha_id;
+    protected string $private_key;
+    protected string $domain;
 
     public function __construct($captcha_id, $private_key)
     {
@@ -26,12 +29,12 @@ class GeeTest
 
     /**
      * 判断极验服务器是否down机
-     *
      * @param $param
      * @param int $new_captcha
      * @return int
+     * @throws Exception
      */
-    public function preProcess($param, $new_captcha = 1): int
+    public function preProcess($param, int $new_captcha = 1): int
     {
         $data      = [
             'gt'          => $this->captcha_id,
@@ -65,6 +68,9 @@ class GeeTest
     }
 
 
+    /**
+     * @throws Exception
+     */
     private function failBackProcess(): void
     {
         $rnd1           = md5(random_int(0, 100));
@@ -80,11 +86,12 @@ class GeeTest
     }
 
     /**
-     * @return mixed
+     * @return false|string
+     * @throws JsonException
      */
     public function getResponseStr()
     {
-        return json_encode($this->response);
+        return json_encode($this->response, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -102,18 +109,19 @@ class GeeTest
      *
      * @param string $challenge
      * @param string $validate
-     * @param string $seccode
+     * @param string $sec_code
      * @param array $param
      * @param int $json_format
      * @return int
+     * @throws JsonException
      */
-    public function successValidate($challenge, $validate, $seccode, $param, $json_format = 1): int
+    public function successValidate(string $challenge, string $validate, string $sec_code, array $param, int $json_format = 1): int
     {
         if (!$this->checkValidate($challenge, $validate)) {
             return 0;
         }
         $query        = array(
-            'seccode'     => $seccode,
+            'seccode'     => $sec_code,
             'timestamp'   => time(),
             'challenge'   => $challenge,
             'captchaid'   => $this->captcha_id,
@@ -123,11 +131,11 @@ class GeeTest
         $query        = array_merge($query, $param);
         $url          = $this->domain . '/validate.php';
         $code_validate = $this->postRequest($url, $query);
-        $obj          = json_decode($code_validate, true);
+        $obj          = json_decode($code_validate, true, 512, JSON_THROW_ON_ERROR);
         if ($obj === false) {
             return 0;
         }
-        if ($obj['seccode'] === md5($seccode)) {
+        if ($obj['seccode'] === md5($sec_code)) {
             return 1;
         }
         return 0;
@@ -168,13 +176,11 @@ class GeeTest
 
     /**
      * GET 请求
-     *
      * @param $url
-     * @return mixed|string
+     * @return bool|int|string
      */
     private function sendRequest($url)
     {
-
         if (function_exists('curl_exec')) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -207,12 +213,11 @@ class GeeTest
     }
 
     /**
-     *
      * @param       $url
-     * @param string $post_data
-     * @return mixed|string
+     * @param array $post_data
+     * @return bool|string
      */
-    private function postRequest($url, $post_data = '')
+    private function postRequest($url, array $post_data = [])
     {
         if (!$post_data) {
             return false;
@@ -252,7 +257,6 @@ class GeeTest
 
         return $data;
     }
-
 
     /**
      * @param $err

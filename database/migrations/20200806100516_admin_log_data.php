@@ -1,4 +1,8 @@
 <?php
+/**
+ * 日志数据迁移文件
+ *
+ */
 
 use Phinx\Db\Adapter\MysqlAdapter;
 use think\migration\Migrator;

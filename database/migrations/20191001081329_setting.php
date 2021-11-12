@@ -10,7 +10,6 @@ use think\migration\db\Column;
 class Setting extends Migrator
 {
 
-
     public function change(): void
     {
         $table = $this->table('setting', ['comment' => '设置', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);

@@ -40,14 +40,13 @@ class TestController extends AdminBaseController
             'data'  => $data,
             'page'  => $data->render(),
             'total' => $data->total(),
-            
+
         ]);
         return $this->fetch();
     }
 
     /**
      * 添加
-     *
      * @param Request $request
      * @param Test $model
      * @param TestValidate $validate
@@ -69,14 +68,14 @@ class TestController extends AdminBaseController
 
             $url = URL_BACK;
             if (isset($param['_create']) && (int)$param['_create'] === 1) {
-               $url = URL_RELOAD;
+                $url = URL_RELOAD;
             }
             return $result ? admin_success('添加成功', [], $url) : admin_error();
         }
         $this->assign([
-    'user_level_list' => UserLevel::select(),
+            'user_level_list' => UserLevel::select(),
 
-]);
+        ]);
 
 
         return $this->fetch();
@@ -84,7 +83,6 @@ class TestController extends AdminBaseController
 
     /**
      * 修改
-     *
      * @param $id
      * @param Request $request
      * @param Test $model
@@ -110,7 +108,7 @@ class TestController extends AdminBaseController
         }
 
         $this->assign([
-            'data' => $data,
+            'data'            => $data,
             'user_level_list' => UserLevel::select(),
 
         ]);
@@ -120,7 +118,6 @@ class TestController extends AdminBaseController
 
     /**
      * 删除
-     *
      * @param mixed $id
      * @param Test $model
      * @return Json
@@ -139,13 +136,6 @@ class TestController extends AdminBaseController
 
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
-
-
-
-
-
-
-
 
 
 }

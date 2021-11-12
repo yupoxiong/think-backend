@@ -6,15 +6,13 @@
 
 declare (strict_types=1);
 
-
 namespace app\api\controller;
 
-
+use think\response\Json;
+use app\common\model\User;
 use app\api\service\TokenService;
 use app\api\exception\ApiServiceException;
-use app\common\model\User;
 use think\exception\HttpResponseException;
-use think\response\Json;
 
 class ApiBaseController
 {
@@ -27,7 +25,6 @@ class ApiBaseController
      * @var array 无需验证权限的url，禁止在此处修改
      */
     protected array $authExcept = [];
-
 
     /**
      * 当前访问的用户
@@ -83,7 +80,6 @@ class ApiBaseController
         if (!in_array(request()->action(), $this->authExcept, true)) {
 
             $token = request()->header('token');
-
             // 缺少token
             if (empty($token)) {
                 throw new HttpResponseException(api_unauthorized('未登录'));
@@ -137,10 +133,8 @@ class ApiBaseController
         }
     }
 
-
     public function __call($name, $arguments): Json
     {
         return api_error_404();
     }
-
 }

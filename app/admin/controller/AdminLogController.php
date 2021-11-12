@@ -8,17 +8,15 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminUser;
 use Exception;
 use JsonException;
 use think\Request;
-use app\admin\model\AdminLog;
 use think\response\Json;
+use app\admin\model\AdminLog;
+use app\admin\model\AdminUser;
 
 class AdminLogController extends AdminBaseController
 {
-
-
     /**
      * 列表
      * @param Request $request
@@ -65,7 +63,7 @@ class AdminLogController extends AdminBaseController
     }
 
     /**
-     * 获取操作的定位
+     * 获取操作IP的城市
      * @param $id
      * @param AdminLog $model
      * @return Json
@@ -74,7 +72,7 @@ class AdminLogController extends AdminBaseController
     public function position($id, AdminLog $model): Json
     {
         $data = $model->findOrEmpty($id);
-        $json = file_get_contents('https://restapi.amap.com/v3/ip?ip=' . $data->log_ip . '&key=' . config('map.amap.key'));
+        $json = file_get_contents('https://restapi.amap.com/v3/ip?ip=' . $data->log_ip . '&key=' . config('map.amap.web_api_key'));
         $arr  = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
         if (isset($arr['status']) && $arr['status'] === '1') {

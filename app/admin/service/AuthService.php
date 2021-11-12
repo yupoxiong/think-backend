@@ -6,18 +6,16 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\service;
 
-
-use app\admin\exception\AdminServiceException;
-use app\admin\model\AdminUser;
-use app\common\exception\CommonServiceException;
-use app\common\service\StringService;
 use think\facade\Cache;
-use think\facade\Cookie;
 use think\facade\Event;
+use think\facade\Cookie;
 use think\facade\Session;
+use app\admin\model\AdminUser;
+use app\common\service\StringService;
+use app\admin\exception\AdminServiceException;
+use app\common\exception\CommonServiceException;
 
 class AuthService extends AdminBaseService
 {
@@ -56,9 +54,7 @@ class AuthService extends AdminBaseService
      */
     public function login($username, $password): AdminUser
     {
-
         $admin_user = $this->model->where('username', '=', $username)->findOrEmpty();
-
         if ($admin_user->isEmpty()) {
             throw new AdminServiceException('用户不存在');
         }
@@ -209,9 +205,7 @@ class AuthService extends AdminBaseService
     {
         // Event_事件 管理用户退出
         Event::trigger('AdminUserLogout', $admin_user);
-
         $this->clearAuthInfo();
-
         return true;
     }
 
@@ -221,10 +215,8 @@ class AuthService extends AdminBaseService
     public function clearAuthInfo(): void
     {
         Session::delete($this->store_uid_key);
-
         Cookie::delete($this->store_uid_key);
         Cookie::delete($this->store_sign_key);
-
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 /**
  * 数据库控制器
+ * @desc 没有加备份/恢复数据库的功能，防止数据泄漏或误操作
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -12,7 +13,6 @@ use Exception;
 use think\facade\Db;
 use think\response\Json;
 
-
 class DatabaseController extends AdminBaseController
 {
 
@@ -23,17 +23,14 @@ class DatabaseController extends AdminBaseController
      */
     public function table(): string
     {
-
         $data = Db::query('SHOW TABLE STATUS');
         $data = array_map('array_change_key_case', $data);
         $this->assign([
             'data'  => $data,
             'total' => count($data),
         ]);
-
         return $this->fetch();
     }
-
 
     /**
      * 查看表信息
@@ -70,7 +67,6 @@ class DatabaseController extends AdminBaseController
         return $this->fetch();
     }
 
-
     /**
      * 优化表
      * @param $name
@@ -106,5 +102,4 @@ class DatabaseController extends AdminBaseController
         }
         return admin_error("数据表`$name`修复失败");
     }
-
 }

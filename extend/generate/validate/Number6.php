@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace generate\validate;
-
 
 class Number6 extends Rule
 {

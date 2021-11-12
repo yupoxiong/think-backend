@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 公共service exception
  * @author yupoxiong<i@yupoxiong.com>
  */
 

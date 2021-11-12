@@ -1,14 +1,12 @@
 <?php
 /**
- *
+ * 后台用户验证器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace app\admin\validate;
-
 
 class AdminUserValidate extends AdminBaseValidate
 {

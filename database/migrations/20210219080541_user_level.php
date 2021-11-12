@@ -1,4 +1,7 @@
 <?php
+/**
+ * 用户等级
+ */
 
 use think\facade\Db;
 use think\migration\Migrator;

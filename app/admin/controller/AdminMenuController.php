@@ -8,28 +8,24 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\model\AdminMenu;
-use app\admin\validate\AdminMenuValidate;
 use Exception;
-use think\db\Query;
 use think\Request;
 use think\Response;
+use think\db\Query;
 use think\response\Json;
+use app\admin\model\AdminMenu;
+use app\admin\validate\AdminMenuValidate;
 
 class AdminMenuController extends AdminBaseController
 {
-
     /**
      * 列表
-     *
      * @param AdminMenu $model
      * @return string
      * @throws Exception
      */
     public function index(AdminMenu $model): string
     {
-
-
         $this->assign('data', $this->getMenuTree($model));
 
         return $this->fetch();
@@ -37,7 +33,6 @@ class AdminMenuController extends AdminBaseController
 
     /**
      * 添加
-     *
      * @param Request $request
      * @param AdminMenu $model
      * @param AdminMenuValidate $validate
@@ -46,7 +41,6 @@ class AdminMenuController extends AdminBaseController
      */
     public function add(Request $request, AdminMenu $model, AdminMenuValidate $validate)
     {
-
         if ($request->isPost()) {
             $param = $request->param();
             $check = $validate->scene('admin_add')->check($param);
@@ -70,7 +64,6 @@ class AdminMenuController extends AdminBaseController
 
     /**
      * 修改
-     *
      * @param $id
      * @param Request $request
      * @param AdminMenu $model
@@ -113,7 +106,6 @@ class AdminMenuController extends AdminBaseController
      */
     public function del($id, AdminMenu $model): Response
     {
-
         $check = $model->inNoDeletionIds($id);
         if (false !== $check) {
             return admin_error('ID为' . $check . '的数据不能被删除');
@@ -126,7 +118,6 @@ class AdminMenuController extends AdminBaseController
 
         return $result ? admin_success('删除成功', [], URL_RELOAD) : admin_error('删除失败');
     }
-
 
     /**
      * @param AdminMenu $model

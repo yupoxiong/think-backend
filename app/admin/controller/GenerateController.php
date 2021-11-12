@@ -56,7 +56,6 @@ class GenerateController extends AdminBaseController
         return admin_success('success', $data);
     }
 
-
     /**
      * 获取菜单
      * @return Json
@@ -65,7 +64,6 @@ class GenerateController extends AdminBaseController
     {
         return admin_success('success', (new Generate())->getMenu(10000));
     }
-
 
     /**
      * 自动生成代码接口
@@ -83,18 +81,21 @@ class GenerateController extends AdminBaseController
                 'create'    => (int)$param['create_menu'],
                 'menu_list' => $param['create_menu_list']
             ],
+            // 后台控制器
             'admin_controller' => [
                 'module' => 'admin',
                 'create' => (int)($param['create_admin_controller'] ?? 0),
                 'name'   => $param['admin_controller_name'],
                 'action' => $param['admin_controller_action_list'],
             ],
+            // api控制器
             'api_controller'   => [
                 'module' => 'api',
                 'create' => (int)($param['create_api_controller'] ?? 0),
                 'name'   => $param['api_controller_name'],
                 'action' => $param['api_controller_action_list'],
             ],
+            // 模型
             'model'            => [
                 'module'      => 'common',
                 'create'      => (int)($param['create_model'] ?? 0),
@@ -102,11 +103,13 @@ class GenerateController extends AdminBaseController
                 'timestamp'   => (int)($param['auto_timestamp'] ?? 0),
                 'soft_delete' => (int)($param['soft_delete'] ?? 0),
             ],
+            // 验证器
             'validate'         => [
                 'module' => 'common',
                 'create' => (int)($param['create_validate'] ?? 0),
                 'name'   => $param['validate_name'],
             ],
+            // 视图
             'view'             => [
                 'create_index' => (int)($param['create_view_index'] ?? 0),
                 'index_button' => (int)($param['index_operation_button'] ?? 1),
@@ -118,6 +121,7 @@ class GenerateController extends AdminBaseController
                 'import'       => (int)($param['list_import'] ?? 0),
                 'refresh'      => (int)($param['list_refresh'] ?? 0),
             ],
+            // 模块
             'module'           => [
                 'name_suffix' => $param['module_name_suffix'],
                 'icon'        => $param['module_icon'],
@@ -182,12 +186,11 @@ class GenerateController extends AdminBaseController
             Log::write('生成报错：' . $n . '错误信息：' . $e->getMessage()
                 . $n . '行数：' . $e->getLine()
                 . $n . '文件：' . $e->getFile());
-            $msg = $e->getMessage();
+            $msg = '生成报错，信息：'.$e->getMessage().'具体信息请查看日志文件';
         }
 
         return $result ? admin_success($msg) : admin_error($msg);
     }
-
 
     /**
      * 自动生成form表单字段
@@ -247,16 +250,13 @@ class GenerateController extends AdminBaseController
     {
         $param = $request->param();
         $name  = $param['name'];
-
         $data = (new Generate())->getAllField($name);
-
-        //Log::write($data);
 
         return admin_success('success', $data);
     }
 
-
     /**
+     * 获取验证规则选择
      * @param Request $request
      * @return Json|void
      */
@@ -284,6 +284,11 @@ class GenerateController extends AdminBaseController
         return $result ? admin_success($msg, $data) : admin_error($msg);
     }
 
+    /**
+     * 获取关联显示字段
+     * @param Request $request
+     * @return Json
+     */
     public function getRelationShowField(Request $request): Json
     {
         $param = $request->param();
@@ -306,5 +311,4 @@ class GenerateController extends AdminBaseController
             'name' => $name,
         ]);
     }
-
 }

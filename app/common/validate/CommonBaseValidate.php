@@ -6,20 +6,17 @@
 
 declare (strict_types=1);
 
-
 namespace app\common\validate;
 
-
-use generate\validate\Color16;
-use generate\validate\ComplexPassword;
-use generate\validate\MiddlePassword;
-use generate\validate\Number6;
-use generate\validate\SimplePassword;
 use think\Validate;
+use generate\validate\Number6;
+use generate\validate\Color16;
+use generate\validate\MiddlePassword;
+use generate\validate\SimplePassword;
+use generate\validate\ComplexPassword;
 
 class CommonBaseValidate extends Validate
 {
-
     /**
      * 验证16进制颜色
      * @param $value
@@ -33,9 +30,7 @@ class CommonBaseValidate extends Validate
     {
         $pattern = '/^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/';
         return preg_match($pattern, $value) ? true : $desc.(new Color16())->getMsg();
-
     }
-
 
     /**
      * 验证6位数字密码
@@ -50,7 +45,6 @@ class CommonBaseValidate extends Validate
     {
         $pattern = '/^\d{6}$/';
         return preg_match($pattern, $value) ? true : $desc.(new Number6())->getMsg();
-
     }
 
     /**
@@ -66,9 +60,7 @@ class CommonBaseValidate extends Validate
     {
         $pattern = '/^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new SimplePassword())->getMsg();
-
     }
-
 
     /**
      * 验证简单密码
@@ -83,7 +75,6 @@ class CommonBaseValidate extends Validate
     {
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new MiddlePassword())->getMsg();
-
     }
 
     /**
@@ -99,10 +90,6 @@ class CommonBaseValidate extends Validate
     {
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.[$@!%#?&]).{8,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new ComplexPassword())->getMsg();
-
     }
-
-
-
 
 }

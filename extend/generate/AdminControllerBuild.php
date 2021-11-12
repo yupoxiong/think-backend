@@ -6,16 +6,15 @@
 
 declare (strict_types=1);
 
-
 namespace generate;
 
-
 use Exception;
-use generate\exception\GenerateException;
 use generate\field\Editor;
+use generate\exception\GenerateException;
 
 class AdminControllerBuild extends Build
 {
+    // 可生成的action列表
     protected array $actionList = [
         'index', 'add', 'info', 'edit', 'del', 'disable', 'enable', 'import', 'export'
     ];
@@ -33,7 +32,6 @@ class AdminControllerBuild extends Build
         $this->template = $this->config['template']['admin'];
 
         $this->code = file_get_contents($this->template['controller']);
-
     }
 
     /**
@@ -76,7 +74,6 @@ class AdminControllerBuild extends Build
         $index_select = '';
 
         foreach ($this->data['data'] as $key => $value) {
-
             if ($value['form_type'] !== 'none') {
                 $add_field_code_tmp  = '';
                 $edit_field_code_tmp = '';
@@ -105,9 +102,7 @@ class AdminControllerBuild extends Build
                         break;
                     case 1:// 外键一对一
                     case 2:// 外键一对多
-
                         $table_name = $this->getSelectFieldFormat($value['field_name']);
-
                         $class_name = parse_name($table_name, 1);
                         $relation_1 .= 'use app\\common\\model\\' . $class_name . ";\n";
 
@@ -128,11 +123,9 @@ class AdminControllerBuild extends Build
                 // 这里处理导入，表单字段为导入字段
                 $import_field .= "'" . $value['field_name'] . "',";
                 $import_name  .= "'" . $value['form_name'] . "',";
-
             }
 
             if ($value['index_search'] === 'select') {
-
                 if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     $table_name        = $this->getSelectFieldFormat($value['field_name']);
                     $select_class_name = parse_name($table_name, 1);
@@ -153,14 +146,11 @@ class AdminControllerBuild extends Build
                 }
             }
 
-
             if ($value['is_list'] === 1) {
-
                 //列表关联显示
                 if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     $relation_with_name = $this->getSelectFieldFormat($value['field_name']);
                     $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
-
                 }
 
                 //如果有列表导出
@@ -175,11 +165,8 @@ class AdminControllerBuild extends Build
                         $export_body .= '$record[' . "'" . $value['field_name'] . "'" . '] = $item->' . $value['field_name'] . ";\n";
                     }
                 }
-
             }
-
         }
-
 
         // 导出
         if ($export_header !== '') {
@@ -214,11 +201,8 @@ class AdminControllerBuild extends Build
         );
 
         $this->createFile();
-
         return true;
-
     }
-
 
     /**
      * 生成文件
@@ -229,7 +213,6 @@ class AdminControllerBuild extends Build
      */
     public function createFile($code = null, $path = null): bool
     {
-
         $replace_content = [
             '[NAME]'              => $this->data['cn_name'],
             '[TABLE_NAME]'        => $this->data['table'],
@@ -264,7 +247,6 @@ class AdminControllerBuild extends Build
         }
         return true;
     }
-
 
     /**
      * 生成需要生成的action

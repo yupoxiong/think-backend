@@ -250,7 +250,7 @@ class AdminViewBuild extends Build
                     break;
 
                 case 'datetime':
-                    $search_html .= str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), Field::$listSearchDatatime);
+                    $search_html .= str_replace(array('[FIELD_NAME]', '[FORM_NAME]'), array($value['field_name'], $value['form_name']), Field::$listSearchDatetime);
                     break;
                 default:
                     break;

@@ -1,23 +1,28 @@
 <?php
 /**
- * 错误控制器
+ * 系统控制器
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
+
 namespace app\admin\controller;
 
 use Exception;
 
-class ErrorController extends AdminBaseController
+class SystemController extends AdminBaseController
 {
+
     /**
-     * 403 没有权限访问
+     * @return string
      * @throws Exception
      */
-    public function err403(): string
+    public function index(): string
     {
-        return $this->fetch('error/403');
+
+
+        return $this->fetch();
     }
+
 }

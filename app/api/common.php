@@ -8,13 +8,27 @@ use think\response\Json;
 
 if (!function_exists('api_unauthorized')) {
     /**
-     * 未授权
+     * 未认证（未登录）
      * @param string $msg
      * @param mixed $data
      * @param int $code
      * @return Json
      */
     function api_unauthorized(string $msg = 'unauthorized', $data = [], int $code = 401): Json
+    {
+        return api_result($msg, $data, $code);
+    }
+}
+
+if (!function_exists('api_forbidden')) {
+    /**
+     * 无权限
+     * @param string $msg
+     * @param mixed $data
+     * @param int $code
+     * @return Json
+     */
+    function api_forbidden(string $msg = 'forbidden', $data = [], int $code = 403): Json
     {
         return api_result($msg, $data, $code);
     }
@@ -101,7 +115,7 @@ if (!function_exists('api_service_unavailable')) {
 
 if (!function_exists('api_error_client')) {
     /**
-     * 客户端错误
+     * 客户端错误 例如提交表单的时候验证不通过，是因为客户填写端错误引起的
      * @param string $msg
      * @param mixed $data
      * @param int $code

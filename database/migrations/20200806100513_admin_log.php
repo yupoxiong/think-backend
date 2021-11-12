@@ -1,4 +1,7 @@
 <?php
+/**
+ * 后台日志
+ */
 
 use think\migration\Migrator;
 use think\migration\db\Column;

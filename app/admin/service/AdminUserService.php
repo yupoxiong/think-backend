@@ -6,17 +6,14 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\service;
 
-
-use app\admin\exception\AdminServiceException;
-use app\admin\model\AdminUser;
 use think\Model;
+use app\admin\model\AdminUser;
+use app\admin\exception\AdminServiceException;
 
 class AdminUserService
 {
-
     // 密码强度列表
     public const  PASSWORD_LEVEL_LIST = [
         1 => [
@@ -60,7 +57,6 @@ class AdminUserService
                 throw new AdminServiceException($check_result);
             }
         }
-
         return $this->model::create($param);
     }
 
@@ -115,8 +111,6 @@ class AdminUserService
         if ($content === 'all') {
             return self::PASSWORD_LEVEL_LIST[$level];
         }
-
         return self::PASSWORD_LEVEL_LIST[$level][$content];
     }
-
 }

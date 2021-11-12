@@ -1,4 +1,7 @@
 <?php
+/**
+ * 前台用户
+ */
 
 use think\facade\Db;
 use think\migration\Migrator;

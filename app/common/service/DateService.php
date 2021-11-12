@@ -1,18 +1,15 @@
 <?php
 /**
- *
+ * 日期相关service
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace app\common\service;
-
 
 class DateService
 {
-
     /**
      * 获取当前毫秒时间戳
      * @return string

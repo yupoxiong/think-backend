@@ -8,21 +8,20 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
+use Exception;
+use think\Request;
+use think\Response;
+use think\db\Query;
+use think\response\Json;
 use app\admin\model\AdminMenu;
 use app\admin\model\AdminRole;
 use app\admin\validate\AdminRoleValidate;
-use Exception;
-use think\db\Query;
-use think\Request;
-use think\Response;
-use think\response\Json;
 
 class AdminRoleController extends AdminBaseController
 {
 
     /**
      * 列表
-     *
      * @param Request $request
      * @param AdminRole $model
      * @return string
@@ -49,10 +48,8 @@ class AdminRoleController extends AdminBaseController
         return $this->fetch();
     }
 
-
     /**
      * 添加
-     *
      * @param Request $request
      * @param AdminRole $model
      * @param AdminRoleValidate $validate
@@ -61,7 +58,6 @@ class AdminRoleController extends AdminBaseController
      */
     public function add(Request $request, AdminRole $model, AdminRoleValidate $validate)
     {
-
         if ($request->isPost()) {
             $param = $request->param();
             $check = $validate->scene('admin_add')->check($param);
@@ -80,7 +76,6 @@ class AdminRoleController extends AdminBaseController
 
     /**
      * 修改
-     *
      * @param $id
      * @param Request $request
      * @param AdminRole $model
@@ -97,9 +92,7 @@ class AdminRoleController extends AdminBaseController
             if (!$check) {
                 return admin_error($validate->getError());
             }
-
             $result = $data->save($param);
-
             return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
@@ -154,7 +147,6 @@ class AdminRoleController extends AdminBaseController
 
     /**
      * 删除
-     *
      * @param mixed $id
      * @param AdminRole $model
      * @return Response

@@ -8,16 +8,16 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\admin\exception\AdminServiceException;
-use app\admin\service\AdminRoleService;
-use app\admin\service\AdminUserService;
 use Exception;
 use think\Request;
 use think\Response;
 use think\db\Query;
 use think\response\Json;
 use app\admin\model\AdminUser;
+use app\admin\service\AdminRoleService;
+use app\admin\service\AdminUserService;
 use app\admin\validate\AdminUserValidate;
+use app\admin\exception\AdminServiceException;
 
 class AdminUserController extends AdminBaseController
 {
@@ -53,7 +53,6 @@ class AdminUserController extends AdminBaseController
 
     /**
      * 添加
-     *
      * @param Request $request
      * @param AdminUserService $service
      * @param AdminUserValidate $validate
@@ -88,7 +87,6 @@ class AdminUserController extends AdminBaseController
 
     /**
      * 修改
-     *
      * @param $id
      * @param Request $request
      * @param AdminUser $model
@@ -128,7 +126,6 @@ class AdminUserController extends AdminBaseController
 
     /**
      * 删除
-     *
      * @param mixed $id
      * @param AdminUser $model
      * @return Response

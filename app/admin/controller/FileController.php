@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 文件上传controller
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -8,7 +8,6 @@ declare (strict_types=1);
 
 
 namespace app\admin\controller;
-
 
 use think\exception\ValidateException;
 use think\facade\Filesystem;

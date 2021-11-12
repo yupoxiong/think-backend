@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace generate\validate;
-
 
 class Email extends Rule
 {

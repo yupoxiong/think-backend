@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 后台用户迁移文件
+ */
 use app\common\exception\CommonServiceException;
 use app\common\service\StringService;
 use think\facade\Db;
@@ -28,9 +30,6 @@ class AdminUser extends Migrator
         $this->insertData();
     }
 
-    /**
-     *
-     */
     protected function insertData(): void
     {
         try {

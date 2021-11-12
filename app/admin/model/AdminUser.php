@@ -6,7 +6,6 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\model;
 
 use think\db\exception\DataNotFoundException;
@@ -29,22 +28,24 @@ class AdminUser extends AdminBaseModel
     use SoftDelete;
 
     // 开发管理员和超级管理员不能删除
-    public array $noDeletionIds = [1,2];
+    public array $noDeletionIds = [1, 2];
 
     /**
+     * 插入前进行密码加密
      * @param AdminUser $data
      * @return void
      */
-    public static function onBeforeInsert($data):void
+    public static function onBeforeInsert($data): void
     {
         $data->password = (new self)->setEncryptPassword($data->password);
     }
 
     /**
+     * 更新前监测密码是否变更
      * @param AdminUser $data
      * @return void
      */
-    public static function onBeforeUpdate($data):void
+    public static function onBeforeUpdate($data): void
     {
         $old = (new self())->where('id', '=', $data->id)->findOrEmpty();
         /**@var AdminUser $old */
@@ -52,7 +53,6 @@ class AdminUser extends AdminBaseModel
             $data->password = (new self)->setEncryptPassword($data->password);
         }
     }
-
 
     /**
      * 角色获取器
@@ -91,22 +91,18 @@ class AdminUser extends AdminBaseModel
         }
     }
 
-
     /**
      * 获取当前用户已授权的显示菜单
      * @param bool $top_nav 是否显示顶部菜单
      * @return array
      */
-    public function getShowMenu($top_nav =0): array
+    public function getShowMenu($top_nav = 0): array
     {
         $model = new AdminMenu;
-
-        $top  = [];
-        $left = [];
-
+        $top   = [];
+        $left  = [];
         if ($this->id === 1) {
-
-            if ($top_nav===1) {
+            if ($top_nav === 1) {
                 $top = $model->where('is_show', '=', 1)
                     ->where('parent_id', '=', 0)
                     ->order('sort_number', 'asc')
@@ -131,8 +127,6 @@ class AdminUser extends AdminBaseModel
                     ->order('id', 'asc')
                     ->column('id,parent_id,name,url,icon,sort_number', 'id');
             }
-
-
         } else {
             $role_urls = (new AdminRole)->whereIn('id', $this->role)
                 ->where('status', '=', 1)
@@ -144,8 +138,7 @@ class AdminUser extends AdminBaseModel
             }
 
             $menu_ids = array_unique(explode(',', $menu_id_str));
-
-            if ($top_nav===1) {
+            if ($top_nav === 1) {
                 $top = $model->whereIn('id', $menu_ids)
                     ->where('parent_id', '=', 0)
                     ->where('is_show', '=', 1)
@@ -230,6 +223,5 @@ class AdminUser extends AdminBaseModel
         }
         return $auth_url;
     }
-
 
 }

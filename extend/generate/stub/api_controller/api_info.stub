@@ -1,6 +1,5 @@
 /**
      * 详情
-     *
      * @param [VALIDATE_NAME]Validate $validate
      * @param [SERVICE_NAME]Service $service
      * @return Json

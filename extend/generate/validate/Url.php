@@ -3,12 +3,9 @@
  * url
  * @author yupoxiong<i@yupoxiong.com>
  */
-
 declare (strict_types=1);
 
-
 namespace generate\validate;
-
 
 class Url extends Rule
 {

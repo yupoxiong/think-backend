@@ -46,6 +46,7 @@ class AdminBaseController
     protected string $url;
 
     /**
+     * 当前访问的菜单
      * @var mixed
      */
     protected $menu;
@@ -74,16 +75,24 @@ class AdminBaseController
 
     public function __construct()
     {
+        // 初始化
         $this->initialize();
     }
 
+    /**
+     * 初始化方法
+     */
     public function initialize(): void
     {
+        // 初始化view
         $this->view = app()->make(View::class);
-
+        // 检查登录
         $this->checkLogin();
+        // 检查权限
         $this->checkAuth();
+        // 单设备登录检查
         $this->checkOneDeviceLogin();
+        // csrfToken检查
         $this->checkToken();
 
         // 分页每页数量
@@ -94,9 +103,9 @@ class AdminBaseController
         $this->menu = (new AdminMenu)->where(['url' => $this->url])->findOrEmpty();
 
         if (isset($this->user) && !$this->menu->isEmpty() && request()->method() === $this->menu->log_method) {
+            // 如果用户登录了而且符合菜单记录日志方式，记录操作日志
             $this->createLog($this->user, $this->menu->name);
         }
-
     }
 
     /**
@@ -110,9 +119,8 @@ class AdminBaseController
         $is_check     = (bool)setting('admin.safe.check_token');
 
         if ($is_check && request()->isPost() && in_array(request()->action(true), $action_list, true)) {
-
+            // 如果当前访问方式为post，并且当前访问的控制器action在配置的列表中，验证csrfToken
             $check = request()->checkToken();
-
             if (false === $check) {
                 throw new HttpResponseException(admin_error('token验证失败', [], URL_CURRENT, 403));
             }
@@ -130,7 +138,6 @@ class AdminBaseController
         return $this->view->assign($name, $value);
     }
 
-
     /**
      * 渲染模板
      * @param string $template
@@ -142,35 +149,39 @@ class AdminBaseController
     {
         // 顶部导航
         $this->admin['top_nav'] = (int)setting('admin.display.top_nav');
-
+        // 后台基本信息配置
         $this->admin['base'] = setting('admin.base');
-
+        // 当前顶部导航ID
         $current_top_id = 0;
 
         if (!$this->menu->isEmpty()) {
             $menu     = $this->menu;
             $menu_all = (new AdminMenu)->field('id,parent_id,name,icon')->select()->toArray();
-
+            // 当前页面标题
             $this->admin['title']      = $menu->name;
+            // 当前面包屑
             $this->admin['breadcrumb'] = $this->getBreadCrumb($menu_all, $menu->id);
             if ($this->admin['top_nav'] === 1) {
+                // 顶部导航id
                 $current_top_id = $this->getTopParentIdById($menu_all, $menu->id);
             }
         }
-
+        // 当前是否为pjax访问
         $this->admin['is_pjax']    = request()->isPjax();
+        // 上传文件url
         $this->admin['upload_url'] = url('admin/file/upload')->build();
+        // 退出url
         $this->admin['logout_url'] = url('admin/auth/logout')->build();
 
-
         if ('admin/auth/login' !== $this->url && !$this->admin['is_pjax']) {
-
+            // 展示菜单
             $show_menu = $this->user->getShowMenu($this->admin['top_nav']);
-
+            // 顶部导航
             $this->admin['top_menu']  = $show_menu['top'];
+            // 左侧菜单
             $this->admin['left_menu'] = $this->getLeftMenu($show_menu['left'][$current_top_id], $menu->id ?? 0);
         }
-
+        // 是否开启debug
         $this->admin['debug'] = Env::get('app_debug') ? 1 : 0;
         // 顶部导航
         $this->admin['top_nav'] = 1;
@@ -182,19 +193,20 @@ class AdminBaseController
         $this->admin['top_notification'] = 0;
         // 文件删除url
         $this->admin['file_del_url'] = url('admin/file/del');
+        // 地图配置
         $this->admin['map']          = config('map');
-
+        // 当前用户
         $this->admin['user'] = $this->user ?? new AdminUser();
 
         // 赋值后台变量
         $this->assign([
             'admin' => $this->admin,
         ]);
-
         return $this->view->fetch($template, $vars);
     }
 
     /**
+     * 访问不存在的方法
      * @param $name
      * @param $arguments
      * @return string|Json

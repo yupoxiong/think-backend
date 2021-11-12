@@ -39,7 +39,6 @@
                                     </button>
                                 </div>
 
-
                                 {if !isset($data)}
                                 <div class="btn-group float-right createContinueDiv">
                                     <input type="checkbox" class="form-check-input" value="1" id="_create" name="_create" title="继续添加数据">

@@ -1,6 +1,5 @@
     /**
      * 删除
-     *
      * @param mixed $id
      * @param [MODEL_NAME] $model
      * @return Json

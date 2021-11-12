@@ -1,26 +1,23 @@
 <?php
 /**
- *
+ * build基础类
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace generate;
-
 
 class Build
 {
-
+    // 数据
     protected array $data;
-
+    // 配置
     protected array $config;
-
+    // 模版
     protected array $template;
-
+    // 代码
     protected string $code;
-
 
     /**
      * @param $field_name

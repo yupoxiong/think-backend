@@ -6,16 +6,13 @@
 
 declare (strict_types=1);
 
-
 namespace generate;
-
 
 use Exception;
 use generate\exception\GenerateException;
 
 class ApiControllerBuild
 {
-
     /**
      * @var array 数据
      */
@@ -82,7 +79,6 @@ class ApiControllerBuild
             throw new GenerateException($e->getMessage());
         }
         return true;
-
     }
 
     /**
@@ -99,5 +95,4 @@ class ApiControllerBuild
             $this->code = str_replace('[ACTION_' . $upper . ']', $code, $this->code);
         }
     }
-
 }

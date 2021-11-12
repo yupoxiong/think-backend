@@ -6,16 +6,16 @@
 
 declare (strict_types=1);
 
-
 namespace app\api\service;
 
-use app\api\exception\ApiServiceException;
-use app\common\exception\CommonServiceException;
+use util\jwt\Jwt;
+use think\facade\Env;
+use util\jwt\JwtException;
 use app\common\service\DateService;
 use app\common\service\StringService;
-use think\facade\Env;
-use util\jwt\Jwt;
-use util\jwt\JwtException;
+use app\api\exception\ApiServiceException;
+use app\common\exception\CommonServiceException;
+
 
 class TokenService extends ApiBaseService
 {

@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace app\api\controller;
-
 
 use app\api\exception\ApiServiceException;
 use app\api\service\TokenService;
@@ -16,7 +14,6 @@ use think\response\Json;
 
 class AuthController
 {
-
     /**
      * @return Json
      */

@@ -33,14 +33,19 @@ if($result===true){
 
 ### RS256(RS384,RS512)加密
 ```php
-$public_key = 'ThisIsKey';
+$private_key = 'ThisIsKey';
 $jwt =new \util\jwt\Jwt();
 $token = $jwt->setAlg('RS256')
-->setPrivateKey($key)
+->setPrivateKey($private_key)
 ->setClaim()
 ->getToken();
 ```
 ### RS256(RS384,RS512)验证
-```
-
+```php
+$public_key = 'ThisIsKey';
+$jwt =new \util\jwt\Jwt();
+$token = $jwt->setAlg('RS256')
+->setPublicKey($key)
+->setClaim()
+->getToken();
 ```

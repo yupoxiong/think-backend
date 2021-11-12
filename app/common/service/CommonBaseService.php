@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * common模块基础service
  * @author yupoxiong<i@yupoxiong.com>
  */
 

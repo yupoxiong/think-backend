@@ -26,14 +26,11 @@ class SettingGroupValidate extends CommonBaseValidate
         'sort_number.require'      => '排序不能为空',
         'auto_create_menu.require' => '自动生成菜单不能为空',
         'auto_create_file.require' => '自动生成配置文件不能为空',
-
     ];
 
     protected $scene = [
         'add'  => ['name', 'description', 'module', 'code', 'sort_number', 'auto_create_menu', 'auto_create_file',],
         'edit' => ['name', 'description', 'module', 'code', 'sort_number', 'auto_create_menu', 'auto_create_file',],
-
     ];
-
 
 }

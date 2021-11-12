@@ -17,7 +17,7 @@ class Text extends Field
 </div>\n
 EOF;
 
-    public static function create($data):string
+    public static function create($data): string
     {
         return  str_replace(
             array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'),

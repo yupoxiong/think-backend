@@ -1,18 +1,16 @@
 <?php
 /**
- *
+ * 用户退出事件监听类
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace app\admin\listener;
 
-
-use app\admin\exception\AdminServiceException;
-use app\admin\service\AdminLogService;
 use think\facade\Log;
+use app\admin\service\AdminLogService;
+use app\admin\exception\AdminServiceException;
 
 class AdminUserLogout
 {

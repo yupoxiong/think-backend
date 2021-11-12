@@ -7,17 +7,16 @@
 namespace app\admin\traits;
 
 use Exception;
+use XLSXWriter;
+use think\facade\Db;
+use RuntimeException;
+use think\facade\Filesystem;
+use think\exception\ValidateException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use RuntimeException;
-use think\exception\ValidateException;
-use think\facade\Db;
-use think\facade\Filesystem;
-use XLSXWriter;
 
 trait AdminPhpOffice
 {
-
     /**
      * 普通导出，少于1万条数据可使用，1万+数据用exportXlsx
      * @param array $head
@@ -29,7 +28,6 @@ trait AdminPhpOffice
     protected function exportData(array $head, array $body, string $name = '', string $title = 'Sheet1'): void
     {
         try {
-
             if (empty($name)) {
                 $name = date('Y-m-d-H-i-s');
             }
@@ -85,9 +83,7 @@ trait AdminPhpOffice
     protected function importData(string $name, string $table, array $field_list, int $limit = 100, bool $del = true)
     {
         $config = config('filesystem.disks.admin_import');
-
         $file = request()->file($name);
-
         try {
             validate($config['validate'])->check([$name => $file]);
 
@@ -110,11 +106,9 @@ trait AdminPhpOffice
 
         Db::startTrans();
         try {
-
             $time     = time();
             $all_data = [];
             foreach ($excel_array as $key => $value) {
-
                 $data = [];
                 foreach ($field_list as $field_key => $field_value) {
                     if (!isset($value[$field_key])) {
@@ -132,7 +126,6 @@ trait AdminPhpOffice
             Db::name($table)
                 ->limit($limit)
                 ->insertAll($all_data);
-
             Db::commit();
             $result = true;
         } catch (Exception $exception) {
@@ -142,7 +135,6 @@ trait AdminPhpOffice
         if ($del) {
             unlink($file);
         }
-
         return $result;
     }
 
@@ -188,7 +180,6 @@ trait AdminPhpOffice
         }
     }
 
-
     /**
      * 简单导出，占用内存低，导出1-10万条数据使用
      * @param $header
@@ -219,5 +210,4 @@ trait AdminPhpOffice
         $writer->writeToStdOut();
         exit();
     }
-
 }

@@ -6,7 +6,6 @@
      */
     public function getDataInfo($id): array
     {
-
         $data = $this->model->where('id', '=', $id)->findOrEmpty();
         if ($data->isEmpty()) {
             throw new ApiServiceException('数据不存在');

@@ -23,6 +23,16 @@ return [
             // 序列化机制 例如 ['serialize', 'unserialize']
             'serialize'  => [],
         ],
+        // redis缓存
+        'redis'   =>  [
+            // 驱动方式
+            'type'   => 'redis',
+            // 服务器地址
+            'host'     => env('redis.redis_host', '127.0.0.1'),
+            'port'     => env('redis.redis_port', 6379),
+            'password' => env('redis.redis_password', ''),
+            'select'   => env('redis.redis_select', 0),
+        ],
         // 更多的缓存连接
     ],
 ];

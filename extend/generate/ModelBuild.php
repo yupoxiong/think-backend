@@ -9,20 +9,17 @@ declare (strict_types=1);
 namespace generate;
 
 use Exception;
-use generate\exception\GenerateException;
 use think\facade\Db;
-use think\Log;
+use generate\exception\GenerateException;
 
 class ModelBuild extends Build
 {
-
     public function __construct($data, $config)
     {
         $this->data   = $data;
         $this->config = $config;
 
         $this->template = $this->config['template']['model'];
-
         $this->code = file_get_contents($this->template['model']);
     }
 
@@ -49,7 +46,6 @@ class ModelBuild extends Build
         $getter_setter_code = '';
         // 自定义选择数据
         $select_data_code = '';
-
         foreach ($this->data['data'] as $value) {
 
             if ($value['relation_type'] > 0) {
@@ -61,7 +57,6 @@ class ModelBuild extends Build
                     $getter_setter_code .= $code_result[1];
                 }
             }
-
             if ($value['getter_setter']) {
                 $this->getGetterSetterCode($value);
             }
@@ -91,18 +86,15 @@ class ModelBuild extends Build
                 default:
                     break;
             }
-
         }
 
         // 搜索筛选字段替换
         $code = str_replace(array('[SEARCH_FIELD]', '[WHERE_FIELD]', '[TIME_FIELD]'), array($search_field, $where_field, $time_field), $code);
-
         try {
             file_put_contents($this->config['file_dir']['model'] . $this->data['model']['name'] . '.php', $code);
         } catch (Exception $e) {
             throw new GenerateException($e->getMessage());
         }
-
         return true;
     }
 
@@ -185,7 +177,6 @@ class ModelBuild extends Build
         }
         $option_code .= "];\n";
 
-
         // 处理select自定义数据的获取器
         $field5             = $this->getSelectFieldFormat($value['field_name'], 5);
         $field4             = $this->getSelectFieldFormat($value['field_name'], 3);
@@ -220,10 +211,8 @@ class ModelBuild extends Build
                 $code = '';
                 break;
         }
-
         return $code;
     }
-
 
     /**
      * 软删除
@@ -239,7 +228,6 @@ class ModelBuild extends Build
         }
 
         $this->code = str_replace(array('[SOFT_DELETE_USE1]', '[SOFT_DELETE_USE2]',), array($soft_delete1, $soft_delete2), $this->code);
-
         return true;
     }
 
@@ -258,5 +246,4 @@ class ModelBuild extends Build
         $this->code = str_replace('[AUTO_TIMESTAMP]', $auto_time, $this->code);
         return true;
     }
-
 }

@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\model;
-
 
 use JsonException;
 use think\model\concern\SoftDelete;
@@ -33,5 +31,4 @@ class AdminLogData extends AdminBaseModel
     {
         return json_encode(json_decode($data['data'], true, 512, JSON_THROW_ON_ERROR), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
-
 }

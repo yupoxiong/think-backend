@@ -1,11 +1,12 @@
 <?php
-
+/**
+ * 测试迁移文件，有各种类型字段，可用来测试自动生成代码功能
+ */
 use think\migration\Migrator;
 use think\migration\db\Column;
 
 class Test extends Migrator
 {
-
     public function change()
     {
         $table = $this->table('test', ['comment' => '测试', 'engine' => 'InnoDB', 'encoding' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci']);

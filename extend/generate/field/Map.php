@@ -109,7 +109,7 @@ EOF;
      * @return string|string[]
      * @throws GenerateException
      */
-    public static function create($data):string
+    public static function create($data): string
     {
         if (strpos($data['field_name'], 'lng') !== false) {
             $data['field_name_lng'] = $data['field_name'];
@@ -122,11 +122,10 @@ EOF;
         }
 
         $html = self::$html;
-        $html = str_replace(
+        return str_replace(
             array('[FORM_NAME]', '[FIELD_NAME_LNG]', '[FIELD_NAME_LAT]')
             , array($data['form_name'], $data['field_name_lng']
         , $data['field_name_lat']), $html
         );
-        return $html;
     }
 }

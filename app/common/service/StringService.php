@@ -1,32 +1,30 @@
 <?php
 /**
- *
+ * 字符串相关service
  * @author yupoxiong<i@yupoxiong.com>
  */
 
 declare (strict_types=1);
 
-
 namespace app\common\service;
 
-
-use app\common\exception\CommonServiceException;
 use Exception;
+use app\common\exception\CommonServiceException;
 
 class StringService extends CommonBaseService
 {
-
     public const STR_NUMBER = '0123456789';
     public const STR_LOWER_CASE = 'abcdefghijklmnopqrstuvwxyz';
     public const STR_CAPITAL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     public const STR_PUNCTUATION = '~!@#$%^&*()_+{}|:"<>?`-=[]\;,./';
 
     /**
-     * @param int $length
-     * @param bool $number
-     * @param bool $lower_case
-     * @param bool $capital
-     * @param bool $punctuation
+     * 生成随机字符串
+     * @param int $length 长度
+     * @param bool $number 是否包含数字
+     * @param bool $lower_case 是否包含小写字母
+     * @param bool $capital 是否包含大写字母
+     * @param bool $punctuation 是否包含特殊符号
      * @return string
      * @throws CommonServiceException
      */
@@ -61,8 +59,6 @@ class StringService extends CommonBaseService
             }
             $result .= $str[$rand];
         }
-
         return $result;
     }
-
 }

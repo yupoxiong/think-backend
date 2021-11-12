@@ -6,7 +6,6 @@
 
 declare (strict_types=1);
 
-
 namespace generate\exception;
 
 use Exception;

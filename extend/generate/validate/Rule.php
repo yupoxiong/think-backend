@@ -6,13 +6,10 @@
 
 declare (strict_types=1);
 
-
 namespace generate\validate;
-
 
 class Rule
 {
-
     // 规则名称
     protected string $name = '';
     // 提示信息

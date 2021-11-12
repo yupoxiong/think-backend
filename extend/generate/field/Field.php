@@ -89,7 +89,7 @@ EOF;
 EOF;
 
     //列表日期时间筛选
-    public static string $listSearchDatatime = <<<EOF
+    public static string $listSearchDatetime = <<<EOF
 <div class="input-group input-group-sm searchGroup">
     <input value="{\$[FIELD_NAME]|default=''}" readonly name="[FIELD_NAME]" id="[FIELD_NAME]" class="form-control input-sm indexSearchDatetimeRange" placeholder="[FORM_NAME]">
 </div>
@@ -150,10 +150,10 @@ EOF;
 
 
     //获取选择的字段和字段对应的验证optionDOM代码
-    public function getFormSelectOption($field_type)
+    public function getFormSelectOption($field_type): array
     {
         $result     = ['text', ''];
-        $field_info = $this->getFieldInfo($file_name = '', $field_type);
+        $field_info = $this->getFieldInfo( '', $field_type);
         switch ($field_info['type']) {
             case 'tinyint':
                 $result[0] = 'switch';
@@ -193,14 +193,12 @@ EOF;
                 $result[0] = 'text';
                 break;
         }
-
-
         $result[1] = $this->getValidateOption($result[0], $field_info['length']);
         return $result;
     }
 
     //根据表单类型和长度返回相应的验证
-    public function getValidateOption($type, $length = '')
+    public function getValidateOption($type, $length = ''): string
     {
         switch ($type) {
             case 'number':
@@ -224,7 +222,7 @@ EOF;
             case 'ip':
                 $data = Ip::rule($length);
                 break;
-            case 'texterea':
+            case 'textarea':
                 $data = Textarea::rule($length);
                 break;
             case 'switch':
@@ -288,14 +286,15 @@ EOF;
                 $data = Text::rule($length);
                 break;
         }
-
-
         return $data;
     }
 
-
-    //规则
-    public static function rule($length = ''): string
+    /**
+     * 规则
+     * @param  $length
+     * @return string
+     */
+    public static function rule( $length = ''): string
     {
 
         $html  = '';
@@ -305,14 +304,6 @@ EOF;
             $html .= '<option value="' . $key . '">' . $value . '</option>';
         }
         return $html;
-    }
-
-    public static function createHtmlRule($rule)
-    {
-        $html = '';
-        if (array_key_exists($rule, self::$rules)) {
-            $html .= '';
-        }
     }
 
     public static function create($data): string

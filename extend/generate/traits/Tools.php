@@ -16,7 +16,6 @@ trait Tools
         return substr($str, $left + strlen($leftStr), $right - $left - strlen($leftStr));
     }
 
-
     /**
      * 获取字段信息
      * @param $field_name

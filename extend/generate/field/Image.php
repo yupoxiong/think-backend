@@ -23,10 +23,9 @@ class Image extends Field
     </div>
 EOF;
 
-    public static function create($data):string
+    public static function create($data): string
     {
         $html = self::$html;
-        $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'), array($data['form_name'], $data['field_name'], $data['field_default']), $html);
-        return $html;
+        return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'), array($data['form_name'], $data['field_name'], $data['field_default']), $html);
     }
 }

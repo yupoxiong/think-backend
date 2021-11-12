@@ -1,4 +1,7 @@
 <?php
+/**
+ * 后台菜单
+ */
 
 use think\facade\Db;
 use think\migration\Migrator;

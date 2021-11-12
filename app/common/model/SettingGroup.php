@@ -1,13 +1,14 @@
 <?php
 /**
  * 设置分组模型
+ * @author yupoxiong<i@yupoxiong.com>
  */
 
 namespace app\common\model;
 
 use think\model\Collection;
-use think\model\concern\SoftDelete;
 use think\model\relation\HasMany;
+use think\model\concern\SoftDelete;
 
 /**
  * Class SettingGroup
@@ -32,21 +33,32 @@ class SettingGroup extends CommonBaseModel
         1,2,3,4,5,
     ];
 
-    //可搜索字段
+    // 可搜索字段
     public array $searchField = ['name', 'description', 'code',];
 
-
-    //关联设置
+    // 关联设置
     public function setting(): HasMany
     {
         return $this->hasMany(Setting::class);
     }
 
+    /**
+     * 自动生成菜单字段获取器
+     * @param $value
+     * @param $data
+     * @return string
+     */
     public function getAutoCreateMenuTextAttr($value,$data): string
     {
         return self::BOOLEAN_TEXT[$data['auto_create_menu']];
     }
 
+    /**
+     * 自动生成配置文件获取器
+     * @param $value
+     * @param $data
+     * @return string
+     */
     public function getAutoCreateFileTextAttr($value,$data): string
     {
         return self::BOOLEAN_TEXT[$data['auto_create_file']];

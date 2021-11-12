@@ -7,7 +7,6 @@ use think\facade\Db;
 use think\migration\Migrator;
 use think\migration\db\Column;
 
-
 class SettingGroup extends Migrator
 {
 
@@ -30,7 +29,6 @@ class SettingGroup extends Migrator
 
         $this->insertData();
     }
-
 
     protected function insertData(): void
     {

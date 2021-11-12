@@ -1,6 +1,5 @@
     /**
      * 添加
-     *
      * @param Request $request
      * @param [MODEL_NAME] $model
      * @param [VALIDATE_NAME]Validate $validate

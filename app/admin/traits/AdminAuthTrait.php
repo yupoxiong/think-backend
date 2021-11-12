@@ -5,11 +5,11 @@
 
 namespace app\admin\traits;
 
-use app\admin\service\AdminLogService;
-use think\facade\Cache;
 use think\facade\Log;
+use think\facade\Cache;
 use app\admin\model\AdminUser;
 use app\admin\service\AuthService;
+use app\admin\service\AdminLogService;
 use think\exception\HttpResponseException;
 use app\admin\exception\AdminServiceException;
 
@@ -52,10 +52,8 @@ trait AdminAuthTrait
             }
             throw new HttpResponseException(admin_error('未登录', [], $login_url, 401));
         }
-
         return true;
     }
-
 
     /**
      * 检查权限
@@ -63,18 +61,15 @@ trait AdminAuthTrait
     public function checkAuth(): bool
     {
         $url = $this->url;
-
         $request = request();
 
         $login_except = !empty($this->loginExcept) ? array_map('parse_name', $this->loginExcept) : $this->loginExcept;
-
         // 如果在无需登录的URL里，直接返回
         if (in_array($url, $login_except, true)) {
             return true;
         }
 
         $auth_except = !empty($this->authExcept) ? array_map('parse_name', $this->authExcept) : $this->authExcept;
-
         // 如果在无需授权的URL里，直接返回
         if (in_array($url, $auth_except, true)) {
             return true;
@@ -172,7 +167,6 @@ trait AdminAuthTrait
     public function clearLoginDeviceId($user): bool
     {
         $cache_key = $this->loginDeviceKey . $user->id;
-
         return Cache::delete($cache_key);
     }
 
@@ -185,6 +179,4 @@ trait AdminAuthTrait
             return false;
         }
     }
-
-
 }

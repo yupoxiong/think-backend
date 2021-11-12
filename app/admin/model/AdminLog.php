@@ -8,9 +8,9 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
+use think\model\relation\HasOne;
 use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
-use think\model\relation\HasOne;
 
 /**
  * Class AdminLog

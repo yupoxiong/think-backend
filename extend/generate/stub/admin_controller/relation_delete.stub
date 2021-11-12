@@ -1,4 +1,4 @@
-//关联数据删除限制
+// 关联数据删除限制
 $msg_[FIELD_NAME] = '下有[FORM_NAME]数据，请删除[FORM_NAME]后再进行删除操作';
 if(is_array($id)){
     foreach ($id as $item){

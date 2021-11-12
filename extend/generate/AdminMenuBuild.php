@@ -8,13 +8,14 @@ declare (strict_types=1);
 
 namespace generate;
 
-use app\admin\model\AdminMenu;
 use Exception;
-use generate\exception\GenerateException;
 use think\facade\Db;
+use app\admin\model\AdminMenu;
+use generate\exception\GenerateException;
 
 class AdminMenuBuild extends Build
 {
+    // 菜单信息
     protected array $actionDataList = [
         'add'     => [
             'icon' => 'fa fa-plus',
@@ -88,7 +89,6 @@ class AdminMenuBuild extends Build
             }
 
             $menu_list = $this->data['menu']['menu_list'];
-
             foreach ($menu_list as $item) {
                 if ($item !== 'index') {
                     $have = AdminMenu::where('url', $url_prefix . '/' . $item)->find();
@@ -109,8 +109,6 @@ class AdminMenuBuild extends Build
             Db::rollback();
             throw new GenerateException($e->getMessage());
         }
-
         return true;
     }
-
 }

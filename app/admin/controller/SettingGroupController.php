@@ -1,18 +1,18 @@
 <?php
 /**
  * 设置分组控制器
+ * @author yupoxiong<i@yufuping.com>
  */
 
 namespace app\admin\controller;
 
 use Exception;
-use app\admin\model\AdminMenu;
-use think\db\Query;
 use think\Request;
-use app\common\model\SettingGroup;
-
-use app\common\validate\SettingGroupValidate;
+use think\db\Query;
 use think\response\Json;
+use app\admin\model\AdminMenu;
+use app\common\model\SettingGroup;
+use app\common\validate\SettingGroupValidate;
 
 class SettingGroupController extends AdminBaseController
 {

@@ -6,12 +6,10 @@
 
 declare (strict_types=1);
 
-
 namespace app\common\model;
 
-
-use think\db\Query;
 use think\Model;
+use think\db\Query;
 
 /**
  * @method getFieldType(string $key)
@@ -37,7 +35,6 @@ class CommonBaseModel extends Model
 
     /**
      * 查询处理
-     *
      * @param Query $query
      * @var array $param
      */
@@ -78,7 +75,6 @@ class CommonBaseModel extends Model
                 }
             }
         }
-
         //排序
         $order = $param['_order'] ?? '';
         $by    = $param['_by'] ?? 'desc';
@@ -94,7 +90,6 @@ class CommonBaseModel extends Model
     {
         $this->scopeWhere($query,$param);
     }
-
 
     /**
      * 当前ID是否包含在不可删除的ID中
@@ -114,7 +109,6 @@ class CommonBaseModel extends Model
         }
         return false;
     }
-
 
     /**
      * 是否状态获取器

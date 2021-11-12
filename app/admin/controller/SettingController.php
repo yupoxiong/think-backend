@@ -1,27 +1,28 @@
 <?php
 /**
  * 设置控制器
+ * @author yupoxiong<i@yufuping.com>
  */
 
 namespace app\admin\controller;
 
-
 use Exception;
-use RuntimeException;
-use think\db\Query;
-use think\facade\Log;
 use think\Request;
+use think\db\Query;
+use RuntimeException;
+use think\response\Json;
 use app\common\model\Setting;
 use app\common\model\SettingGroup;
-use app\common\validate\SettingValidate;
 use app\admin\traits\AdminSettingForm;
-use think\response\Json;
+use app\common\validate\SettingValidate;
 
 class SettingController extends AdminBaseController
 {
+    // 引入form相关trait
     use AdminSettingForm;
 
     /**
+     * 设置列表
      * @param Request $request
      * @param Setting $model
      * @return string
@@ -50,6 +51,7 @@ class SettingController extends AdminBaseController
     }
 
     /**
+     * 添加设置
      * @param Request $request
      * @param Setting $model
      * @param SettingValidate $validate
@@ -86,13 +88,13 @@ class SettingController extends AdminBaseController
 
         $this->assign([
             'setting_group_list' => (new SettingGroup)->select(),
-
         ]);
 
         return $this->fetch();
     }
 
     /**
+     * 修改设置
      * @param $id
      * @param Request $request
      * @param Setting $model
@@ -132,10 +134,10 @@ class SettingController extends AdminBaseController
 
         ]);
         return $this->fetch('add');
-
     }
 
     /**
+     * 删除设置
      * @param $id
      * @param Setting $model
      * @return Json
@@ -163,18 +165,13 @@ class SettingController extends AdminBaseController
     protected function show($id): string
     {
         $data = (new Setting)->where('setting_group_id', '=', $id)->select();
-
         foreach ($data as $value) {
-
             $content_new = [];
-
             foreach ($value->content as $content) {
 
                 $content['form'] = $this->getFieldForm($content['type'], $content['name'], $content['field'], $content['content'], $content['option']);
-
-                $content_new[] = $content;
+                $content_new[]   = $content;
             }
-
             $value->content = $content_new;
         }
 
@@ -190,7 +187,7 @@ class SettingController extends AdminBaseController
     }
 
     /**
-     * 获取
+     * 获取配置内容
      * @param $param
      * @return array
      */
@@ -223,6 +220,7 @@ class SettingController extends AdminBaseController
 
 
     /**
+     * 更新配置
      * @param Request $request
      * @param Setting $model
      * @return Json
@@ -230,19 +228,17 @@ class SettingController extends AdminBaseController
     public function update(Request $request, Setting $model): Json
     {
         $param = $request->param();
-
         $id = $param['id'];
-
         $config = $model->findOrEmpty($id);
 
         $content_data = [];
         foreach ($config->content as $value) {
-            if ($value['type'] === 'map' || $value['type']==='multi_select') {
+            if ($value['type'] === 'map' || $value['type'] === 'multi_select') {
                 $param[$value['field']] = implode(',', $param[$value['field']]);
             }
 
             $value['content'] = $param[$value['field']];
-            $content_data[] = $value;
+            $content_data[]   = $value;
         }
 
         $config->content = $content_data;
@@ -255,9 +251,7 @@ class SettingController extends AdminBaseController
         }
 
         return $result ? admin_success('修改成功', [], URL_RELOAD) : admin_error();
-
     }
-
 
     /**
      * @param Request $request
@@ -267,7 +261,6 @@ class SettingController extends AdminBaseController
      */
     public function all(Request $request, SettingGroup $model): string
     {
-
         $param = $request->param();
         $data  = $model->scope('where', $param)
             ->paginate([
@@ -278,7 +271,6 @@ class SettingController extends AdminBaseController
 
         // 关键词，排序等赋值
         $this->assign($request->get());
-
         $this->assign([
             'data'  => $data,
             'page'  => $data->render(),
@@ -287,7 +279,6 @@ class SettingController extends AdminBaseController
         return $this->fetch();
     }
 
-
     /**
      * @param $id
      * @return string
@@ -295,10 +286,8 @@ class SettingController extends AdminBaseController
      */
     public function info($id): string
     {
-
         return $this->show($id);
     }
-
 
     /**
      * 后台设置

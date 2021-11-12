@@ -17,7 +17,6 @@ class PageService extends Paginator
      */
     protected function getPreviousButton(string $text = "&laquo;"): string
     {
-
         if ($this->currentPage() <= 1) {
             return $this->getDisabledTextWrapper($text);
         }
@@ -175,11 +174,9 @@ class PageService extends Paginator
     protected function getUrlLinks(array $urls): string
     {
         $html = '';
-
         foreach ($urls as $page => $url) {
             $html .= $this->getPageLinkWrapper($url, $page);
         }
-
         return $html;
     }
 

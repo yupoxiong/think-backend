@@ -6,19 +6,16 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\service;
 
-
-use app\admin\model\AdminUser;
-use app\admin\exception\AdminServiceException;
-use app\admin\model\AdminLog;
 use Exception;
 use think\facade\Db;
+use app\admin\model\AdminUser;
+use app\admin\model\AdminLog;
+use app\admin\exception\AdminServiceException;
 
 class AdminLogService extends AdminBaseService
 {
-
     protected AdminLog $model;
 
     public function __construct()
@@ -49,14 +46,12 @@ class AdminLogService extends AdminBaseService
                 'header' => request()->header(),
                 'param'  => request()->param(),
             ];
-
             $log_data = [
                 'data' => json_encode($data_arr, JSON_THROW_ON_ERROR),
             ];
             $log->adminLogData()->save($log_data);
 
             Db::commit();
-
         } catch (Exception $exception) {
             Db::rollback();
             throw new AdminServiceException($exception->getMessage());

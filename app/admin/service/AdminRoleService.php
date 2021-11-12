@@ -6,14 +6,12 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\service;
 
-
-use app\admin\model\AdminRole;
 use think\Collection;
-use think\db\exception\DataNotFoundException;
+use app\admin\model\AdminRole;
 use think\db\exception\DbException;
+use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 
 class AdminRoleService
@@ -37,5 +35,4 @@ class AdminRoleService
             return [];
         }
     }
-
 }

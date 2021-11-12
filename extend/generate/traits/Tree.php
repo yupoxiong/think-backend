@@ -26,7 +26,6 @@ trait Tree
      */
     public string $ret = '';
 
-
     /**
      * 构造函数，初始化类
      * @param array $arr

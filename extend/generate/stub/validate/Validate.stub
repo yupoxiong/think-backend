@@ -18,5 +18,4 @@ class [VALIDATE_NAME]Validate extends CommonBaseValidate
     protected $scene = [
         [VALIDATE_SCENE]
     ];
-
 }

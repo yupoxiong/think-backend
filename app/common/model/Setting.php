@@ -1,6 +1,7 @@
 <?php
 /**
  * 设置模型
+ * @author yupoxiong<i@yupoxiong.com>
  */
 
 namespace app\common\model;

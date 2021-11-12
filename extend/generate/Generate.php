@@ -9,6 +9,7 @@ namespace generate;
 use Exception;
 use think\facade\Db;
 use think\facade\Env;
+use generate\field\Field;
 use generate\traits\Tree;
 use generate\traits\Tools;
 use app\admin\model\AdminMenu;
@@ -163,7 +164,6 @@ class Generate
     {
         $this->checkName($this->data);
         $this->checkDir();
-
         $this->createModel();
         $this->createAdminController();
         $this->createAddView();
@@ -172,7 +172,6 @@ class Generate
         $this->createApiController();
         $this->createApiService();
         $this->createMenu();
-
         return '生成成功';
     }
 
@@ -192,7 +191,6 @@ class Generate
                 $table[] = $current;
             }
         }
-
         return $table;
     }
 
@@ -204,8 +202,7 @@ class Generate
      */
     public function getMenu($selected = 1, $current_id = 0): string
     {
-
-        $result = AdminMenu::where('id', '<>', $current_id)
+        $result = (new AdminMenu)->where('id', '<>', $current_id)
             ->order('sort_number', 'asc')
             ->order('id', 'asc')
             ->column('id,parent_id,name,sort_number', 'id');
@@ -217,8 +214,10 @@ class Generate
         return $this->getTree(0, $str, $selected);
     }
 
-
-    // 获取所有模块
+    /**
+     * 获取所有模块
+     * @return array|false
+     */
     protected function getModule()
     {
         $module = [];
@@ -263,7 +262,6 @@ class Generate
             $this->mkFolder($this->config['file_dir']['view'] . $this->data['table']);
         }
 
-
         if (!is_writable($this->config['file_dir']['admin_controller'])) {
             throw new GenerateException('Admin控制器目录不可写');
         }
@@ -301,26 +299,20 @@ class Generate
         if (in_array($data['admin_controller']['name'], $this->blacklistName, true)) {
             throw new GenerateException('控制器名非法');
         }
-
         if (in_array($data['admin_controller']['name'], $this->blacklistName, true)) {
             throw new GenerateException('控制器名非法');
         }
-
         if (in_array($data['model'], $this->blacklistName, true)) {
             throw new GenerateException('模型名非法');
         }
-
         if (in_array($data['validate'], $this->blacklistName, true)) {
             throw new GenerateException('验证器名非法');
         }
-
         if (in_array($data['table'], $this->blacklistTable, true)) {
             throw new GenerateException('表名非法');
         }
-
         return true;
     }
-
 
     /**
      * 创建菜单
@@ -342,9 +334,8 @@ class Generate
         return (new AdminControllerBuild($this->data, $this->config))->run();
     }
 
-    // 创建模型
-
     /**
+     * 创建模型
      * @return bool
      * @throws GenerateException
      */
@@ -354,6 +345,7 @@ class Generate
     }
 
     /**
+     * 创建验证器
      * @return bool
      * @throws GenerateException
      */
@@ -363,7 +355,7 @@ class Generate
     }
 
     /**
-     * 列表视图
+     * 创建列表视图
      * @return bool
      * @throws GenerateException
      */
@@ -373,6 +365,7 @@ class Generate
     }
 
     /**
+     * 创建添加视图
      * @return bool
      */
     protected function createAddView(): bool
@@ -413,8 +406,13 @@ class Generate
         }
     }
 
-    //获取目录下的所有类名
-    public function getClassList($dir, $except = []): array
+    /**
+     * 获取目录下的所有类名
+     * @param $dir
+     * @param array $except
+     * @return array
+     */
+    public function getClassList($dir, array $except = []): array
     {
         $files   = [];
         $handler = opendir($dir);
@@ -441,14 +439,13 @@ class Generate
     public function getAllField($table_name): array
     {
         $parse_name = parse_name($table_name, 1);
-
         $data = [
-            //表
+            // 表
             'table'      => [
                 'name'    => $table_name,
                 'cn_name' => ''
             ],
-            //控制器
+            // 控制器
             'controller' => [
                 'create'       => 1,
                 'name'         => $parse_name,
@@ -461,18 +458,18 @@ class Generate
                     'disable' => 0,
                 ],
                 'del_relation' => [
-                    //关联方法，删除模式，1判断关联，2不做操作，3关联删除
+                    // 关联方法，删除模式，1判断关联，2不做操作，3关联删除
                     'user' => 1,
                 ]
             ],
-            //模型
+            // 模型
             'model'      => [
                 'create'         => 1,
                 'name'           => $parse_name,
                 'auto_timestamp' => 1,
                 'soft_delete'    => 1,
             ],
-            //验证器
+            // 验证器
             'validate'   => [
                 'create' => 1,
                 'name'   => $parse_name,
@@ -485,32 +482,32 @@ class Generate
                     'index_edit' => 1,
                 ]
             ],
-            //字段
+            // 字段
             'field'      => [],
         ];
 
-        //所有字段信息
+        // 所有字段信息
         $field_list = Db::query('SHOW FULL COLUMNS FROM `' . $table_name . '`');
-        //表信息
+        // 表信息
         $table_info = Db::query('SHOW TABLE STATUS LIKE ' . "'" . $table_name . "'");
         $table_info = $table_info[0];
-        //表名
+        // 表名
         $data['table']['name'] = $table_info['Name'];
-        //表中文名
+        // 表中文名
         $data['table']['cn_name'] = $table_info['Comment'];
 
-        //定义好以下情况，
-        //90%概率为列表的字段，
-        //90%概率不为列表的字段，
-        //90%为搜索的字段
-        //90%不为搜索的字段
-        //90%为表单的字段
-        //90不为表单的字段
-        //导出字段暂时和显示字段一样
+        // 定义好以下情况，
+        // 90%概率为列表的字段，
+        // 90%概率不为列表的字段，
+        // 90%为搜索的字段
+        // 90%不为搜索的字段
+        // 90%为表单的字段
+        // 90不为表单的字段
+        // 导出字段暂时和显示字段一样
 
-        //显示为列表的字段名，暂时不用
-        //$list_show_field = ['id','name','mobile','description','address','money','price', 'keywords','title','img','create_time','sort_number','user_id','status'];
-        //列表隐藏字段，如果为text字段，大概率隐藏
+        // 显示为列表的字段名，暂时不用
+        // $list_show_field = ['id','name','mobile','description','address','money','price', 'keywords','title','img','create_time','sort_number','user_id','status'];
+        // 列表隐藏字段，如果为text字段，大概率隐藏
         $list_hide_field = ['password', 'update_time', 'delete_time'];
         $list_hide_type  = ['tinytext', 'tinyblob', 'text', 'blob', 'longtext', 'longblob'];
 
@@ -523,28 +520,26 @@ class Generate
          * date,datetime,timestamp,time,year
          */
 
-
-        //搜索字段，如果为varchar，char字段，大概率需要搜索
+        // 搜索字段，如果为varchar，char字段，大概率需要搜索
         $search_show_field = ['id', 'mobile', 'keywords', 'id_card', 'name', 'title', 'username', 'nickname', 'true_name', 'description'];
         $search_show_type  = ['char', 'varchar'];
 
         $multi_image_field = ['slide','img_list','image_list',];
         $multi_image_type = ['varchar','text'];
 
-        //导出隐藏字段，和列表隐藏字段差不多
+        // 导出隐藏字段，和列表隐藏字段差不多
         $export_hide_field = ['update_time', 'delete_time'];
         $export_hide_type  = ['tinytext', 'tinyblob', 'text', 'blob', 'longtext', 'longblob'];
 
-        //表单显示字段
-        //$form_show_field = ['id','create_time','update_time','delete_time'];
-        //表单隐藏字段
+        // 表单显示字段
+        // $form_show_field = ['id','create_time','update_time','delete_time'];
+        // 表单隐藏字段
         $form_hide_field = ['id', 'create_time', 'update_time', 'delete_time'];
         $form_hide_type  = ['double'];
 
         // 列表排序字段
         $list_sort_field = ['id', 'create_time', 'money', 'integral',];
         $list_sort_type  = ['tinyint', 'int', 'smallint', 'mediumint', 'bigint', 'decimal', 'float', 'double', 'date', 'datetime', 'timestamp',];
-
 
         foreach ($field_list as $key => $value) {
 
@@ -642,7 +637,7 @@ class Generate
             if ($field_data['is_list'] === 1 && in_array($field_info['name'], $list_sort_field, true) && in_array($field_info['type'], $list_sort_type, true)) {
                 $field_data['list_sort'] = 1;
             }
-
+            // 多图上传
             if(in_array($field_info['name'],$multi_image_field,true) && in_array($field_info['type'],$multi_image_type,true)){
                 $field_data['form_type'] = 'multi_image';
             }
@@ -689,10 +684,14 @@ class Generate
                 }
             }
         }
-
         return $relation_table;
     }
 
+    /**
+     * 获取关联显示字段
+     * @param $field
+     * @return string
+     */
     public function getRelation($field): string
     {
         $result     = '';
@@ -724,12 +723,9 @@ class Generate
                     }
                 }
             }
-
-
         }
         return $result;
     }
-
 
     /**
      * 根据表单类型和长度返回相应的验证
@@ -738,17 +734,14 @@ class Generate
      */
     public function getValidateHtml($field_data): string
     {
-
         $html = '';
         try {
-
             if ($field_data['form_type'] !== 'none') {
                 if ($field_data['form_type'] === 'switch') {
                     $field_data['form_type'] = 'switch_field';
                 }
-
                 $class_name = parse_name($field_data['form_type'], 1);
-
+                /** @var Field $class */
                 $class = '\\generate\\field\\' . $class_name;
                 $html  = $class::rule($field_data['field_length']);
             }
@@ -767,7 +760,6 @@ class Generate
      */
     public function getFormInfo($field_info): array
     {
-
         // 结尾：_id为select，_time为datetime，_date为date，
         // 结尾：_count为number，_lng/_longitude为map，img为image，slide为multiImage
         // 开头：is_为switch
@@ -777,17 +769,14 @@ class Generate
             'form_type'     => 'text',
             'getter_setter' => false,
         ];
-
         // id
         if ($field_info['name'] === 'id') {
             $field_data['form_type'] = 'number';
         }
-
         // _id为下拉列表，大多数为关联
         if (strrchr($field_info['name'], '_id') === '_id') {
             $field_data['form_type'] = 'select';
         }
-
         // 日期时间
         if (strrchr($field_info['name'], '_time') === '_time') {
             $field_data['form_type'] = 'datetime';
@@ -797,12 +786,10 @@ class Generate
                 $field_data['getter_setter'] = 'datetime';
             }
         }
-
         // 日期
         if ($field_info['type'] === 'datetime') {
             $field_data['form_type'] = 'date';
         }
-
         // 日期
         if (strrchr($field_info['name'], '_date') === '_date') {
             $field_data['form_type'] = 'date';
@@ -814,47 +801,38 @@ class Generate
         if ($field_info['type'] === 'date') {
             $field_data['form_type'] = 'date';
         }
-
         // 数量
         if (strrchr($field_info['name'], '_count') === '_count') {
             $field_data['form_type'] = 'number';
         }
-
         // 数量
         if (strrchr($field_info['name'], '_number') === '_number') {
             $field_data['form_type'] = 'number';
         }
-
         // 经纬度
         if (strrchr($field_info['name'], '_lng') === '_lng' || strrchr($field_info['name'], '_longitude') === '_longitude') {
             $field_data['form_type'] = 'map';
         }
-
         // 经纬度
         if ($field_info['name'] === 'lng' || $field_info['name'] === 'longitude') {
             $field_data['form_type'] = 'map';
         }
-
         // 图片
         if (strrchr($field_info['name'], 'img') === 'img') {
             $field_data['form_type'] = 'image';
         }
-
         // 视频
         if (strrchr($field_info['name'], 'video') === 'video') {
             $field_data['form_type'] = 'video';
         }
-
         // 轮播
         if (strrchr($field_info['name'], 'slide') === 'slide') {
             $field_data['form_type'] = 'multi_image';
         }
-
         // 密码
         if (strrchr($field_info['name'], 'password') === 'password') {
             $field_data['form_type'] = 'password';
         }
-
         // 颜色
         if (strrchr($field_info['name'], 'color') === 'color') {
             $field_data['form_type'] = 'color';
@@ -863,113 +841,37 @@ class Generate
         if (strrchr($field_info['name'], 'icon') === 'icon') {
             $field_data['form_type'] = 'icon';
         }
-
         // 价格，暂时用number
         if (strrchr($field_info['name'], 'price') === 'price') {
             $field_data['form_type'] = 'number';
         }
-
         // 金额，暂时用number
         if (strrchr($field_info['name'], 'money') === 'money') {
             $field_data['form_type'] = 'number';
         }
-
         // 状态
         if ($field_info['name'] === 'status') {
             $field_data['form_type']     = 'switch';
             $field_data['getter_setter'] = 'switch';
         }
-
         // 手机号
         if ($field_info['name'] === 'mobile' || $field_info['name'] === 'phone') {
             $field_data['form_type'] = 'mobile';
         }
-
         // 头像
         if ($field_info['name'] === 'avatar') {
             $field_data['form_type'] = 'image';
         }
-
         // 富文本
         if ($field_info['type'] === 'text' || $field_info['type'] === 'longtext') {
             $field_data['form_type'] = 'editor';
         }
-
+        // switch
         if ($field_info['type'] === 'tinyint' && strpos($field_info['name'], 'is_') === 0) {
-
             $field_data['form_type']     = 'switch';
             $field_data['getter_setter'] = 'switch';
         }
 
         return $field_data;
-    }
-
-    /**
-     * @param $field_name
-     * @param $type 1返回去掉_id的字段名，如果没有_id的话就返回原字段；
-     * 2返回list，例如type字段的type_list，channel_id的channel_list;
-     * 3为常量LIST，例如TYPE_LIST，CHANNEL_LIST；
-     * 4为显示字段name,例如type_name，channel_name；
-     * 这里要注意，如果原字段是_id结尾的，会干掉_id，例如channel_id_list不仅长，而且容易产生歧义，
-     * 实际channel_list的话就非常明确，这是渠道列表,是一个二维数组。
-     * @return false|string
-     */
-    protected function getSelectFieldFormat($field_name, $type = 1)
-    {
-        $_id_suffix   = '_id';
-        $_list_suffix = '_list';
-        $_name_suffix = '_name';
-
-        switch ($type) {
-
-            case 1:
-            default:
-                $result   = $field_name;
-                $_id_post = strpos($field_name, $_id_suffix);
-                if (strlen($field_name) === ($_id_post + 3)) {
-                    $result = substr($result, 0, $_id_post);
-                }
-                break;
-            case 2:
-
-                $result   = $field_name;
-                $_id_post = strpos($field_name, $_id_suffix);
-                if (strlen($field_name) === ($_id_post + 3)) {
-                    $result = substr($result, 0, $_id_post);
-                }
-                $result .= $_list_suffix;
-                break;
-
-            case 3:
-                $result   = $field_name;
-                $_id_post = strpos($field_name, $_id_suffix);
-                if (strlen($field_name) === ($_id_post + 3)) {
-                    $result = substr($result, 0, $_id_post);
-                }
-                $result = strtoupper($result . $_list_suffix);
-                break;
-
-            case 4:
-                $result   = $field_name;
-                $_id_post = strpos($field_name, $_id_suffix);
-                if (strlen($field_name) === ($_id_post + 3)) {
-                    $result = substr($result, 0, $_id_post);
-
-                }
-                $result .= $_name_suffix;
-                break;
-
-            case 5:
-                $result   = $field_name;
-                $_id_post = strpos($field_name, $_id_suffix);
-                if (strlen($field_name) === ($_id_post + 3)) {
-                    $result = substr($result, 0, $_id_post);
-                }
-                $result .= $_name_suffix;
-                $result = parse_name($result, 1, true);
-                break;
-        }
-
-        return $result;
     }
 }

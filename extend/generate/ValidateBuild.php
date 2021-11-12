@@ -9,14 +9,12 @@ declare (strict_types=1);
 namespace generate;
 
 use Exception;
-use generate\exception\GenerateException;
 use generate\field\Field;
 use generate\validate\Rule;
-use think\facade\Log;
+use generate\exception\GenerateException;
 
 class ValidateBuild extends Build
 {
-
     /**
      * ValidateBuild constructor.
      * @param array $data 数据
@@ -28,7 +26,6 @@ class ValidateBuild extends Build
         $this->config = $config;
 
         $this->template = $this->config['template']['validate'];
-
         $this->code = file_get_contents($this->template['validate']);
     }
 
@@ -83,9 +80,7 @@ class ValidateBuild extends Build
                 if($temp_rule_code!==''){
                     $rule_code      .= $rule_class->getValidateRule($value, $temp_rule_code);
                 }
-
                 $scene_code_tmp .= "'" . $value['field_name'] . "', ";
-
             }
         }
 
@@ -110,8 +105,6 @@ class ValidateBuild extends Build
         } catch (Exception $e) {
             throw new GenerateException($e->getMessage());
         }
-
         return true;
     }
-
 }

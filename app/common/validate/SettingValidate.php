@@ -22,14 +22,11 @@ class SettingValidate extends CommonBaseValidate
         'description.require'      => '描述不能为空',
         'code.require'             => '代码不能为空',
         'sort_number.require'      => '排序不能为空',
-
     ];
 
     protected $scene = [
         'add'  => ['setting_group_id', 'name', 'description', 'code', 'sort_number',],
         'edit' => ['setting_group_id', 'name', 'description', 'code', 'sort_number',],
-
     ];
-
 
 }
