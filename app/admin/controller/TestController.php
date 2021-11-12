@@ -7,6 +7,7 @@ namespace app\admin\controller;
 
 use Exception;
 use think\Request;
+use think\db\Query;
 use think\response\Json;
 use app\common\model\Test;
 use app\common\model\UserLevel;
@@ -132,7 +133,7 @@ class TestController extends AdminBaseController
         }
 
         $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
+            /** @var Query $query */
             $query->whereIn('id', $id);
         });
 

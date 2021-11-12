@@ -13,7 +13,7 @@
         }
 
         $result = $model::destroy(static function ($query) use ($id) {
-            /** @var \think\db\Query $query */
+            /** @var Query $query */
             $query->whereIn('id', $id);
         });
 

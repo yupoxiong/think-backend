@@ -18,7 +18,7 @@ class SettingGroupController extends AdminBaseController
 {
     protected array $codeBlacklist = [
         'app', 'cache', 'database', 'console', 'cookie', 'log', 'middleware', 'session', 'template', 'trace',
-        'ueditor', 'api', 'attachment', 'geetest', 'generate', 'admin', 'paginate', 'abstract', 'and', 'array',
+        'api', 'attachment', 'geetest', 'generate', 'admin', 'paginate', 'abstract', 'and', 'array',
         'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die',
         'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile',
         'eval', 'exit', 'extends', 'final', 'finally', 'for', 'foreach', 'function', 'global', 'goto', 'if',

@@ -26,7 +26,7 @@ trait AdminPhpOffice
      * @param string $title
      * @return void
      */
-    protected function exportData(array $head, array $body, string $name = '', string $title = 'Sheet1')
+    protected function exportData(array $head, array $body, string $name = '', string $title = 'Sheet1'): void
     {
         try {
 

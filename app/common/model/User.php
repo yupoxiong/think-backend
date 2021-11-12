@@ -6,14 +6,20 @@
 namespace app\common\model;
 
 use think\model\concern\SoftDelete;
+use think\model\relation\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $status
+ * @property string $password
+ */
 class User extends CommonBaseModel
 {
     use SoftDelete;
 
     // 自定义选择数据
     // 是否启用列表
-    const STATUS_LIST = [
+    public const STATUS_LIST = [
         1 => '是',
         0 => '否',
     ];
@@ -32,14 +38,14 @@ class User extends CommonBaseModel
     public array $timeField = [];
 
     // [FORM_NAME]获取器
-    public function getStatusNameAttr($value, $data)
+    public function getStatusNameAttr($value, $data): string
     {
         return self::STATUS_LIST[$data['status']];
     }
 
 
     // 关联用户等级
-    public function userLevel()
+    public function userLevel(): BelongsTo
     {
         return $this->belongsTo(UserLevel::class);
     }

@@ -26,7 +26,7 @@ class Select extends Field
 </script>\n
 EOF;
 
-    public static function create($data)
+    public static function create($data):string
     {
         $html = self::$html;
         return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[OPTION_DATA]'), array($data['form_name'], $data['field_name'] ?? '', $data['option_data'] ?? ''), $html);

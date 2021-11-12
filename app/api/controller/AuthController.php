@@ -12,11 +12,15 @@ namespace app\api\controller;
 
 use app\api\exception\ApiServiceException;
 use app\api\service\TokenService;
+use think\response\Json;
 
 class AuthController
 {
 
-    public function login()
+    /**
+     * @return Json
+     */
+    public function login(): Json
     {
         try {
             return api_success([

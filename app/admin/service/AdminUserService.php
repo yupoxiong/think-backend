@@ -38,7 +38,7 @@ class AdminUserService
         ],
     ];
 
-    protected $model;
+    protected AdminUser $model;
 
     public function __construct()
     {

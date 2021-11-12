@@ -90,7 +90,7 @@ echo 'Resource';
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>提示</title>

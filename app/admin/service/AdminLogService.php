@@ -13,14 +13,13 @@ namespace app\admin\service;
 use app\admin\model\AdminUser;
 use app\admin\exception\AdminServiceException;
 use app\admin\model\AdminLog;
-
 use Exception;
 use think\facade\Db;
 
 class AdminLogService extends AdminBaseService
 {
 
-    protected $model;
+    protected AdminLog $model;
 
     public function __construct()
     {
@@ -33,7 +32,7 @@ class AdminLogService extends AdminBaseService
      * @param string $name 操作名称
      * @throws AdminServiceException
      */
-    public function create($user, $name): void
+    public function create(AdminUser $user, string $name): void
     {
         Db::startTrans();
         try {

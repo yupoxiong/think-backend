@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 公共验证类
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -29,7 +29,7 @@ class CommonBaseValidate extends Validate
      * @param string $desc
      * @return bool|string
      */
-    protected function color16($value, $rule, $data = [], $field = '', $desc = '')
+    protected function color16($value, $rule, array $data = [], string $field = '', string $desc = '')
     {
         $pattern = '/^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/';
         return preg_match($pattern, $value) ? true : $desc.(new Color16())->getMsg();
@@ -46,7 +46,7 @@ class CommonBaseValidate extends Validate
      * @param string $desc
      * @return bool|string
      */
-    protected function number6($value, $rule, $data = [], $field = '', $desc = '')
+    protected function number6($value, $rule, array $data = [], string $field = '', string $desc = '')
     {
         $pattern = '/^\d{6}$/';
         return preg_match($pattern, $value) ? true : $desc.(new Number6())->getMsg();
@@ -62,7 +62,7 @@ class CommonBaseValidate extends Validate
      * @param string $desc
      * @return bool|string
      */
-    protected function simplePassword($value, $rule, $data = [], $field = '', $desc = '')
+    protected function simplePassword($value, $rule, array $data = [], string $field = '', string $desc = '')
     {
         $pattern = '/^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new SimplePassword())->getMsg();
@@ -79,7 +79,7 @@ class CommonBaseValidate extends Validate
      * @param string $desc
      * @return bool|string
      */
-    protected function middlePassword($value, $rule, $data = [], $field = '', $desc = '')
+    protected function middlePassword($value, $rule, array $data = [], string $field = '', string $desc = '')
     {
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new MiddlePassword())->getMsg();
@@ -95,7 +95,7 @@ class CommonBaseValidate extends Validate
      * @param string $desc
      * @return bool|string
      */
-    protected function complexPassword($value, $rule, $data = [], $field = '', $desc = '')
+    protected function complexPassword($value, $rule, array $data = [], string $field = '', string $desc = '')
     {
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.[$@!%#?&]).{8,16}$/';
         return preg_match($pattern, $value) ? true : $desc.(new ComplexPassword())->getMsg();

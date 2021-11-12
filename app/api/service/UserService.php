@@ -55,7 +55,7 @@ class UserService extends ApiBaseService
     public function createData($param): bool
     {
         $result = $this->model::create($param);
-        return $result ? true : false;
+        return (bool)$result;
     }
     
         /**

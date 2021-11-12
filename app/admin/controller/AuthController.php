@@ -69,7 +69,7 @@ class AuthController extends AdminBaseController
                 $redirect = $param['redirect'] ?? url('admin/index/index')->build();
 
                 $admin_user = $service->login($username, $password);
-                $service->setAdminUserAuthInfo($admin_user, $remember);
+                $service->setAdminUserAuthInfo($admin_user, (bool)$remember);
 
                 $this->setLoginDeviceId($admin_user);
 
@@ -151,6 +151,7 @@ class AuthController extends AdminBaseController
 
     /**
      * 获取token
+     * @param Request $request
      * @return Json
      */
     public function token(Request $request): Json

@@ -17,7 +17,7 @@ class Textarea extends Field
 </div>\n
 EOF;
 
-    public static function create($data)
+    public static function create($data):string
     {
         return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]', '[ROWS]'), array($data['form_name'], $data['field_name'], $data['field_default'], $data['rows'] ?? 3), self::$html);
 

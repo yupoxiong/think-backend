@@ -106,7 +106,7 @@ if (!function_exists('format_size')) {
      * @param string $delimiter
      * @return string
      */
-    function format_size($size, $delimiter = ''): string
+    function format_size($size, string $delimiter = ''): string
     {
         $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
         for ($i = 0; $size >= 1024 && $i < 5; $i++) {

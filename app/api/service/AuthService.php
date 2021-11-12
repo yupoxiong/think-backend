@@ -15,7 +15,7 @@ use think\facade\Event;
 
 class AuthService extends ApiBaseService
 {
-    protected $model;
+    protected User $model;
 
     public function __construct()
     {

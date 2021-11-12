@@ -25,7 +25,7 @@ EOF;
         'complexPassword' => '复杂密码',
     ];
 
-    public static function create($data)
+    public static function create($data):string
     {
         return str_replace(array('[FORM_NAME]', '[FIELD_NAME]', '[FIELD_DEFAULT]'), array($data['form_name'], $data['field_name'], $data['field_default']), self::$html);
     }

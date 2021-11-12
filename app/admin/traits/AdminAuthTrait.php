@@ -107,7 +107,6 @@ trait AdminAuthTrait
 
     /**
      * 单设备登录检查
-     * @param $user
      * @return bool
      */
     public function checkOneDeviceLogin(): bool
@@ -177,7 +176,7 @@ trait AdminAuthTrait
         return Cache::delete($cache_key);
     }
 
-    public function createLog($user,$name)
+    public function createLog($user,$name): bool
     {
         try {
             (new AdminLogService())->create($user, $name);

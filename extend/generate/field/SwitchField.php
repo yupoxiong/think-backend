@@ -29,7 +29,7 @@ class SwitchField extends Field
 EOF;
 
 
-    public static function create($data)
+    public static function create($data):string
     {
         $html = self::$html;
         //switch开的文字

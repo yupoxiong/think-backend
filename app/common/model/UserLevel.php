@@ -6,6 +6,7 @@
 namespace app\common\model;
 
 use think\model\concern\SoftDelete;
+use think\model\relation\HasMany;
 
 class UserLevel extends CommonBaseModel
 {
@@ -27,11 +28,11 @@ class UserLevel extends CommonBaseModel
     
 
     // 关联测试
-    public function test()
+    public function test(): HasMany
     {
         return $this->hasMany(Test::class);
     }// 关联用户
-    public function user()
+    public function user(): HasMany
     {
         return $this->hasMany(User::class);
     }

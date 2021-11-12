@@ -7,6 +7,7 @@ namespace app\[CONTROLLER_MODULE]\controller;
 
 use Exception;
 use think\Request;
+use think\db\Query;
 use think\response\Json;
 use app\[MODEL_MODULE]\model\[MODEL_NAME];
 [RELATION_1]

@@ -21,7 +21,7 @@ use think\facade\Session;
 
 class AuthService extends AdminBaseService
 {
-    protected $model;
+    protected AdminUser $model;
 
     protected string $limitKeyPrefix = 'admin_login_count_';
 
@@ -140,7 +140,7 @@ class AuthService extends AdminBaseService
      * @param $admin_user
      * @param bool $remember
      */
-    public function setAdminUserAuthInfo($admin_user, $remember = false): void
+    public function setAdminUserAuthInfo($admin_user, bool $remember): void
     {
         Session::set($this->store_uid_key, $admin_user->id);
         if ($remember) {

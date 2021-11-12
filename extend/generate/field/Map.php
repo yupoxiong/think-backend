@@ -109,7 +109,7 @@ EOF;
      * @return string|string[]
      * @throws GenerateException
      */
-    public static function create($data)
+    public static function create($data):string
     {
         if (strpos($data['field_name'], 'lng') !== false) {
             $data['field_name_lng'] = $data['field_name'];

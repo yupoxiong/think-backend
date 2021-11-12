@@ -21,7 +21,6 @@ class IndexController extends AdminBaseController
      */
     public function index(): string
     {
-
         return  $this->fetch();
     }
 

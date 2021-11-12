@@ -10,6 +10,7 @@ declare (strict_types=1);
 namespace app\admin\model;
 
 
+use JsonException;
 use think\model\concern\SoftDelete;
 use think\model\relation\BelongsTo;
 
@@ -26,7 +27,7 @@ class AdminLogData extends AdminBaseModel
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function getDataFormatAttr($value, $data)
     {

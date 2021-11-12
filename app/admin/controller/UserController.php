@@ -184,10 +184,9 @@ class UserController extends AdminBaseController
      * 导出
      * @param Request $request
      * @param User $model
-     * @return mixed
      * @throws Exception
      */
-    public function export(Request $request, User $model)
+    public function export(Request $request, User $model): void
     {
         $param = $request->param();
         $data  = $model->with('user_level')->scope('where', $param)->select();
@@ -207,8 +206,7 @@ class UserController extends AdminBaseController
 
             $body[] = $record;
         }
-        return $this->exportData($header, $body, '用户数据-' . date('YmdHis'));
-
+         $this->exportData($header, $body, '用户数据-' . date('YmdHis'));
     }
 
 }

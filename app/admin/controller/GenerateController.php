@@ -224,6 +224,7 @@ class GenerateController extends AdminBaseController
 
             $class_name = parse_name($param['form_type'], 1);
 
+            /** @var Field $class */
             $class = '\\generate\\field\\' . $class_name;
             $data  = $class::create($param);
 

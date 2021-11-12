@@ -7,8 +7,8 @@
         <div class="col-md-6">
             <div class="card">
 
-                <!-- 表单头部 -->
-                <div class="card-header with-border">
+
+                <div class="card-header">
                     <div class="btn-group">
                         <a class="btn flat btn-sm btn-default BackButton">
                             <i class="fas fa-arrow-left"></i>
@@ -17,32 +17,30 @@
                     </div>
                 </div>
 
-                <form id="dataForm" class="form-horizontal dataForm" action="formField" method="post"
+                <form id="dataForm" class="form-horizontal dataForm" action="{:url('generate/formField')}" method="post"
                       enctype="multipart/form-data">
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="form_name" class="col-sm-2 control-label">名称</label>
+
+                        <div class="form-group row">
+                            <label for="form_name" class="col-sm-2 col-form-label">名称</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input maxlength="50" id="form_name" autocomplete="off" name="form_name"
-                                       class="form-control form-control-sm" placeholder="请输入名称">
+                                       type="text" class="form-control" placeholder="请输入名称">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="field_name" class="col-sm-2 control-label">字段</label>
+                        <div class="form-group row">
+                            <label for="field_name" class="col-sm-2 col-form-label">字段</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <input maxlength="50" id="field_name" autocomplete="off" name="field_name"
-                                       class="form-control form-control-sm" placeholder="请输入字段">
+                                       type="text" class="form-control" placeholder="请输入字段">
                             </div>
                         </div>
 
-
-                        <div class="form-group">
+                        <div class="form-group row">
                             <label for="form_type" class="col-sm-2 control-label">类型</label>
                             <div class="col-sm-10 col-md-4 formInputDiv">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
-                                    <select class="form-control select2 form-type-select form-control-sm" id="form_type"
-                                            name="form_type">
+                                    <select class="form-control select2bs4" id="form_type" name="form_type">
                                         <option value="text">文本[text]</option>
                                         <option value="number">数字[number]</option>
                                         <option value="password">密码[password]</option>
@@ -71,7 +69,6 @@
                                         <option value="color">颜色选择[color]</option>
                                         <option value="icon">图标选择[icon]</option>
                                         <option value="editor">富文本编辑器[editor]</option>
-                                        <option value="province_city_district">省市区[三级联动]</option>
                                     </select>
                                 </div>
                             </div>
@@ -86,20 +83,19 @@
                         {:token_field()}
                         <div class="col-sm-2">
                         </div>
-                        <div class="col-sm-10 col-md-4 formInputDiv">
+                        <div class="col-sm-10 col-md-8 formInputDiv">
                             <div class="btn-group">
-                                <button type="submit" class="btn flat btn-info dataFormSubmit">
-                                    生成
+                                <button type="submit" class="btn btn-sm btn-primary dataFormSubmit">
+                                    生 成
                                 </button>
                             </div>
                             <div class="btn-group">
-                                <button type="reset" class="btn flat btn-default dataFormReset">
-                                    重置
+                                <button type="reset" class="btn btn-sm btn-default dataFormReset">
+                                    重 置
                                 </button>
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -107,8 +103,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header with-border">
-                    <h3 class="card-title">生成结果</h3>
-
+                    <h3 class="card-title"> <label for="code">生成结果</label></h3>
                 </div>
                 <div class="card-body">
                     <textarea id="code" style="width: 100%" placeholder="生成结果" rows="6"></textarea>
@@ -161,7 +156,7 @@
                 var form_action = $(this).attr('action');
                 var form_method = $(this).attr('method');
                 var form_data = new FormData($(this)[0]);
-                console.log('%cajax submit start!', ';color:#333333');
+                console.log('%c ajax submit start!', ';color:#333333');
                 console.log('action:' + form_action);
                 console.log('method:' + form_method);
                 console.log('data:' + form_data);
@@ -180,16 +175,16 @@
                             console.log('submit success!');
                             if (result.code === 200) {
                                 addCode(result.data);
-                                console.log('%cresult success', ';color:#00a65a');
+                                console.log('%c result success', ';color:#00a65a');
                             } else {
                                 addCode('');
-                                console.log('%cresult fail', ';color:#f39c12');
+                                console.log('%c result fail', ';color:#f39c12');
                             }
 
                         },
                         error: function (xhr, type, errorThrown) {
                             //异常处理；
-                            console.log('%csubmit fail!', ';color:#dd4b39');
+                            console.log('%c submit fail!', ';color:#dd4b39');
                             console.log();
                             console.log("type:" + type + ",readyState:" + xhr.readyState + ",status:" + xhr.status);
                             console.log("url:" + form_action);
@@ -205,10 +200,8 @@
     });
 
     function addCode(code) {
-        //$('#code').html(code);
         $('#code').val(code);
     }
-
 
 </script>
 

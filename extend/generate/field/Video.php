@@ -21,7 +21,7 @@ class Video extends Field
     </script>   
 EOF;
 
-    public static function create($data)
+    public static function create($data):string
     {
         $html = self::$html;
         $html = str_replace(array('[FORM_NAME]', '[FIELD_NAME]'), array($data['form_name'], $data['field_name']), $html);

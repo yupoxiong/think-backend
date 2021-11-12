@@ -18,7 +18,7 @@ use think\db\exception\ModelNotFoundException;
 
 class AdminRoleService
 {
-    protected $model;
+    protected AdminRole $model;
 
     public function __construct()
     {

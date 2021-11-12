@@ -26,7 +26,7 @@ class AdminRole extends AdminBaseModel
      * @param AdminRole $data
      * @return void
      */
-    public static function onBeforeInsert($data)
+    public static function onBeforeInsert($data):void
     {
         $data->url = empty($data->url) ? [1, 2, 18] : $data->url;
     }

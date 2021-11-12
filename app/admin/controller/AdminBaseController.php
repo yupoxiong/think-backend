@@ -45,7 +45,9 @@ class AdminBaseController
      */
     protected string $url;
 
-
+    /**
+     * @var mixed
+     */
     protected $menu;
 
     /**

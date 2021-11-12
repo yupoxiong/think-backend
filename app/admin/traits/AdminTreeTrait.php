@@ -5,12 +5,16 @@
 
 namespace app\admin\traits;
 
-use think\Model;
-
 trait AdminTreeTrait
 {
-
-    public $text, $html;
+    /**
+     * @var mixed
+     */
+    public $text;
+    /**
+     * @var mixed
+     */
+    public  $html;
     /**
      * 生成树型结构所需要的2维数组
      * @var array
@@ -50,7 +54,7 @@ trait AdminTreeTrait
      * @param string $str_group
      * @return string
      */
-    public function getTree($my_id, $str, $sid = 0, $adds = '', $str_group = ''): string
+    public function getTree(int $my_id, string $str, int $sid = 0, string $adds = '', string $str_group = ''): string
     {
         $parent_id = '';
         $n_str     = '';
@@ -68,7 +72,7 @@ trait AdminTreeTrait
                     $k = $adds ? $this->icon[0] : '';
                 }
                 $spacer   = $adds ? $adds . $j : '';
-                $selected = $id == $sid ? 'selected' : '';
+                $selected = (int)$id === $sid ? 'selected' : '';
                 extract($value, null);
                 if (0 === $parent_id && $str_group) {
                     eval("\$n_str = \"$str_group\";");
@@ -140,7 +144,7 @@ trait AdminTreeTrait
      * @param  $pid
      * @return array
      */
-    public function getChild($pid)
+    public function getChild($pid): array
     {
         $result = [];
         foreach ($this->array as $key => $value) {
@@ -158,7 +162,7 @@ trait AdminTreeTrait
      * @param int $i 所在级别
      * @return int
      */
-    public function getLevel($id, $array, $i = 0): int
+    public function getLevel(int $id, array $array, int $i = 0): int
     {
         if ($array[$id]['parent_id'] === 0 || empty($array[$array[$id]['parent_id']]) || $array[$id]['parent_id'] === $id) {
             return $i;
@@ -188,12 +192,11 @@ trait AdminTreeTrait
                     self::getAuthTreeAccess($k);
 
                     eval("\$n_str = \"$text[1]\";");
-                    $this->html .= $n_str;
                 } else {
                     $a = $this->text['other'];
                     eval("\$n_str = \"$a\";");
-                    $this->html .= $n_str;
                 }
+                $this->html .= $n_str;
             }
         }
         return $this->html;
@@ -206,7 +209,7 @@ trait AdminTreeTrait
      * @param int $current_id
      * @return string
      */
-    protected function getLeftMenu($menu, $current_id = 1): string
+    protected function getLeftMenu($menu, int $current_id = 1): string
     {
         $max_level  = 0;
         $parent_ids = array(0 => 0);
@@ -217,10 +220,6 @@ trait AdminTreeTrait
                 $parent_ids = $this->getParentIdsById($menu, $v['id']);
                 $current_id = $v['id'];
             }
-        }
-
-        if ($parent_ids === false) {
-            $parent_ids = array(0 => 0);
         }
 
         foreach ($menu as $k => $v) {
@@ -319,8 +318,6 @@ trait AdminTreeTrait
                 }
                 return $this->getTopParentIdById($data, $item['parent_id']);
             }
-
-            continue;
         }
 
         return  0;
@@ -333,7 +330,7 @@ trait AdminTreeTrait
      * @param string $current_nav
      * @return string
      */
-    protected function getBreadCrumb($data, $current_id, $current_nav = ''): string
+    protected function getBreadCrumb($data, $current_id, string $current_nav = ''): string
     {
         $breadcrumb = '';
         foreach ($data as $value) {
@@ -402,10 +399,10 @@ trait AdminTreeTrait
     /**
      * 获取树形选择列表
      * @param  $model
-     * @param  $selected
+     * @param int $selected
      * @return string
      */
-    protected function getSelectList($model, $selected = 0): string
+    protected function getSelectList($model, int $selected = 0): string
     {
         $data = $model->column('id,parent_id,name', 'id');
 

@@ -315,4 +315,8 @@ EOF;
         }
     }
 
+    public static function create($data): string
+    {
+        return '';
+    }
 }
