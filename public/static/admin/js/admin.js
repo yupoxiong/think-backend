@@ -473,9 +473,8 @@ $(function () {
     });
 });
 
-//ajax请求封装
 /**
- *
+ * ajax请求封装
  * @param url 访问的url
  * @param method  访问方式
  * @param data  data数据

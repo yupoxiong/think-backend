@@ -122,6 +122,28 @@
     left: 25%;
 }
 
+.mapTipsContainer {
+    z-index: 20;
+    position: absolute;
+    min-width: 200px;
+    height: 25px;
+    width: 80%;
+    bottom: 8px;
+    left: 10%;
+    opacity: 0.65;
+    background: #0c525d;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.mapTipsContainer span{
+    font-size: 10px;
+    background: black;
+    height: 25px;
+    color: white;
+    padding-top: 4px;
+}
+
 /**
 地图容器
  */

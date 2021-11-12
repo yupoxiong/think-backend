@@ -23,7 +23,7 @@
         <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
                 <input id="avatar_file" name="avatar_file" type="file" class="file-loading " data-initial-preview="{if isset($data)}{$data.avatar}{/if}">
-                <input name="avatar" id="avatar" value="{$data.avatar|default=''}" hidden placeholder="请上传图片" class="fieldImage">
+                <input name="avatar" id="avatar" value="{$data.avatar|default='/static/index/images/avatar.png'}" hidden placeholder="请上传图片" class="fieldImage">
                 <script>
                      initUploadImg('avatar');
                 </script>            
@@ -97,10 +97,16 @@
             <input class="form-control mapKeywords" id="map_key_lng"  placeholder="输入关键字搜索地点" />
         </div>
 
+        <div class="input-group mb-3 mapTipsContainer">
+            <span class="form-control mapAddressTips" >
+            参考地址：<span id="map_tips_lng" class="mapClipboardSpan" title="点击复制地址" data-toggle="tooltip" data-clipboard-target="#map_tips_lng"></span>
+</span>
+        </div>
+        
         <div id="map_container_lng" class="mapContainer">
         </div>
-        <input name="lng" hidden id="lng" value="{$data.lng|default='36'}">
-        <input name="lat" hidden id="lat" value="{$data.lat|default='117'}" >
+        <input name="lng" hidden id="lng" value="{$data.lng|default='117'}">
+        <input name="lat" hidden id="lat" value="{$data.lat|default='36'}" >
     </div>
 </div>
     
@@ -121,6 +127,7 @@
 
         positionPicker.on('success', function(positionResult) {
             console.log(positionResult);
+            $('#map_tips_lng').html(positionResult.address);
             console.log('success');
             $('#lng').val(positionResult.position.lng);
             $('#lat').val(positionResult.position.lat);
@@ -151,8 +158,24 @@
             placeSearch.setCity(e.poi.adcode);
             positionPicker.start(new AMap.LngLat(e.poi.location.lng,e.poi.location.lat ));
         });
-        
     });
+     var mapClipboard = new ClipboardJS('.mapClipboardSpan');
+     mapClipboard.on('success', function(e) {
+         layer.tips('地址复制成功！', '#map_tips_lng', {
+             tips: [1,]
+         });
+         console.info('Action:', e.action);
+         console.info('Text:', e.text);
+         console.info('Trigger:', e.trigger);
+         e.clearSelection();
+    });
+
+    mapClipboard.on('error', function(e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+
+   
 </script>
 
 <div class="form-group row">

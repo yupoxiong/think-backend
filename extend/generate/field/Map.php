@@ -19,6 +19,12 @@ class Map extends Field
             <input class="form-control mapKeywords" id="map_key_[FIELD_NAME_LNG]"  placeholder="输入关键字搜索地点" />
         </div>
 
+        <div class="input-group mb-3 mapTipsContainer">
+            <span class="form-control mapAddressTips" >
+            参考地址：<span id="map_tips_[FIELD_NAME_LNG]" class="mapClipboardSpan" title="点击复制地址" data-toggle="tooltip" data-clipboard-target="#map_tips_[FIELD_NAME_LNG]"></span>
+</span>
+        </div>
+        
         <div id="map_container_[FIELD_NAME_LNG]" class="mapContainer">
         </div>
         <input name="[FIELD_NAME_LNG]" hidden id="[FIELD_NAME_LNG]" value="{\$data.[FIELD_NAME_LNG]|default='117'}">
@@ -43,6 +49,7 @@ class Map extends Field
 
         positionPicker.on('success', function(positionResult) {
             console.log(positionResult);
+            $('#map_tips_[FIELD_NAME_LNG]').html(positionResult.address);
             console.log('success');
             $('#[FIELD_NAME_LNG]').val(positionResult.position.lng);
             $('#[FIELD_NAME_LAT]').val(positionResult.position.lat);
@@ -73,8 +80,24 @@ class Map extends Field
             placeSearch.setCity(e.poi.adcode);
             positionPicker.start(new AMap.LngLat(e.poi.location.lng,e.poi.location.lat ));
         });
-        
     });
+     var mapClipboard = new ClipboardJS('.mapClipboardSpan');
+     mapClipboard.on('success', function(e) {
+         layer.tips('地址复制成功！', '#map_tips_[FIELD_NAME_LNG]', {
+             tips: [1,]
+         });
+         console.info('Action:', e.action);
+         console.info('Text:', e.text);
+         console.info('Trigger:', e.trigger);
+         e.clearSelection();
+    });
+
+    mapClipboard.on('error', function(e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+
+   
 </script>\n
 EOF;
 
@@ -88,13 +111,13 @@ EOF;
      */
     public static function create($data)
     {
-        if(strpos($data['field_name'],'lng')!==false){
+        if (strpos($data['field_name'], 'lng') !== false) {
             $data['field_name_lng'] = $data['field_name'];
-            $data['field_name_lat'] = str_replace('lng','lat',$data['field_name']);
-        }else if(strpos($data['field_name'],'longitude')!==false){
+            $data['field_name_lat'] = str_replace('lng', 'lat', $data['field_name']);
+        } else if (strpos($data['field_name'], 'longitude') !== false) {
             $data['field_name_lng'] = $data['field_name'];
-            $data['field_name_lat'] = str_replace('longitude','latitude',$data['field_name']);
-        }else {
+            $data['field_name_lat'] = str_replace('longitude', 'latitude', $data['field_name']);
+        } else {
             throw new GenerateException('地图字段必须包含lng,lat或longitude,latitude');
         }
 

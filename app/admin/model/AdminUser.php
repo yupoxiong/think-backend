@@ -28,8 +28,8 @@ class AdminUser extends AdminBaseModel
 
     use SoftDelete;
 
-
-    public array $noDeletionIds = [1];
+    // 开发管理员和超级管理员不能删除
+    public array $noDeletionIds = [1,2];
 
     /**
      * @param AdminUser $data
@@ -178,8 +178,13 @@ class AdminUser extends AdminBaseModel
         ];
     }
 
-
-    protected function getAllShowMenuId($parent_id = 0, $data = []): array
+    /**
+     * 获取所有显示的菜单ID
+     * @param int $parent_id
+     * @param array $data
+     * @return array
+     */
+    protected function getAllShowMenuId(int $parent_id = 0, array $data = []): array
     {
         $ids = (new AdminMenu)->where('parent_id', '=', $parent_id)
             ->where('is_show', '=', 1)
