@@ -8,86 +8,68 @@ declare (strict_types=1);
 
 namespace app\api\service;
 
+use think\facade\Cache;
 use util\jwt\Jwt;
-use think\facade\Env;
 use util\jwt\JwtException;
 use app\common\service\DateService;
-use app\common\service\StringService;
 use app\api\exception\ApiServiceException;
-use app\common\exception\CommonServiceException;
 
 
 class TokenService extends ApiBaseService
 {
-    /** @var string */
-    protected $key;
-
-    /** @var string 颁发者 */
-    protected $iss;
-
-
-    /** @var string 使用者 */
-    protected $aud;
-
-
-    /** @var int 默认token过期时间 */
-    protected int $exp = 86400000;
-
-
     /** @var Jwt */
     protected Jwt $jwt;
+    /** @var string 公钥 */
+    protected string $publicKey;
+    /** @var string 私钥 */
+    protected string $privateKey;
+    /** @var string */
+    protected $key = 'b19a4be117e0d245bb838b3c7f776ade370c88e6';
+    /** @var string 颁发者 */
+    /** @var int 默认token过期时间 当前为1000天 */
+    protected int $exp = 86400000;
+    /** @var int 刷新token 默认为15天 */
+    protected int $refreshTokenExp = 1296000;
+    /** @var bool 开启token刷新 */
+    protected bool $enableRefreshToken = false;
+    /** @var bool 重复使用检测 */
+    protected bool $reuseCheck = false;
+    /** @var string 黑名单缓存前缀 */
+    protected string $blacklistKeyPrefix = 'api_access_token_blacklist_';
+    protected string $loginAgainKeyPrefix = 'api_user_login_again_';
 
-    /**
-     * @throws ApiServiceException
-     */
-    public function __construct($config = null)
+    public function __construct()
     {
         $this->jwt = new Jwt();
 
-        if (is_array($config)) {
-            $this->key = $config['key'] ?: $this->key;
-            $this->iss = $config['iss'] ?: $this->iss;
-            $this->aud = $config['aud'] ?: $this->aud;
-            $this->exp = $config['exp'] ?: $this->exp;
-        } else {
-            $this->key = Env::get('jwt.key');
-            $this->iss = Env::get('jwt.iss');
-            $this->aud = Env::get('jwt.aud');
-            $this->exp = (int)Env::get('jwt.exp') ?: $this->exp;
+        $this->key                = env('api.jwt_key', $this->key);
+        $this->exp                = (int)env('api.jwt_exp', $this->exp);
+        $this->enableRefreshToken = (bool)env('api.enable_refresh_token', $this->enableRefreshToken);
+        $this->reuseCheck         = (bool)env('api.reuse_check', $this->reuseCheck);
+        $this->refreshTokenExp    = (int)env('api.refresh_token_exp', $this->refreshTokenExp);
 
-        }
-
-
-        if (!$this->key || !$this->iss || !$this->aud) {
-            throw new ApiServiceException('请在.env文件中配置jwt信息');
-        }
     }
+
 
     /**
      * 获取token
-     * @param int $uid
-     * @param array $claim
+     * @param int $uid 用户ID
+     * @param array $claim 自定义claim
      * @return string
      * @throws ApiServiceException
      */
-    public function getToken(int $uid, array $claim = []): string
+    public function getAccessToken(int $uid, array $claim = []): string
     {
         $time = time();
 
-        try {
-            $jti = md5(StringService::getRandString(20) . DateService::microTimestamp());
-        } catch (CommonServiceException $e) {
-            throw new ApiServiceException($e->getMessage());
-        }
+        $jti = $this->createJti($uid);
 
-        $token = $this->jwt->setKey($this->key)
-            //->setClaim('iss', $iss)// 签发者
-            //->setClaim('aud', $aud)// 使用者
-            //->setClaim('iat', $time)// 签发时间
-            //->setClaim('nbf', $time)// 在此时间前不可用
-            ->setClaim('exp', $time + $this->exp)// 过期时间
-            ->setClaim('jti', $jti)// tokenID
-            ->setClaim('uid', $uid);// 用户ID
+        $token = $this->jwt
+            ->setKey($this->key)
+            ->setIat($time)
+            ->setExp($time + $this->exp)// 过期时间
+            ->setJti($jti)// tokenID
+            ->setUid($uid);// 用户ID
         // 附加参数
         if (count($claim) > 0) {
             foreach ($claim as $c_key => $c_value) {
@@ -103,21 +85,151 @@ class TokenService extends ApiBaseService
     }
 
     /**
-     * 需要写完验证token的
-     * @param $token
-     * @return mixed
+     * 获取token
+     * @param int $uid 用户ID
+     * @param array $claim 自定义claim
+     * @return string
      * @throws ApiServiceException
      */
-    public function checkToken($token)
+    public function getRefreshToken(int $uid, array $claim = []): string
+    {
+        $time = time();
+
+        $jti = $this->createJti($uid);
+
+        $token = (new Jwt())->setKey($this->key)
+            ->setIat($time)
+            ->setExp($time + $this->refreshTokenExp)// 过期时间
+            ->setJti($jti)// tokenID
+            ->setUid($uid);// 用户ID
+        // 附加参数
+        if (count($claim) > 0) {
+            foreach ($claim as $c_key => $c_value) {
+                $token = $token->setClaim($c_key, $c_value);
+            }
+        }
+
+        try {
+            return $token->getToken();
+        } catch (JwtException $e) {
+            throw  new ApiServiceException('生成token失败，信息：' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 验证token
+     * @param $token
+     * @return Jwt
+     * @throws ApiServiceException
+     */
+    public function checkToken($token): Jwt
     {
         try {
             $check = $this->jwt->setKey($this->key)->checkToken($token);
+            if (!$check) {
+                throw new ApiServiceException($this->jwt->getMessage());
+            }
+            // 如果开启了刷新token和重复使用检查
+            if ($this->enableRefreshToken && $this->reuseCheck && $this->needLoginAgain($this->jwt)) {
+                throw  new ApiServiceException('需重新登录');
+            }
+
+            return $this->jwt;
+
         } catch (JwtException $e) {
             throw  new ApiServiceException($e->getMessage());
         }
-        if ($check) {
-            return $this->jwt->getUid();
+    }
+
+
+    /**
+     * @param $refresh_token
+     * @return array
+     * @throws ApiServiceException
+     */
+    public function refreshToken($refresh_token): array
+    {
+        // 判断是否开启刷新功能
+        if (!$this->enableRefreshToken) {
+            throw new ApiServiceException('未开启token刷新功能');
         }
-        throw new ApiServiceException($this->jwt->getMessage());
+
+        // 启用刷新的话access_token的有效期应该短，refresh_token的有效期长
+        if ($this->exp >= $this->refreshTokenExp) {
+            throw new ApiServiceException('access_token有效期配置超过refresh_token');
+        }
+
+        // 检查token的合法性
+        $jwt = $this->checkToken($refresh_token);
+        if (!$jwt) {
+            throw new ApiServiceException($this->jwt->getMessage());
+        }
+
+        // 如果开启了重复使用检查
+        if ($this->reuseCheck) {
+            $jti  = $jwt->getJti();
+            $used = $this->isBlacklist($jti);
+            if ($used) {
+                // 如果此refresh_token已经被使用过了,此用户必须重新登录，
+                $this->setLoginAgain($jwt->getUid());
+                throw new ApiServiceException('refresh_token被重复使用');
+            } else {
+                $this->addBlacklist($jti);
+            }
+        }
+
+        return [
+            'access_token'  => $this->getAccessToken($jwt->getUid()),
+            'refresh_token' => $this->getRefreshToken($jwt->getUid()),
+        ];
+    }
+
+    public function createJti($uid): string
+    {
+        return sha1($uid . DateService::microTimestamp() . uniqid('jwt_' . $uid, true));
+    }
+
+    public function isBlacklist($jti): bool
+    {
+        $blacklist_key = $this->blacklistKeyPrefix . $jti;
+        return Cache::has($blacklist_key);
+    }
+
+    public function addBlacklist($jti): bool
+    {
+        $blacklist_key = $this->blacklistKeyPrefix . $jti;
+        return Cache::set($blacklist_key, time());
+    }
+
+    public function setLoginAgain($uid): bool
+    {
+        $login_again_key = $this->loginAgainKeyPrefix . $uid;
+        return Cache::set($login_again_key, time() + 1, $this->refreshTokenExp);
+    }
+
+    /**
+     * @param Jwt $jwt
+     * @return bool
+     */
+    public function needLoginAgain(Jwt $jwt): bool
+    {
+        $login_again_key = $this->loginAgainKeyPrefix . $jwt->getUid();
+        if (Cache::has($login_again_key)) {
+            $time = Cache::get($login_again_key);
+            $iat  = $jwt->getIat();
+            // 如果当前token签发时间早于重用记录时间，证明token已失效
+            if ($iat <= $time) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnableRefreshToken(): bool
+    {
+        return $this->enableRefreshToken;
     }
 }

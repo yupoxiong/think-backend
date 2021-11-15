@@ -23,4 +23,7 @@ return [
         // HTTP状态码和业务状态码同步
         'http_code_sync' => env('api.http_code_sync', false),
     ],
+    'auth'=>[
+
+    ],
 ];

@@ -10,12 +10,13 @@ namespace app\api\controller;
 
 use think\response\Json;
 use app\common\model\User;
-use app\api\service\TokenService;
-use app\api\exception\ApiServiceException;
-use think\exception\HttpResponseException;
+use app\api\traits\ApiAuthTrait;
+use app\api\traits\ApiThrottleTrait;
 
 class ApiBaseController
 {
+    use ApiAuthTrait,ApiThrottleTrait;
+
     /**
      * @var array 无需验证登录的url，禁止在此处修改
      */
@@ -25,6 +26,9 @@ class ApiBaseController
      * @var array 无需验证权限的url，禁止在此处修改
      */
     protected array $authExcept = [];
+
+    /** @var array 需要限制重复提交的action */
+    protected array $throttleAction = [];
 
     /**
      * 当前访问的用户
@@ -47,6 +51,8 @@ class ApiBaseController
     /** @var int 当前每页数量 */
     protected int $limit;
 
+    protected string $url;
+
     public function __construct()
     {
         // 处理跨域问题
@@ -55,74 +61,26 @@ class ApiBaseController
         $this->checkLogin();
         // 检查登录
         $this->checkAuth();
+
+        $this->checkThrottle();
+
         // 初始化部分数据
         $this->initData();
     }
 
     /**
-     * 处理跨域
+     * 初始化数据
      */
-    protected function crossDomain(): void
-    {
-        if (request()->isOptions()) {
-            $header = config('api.cross_domain.header');
-            throw new HttpResponseException(json('', 200, $header));
-        }
-    }
-
-    /**
-     * 检查登录
-     */
-    protected function checkLogin(): void
-    {
-        $tokenService = new TokenService();
-
-        if (!in_array(request()->action(), $this->authExcept, true)) {
-
-            $token = request()->header('token');
-            // 缺少token
-            if (empty($token)) {
-                throw new HttpResponseException(api_unauthorized('未登录'));
-            }
-
-            // 验证token
-            try {
-                $this->uid = $tokenService->checkToken($token);
-            } catch (ApiServiceException $e) {
-                throw new HttpResponseException(api_unauthorized('验证token失败，信息：' . $e->getMessage()));
-            }
-
-            /** @var User $user */
-            $user = (new User)->findOrEmpty($this->uid);
-            if ($user->isEmpty()) {
-                throw new HttpResponseException(api_unauthorized('用户不存在'));
-            }
-
-            if ($user->status === 0) {
-                throw new HttpResponseException(api_unauthorized('账号被冻结'));
-            }
-
-            $this->user = $user;
-        }
-    }
-
-    /**
-     * 检查权限
-     */
-    public function checkAuth(): void
-    {
-        // TODO::这里可以自定义权限检查
-
-    }
-
     protected function initData(): void
     {
         $this->param = (array)request()->param();
         // 初始化基本数据
         $this->page  = (int)($this->param['page'] ?? 1);
         $this->limit = (int)($this->param['limit'] ?? 10);
+        // 限制每页数量最大为100条
+        $this->limit = $this->limit > 100 ? 100 : $this->limit;
 
-        if(isset($this->param['id'])){
+        if (isset($this->param['id'])) {
             if (is_numeric($this->param['id'])) {
                 $this->id = (int)$this->param['id'];
             } else if (is_string($this->param['id']) && strpos($this->param['id'], ',') > 0) {

@@ -381,7 +381,6 @@ trait AdminTreeTrait
 
         }
 
-
         $this->initTree($data);
         $html = "<tr>
                            \$select_html

@@ -30,6 +30,8 @@ class Generate
      * @var array
      */
     protected array $blacklistName = [
+        'User',
+        'UserLevel',
         'Auth',
         'Index',
         'AdminUser',
@@ -45,6 +47,8 @@ class Generate
      * @var array
      */
     protected array $blacklistTable = [
+        'user',
+        'user_level',
         'admin_user',
         'admin_role',
         'admin_menu',

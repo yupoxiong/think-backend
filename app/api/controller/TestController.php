@@ -9,26 +9,22 @@ use think\response\Json;
 use app\api\service\TestService;
 use app\common\validate\TestValidate;
 use app\api\exception\ApiServiceException;
+use util\jwt\Example;
 
 class TestController extends ApiBaseController
 {
+
+    protected array $loginExcept= [
+        'index'
+    ];
     /**
      * 列表
      * @param TestService $service
-     * @return Json
      */
-    public function index(TestService $service): Json
+    public function index(TestService $service)
     {
-        try {
-            $data   = $service->getList($this->param, $this->page, $this->limit);
-            $result = [
-                'test' => $data,
-            ];
-
-            return api_success($result);
-        } catch (ApiServiceException $e) {
-            return api_error($e->getMessage());
-        }
+        //(new Example())->testHSToken();
+        //(new Example())->testRSToken();
     }
 
     /**
@@ -118,7 +114,7 @@ class TestController extends ApiBaseController
         }
     }
 
-    
 
-    
+
+
 }

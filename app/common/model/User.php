@@ -37,7 +37,31 @@ class User extends CommonBaseModel
     // 可做为时间
     public array $timeField = [];
 
-    // [FORM_NAME]获取器
+    /**
+     * 插入前进行密码加密
+     * @param User $data
+     * @return void
+     */
+    public static function onBeforeInsert($data): void
+    {
+        $data->password = (new self)->setEncryptPassword($data->password);
+    }
+
+    /**
+     * 更新前监测密码是否变更
+     * @param User $data
+     * @return void
+     */
+    public static function onBeforeUpdate($data): void
+    {
+        $old = (new self())->where('id', '=', $data->id)->findOrEmpty();
+        /**@var User $old */
+        if ($data->password !== $old->password) {
+            $data->password = (new self)->setEncryptPassword($data->password);
+        }
+    }
+
+    // 是否启用获取器
     public function getStatusNameAttr($value, $data): string
     {
         return self::STATUS_LIST[$data['status']];
@@ -48,6 +72,16 @@ class User extends CommonBaseModel
     public function userLevel(): BelongsTo
     {
         return $this->belongsTo(UserLevel::class);
+    }
+
+    /**
+     * 设置加密密码
+     * @param $password
+     * @return string
+     */
+    protected function setEncryptPassword($password): string
+    {
+        return base64_encode(password_hash($password, 1));
     }
 
 }

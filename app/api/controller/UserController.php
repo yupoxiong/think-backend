@@ -12,6 +12,10 @@ use app\api\exception\ApiServiceException;
 
 class UserController extends ApiBaseController
 {
+    protected array $throttleAction = [
+        'api/user/index' => 3,
+    ];
+
     /**
      * 列表
      * @param UserService $service

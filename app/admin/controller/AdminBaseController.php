@@ -9,10 +9,9 @@ declare (strict_types=1);
 namespace app\admin\controller;
 
 use Exception;
-use think\exception\HttpResponseException;
-use think\response\Json;
 use think\View;
 use think\facade\Env;
+use think\response\Json;
 use app\admin\model\{AdminMenu, AdminUser};
 use app\admin\traits\{AdminAuthTrait, AdminPhpOffice, AdminTreeTrait};
 
@@ -84,8 +83,6 @@ class AdminBaseController
      */
     public function initialize(): void
     {
-        // 初始化view
-        $this->view = app()->make(View::class);
         // 检查登录
         $this->checkLogin();
         // 检查权限
@@ -94,6 +91,9 @@ class AdminBaseController
         $this->checkOneDeviceLogin();
         // csrfToken检查
         $this->checkToken();
+
+        // 初始化view
+        $this->view = app()->make(View::class);
 
         // 分页每页数量
         $this->admin['admin_list_rows'] = cookie('admin_list_rows') ?? 10;
@@ -108,24 +108,6 @@ class AdminBaseController
         }
     }
 
-    /**
-     * 验证csrf token
-     */
-    protected function checkToken(): void
-    {
-        $default_list = 'add,edit,del,import,update,profile';
-        $action_list  = setting('admin.safe.check_token_action_list') ?? $default_list;
-        $action_list  = explode(',', $action_list);
-        $is_check     = (bool)setting('admin.safe.check_token');
-
-        if ($is_check && request()->isPost() && in_array(request()->action(true), $action_list, true)) {
-            // 如果当前访问方式为post，并且当前访问的控制器action在配置的列表中，验证csrfToken
-            $check = request()->checkToken();
-            if (false === $check) {
-                throw new HttpResponseException(admin_error('token验证失败', [], URL_CURRENT, 403));
-            }
-        }
-    }
 
     /**
      * 模板赋值

@@ -30,7 +30,7 @@
 
     <!-- 边栏(左侧) -->
     {block name='sidebar'}
-    {include file='public/sidebar/sidebar' /}
+    {include file='public/sidebar' /}
     {/block}
 
     <!-- 内容 -->
@@ -55,7 +55,6 @@
 
 {if !$admin.is_pjax}
 
-{include file='public/foot_js' /}
 </body>
 </html>
 {/if}

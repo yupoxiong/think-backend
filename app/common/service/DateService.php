@@ -11,7 +11,7 @@ namespace app\common\service;
 class DateService
 {
     /**
-     * 获取当前毫秒时间戳
+     * 获取当前微秒时间戳
      * @return string
      */
     public static function microTimestamp(): string

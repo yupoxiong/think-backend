@@ -86,7 +86,6 @@ class SettingGroupController extends AdminBaseController
             $redirect = isset($param['_create']) && (int)$param['_create'] === 1 ? URL_RELOAD : URL_BACK;
 
             return $result ? admin_success('添加成功', [], $redirect) : admin_error('添加失败');
-
         }
 
         $this->assign([
@@ -141,11 +140,9 @@ class SettingGroupController extends AdminBaseController
     public function del($id, SettingGroup $model): Json
     {
         $check = $model->inNoDeletionIds($id);
-
         if (false !== $check) {
             return admin_error('ID 为' . $check . '的数据无法删除');
         }
-
         // 删除限制
         $relation_name    = 'setting';
         $relation_cn_name = '设置';
@@ -237,8 +234,7 @@ class SettingGroupController extends AdminBaseController
      */
     protected function getModuleList(): array
     {
-
-        $app_path    = app()->getAppPath();
+        $app_path    = app()->getRootPath().'app/';
         $module_list = [];
         $all_list    = scandir($app_path);
 
@@ -247,9 +243,6 @@ class SettingGroupController extends AdminBaseController
                 $module_list[] = $item;
             }
         }
-
         return $module_list;
     }
-
-
 }

@@ -24,15 +24,15 @@ class AuthService extends ApiBaseService
     /**
      * @param $username
      * @param $password
-     * @return string
+     * @return array
      * @throws ApiServiceException
      */
-    public function usernameLogin($username,$password): string
+    public function usernameLogin($username, $password): array
     {
         /** @var User $user */
-        $user = $this->model->where('username','=',$username)->findOrEmpty();
+        $user = $this->model->where('username', '=', $username)->findOrEmpty();
 
-        if($user->isEmpty()){
+        if ($user->isEmpty()) {
             throw new ApiServiceException('用户不存在');
         }
 
@@ -49,9 +49,15 @@ class AuthService extends ApiBaseService
         // Event_事件 管理用户登录
         Event::trigger('UserLogin', $user);
 
-        $tokenService = new TokenService();
-        return $tokenService->getToken($user->id);
-    }
+        $service = new TokenService();
 
+        $data = [
+            'access_token' => $service->getAccessToken($user->id),
+        ];
+        if ($service->isEnableRefreshToken()) {
+            $data['refresh_token'] = $service->getRefreshToken($user->id);
+        }
+        return $data;
+    }
 
 }
