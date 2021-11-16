@@ -44,8 +44,8 @@ trait ApiAuthTrait
         $login_except = !empty($this->loginExcept) ? array_map('parse_name', $this->loginExcept) : $this->loginExcept;
 
         if (!in_array($url, $login_except, true)) {
-            $token_position = env('api.token_position');
-            $token_field    = env('api.token_field');
+            $token_position = config('api.token_position');
+            $token_field    = config('api.token_field');
             if ($token_position === 'header') {
                 $token = request()->header($token_field, 'token');
             } else {

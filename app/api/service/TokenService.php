@@ -42,11 +42,11 @@ class TokenService extends ApiBaseService
     {
         $this->jwt = new Jwt();
 
-        $this->key                = env('api.jwt_key', $this->key);
-        $this->exp                = (int)env('api.jwt_exp', $this->exp);
-        $this->enableRefreshToken = (bool)env('api.enable_refresh_token', $this->enableRefreshToken);
-        $this->reuseCheck         = (bool)env('api.reuse_check', $this->reuseCheck);
-        $this->refreshTokenExp    = (int)env('api.refresh_token_exp', $this->refreshTokenExp);
+        $this->key                = config('api.jwt_key', $this->key);
+        $this->exp                = (int)config('api.jwt_exp', $this->exp);
+        $this->enableRefreshToken = (bool)config('api.enable_refresh_token', $this->enableRefreshToken);
+        $this->reuseCheck         = (bool)config('api.reuse_check', $this->reuseCheck);
+        $this->refreshTokenExp    = (int)config('api.refresh_token_exp', $this->refreshTokenExp);
 
     }
 
