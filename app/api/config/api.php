@@ -25,12 +25,12 @@ return [
     ],
     'auth'         => [
         'jwt_key'              => env('api.jwt_key', 'f2244f5316b70ef2887514b65caf795f'),
-        'jwt_exp'              => env('api.jwt_exp', 3600),
+        'jwt_exp'              => (int)env('api.jwt_exp', 3600),
         'jwt_aud'              => env('api.jwt_aud', 'a'),
         'jwt_iss'              => env('api.jwt_iss', 's'),
-        'enable_refresh_token' => env('api.enable_refresh_token', true),
-        'refresh_token_exp'    => env('api.refresh_token_exp', 1296000),
-        'reuse_check'          => env('api.reuse_check', true),
+        'enable_refresh_token' => (bool)env('api.enable_refresh_token', true),
+        'refresh_token_exp'    => (int)env('api.refresh_token_exp', 1296000),
+        'reuse_check'          => (bool)env('api.reuse_check', true),
         'token_position'       => env('api.token_position', 'header'),
         'token_field'          => env('api.token_field', 'token'),
     ]

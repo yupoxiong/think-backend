@@ -19,7 +19,7 @@ class AdminUserLogout
         try {
             (new AdminLogService)->create($user, '退出');
         } catch (AdminServiceException $e) {
-            Log::error('记录退出出错，信息：'.$e->getMessage());
+            Log::error('记录退出异常，信息：'.$e->getMessage());
         }
 
     }

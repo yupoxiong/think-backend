@@ -17,28 +17,19 @@ class ApiBaseController
 {
     use ApiAuthTrait,ApiThrottleTrait;
 
-    /**
-     * @var array 无需验证登录的url，禁止在此处修改
-     */
+    /** @var array 无需验证登录的url，禁止在此处修改 */
     protected array $loginExcept = [];
 
-    /**
-     * @var array 无需验证权限的url，禁止在此处修改
-     */
+    /** @var array 无需验证权限的url，禁止在此处修改 */
     protected array $authExcept = [];
 
     /** @var array 需要限制重复提交的action */
     protected array $throttleAction = [];
 
-    /**
-     * 当前访问的用户
-     * @var int
-     */
+    /** @var int 当前访问的用户 */
     protected int $uid = 0;
 
-    /**
-     * @var User 当前用户
-     */
+    /** @var User 当前用户 */
     protected User $user;
 
     /** @var array 当前请求参数 */
@@ -50,7 +41,7 @@ class ApiBaseController
     protected int $page;
     /** @var int 当前每页数量 */
     protected int $limit;
-
+    /** @var string 当前访问的url */
     protected string $url;
 
     public function __construct()
@@ -61,9 +52,8 @@ class ApiBaseController
         $this->checkLogin();
         // 检查登录
         $this->checkAuth();
-
+        // 防重复提交
         $this->checkThrottle();
-
         // 初始化部分数据
         $this->initData();
     }
@@ -91,6 +81,7 @@ class ApiBaseController
         }
     }
 
+    /** 访问不存在的方法 */
     public function __call($name, $arguments): Json
     {
         return api_error_404();

@@ -7,12 +7,10 @@
     <link rel="icon" href="{$admin.base.logo|default='__ADMIN_IMAGES__/logo.png'}">
     <link rel="apple-touch-icon" href="{$admin.base.logo|default='__ADMIN_IMAGES__/logo.png'}">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
     {include file='public/head_css' /}
     {include file='public/head_js' /}
     <!-- 登录背景相关 -->
     {include file='auth/login_bg' /}
-
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -42,7 +40,6 @@
                     </div>
                 </div>
 
-
                 {if $login_config.captcha==1}
                 {include file='auth/captcha' /}
                 {else/}
@@ -66,14 +63,12 @@
                     </div>
                 </div>
 
-
             </form>
         </div>
     </div>
 </div>
 
 <script>
-
 
     $(document).ready(function () {
         $("#dataForm").validate({

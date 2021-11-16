@@ -7,16 +7,15 @@
 namespace app\admin\controller;
 
 use Exception;
-use generate\field\Field;
-use think\facade\Db;
 use think\Request;
+use think\facade\Db;
 use think\facade\Log;
 use generate\Generate;
 use think\response\Json;
+use generate\field\Field;
 
 class GenerateController extends AdminBaseController
 {
-
     /**
      * 首页
      * @return string
@@ -40,7 +39,6 @@ class GenerateController extends AdminBaseController
             'table' => (new Generate())->getTable(),
             'menus' => (new Generate())->getMenu(10000),
         ]);
-
         return $this->fetch();
     }
 
@@ -236,10 +234,8 @@ class GenerateController extends AdminBaseController
         } catch (Exception $exception) {
             $msg = $exception->getMessage();
         }
-
         return $result ? admin_success($msg, $data) : admin_error($msg);
     }
-
 
     /**
      * 根据字段返回相关表单类型和验证
@@ -251,7 +247,6 @@ class GenerateController extends AdminBaseController
         $param = $request->param();
         $name  = $param['name'];
         $data = (new Generate())->getAllField($name);
-
         return admin_success('success', $data);
     }
 

@@ -15,8 +15,9 @@ class TestController extends ApiBaseController
 {
 
     protected array $loginExcept= [
-        'index'
+        'api/test/index'
     ];
+
     /**
      * 列表
      * @param TestService $service
@@ -113,8 +114,4 @@ class TestController extends ApiBaseController
             return api_error($e->getMessage());
         }
     }
-
-
-
-
 }

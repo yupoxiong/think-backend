@@ -49,3 +49,5 @@ $token = $jwt->setAlg('RS256')
 ->setClaim()
 ->getToken();
 ```
+
+具体示例代码可参考Example.php文件内方法。

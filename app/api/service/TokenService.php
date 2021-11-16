@@ -1,6 +1,7 @@
 <?php
 /**
  * Token Service
+ * 当前默认用HS256加密，可自行修改为RS256或者其他
  * @author yupoxiong<i@yupoxiong.com>
  */
 
@@ -8,8 +9,8 @@ declare (strict_types=1);
 
 namespace app\api\service;
 
-use think\facade\Cache;
 use util\jwt\Jwt;
+use think\facade\Cache;
 use util\jwt\JwtException;
 use app\common\service\DateService;
 use app\api\exception\ApiServiceException;
@@ -19,10 +20,6 @@ class TokenService extends ApiBaseService
 {
     /** @var Jwt */
     protected Jwt $jwt;
-    /** @var string 公钥 */
-    protected string $publicKey;
-    /** @var string 私钥 */
-    protected string $privateKey;
     /** @var string */
     protected $key = 'b19a4be117e0d245bb838b3c7f776ade370c88e6';
     /** @var string 颁发者 */
@@ -35,21 +32,21 @@ class TokenService extends ApiBaseService
     /** @var bool 重复使用检测 */
     protected bool $reuseCheck = false;
     /** @var string 黑名单缓存前缀 */
-    protected string $blacklistKeyPrefix = 'api_access_token_blacklist_';
+    protected string $refreshTokenBlacklistKeyPrefix = 'api_access_token_blacklist_';
     protected string $loginAgainKeyPrefix = 'api_user_login_again_';
 
     public function __construct()
     {
         $this->jwt = new Jwt();
 
-        $this->key                = config('api.jwt_key', $this->key);
-        $this->exp                = (int)config('api.jwt_exp', $this->exp);
-        $this->enableRefreshToken = (bool)config('api.enable_refresh_token', $this->enableRefreshToken);
-        $this->reuseCheck         = (bool)config('api.reuse_check', $this->reuseCheck);
-        $this->refreshTokenExp    = (int)config('api.refresh_token_exp', $this->refreshTokenExp);
+        $config = config('api.auth');
 
+        $this->key                = $config['jwt_key'] ?? $this->key;
+        $this->exp                = $config['jwt_exp'] ?? $this->exp;
+        $this->enableRefreshToken = $config['enable_refresh_token'] ?? $this->enableRefreshToken;
+        $this->reuseCheck         = $config['reuse_check'] ?? $this->reuseCheck;
+        $this->refreshTokenExp    = $config['refresh_token_exp'] ?? $this->refreshTokenExp;
     }
-
 
     /**
      * 获取token
@@ -60,10 +57,8 @@ class TokenService extends ApiBaseService
      */
     public function getAccessToken(int $uid, array $claim = []): string
     {
-        $time = time();
-
-        $jti = $this->createJti($uid);
-
+        $time  = time();
+        $jti   = $this->createJti($uid);
         $token = $this->jwt
             ->setKey($this->key)
             ->setIat($time)
@@ -93,10 +88,8 @@ class TokenService extends ApiBaseService
      */
     public function getRefreshToken(int $uid, array $claim = []): string
     {
-        $time = time();
-
-        $jti = $this->createJti($uid);
-
+        $time  = time();
+        $jti   = $this->createJti($uid);
         $token = (new Jwt())->setKey($this->key)
             ->setIat($time)
             ->setExp($time + $this->refreshTokenExp)// 过期时间
@@ -133,14 +126,12 @@ class TokenService extends ApiBaseService
             if ($this->enableRefreshToken && $this->reuseCheck && $this->needLoginAgain($this->jwt)) {
                 throw  new ApiServiceException('需重新登录');
             }
-
             return $this->jwt;
 
         } catch (JwtException $e) {
             throw  new ApiServiceException($e->getMessage());
         }
     }
-
 
     /**
      * @param $refresh_token
@@ -168,13 +159,14 @@ class TokenService extends ApiBaseService
         // 如果开启了重复使用检查
         if ($this->reuseCheck) {
             $jti  = $jwt->getJti();
-            $used = $this->isBlacklist($jti);
+            $used = $this->isRefreshTokenBlacklist($jti);
             if ($used) {
                 // 如果此refresh_token已经被使用过了,此用户必须重新登录，
                 $this->setLoginAgain($jwt->getUid());
+                $this->delRefreshBlacklist($jti);
                 throw new ApiServiceException('refresh_token被重复使用');
             } else {
-                $this->addBlacklist($jti);
+                $this->addRefreshBlacklist($jti);
             }
         }
 
@@ -184,23 +176,54 @@ class TokenService extends ApiBaseService
         ];
     }
 
+    /**
+     * 创建jwt的ID
+     * @param $uid
+     * @return string
+     */
     public function createJti($uid): string
     {
         return sha1($uid . DateService::microTimestamp() . uniqid('jwt_' . $uid, true));
     }
 
-    public function isBlacklist($jti): bool
+    /**
+     * 检查jti是否在黑名单
+     * @param $jti
+     * @return bool
+     */
+    public function isRefreshTokenBlacklist($jti): bool
     {
-        $blacklist_key = $this->blacklistKeyPrefix . $jti;
+        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
         return Cache::has($blacklist_key);
     }
 
-    public function addBlacklist($jti): bool
+    /**
+     * 将jti加入黑名单
+     * @param $jti
+     * @return bool
+     */
+    public function addRefreshBlacklist($jti): bool
     {
-        $blacklist_key = $this->blacklistKeyPrefix . $jti;
+        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
         return Cache::set($blacklist_key, time());
     }
 
+    /**
+     * 从黑名单里删除
+     * @param $jti
+     * @return bool
+     */
+    public function delRefreshBlacklist($jti): bool
+    {
+        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
+        return Cache::delete($blacklist_key);
+    }
+
+    /**
+     * 设置用户必须重新登录，添加1秒的防护机制
+     * @param $uid
+     * @return bool
+     */
     public function setLoginAgain($uid): bool
     {
         $login_again_key = $this->loginAgainKeyPrefix . $uid;
@@ -208,6 +231,7 @@ class TokenService extends ApiBaseService
     }
 
     /**
+     * 检查是否需要重新登录
      * @param Jwt $jwt
      * @return bool
      */
@@ -226,6 +250,18 @@ class TokenService extends ApiBaseService
     }
 
     /**
+     * 清除需要重新登录的标记
+     * @param $uid
+     * @return bool
+     */
+    public function clearLoginAgain($uid): bool
+    {
+        $login_again_key = $this->loginAgainKeyPrefix . $uid;
+        return Cache::delete($login_again_key);
+    }
+
+    /**
+     * 是否开启了token刷新
      * @return bool
      */
     public function isEnableRefreshToken(): bool

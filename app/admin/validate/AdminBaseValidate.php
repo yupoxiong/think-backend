@@ -6,9 +6,7 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\validate;
-
 
 use app\common\validate\CommonBaseValidate;
 

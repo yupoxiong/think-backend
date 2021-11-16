@@ -10,8 +10,8 @@ namespace app\admin\service;
 
 use Exception;
 use think\facade\Db;
-use app\admin\model\AdminUser;
 use app\admin\model\AdminLog;
+use app\admin\model\AdminUser;
 use app\admin\exception\AdminServiceException;
 
 class AdminLogService extends AdminBaseService

@@ -213,7 +213,6 @@ class SettingController extends AdminBaseController
                 'content' => $param['config_content'][$key],
                 'option'  => $param['config_option'][$key],
             ];
-
         }
         return $content;
     }

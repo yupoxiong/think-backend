@@ -6,13 +6,12 @@
 
 declare (strict_types=1);
 
-
 namespace app\admin\controller;
 
-use think\exception\ValidateException;
-use think\facade\Filesystem;
 use think\Request;
 use think\response\Json;
+use think\facade\Filesystem;
+use think\exception\ValidateException;
 
 class FileController extends AdminBaseController
 {
@@ -69,6 +68,11 @@ class FileController extends AdminBaseController
         return admin_error('非法访问');
     }
 
+    /**
+     * 编辑器上传
+     * @param Request $request
+     * @return Json
+     */
     public function editor(Request $request): Json
     {
 

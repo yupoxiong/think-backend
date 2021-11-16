@@ -12,7 +12,6 @@ use Exception;
 
 class IndexController extends AdminBaseController
 {
-
     /**
      * 后台首页
      * @return string
@@ -22,5 +21,4 @@ class IndexController extends AdminBaseController
     {
         return  $this->fetch();
     }
-
 }

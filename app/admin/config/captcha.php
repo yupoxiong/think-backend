@@ -4,8 +4,6 @@
  * @author yupoxiong<i@yupoxiong.com>
  */
 
-declare (strict_types=1);
-
 return [
     // 验证码字体大小
     'fontSize' => 30,

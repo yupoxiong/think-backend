@@ -8,9 +8,9 @@ declare (strict_types=1);
 
 namespace app\admin\model;
 
+use think\model\concern\SoftDelete;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\model\concern\SoftDelete;
 
 /**
  * Class AdminUser
@@ -24,7 +24,6 @@ use think\model\concern\SoftDelete;
  */
 class AdminUser extends AdminBaseModel
 {
-
     use SoftDelete;
 
     // 开发管理员和超级管理员不能删除

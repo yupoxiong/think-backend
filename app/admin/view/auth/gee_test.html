@@ -13,7 +13,7 @@
 <script>
     var handlerEmbed = function (captchaObj) {
         $("#loginButton").click(function (e) {
-            var validate = captchaObj.getValidate();
+            let validate = captchaObj.getValidate();
             if (!validate) {
                 layer.msg('请先完成验证',{icon:2});
                 e.preventDefault();

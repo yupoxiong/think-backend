@@ -12,8 +12,9 @@ use app\api\exception\ApiServiceException;
 
 class UserController extends ApiBaseController
 {
+    // 设置添加用户3秒内无法重复请求
     protected array $throttleAction = [
-        'api/user/index' => 3,
+        'api/user/add' => 3,
     ];
 
     /**

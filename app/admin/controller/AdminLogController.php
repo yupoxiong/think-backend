@@ -17,6 +17,9 @@ use app\admin\model\AdminUser;
 
 class AdminLogController extends AdminBaseController
 {
+    protected array $authExcept=[
+        'admin/admin_log/position'
+    ];
     /**
      * 列表
      * @param Request $request
