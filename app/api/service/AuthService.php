@@ -56,8 +56,6 @@ class AuthService extends ApiBaseService
         ];
         if ($service->isEnableRefreshToken()) {
             $data['refresh_token'] = $service->getRefreshToken($user->id);
-            // 清除需要需要登录的标记
-            $service->clearLoginAgain($user->id);
         }
 
         return $data;

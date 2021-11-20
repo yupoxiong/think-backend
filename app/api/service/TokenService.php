@@ -163,10 +163,9 @@ class TokenService extends ApiBaseService
             if ($used) {
                 // 如果此refresh_token已经被使用过了,此用户必须重新登录，
                 $this->setLoginAgain($jwt->getUid());
-                $this->delRefreshBlacklist($jti);
                 throw new ApiServiceException('refresh_token被重复使用');
             } else {
-                $this->addRefreshBlacklist($jti);
+                $this->addRefreshBlacklist($jwt);
             }
         }
 
@@ -199,24 +198,18 @@ class TokenService extends ApiBaseService
 
     /**
      * 将jti加入黑名单
-     * @param $jti
+     * @param Jwt $jwt
      * @return bool
      */
-    public function addRefreshBlacklist($jti): bool
+    public function addRefreshBlacklist($jwt): bool
     {
-        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
-        return Cache::set($blacklist_key, time());
-    }
-
-    /**
-     * 从黑名单里删除
-     * @param $jti
-     * @return bool
-     */
-    public function delRefreshBlacklist($jti): bool
-    {
-        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
-        return Cache::delete($blacklist_key);
+        $time          = time();
+        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jwt->getJti();
+        $value         = [
+            'time' => $time,
+            'uid'  => $jwt->getUid(),
+        ];
+        return Cache::set($blacklist_key, $value, $jwt->getExp() - $time + 1);
     }
 
     /**
@@ -227,7 +220,7 @@ class TokenService extends ApiBaseService
     public function setLoginAgain($uid): bool
     {
         $login_again_key = $this->loginAgainKeyPrefix . $uid;
-        return Cache::set($login_again_key, time() + 1, $this->refreshTokenExp);
+        return Cache::set($login_again_key, time() + 1, $this->refreshTokenExp + 1);
     }
 
     /**
@@ -250,6 +243,26 @@ class TokenService extends ApiBaseService
     }
 
     /**
+     * 是否开启了token刷新
+     * @return bool
+     */
+    public function isEnableRefreshToken(): bool
+    {
+        return $this->enableRefreshToken;
+    }
+
+    /**
+     * 从黑名单里删除token
+     * @param $jti
+     * @return bool
+     */
+    public function delRefreshBlacklist($jti): bool
+    {
+        $blacklist_key = $this->refreshTokenBlacklistKeyPrefix . $jti;
+        return Cache::delete($blacklist_key);
+    }
+
+    /**
      * 清除需要重新登录的标记
      * @param $uid
      * @return bool
@@ -258,14 +271,5 @@ class TokenService extends ApiBaseService
     {
         $login_again_key = $this->loginAgainKeyPrefix . $uid;
         return Cache::delete($login_again_key);
-    }
-
-    /**
-     * 是否开启了token刷新
-     * @return bool
-     */
-    public function isEnableRefreshToken(): bool
-    {
-        return $this->enableRefreshToken;
     }
 }

@@ -42,6 +42,7 @@ class UserValidate extends CommonBaseValidate
         'api_disable'   => ['id',],
         'api_enable'    => ['id',],
         'api_login'     => ['username', 'password'],
+        'index_login'     => ['username', 'password'],
     ];
 
 }

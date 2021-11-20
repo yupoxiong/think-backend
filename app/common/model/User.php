@@ -12,6 +12,7 @@ use think\model\relation\BelongsTo;
  * @property int $id
  * @property int $status
  * @property string $password
+ * @property string $sign_str
  */
 class User extends CommonBaseModel
 {
@@ -84,4 +85,15 @@ class User extends CommonBaseModel
         return base64_encode(password_hash($password, 1));
     }
 
+    /**
+     * 加密字符串，用在判断登录的时候加密处理
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    protected function getSignStrAttr($value, $data): string
+    {
+        $ua = request()->header('user-agent');
+        return sha1('user_'.$data['id'] . $data['username'] . $ua);
+    }
 }

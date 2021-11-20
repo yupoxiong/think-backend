@@ -10,6 +10,7 @@ use app\api\service\TestService;
 use app\common\validate\TestValidate;
 use app\api\exception\ApiServiceException;
 use util\jwt\Example;
+use util\safe\SafeCookie;
 
 class TestController extends ApiBaseController
 {
@@ -24,6 +25,10 @@ class TestController extends ApiBaseController
      */
     public function index(TestService $service)
     {
+        $a = SafeCookie::encrypt('123456','1234');
+        dump($a);
+        $b = SafeCookie::decrypt($a,'1234');
+        dump($b);
         //(new Example())->testHSToken();
         //(new Example())->testRSToken();
     }

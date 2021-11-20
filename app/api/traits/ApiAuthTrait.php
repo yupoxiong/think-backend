@@ -35,7 +35,6 @@ trait ApiAuthTrait
     {
         $tokenService = new TokenService();
 
-
         $request = request();
         // 获取当前访问url,应用名+'/'+控制器名+'/'+方法名
         $this->url = $url = parse_name(app('http')->getName())
@@ -52,9 +51,6 @@ trait ApiAuthTrait
             } else {
                 $token = request()->param($token_field, 'token');
             }
-
-
-            Log::write($token);
 
             // 缺少token
             if (empty($token)) {
