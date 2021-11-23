@@ -61,4 +61,22 @@ class StringService extends CommonBaseService
         }
         return $result;
     }
+
+    /**
+     * 获取两个字符串中间的字符
+     * @param $str
+     * @param $leftStr
+     * @param $rightStr
+     * @return string
+     */
+    public static function getMiddleStr($str, $leftStr, $rightStr): string
+    {
+        $left  = mb_strpos($str, $leftStr);
+        $right = mb_strpos($str, $rightStr, $left + 1);
+        if ($left < 0 || $right < $left) {
+            return '';
+        }
+        return mb_substr($str, $left + mb_strlen($leftStr), $right - $left - mb_strlen($leftStr));
+    }
+
 }

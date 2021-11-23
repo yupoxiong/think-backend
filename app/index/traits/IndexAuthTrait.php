@@ -47,7 +47,7 @@ trait IndexAuthTrait
         if($user->isEmpty()) {
             return false;
         }
-        $this->uid = $user->id;
+        $this->uid = (int)$user->id;
 
         return Session::get(self::$user_id_sign) === $user->sign_str;
     }
