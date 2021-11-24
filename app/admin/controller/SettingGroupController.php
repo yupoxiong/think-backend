@@ -117,7 +117,7 @@ class SettingGroupController extends AdminBaseController
             create_setting_menu($data);
             create_setting_file($data);
 
-            return $result ? admin_success() : admin_error();
+            return $result ? admin_success('修改成功', [], URL_BACK) : admin_error('修改失败');
         }
 
         $this->assign([
