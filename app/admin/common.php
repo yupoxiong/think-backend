@@ -4,10 +4,10 @@
  * @author yupoxiong<i@yupoxiong.com>
  */
 
-use app\admin\controller\SettingController;
 use think\response\Json;
-use app\common\model\SettingGroup;
 use app\admin\model\AdminMenu;
+use app\common\model\SettingGroup;
+use app\admin\controller\SettingController;
 
 /** 不做任何操作 */
 const URL_CURRENT = 'url://current';
@@ -135,9 +135,13 @@ if (!function_exists('create_setting_menu')) {
      */
     function create_setting_menu(SettingGroup $data): bool
     {
-
         $function = <<<EOF
-    public function [GROUP_COED]()
+    /**
+    * [GROUP_NAME]
+    * @return string
+    * @throws Exception
+    */
+    public function [GROUP_CODE]()
     {
         return \$this->show([GROUP_ID]);
     }\n
@@ -148,10 +152,8 @@ EOF;
         if ($data->auto_create_menu === 1) {
             $url = get_setting_menu_url($data);
             /** @var AdminMenu $menu */
-            $menu = (new app\admin\model\AdminMenu)->findOrEmpty(function ($query) use ($url) {
-                $query->where('url', $url);
-            });
-            if (!$menu) {
+            $menu = (new app\admin\model\AdminMenu)->where('url', $url)->findOrEmpty();
+            if ($menu->isEmpty()) {
                 $result = AdminMenu::create([
                     'parent_id' => 43,
                     'name'      => $data->name,
@@ -166,12 +168,11 @@ EOF;
                 $result     = $menu->save();
             }
 
-            $setting = new SettingController();
-            if (!method_exists($setting, $data->code)) {
+            if (!method_exists(SettingController::class, $data->code)) {
 
-                $function = str_replace(array('[GROUP_COED]', '[GROUP_ID]'), array($data->code, $data->id), $function);
+                $function = str_replace(array('[GROUP_CODE]', '[GROUP_ID]','[GROUP_NAME]'), array($data->code, $data->id,$data->name), $function);
 
-                $file_path = app()->getAppPath() . 'admin/controller/SettingController.php';
+                $file_path = app()->getAppPath() . 'controller/SettingController.php';
                 $file      = file_get_contents($file_path);
                 $file      = str_replace('}//append_menu', $function, $file);
                 file_put_contents($file_path, $file);
@@ -182,7 +183,7 @@ EOF;
     }
 }
 
-if (!function_exists('create_setting_menu')) {
+if (!function_exists('get_setting_menu_url')) {
     /**
      * 获取菜单url
      * @param $data

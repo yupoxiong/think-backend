@@ -11,7 +11,7 @@ class SettingGroupValidate extends CommonBaseValidate
         'name|名称'                   => 'require',
         'description|描述'            => 'require',
         'module|作用模块'               => 'require',
-        'code|代码'                   => 'require|unique:setting',
+        'code|代码'                   => 'require|unique:setting_group',
         'sort_number|排序'            => 'require',
         'auto_create_menu|自动生成菜单'   => 'require',
         'auto_create_file|自动生成配置文件' => 'require',

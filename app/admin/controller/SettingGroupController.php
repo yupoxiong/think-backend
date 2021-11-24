@@ -25,7 +25,7 @@ class SettingGroupController extends AdminBaseController
         'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new',
         'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch',
         'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'yield', 'int', 'float', 'bool', 'string', 'true',
-        'false', 'null',
+        'false', 'null','index',
 
     ];
 
@@ -75,10 +75,8 @@ class SettingGroupController extends AdminBaseController
             if (in_array($param['code'], $this->codeBlacklist, true)) {
                 return admin_error('代码 ' . $param['code'] . ' 在黑名单内，禁止使用');
             }
-            /** @var SettingGroup $result */
-            $result = $model::create($param);
 
-            /** @var SettingGroup $data */
+            $result = $model::create($param);
             $data = $model->find($result->id);
             create_setting_menu($data);
             create_setting_file($data);

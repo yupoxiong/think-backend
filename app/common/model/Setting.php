@@ -15,6 +15,7 @@ use think\model\relation\BelongsTo;
  * @package app\common\model
  * @property int $id ID
  * @property int $name 名称
+ * @property string $code 代码
  * @property array $content 设置内容
  * @property int $setting_group_id 所属分组ID
  */

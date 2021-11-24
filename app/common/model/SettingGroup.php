@@ -20,7 +20,7 @@ use think\model\concern\SoftDelete;
  * @property string $code
  * @property string $module
  * @property string $description
- * @property Collection $setting
+ * @property Setting[] $setting
  * @property string $icon
  */
 class SettingGroup extends CommonBaseModel
