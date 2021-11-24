@@ -13,7 +13,7 @@ class Map extends Field
     public static string $html = <<<EOF
     
 <div class="form-group row">
-    <label class="col-sm-2 control-label">[FORM_NAME]</label>
+    <label class="col-sm-2 col-form-label">[FORM_NAME]</label>
     <div class="col-sm-8 ">
         <div class="input-group mb-3 mapInputContainer">
             <input class="form-control mapKeywords" id="map_key_[FIELD_NAME_LNG]"  placeholder="输入关键字搜索地点" />

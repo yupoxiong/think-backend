@@ -10,7 +10,7 @@ class Color extends Field
 {
     public static string $html = <<<EOF
 <div class="form-group row">
-    <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
+    <label for="[FIELD_NAME]" class="col-sm-2 col-form-label">[FORM_NAME]</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="input-group" id="color-[FIELD_NAME]">
             <input id="[FIELD_NAME]" name="[FIELD_NAME]" autocomplete="off" value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" placeholder="请输入[FORM_NAME]" type="text" class="form-control fieldColor">

@@ -10,7 +10,7 @@ class MultiFile extends Field
 {
     public static string $html = <<<EOF
 <div class="form-group row">
-    <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
+    <label for="[FIELD_NAME]" class="col-sm-2 col-form-label">[FORM_NAME]</label>
     <div class="col-sm-8"> 
         <input id="[FIELD_NAME]" name="[FIELD_NAME][]"  placeholder="请上传[FORM_NAME]" multiple="multiple" type="file" class="form-control fieldMultiFile" >
         <script>

@@ -10,7 +10,7 @@ class Icon extends Field
 {
     public static string $html = <<<EOF
 <div class="form-group row">
-    <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
+    <label for="[FIELD_NAME]" class="col-sm-2 col-form-label">[FORM_NAME]</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <div class="input-group iconpicker-container">
             <div class="input-group-prepend">

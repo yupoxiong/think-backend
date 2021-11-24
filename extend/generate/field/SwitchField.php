@@ -9,7 +9,7 @@ class SwitchField extends Field
 {
     public static string $html = <<<EOF
 <div class="form-group row">
-    <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
+    <label for="[FIELD_NAME]" class="col-sm-2 col-form-label">[FORM_NAME]</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="[FIELD_NAME]" value="1" {if(!isset(\$data) ||\$data.[FIELD_NAME]==1)}checked{/if} type="checkbox" />
     <input class="switch fieldSwitch" placeholder="[FORM_NAME]" name="[FIELD_NAME]" value="{\$data.[FIELD_NAME]|default='[FIELD_DEFAULT]'}" hidden />

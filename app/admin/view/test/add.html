@@ -19,7 +19,7 @@
                     <!-- 表单字段区域 -->
                     <div class="card-body">
                             <div class="form-group row">
-        <label for="avatar" class="col-sm-2 control-label">头像</label>
+        <label for="avatar" class="col-sm-2 col-form-label">头像</label>
         <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
                 <input id="avatar_file" name="avatar_file" type="file" class="file-loading " data-initial-preview="{if isset($data)}{$data.avatar}{/if}">
@@ -30,25 +30,25 @@
             </div>
         </div>
     </div><div class="form-group row">
-    <label for="username" class="col-sm-2 control-label">用户名</label>
+    <label for="username" class="col-sm-2 col-form-label">用户名</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="username" name="username" value="{$data.username|default=''}" placeholder="请输入用户名" type="text" class="form-control fieldText">
     </div>
 </div>
 <div class="form-group row">
-    <label for="nickname" class="col-sm-2 control-label">昵称</label>
+    <label for="nickname" class="col-sm-2 col-form-label">昵称</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="nickname" name="nickname" value="{$data.nickname|default=''}" placeholder="请输入昵称" type="text" class="form-control fieldText">
     </div>
 </div>
 <div class="form-group row">
-    <label for="mobile" class="col-sm-2 control-label">手机号</label>
+    <label for="mobile" class="col-sm-2 col-form-label">手机号</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="mobile" name="mobile" value="{$data.mobile|default=''}" placeholder="请输入手机号" type="tel" maxlength="11" class="form-control fieldMobile">
     </div>
 </div>
 <div class="form-group row">
-    <label for="user_level_id" class="col-sm-2 control-label">用户等级</label>
+    <label for="user_level_id" class="col-sm-2 col-form-label">用户等级</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <select name="user_level_id" id="user_level_id" class="form-control select2bs4 fieldSelect" data-placeholder="请选择用户等级">
             <option value=""></option>
@@ -66,13 +66,13 @@
     });
 </script>
 <div class="form-group row">
-    <label for="password" class="col-sm-2 control-label">密码</label>
+    <label for="password" class="col-sm-2 col-form-label">密码</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
         <input id="password" name="password" value="{$data.password|default='JDJ5JDEwJG9hVDJBY2c0T0lmUXZ1cHhSSHROck84aHRWUGdpRXguQXF2Q0gvVjNEQWF5eTJPZ3BVZXIy'}" placeholder="请输入密码" type="password" class="form-control fieldPassword">
     </div>
 </div>
 <div class="form-group row">
-    <label for="status" class="col-sm-2 control-label">是否启用</label>
+    <label for="status" class="col-sm-2 col-form-label">是否启用</label>
     <div class="col-sm-10 col-md-4 formInputDiv">
     <input class="input-switch"  id="status" value="1" {if(!isset($data) ||$data.status==1)}checked{/if} type="checkbox" />
     <input class="switch fieldSwitch" placeholder="是否启用" name="status" value="{$data.status|default='1'}" hidden />
@@ -91,7 +91,7 @@
     });
 </script>    
 <div class="form-group row">
-    <label class="col-sm-2 control-label">经度</label>
+    <label class="col-sm-2 col-form-label">经度</label>
     <div class="col-sm-8 ">
         <div class="input-group mb-3 mapInputContainer">
             <input class="form-control mapKeywords" id="map_key_lng"  placeholder="输入关键字搜索地点" />
@@ -179,7 +179,7 @@
 </script>
 
 <div class="form-group row">
-    <label for="slide" class="col-sm-2 control-label">相册</label>
+    <label for="slide" class="col-sm-2 col-form-label">相册</label>
     <div class="col-sm-10 col-md-8 formInputDiv">
         <div class="input-group">
             <input id="slide_file" name="slide_file" type="file" class="file-loading " multiple>
@@ -190,7 +190,7 @@
         </div>
     </div>
 </div><div class="form-group row">
-    <label for="content" class="col-sm-2 control-label">内容</label>
+    <label for="content" class="col-sm-2 col-form-label">内容</label>
         <div class="col-sm-10">
             <div id="contentEditor">{$data.content|raw|default='<p></p>'}</div>
             <textarea id="content" name="content" style="display: none">{$data.content|raw|default=''}</textarea>

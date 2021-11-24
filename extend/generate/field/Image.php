@@ -10,7 +10,7 @@ class Image extends Field
 {
     public static string $html = <<<EOF
     <div class="form-group row">
-        <label for="[FIELD_NAME]" class="col-sm-2 control-label">[FORM_NAME]</label>
+        <label for="[FIELD_NAME]" class="col-sm-2 col-form-label">[FORM_NAME]</label>
         <div class="col-sm-10 col-md-4 formInputDiv"> 
             <div class="input-group">
                 <input id="[FIELD_NAME]_file" name="[FIELD_NAME]_file" type="file" class="file-loading " data-initial-preview="{if isset(\$data)}{\$data.[FIELD_NAME]}{/if}">
