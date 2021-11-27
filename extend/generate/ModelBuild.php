@@ -58,7 +58,7 @@ class ModelBuild extends Build
                 }
             }
             if ($value['getter_setter']) {
-                $this->getGetterSetterCode($value);
+                $getter_setter_code .= $this->getGetterSetterCode($value);
             }
         }
 
