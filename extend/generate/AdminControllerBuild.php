@@ -150,7 +150,7 @@ class AdminControllerBuild extends Build
                 //列表关联显示
                 if ($value['relation_type'] === 1 || $value['relation_type'] === 2) {
                     $relation_with_name = $this->getSelectFieldFormat($value['field_name']);
-                    $relation_with_list .= empty($relation_with_list) ? $relation_with_name : ',' . $relation_with_name;
+                    $relation_with_list .= "'" . $relation_with_name . "',";
                 }
 
                 //如果有列表导出
