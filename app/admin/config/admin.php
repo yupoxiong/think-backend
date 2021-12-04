@@ -23,7 +23,7 @@ return [
     // 登录设置:后台登录相关设置
     'login' => [
         // 登录token验证
-        'token'            => '0',
+        'token'            => '1',
         // 验证码
         'captcha'          => '1',
         // 登录背景
@@ -33,7 +33,7 @@ return [
         // 极验KEY
         'geetest_key'      => '99750f86ec232c997efaff56c7b30cd3',
         // 登录重试限制
-        'login_limit'      => '1',
+        'login_limit'      => '0',
         // 限制最大次数
         'login_max_count'  => '5',
         // 禁止登录时长(小时)

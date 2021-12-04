@@ -96,7 +96,16 @@ class AdminControllerBuild extends Build
 
                 $edit_field_code .= $edit_field_code_tmp;
 
-                //关联处理
+                // 自定义select处理
+                if ($value['form_type'] === 'select' && $value['relation_type'] === 0) {
+
+                    $list_name  = $this->getSelectFieldFormat($value['field_name'], 2);
+                    $const_name = $this->getSelectFieldFormat($value['field_name'], 3);
+                    $assign     = "'$list_name'=>" . parse_name($this->data['table'], 1) . '::' . $const_name . ',';
+                    $relation_3 .= $assign;
+                }
+
+                // 关联处理
                 switch ($value['relation_type']) {
                     default:
                         break;
