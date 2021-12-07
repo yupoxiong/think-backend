@@ -22,6 +22,7 @@ class Editor extends Field
         editor_[FIELD_NAME].destroy();
     }
     var editor_[FIELD_NAME] = new E('#[FIELD_NAME]Editor');
+    editor_[FIELD_NAME].config.zIndex=1000;
     editor_[FIELD_NAME].config.uploadImgServer = '{:url("admin/file/editor")}';
      editor_[FIELD_NAME].config.uploadFileName = 'file';
     editor_[FIELD_NAME].create();
@@ -29,7 +30,6 @@ class Editor extends Field
         $('#[FIELD_NAME]').val(newHtml);
     };
     
-
 </script>\n
 EOF;
 
