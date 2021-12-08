@@ -334,7 +334,7 @@ function goUrl(url = 1) {
         $.pjax.reload();
     } else if (url === 'url://back' || url === 3) {
         console.log('Return to the last page.');
-        history.back(1);
+        window.history.go(-1);
     } else if (url === 4 || url === 'url://close-refresh') {
         console.log('Close this layer page and refresh parent page.');
         let indexWindow = parent.layer.getFrameIndex(window.name);
